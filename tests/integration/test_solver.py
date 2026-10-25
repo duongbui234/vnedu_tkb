@@ -198,3 +198,24 @@ def test_empty_validator_failure_is_also_an_internal_error(
     monkeypatch.setattr(entry, "validate_schedule", lambda *args: ValidationReport(valid=False))
     result = entry.solve(ScheduleInput.model_validate(problem_data))
     assert result.status == "MODEL_INVALID"
+
+
+def test_five_periods_keep_one_double_and_three_singles(problem_data: dict[str, Any]) -> None:
+    problem_data["locked_assignments"] = []
+    problem_data["time_slots"] = [
+        {"id": f"p{i}", "day": 1, "session": "AM", "period": i} for i in range(1, 6)
+    ]
+    problem_data["teaching_requirements"][0].update(
+        periods_per_cycle=5, block_durations=[2, 1, 1, 1]
+    )
+    problem = ScheduleInput.model_validate(problem_data)
+    result = solve(problem)
+    assert result.valid_schedule
+    assert {a.occurrence_id for a in result.assignments if a.class_ids == ("demo-class-a",)} == {
+        "demo-requirement-a::1",
+        "demo-requirement-a::2",
+        "demo-requirement-a::3",
+        "demo-requirement-a::4",
+    }
+    assert len(result.assignments) == 5  # Four blocks for A plus one single for B.
+    assert validate_schedule(problem, result.assignments).valid

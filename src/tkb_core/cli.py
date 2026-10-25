@@ -75,9 +75,13 @@ def _read_model[ModelT: BaseModel](path: Path, model: type[ModelT]) -> ModelT:
 
 
 def _check_output(source: Path, destination: Path) -> None:
-    if source.resolve() == destination.resolve() or (
-        destination.exists() and source.samefile(destination)
-    ):
+    try:
+        same_path = source.resolve() == destination.resolve()
+    except RuntimeError as exc:
+        raise CoreError(
+            "INPUT_INVALID", "OUTPUT_PATH_ERROR", "Output path contains a symlink loop"
+        ) from exc
+    if same_path or (destination.exists() and source.samefile(destination)):
         raise CoreError(
             "INPUT_INVALID", "OUTPUT_CONFLICT", "Output must not replace the input file"
         )

@@ -146,3 +146,14 @@ def test_infeasible_and_guard_have_distinct_exit_codes() -> None:
         "solve", str(ROOT / "tests/fixtures/feasible_small.json"), "--max-placements", "1"
     )
     assert limited.returncode == 4 and json.loads(limited.stdout)["status"] == "UNKNOWN"
+
+
+def test_cyclic_output_symlink_is_a_structured_error(tmp_path: Path) -> None:
+    output = tmp_path / "loop.json"
+    output.symlink_to(output)
+    process = run_cli(
+        "solve", str(ROOT / "tests/fixtures/feasible_small.json"), "--output", str(output)
+    )
+    assert process.returncode == 2
+    assert json.loads(process.stdout)["diagnostics"][0]["code"] == "OUTPUT_PATH_ERROR"
+    assert not process.stderr

@@ -1,6 +1,6 @@
 # Phase 1 — Scheduling MVP, tiết đơn và tiết đôi
 
-Trạng thái: **thiết kế đề xuất để duyệt**, chưa triển khai Phase 1. Ngày: 2026-10-26.
+Trạng thái: **đã được người dùng duyệt để triển khai Phase 1**, ngày 2026-10-26. Kết quả triển khai/nghiệm thu xem [phase-1-report](../../phase-1-report.md).
 
 ## 1. Ý định và quyết định đã có
 
