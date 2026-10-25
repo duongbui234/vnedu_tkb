@@ -11,7 +11,7 @@
   requests further research. Do not copy FET/STKB implementations into product code.
 - Follow existing src layout. Public APIs have type hints/docstrings; reject unknown
   input fields and unsupported schema versions instead of ignoring them.
-- Use `uv sync --locked`, `uv run pytest`, `uv run ruff check .`,
+- Use `uv sync --locked --extra solver`, `uv run --extra solver pytest`, `uv run ruff check .`,
   `uv run ruff format --check src tests`, and `uv run mypy` before claiming completion.
 - Add regression tests for validation/algorithm behavior; distinguish contract
   validation, feasibility, solver status and independent result validation.

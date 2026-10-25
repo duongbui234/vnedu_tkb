@@ -1,5 +1,11 @@
 # Domain contracts v1 — Phase 0
 
+Input vẫn version 1.0. Những mô tả “chưa có solver/validator” bên dưới là mốc Phase 0;
+behavior Phase 1 xem [solver-design](solver-design.md). Output solver mới 1.1 có
+SolverRunMetadata riêng (solver_executed, seed, num_workers, time_limit_seconds,
+solver_wall_time). Output 1.0 vẫn dùng RunMetadata cũ đúng bốn field; không thêm
+metadata mới dưới nhãn 1.0. Parser đọc cả 1.0/1.1, solver phát 1.1.
+
 Package `tkb_core` import được mà không cần OR-Tools. Pydantic JSON models nằm trong
 `domain/models.py`, input/output versioned nằm trong `contracts/`.
 

@@ -51,6 +51,8 @@ def prepare(problem: ScheduleInput, options: SolveOptions | None = None) -> Prep
     room_demand = 0
     room_slots: set[tuple[str, str]] = set()
     total_placements = total_terms = 0
+    occurrence_rooms: dict[str, list[Room | None]] = {}
+    empty_domains: list[str] = []
     for occurrence in normalized.occurrences:
         req = requirements[occurrence.requirement_id]
         learner, teacher = classes[req.class_ids[0]], teachers[req.teacher_ids[0]]
@@ -90,6 +92,14 @@ def prepare(problem: ScheduleInput, options: SolveOptions | None = None) -> Prep
                     "Locked room is incompatible with the requirement",
                     occurrence_ids=(occurrence.id,),
                 )
+        occurrence_rooms[occurrence.id] = rooms
+    for occurrence in normalized.occurrences:
+        req = requirements[occurrence.requirement_id]
+        learner, teacher = classes[req.class_ids[0]], teachers[req.teacher_ids[0]]
+        lock = locks.get(occurrence.id)
+        room_lock = lock.room_id if lock else None
+        needs_room = req.room_required or room_lock is not None
+        rooms = occurrence_rooms[occurrence.id]
         candidates: list[Placement] = []
         for start in sorted(problem.time_slots, key=lambda s: (s.day, s.session, s.period)):
             if lock and lock.slot_id is not None and start.id != lock.slot_id:
@@ -142,12 +152,9 @@ def prepare(problem: ScheduleInput, options: SolveOptions | None = None) -> Prep
                     )
                 )
         if not candidates:
-            raise CoreError(
-                "INFEASIBLE",
-                "EMPTY_DOMAIN",
-                "No eligible placement remains for an occurrence",
-                occurrence_ids=(occurrence.id,),
-            )
+            empty_domains.append(occurrence.id)
+            domains[occurrence.id] = ()
+            continue
         domains[occurrence.id] = tuple(candidates)
         if lock and lock.slot_id is not None:
             actors = [("class", learner.id), ("teacher", teacher.id)]
@@ -173,6 +180,13 @@ def prepare(problem: ScheduleInput, options: SolveOptions | None = None) -> Prep
             room_slots.update(
                 (p.room_id, s) for p in candidates if p.room_id is not None for s in p.slot_ids
             )
+    if empty_domains:
+        raise CoreError(
+            "INFEASIBLE",
+            "EMPTY_DOMAIN",
+            "No eligible placement remains for an occurrence",
+            occurrence_ids=tuple(empty_domains),
+        )
     for actor, demand in resource_demand.items():
         if demand > len(resource_slots[actor]):
             raise CoreError(

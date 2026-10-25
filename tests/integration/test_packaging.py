@@ -34,6 +34,9 @@ def test_build_excludes_research_and_private_inputs(tmp_path: Path) -> None:
             assert relative.split("/")[0] in allowed or relative in {
                 "docs/assumptions.md",
                 "docs/domain-model.md",
+                "docs/solver-design.md",
+                "docs/constraint-catalog.md",
+                "docs/phase-1-report.md",
             }, relative
     with zipfile.ZipFile(next(tmp_path.glob("*.whl"))) as wheel:
         for name in wheel.namelist():

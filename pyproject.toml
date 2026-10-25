@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vnedu-tkb-core"
-version = "0.1.0"
-description = "Standalone scheduling contracts for vnEdu TKB; Phase 0 foundation"
+version = "0.2.0"
+description = "Standalone hard-feasibility scheduling core for single and double periods"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["pydantic==2.14.1"]
@@ -32,6 +32,9 @@ include = [
     "/.python-version",
     "/docs/assumptions.md",
     "/docs/domain-model.md",
+    "/docs/solver-design.md",
+    "/docs/constraint-catalog.md",
+    "/docs/phase-1-report.md",
 ]
 
 [tool.pytest.ini_options]

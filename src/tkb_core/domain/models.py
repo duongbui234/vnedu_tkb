@@ -114,7 +114,7 @@ class TeachingRequirement(Entity):
 
 
 class LessonOccurrence(Entity):
-    """A normalized occurrence record for Phase 1; Phase 0 does not expand demands."""
+    """Normalized occurrence with a stable requirement-local ordinal and duration."""
 
     requirement_id: Identifier
     ordinal: PositiveInt

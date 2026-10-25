@@ -79,6 +79,17 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         return finish(exc.status, diagnostics=exc.diagnostics)
     if not prepared.normalized.occurrences:
         report = validate_schedule(problem, ())
+        if not report.valid:
+            return finish(
+                "MODEL_INVALID",
+                validation=report,
+                diagnostics=(
+                    Diagnostic(
+                        code="INTERNAL_VALIDATION_FAILED",
+                        message="Independent validation rejected the empty result",
+                    ),
+                ),
+            )
         return finish(
             "FEASIBLE",
             validation=report,

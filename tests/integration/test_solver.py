@@ -156,3 +156,45 @@ def test_room_and_actual_time_constraints(problem_data: dict[str, Any]) -> None:
     result = solve(ScheduleInput.model_validate(problem_data))
     assert result.valid_schedule and all(a.room_id == "lab" for a in result.assignments)
     assert {a.slot_id for a in result.assignments} == {"day1-am-1", "day1-pm-1"}
+
+
+def test_room_only_lock_does_not_require_unreachable_room_metadata(
+    problem_data: dict[str, Any],
+) -> None:
+    problem_data["manage_rooms"] = True
+    problem_data["classes"][0]["size"] = 20
+    problem_data["teaching_requirements"] = problem_data["teaching_requirements"][:1]
+    problem_data["teaching_requirements"][0].update(
+        periods_per_cycle=1, room_required=True, required_room_type="lab"
+    )
+    problem_data["rooms"] = [
+        {"id": "chosen", "room_type": "lab", "capacity": 25},
+        {"id": "not-used", "room_type": "lab"},
+    ]
+    problem_data["locked_assignments"] = [
+        {"occurrence_id": "demo-requirement-a::1", "room_id": "chosen"}
+    ]
+    result = solve(ScheduleInput.model_validate(problem_data))
+    assert result.valid_schedule and result.assignments[0].room_id == "chosen"
+
+
+def test_invalid_metadata_takes_precedence_over_empty_domain(problem_data: dict[str, Any]) -> None:
+    problem_data["locked_assignments"] = []
+    problem_data["teachers"][0]["available_slot_ids"] = []
+    problem_data["manage_rooms"] = True
+    problem_data["teaching_requirements"][1]["room_required"] = True
+    problem_data["rooms"] = [{"id": "missing-capacity"}]
+    result = solve(ScheduleInput.model_validate(problem_data))
+    assert result.status == "INPUT_INVALID" and not result.metadata.solver_executed
+
+
+def test_empty_validator_failure_is_also_an_internal_error(
+    problem_data: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import tkb_core.solver.cp_sat as entry
+
+    problem_data["teaching_requirements"] = []
+    problem_data["locked_assignments"] = []
+    monkeypatch.setattr(entry, "validate_schedule", lambda *args: ValidationReport(valid=False))
+    result = entry.solve(ScheduleInput.model_validate(problem_data))
+    assert result.status == "MODEL_INVALID"

@@ -90,12 +90,15 @@ def validate_schedule(
     for room_requirement in requirements.values():
         if not room_requirement.periods_per_cycle:
             continue
-        room_locks = {
+        room_locks = [
             lock.room_id
             for lock in locks.values()
             if lock.occurrence_id.rpartition("::")[0] == room_requirement.id
             and lock.room_id is not None
-        }
+        ]
+        needs_unlocked_room = (
+            room_requirement.room_required and len(room_locks) < room_requirement.occurrence_count
+        )
         candidates = [
             room
             for room in rooms.values()
@@ -103,7 +106,7 @@ def validate_schedule(
                 room_requirement.required_room_type is None
                 or room.room_type == room_requirement.required_room_type
             )
-            and (room_requirement.room_required or room.id in room_locks)
+            and (needs_unlocked_room or room.id in room_locks)
         ]
         if candidates and (
             learners[room_requirement.class_ids[0]].size is None

@@ -1,1 +1,1 @@
-"""Standalone Scheduling Core foundation; solver implementation is not included yet."""
+"""Standalone Phase 1 scheduling core with optional CP-SAT and independent validation."""

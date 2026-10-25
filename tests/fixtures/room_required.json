@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "school": {
+    "school_id": "demo-school",
+    "academic_year": "2026-2027",
+    "term": "demo-term"
+  },
+  "time_slots": [
+    {
+      "id": "day1-am-1",
+      "day": 1,
+      "session": "AM",
+      "period": 1
+    },
+    {
+      "id": "day1-am-2",
+      "day": 1,
+      "session": "AM",
+      "period": 2
+    },
+    {
+      "id": "day1-pm-1",
+      "day": 1,
+      "session": "PM",
+      "period": 1
+    }
+  ],
+  "classes": [
+    {
+      "id": "demo-class-a",
+      "size": 20
+    },
+    {
+      "id": "demo-class-b",
+      "size": 20
+    }
+  ],
+  "teachers": [
+    {
+      "id": "demo-teacher-a"
+    },
+    {
+      "id": "demo-teacher-b"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "demo-subject-a"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "demo-lab",
+      "room_type": "lab",
+      "capacity": 25
+    }
+  ],
+  "teaching_requirements": [
+    {
+      "id": "demo-requirement-a",
+      "class_ids": [
+        "demo-class-a"
+      ],
+      "subject_id": "demo-subject-a",
+      "teacher_ids": [
+        "demo-teacher-a"
+      ],
+      "periods_per_cycle": 2,
+      "block_durations": [
+        2
+      ],
+      "room_required": true,
+      "required_room_type": "lab"
+    },
+    {
+      "id": "demo-requirement-b",
+      "class_ids": [
+        "demo-class-b"
+      ],
+      "subject_id": "demo-subject-a",
+      "teacher_ids": [
+        "demo-teacher-b"
+      ],
+      "periods_per_cycle": 1,
+      "room_required": true,
+      "required_room_type": "lab"
+    }
+  ],
+  "locked_assignments": [
+    {
+      "occurrence_id": "demo-requirement-a::1",
+      "slot_id": "day1-am-1"
+    }
+  ],
+  "constraint_config": {
+    "hard": [],
+    "soft": []
+  },
+  "manage_rooms": true
+}

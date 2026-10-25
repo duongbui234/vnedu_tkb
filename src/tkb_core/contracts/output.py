@@ -1,4 +1,4 @@
-"""Output schema 1.0 with guardrails against contradictory schedule claims."""
+"""Output schemas 1.0/1.1 with guardrails against contradictory schedule claims."""
 
 from typing import Annotated, Literal, Self
 
@@ -16,7 +16,7 @@ from tkb_core.domain.models import (
 
 
 class ValidationReport(DomainModel):
-    """Shape of a future independent validator report, not a validator implementation."""
+    """Pure-data report produced by the independent schedule checker."""
 
     valid: StrictBool
     violations: tuple[Diagnostic, ...] = ()

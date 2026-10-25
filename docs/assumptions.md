@@ -1,5 +1,9 @@
 # Phase 0 — giả định, quyết định và giới hạn
 
+**Lịch sử Phase 0:** nội dung dưới ghi lại giới hạn tại mốc đó. Phase 1 đã bổ sung
+solver/prechecks/validator theo [solver-design](solver-design.md) và [catalog](constraint-catalog.md);
+không diễn giải các câu “chưa có” bên dưới là hiện trạng sau Phase 1.
+
 Ngày: 2026-10-26. Đây là contract synthetic của core, **không phải schema vnEdu**.
 Yêu cầu hiện tại chỉ Phase 0; [Core First](VNEDU_TKB_CORE_FIRST_CODEX.md) ưu tiên hơn
 phạm vi rộng của [thiết kế tổng thể](superpowers/specs/2026-10-25-scheduling-core-design.md).
