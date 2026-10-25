@@ -1,0 +1,680 @@
+[
+  {
+    "label": "standby",
+    "repeat": 1,
+    "input": "research/fet/fet-7.12.0/examples/official/by-xdv/standby.fet",
+    "sha256": "97b575d22ef862db7e670346b6cc621d0cb94795ccd5eb9a2a9b1ad1ad3059fb",
+    "seed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 0.033936,
+    "user_s": 0.0,
+    "system_s": 0.0,
+    "max_rss_kib": 18488.0,
+    "output": "reverse-engineering/fet/benchmark/standby-s1",
+    "tail": "were modified separately - so the components had different values for 'must compute n total students' or number of students from the representative subactivity. The export is done, but it is not very accurate.\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/standby-s1/csv/standby.\n0 activity tags exported.\n4 rooms (with buildings) exported.\n2 subjects exported.\n12 teachers exported.\n1 years exported.\n0 groups exported.\n0 subgroups exported.\nThe subactivities with activity group id 168 have disabled active flag but they are exported.\nThe subactivities with activity group id 183 have disabled active flag but they are exported.\nThe subactivities with the activity group id 193 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 198 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 212 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\n12 activities exported.\n10 active activities statistics exported.\n12 not available teachers exported.\nSuccessfully finished timetable: 40 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/standby-s1/timetables/standby/standby_activities.xml",
+        "time_assigned": 40,
+        "total": 40,
+        "fitness_total_reported_by_fet": 0.0,
+        "broken_constraints_reported_by_fet": 0,
+        "basic_checks": "PASS",
+        "assignment_sha256": "c1b84fcafdb5da3f3673eb3b002391ee7b256661346109661b4f49adb2a3d92b"
+      }
+    ],
+    "status": "COMPLETE",
+    "placed_reported_by_fet": [
+      [
+        "Successfully finished timetable",
+        "40"
+      ]
+    ],
+    "fixed_starting_times": 0
+  },
+  {
+    "label": "standby",
+    "repeat": 2,
+    "input": "research/fet/fet-7.12.0/examples/official/by-xdv/standby.fet",
+    "sha256": "97b575d22ef862db7e670346b6cc621d0cb94795ccd5eb9a2a9b1ad1ad3059fb",
+    "seed": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 0.016081,
+    "user_s": 0.0,
+    "system_s": 0.0,
+    "max_rss_kib": 19480.0,
+    "output": "reverse-engineering/fet/benchmark/standby-s2",
+    "tail": "were modified separately - so the components had different values for 'must compute n total students' or number of students from the representative subactivity. The export is done, but it is not very accurate.\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/standby-s2/csv/standby.\n0 activity tags exported.\n4 rooms (with buildings) exported.\n2 subjects exported.\n12 teachers exported.\n1 years exported.\n0 groups exported.\n0 subgroups exported.\nThe subactivities with activity group id 168 have disabled active flag but they are exported.\nThe subactivities with activity group id 183 have disabled active flag but they are exported.\nThe subactivities with the activity group id 193 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 198 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 212 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\n12 activities exported.\n10 active activities statistics exported.\n12 not available teachers exported.\nSuccessfully finished timetable: 40 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/standby-s2/timetables/standby/standby_activities.xml",
+        "time_assigned": 40,
+        "total": 40,
+        "fitness_total_reported_by_fet": 0.0,
+        "broken_constraints_reported_by_fet": 0,
+        "basic_checks": "PASS",
+        "assignment_sha256": "6bf4cc786815493d4ef6c6b533400919296c285d79b73768d96c2be4425c1426"
+      }
+    ],
+    "status": "COMPLETE",
+    "placed_reported_by_fet": [
+      [
+        "Successfully finished timetable",
+        "40"
+      ]
+    ],
+    "fixed_starting_times": 0
+  },
+  {
+    "label": "standby",
+    "repeat": 3,
+    "input": "research/fet/fet-7.12.0/examples/official/by-xdv/standby.fet",
+    "sha256": "97b575d22ef862db7e670346b6cc621d0cb94795ccd5eb9a2a9b1ad1ad3059fb",
+    "seed": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 0.015939,
+    "user_s": 0.0,
+    "system_s": 0.0,
+    "max_rss_kib": 18528.0,
+    "output": "reverse-engineering/fet/benchmark/standby-s3",
+    "tail": "were modified separately - so the components had different values for 'must compute n total students' or number of students from the representative subactivity. The export is done, but it is not very accurate.\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/standby-s3/csv/standby.\n0 activity tags exported.\n4 rooms (with buildings) exported.\n2 subjects exported.\n12 teachers exported.\n1 years exported.\n0 groups exported.\n0 subgroups exported.\nThe subactivities with activity group id 168 have disabled active flag but they are exported.\nThe subactivities with activity group id 183 have disabled active flag but they are exported.\nThe subactivities with the activity group id 193 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 198 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 212 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\n12 activities exported.\n10 active activities statistics exported.\n12 not available teachers exported.\nSuccessfully finished timetable: 40 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/standby-s3/timetables/standby/standby_activities.xml",
+        "time_assigned": 40,
+        "total": 40,
+        "fitness_total_reported_by_fet": 0.0,
+        "broken_constraints_reported_by_fet": 0,
+        "basic_checks": "PASS",
+        "assignment_sha256": "7f3a0aecfaee1e57b7c444241e52d5ede8c9a81f6fa2531b2dc43008291675c7"
+      }
+    ],
+    "status": "COMPLETE",
+    "placed_reported_by_fet": [
+      [
+        "Successfully finished timetable",
+        "40"
+      ]
+    ],
+    "fixed_starting_times": 0
+  },
+  {
+    "label": "pocht",
+    "repeat": 1,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_default.fet",
+    "sha256": "349c4f86f81b0f9ef1f5b24e01e6a738a8a0be2dc3a8ccb49fa7c01b3bd6378c",
+    "seed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 0.064538,
+    "user_s": 0.04,
+    "system_s": 0.0,
+    "max_rss_kib": 22792.0,
+    "output": "reverse-engineering/fet/benchmark/pocht-s1",
+    "tail": "Starting timetable generation...\nTotal searching time (seconds): 0\nGeneration successful\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/pocht-s1/csv/PochtSchool_default.\n0 activity tags exported.\n21 rooms (with buildings) exported.\n28 subjects exported.\n28 teachers exported.\n7 years exported.\n14 groups exported.\n28 subgroups exported.\nNote: Constraint Min days between activities, WP:95%, NA:2, Id:479, Id:480, mD:1, CSD:yes was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:65%, NA:4, Id:262, Id:263, Id:264, Id:265, mD:1, CSD:yes was skipped, because there exists another constraint of this type with larger weight percentage, referring to the same activities\n252 activities exported.\n252 active activities statistics exported.\n28 not available teachers exported.\nSuccessfully finished timetable: 511 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/pocht-s1/timetables/PochtSchool_default/PochtSchool_default_activities.xml",
+        "time_assigned": 511,
+        "total": 511,
+        "fitness_total_reported_by_fet": 9.93,
+        "broken_constraints_reported_by_fet": 12,
+        "basic_checks": "PASS",
+        "assignment_sha256": "3329d4c902a9f81ff70a0d558ba7a60fe2133eaa2b5bfe0039549de98968a9a2"
+      }
+    ],
+    "status": "COMPLETE",
+    "placed_reported_by_fet": [
+      [
+        "Successfully finished timetable",
+        "511"
+      ]
+    ],
+    "fixed_starting_times": 511
+  },
+  {
+    "label": "pocht",
+    "repeat": 2,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_default.fet",
+    "sha256": "349c4f86f81b0f9ef1f5b24e01e6a738a8a0be2dc3a8ccb49fa7c01b3bd6378c",
+    "seed": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 0.064377,
+    "user_s": 0.05,
+    "system_s": 0.0,
+    "max_rss_kib": 22768.0,
+    "output": "reverse-engineering/fet/benchmark/pocht-s2",
+    "tail": "Starting timetable generation...\nTotal searching time (seconds): 0\nGeneration successful\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/pocht-s2/csv/PochtSchool_default.\n0 activity tags exported.\n21 rooms (with buildings) exported.\n28 subjects exported.\n28 teachers exported.\n7 years exported.\n14 groups exported.\n28 subgroups exported.\nNote: Constraint Min days between activities, WP:95%, NA:2, Id:479, Id:480, mD:1, CSD:yes was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:65%, NA:4, Id:262, Id:263, Id:264, Id:265, mD:1, CSD:yes was skipped, because there exists another constraint of this type with larger weight percentage, referring to the same activities\n252 activities exported.\n252 active activities statistics exported.\n28 not available teachers exported.\nSuccessfully finished timetable: 511 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/pocht-s2/timetables/PochtSchool_default/PochtSchool_default_activities.xml",
+        "time_assigned": 511,
+        "total": 511,
+        "fitness_total_reported_by_fet": 9.93,
+        "broken_constraints_reported_by_fet": 12,
+        "basic_checks": "PASS",
+        "assignment_sha256": "3329d4c902a9f81ff70a0d558ba7a60fe2133eaa2b5bfe0039549de98968a9a2"
+      }
+    ],
+    "status": "COMPLETE",
+    "placed_reported_by_fet": [
+      [
+        "Successfully finished timetable",
+        "511"
+      ]
+    ],
+    "fixed_starting_times": 511
+  },
+  {
+    "label": "pocht",
+    "repeat": 3,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_default.fet",
+    "sha256": "349c4f86f81b0f9ef1f5b24e01e6a738a8a0be2dc3a8ccb49fa7c01b3bd6378c",
+    "seed": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 0.064193,
+    "user_s": 0.04,
+    "system_s": 0.0,
+    "max_rss_kib": 23088.0,
+    "output": "reverse-engineering/fet/benchmark/pocht-s3",
+    "tail": "Starting timetable generation...\nTotal searching time (seconds): 0\nGeneration successful\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/pocht-s3/csv/PochtSchool_default.\n0 activity tags exported.\n21 rooms (with buildings) exported.\n28 subjects exported.\n28 teachers exported.\n7 years exported.\n14 groups exported.\n28 subgroups exported.\nNote: Constraint Min days between activities, WP:95%, NA:2, Id:479, Id:480, mD:1, CSD:yes was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:65%, NA:4, Id:262, Id:263, Id:264, Id:265, mD:1, CSD:yes was skipped, because there exists another constraint of this type with larger weight percentage, referring to the same activities\n252 activities exported.\n252 active activities statistics exported.\n28 not available teachers exported.\nSuccessfully finished timetable: 511 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/pocht-s3/timetables/PochtSchool_default/PochtSchool_default_activities.xml",
+        "time_assigned": 511,
+        "total": 511,
+        "fitness_total_reported_by_fet": 9.93,
+        "broken_constraints_reported_by_fet": 12,
+        "basic_checks": "PASS",
+        "assignment_sha256": "3329d4c902a9f81ff70a0d558ba7a60fe2133eaa2b5bfe0039549de98968a9a2"
+      }
+    ],
+    "status": "COMPLETE",
+    "placed_reported_by_fet": [
+      [
+        "Successfully finished timetable",
+        "511"
+      ]
+    ],
+    "fixed_starting_times": 511
+  },
+  {
+    "label": "ma582",
+    "repeat": 1,
+    "input": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/Test_View_Time_H_With_0_Gaps.fet",
+    "sha256": "e4d33758efa04ebeed6badcd9c931413d7816df088a397e4756df87a70830664",
+    "seed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 9.089438,
+    "user_s": 9.06,
+    "system_s": 0.0,
+    "max_rss_kib": 24012.0,
+    "output": "reverse-engineering/fet/benchmark/ma582-s1",
+    "tail": "3, Id:56, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:57, Id:64, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:65, Id:58, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:59, Id:66, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:67, Id:73, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:74, Id:68, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:69, Id:75, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:76, Id:70, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:71, Id:77, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:78, Id:72, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\n329 activities exported.\n316 active activities statistics exported.\n34 not available teachers exported.\nHighest stage timetable: 581 scheduled activities exported.\nCurrent stage timetable: 536 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/ma582-s1/timetables/Test_View_Time_H_With_0_Gaps-current/Test_View_Time_H_With_0_Gaps_activities.xml",
+        "time_assigned": 536,
+        "total": 582,
+        "fitness_total_reported_by_fet": 920097.5,
+        "broken_constraints_reported_by_fet": 209,
+        "basic_checks": "PASS",
+        "assignment_sha256": "3a83a7cb73baa37ffad3f7e1a6ab533b44d39f57800d43436109ae0049921240"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/ma582-s1/timetables/Test_View_Time_H_With_0_Gaps-highest/Test_View_Time_H_With_0_Gaps_activities.xml",
+        "time_assigned": 581,
+        "total": 582,
+        "fitness_total_reported_by_fet": 20019.0,
+        "broken_constraints_reported_by_fet": 62,
+        "basic_checks": "PASS",
+        "assignment_sha256": "0bc783cf90cca2b6ece6819621fbd4d21c81f3ac2b3c71b55283ec5645c29b4c"
+      }
+    ],
+    "status": "TIME_LIMIT",
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "581"
+      ],
+      [
+        "Current stage timetable",
+        "536"
+      ]
+    ],
+    "fixed_starting_times": 12
+  },
+  {
+    "label": "ma582",
+    "repeat": 2,
+    "input": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/Test_View_Time_H_With_0_Gaps.fet",
+    "sha256": "e4d33758efa04ebeed6badcd9c931413d7816df088a397e4756df87a70830664",
+    "seed": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 9.995416,
+    "user_s": 9.97,
+    "system_s": 0.0,
+    "max_rss_kib": 24104.0,
+    "output": "reverse-engineering/fet/benchmark/ma582-s2",
+    "tail": "3, Id:56, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:57, Id:64, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:65, Id:58, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:59, Id:66, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:67, Id:73, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:74, Id:68, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:69, Id:75, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:76, Id:70, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:71, Id:77, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:78, Id:72, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\n329 activities exported.\n316 active activities statistics exported.\n34 not available teachers exported.\nHighest stage timetable: 579 scheduled activities exported.\nCurrent stage timetable: 547 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/ma582-s2/timetables/Test_View_Time_H_With_0_Gaps-current/Test_View_Time_H_With_0_Gaps_activities.xml",
+        "time_assigned": 547,
+        "total": 582,
+        "fitness_total_reported_by_fet": 700097.0,
+        "broken_constraints_reported_by_fet": 193,
+        "basic_checks": "PASS",
+        "assignment_sha256": "d6592199b78f863cc653d0b0a721468ca71accc468693caf4b1ad64e5d2e2bad"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/ma582-s2/timetables/Test_View_Time_H_With_0_Gaps-highest/Test_View_Time_H_With_0_Gaps_activities.xml",
+        "time_assigned": 579,
+        "total": 582,
+        "fitness_total_reported_by_fet": 60029.0,
+        "broken_constraints_reported_by_fet": 73,
+        "basic_checks": "PASS",
+        "assignment_sha256": "2fe6b8c27c429abfa5e56e8064b8b2851103012f1eb2cdbbc68fbad707d0621e"
+      }
+    ],
+    "status": "TIME_LIMIT",
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "579"
+      ],
+      [
+        "Current stage timetable",
+        "547"
+      ]
+    ],
+    "fixed_starting_times": 12
+  },
+  {
+    "label": "ma582",
+    "repeat": 3,
+    "input": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/Test_View_Time_H_With_0_Gaps.fet",
+    "sha256": "e4d33758efa04ebeed6badcd9c931413d7816df088a397e4756df87a70830664",
+    "seed": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 9.994793,
+    "user_s": 9.98,
+    "system_s": 0.0,
+    "max_rss_kib": 23372.0,
+    "output": "reverse-engineering/fet/benchmark/ma582-s3",
+    "tail": "3, Id:56, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:57, Id:64, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:65, Id:58, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:59, Id:66, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:67, Id:73, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:74, Id:68, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:69, Id:75, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:76, Id:70, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:71, Id:77, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\nNote: Constraint Min days between activities, WP:100%, NA:2, Id:78, Id:72, mD:1, CSD:no was skipped, because it does not refer to a whole larger container activity\n329 activities exported.\n316 active activities statistics exported.\n34 not available teachers exported.\nHighest stage timetable: 580 scheduled activities exported.\nCurrent stage timetable: 577 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/ma582-s3/timetables/Test_View_Time_H_With_0_Gaps-current/Test_View_Time_H_With_0_Gaps_activities.xml",
+        "time_assigned": 577,
+        "total": 582,
+        "fitness_total_reported_by_fet": 100025.0,
+        "broken_constraints_reported_by_fet": 74,
+        "basic_checks": "PASS",
+        "assignment_sha256": "f7251fe6f4bd7d584aded9b8f008afffcb0639256250e573ba00f2cfd9cde59d"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/ma582-s3/timetables/Test_View_Time_H_With_0_Gaps-highest/Test_View_Time_H_With_0_Gaps_activities.xml",
+        "time_assigned": 580,
+        "total": 582,
+        "fitness_total_reported_by_fet": 40023.0,
+        "broken_constraints_reported_by_fet": 68,
+        "basic_checks": "PASS",
+        "assignment_sha256": "e0ad8f83a2c07f6e668151e5cc7fe6c01bcc190f2cdf6d837b42c1bdae6a696a"
+      }
+    ],
+    "status": "TIME_LIMIT",
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "580"
+      ],
+      [
+        "Current stage timetable",
+        "577"
+      ]
+    ],
+    "fixed_starting_times": 12
+  },
+  {
+    "label": "impossible5",
+    "repeat": 1,
+    "input": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-2-impossible.fet",
+    "sha256": "75331c572b3f1a2fc6a20773f131ecefe8cdda9e56d4dfe1f73597e40e4e04a7",
+    "seed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "limit_s": 2,
+    "exit_code": 0,
+    "wall_s": 2.019552,
+    "user_s": 1.97,
+    "system_s": 0.0,
+    "max_rss_kib": 18856.0,
+    "output": "reverse-engineering/fet/benchmark/impossible5-s1",
+    "tail": "Starting timetable generation...\nTime exceeded\nFET warning\nThere are subactivities which were modified separately - so the components had different values for 'must compute n total students' or number of students from the representative subactivity. The export is done, but it is not very accurate.\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/impossible5-s1/csv/test-liviu-2-impossible.\n0 activity tags exported.\n2 rooms (with buildings) exported.\n2 subjects exported.\n2 teachers exported.\n0 years exported.\n0 groups exported.\n0 subgroups exported.\nThe subactivities with the activity group id 1 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\nThe subactivities with the activity group id 6 are different between themselves (they were separately edited), so the export will not be very accurate. The fields which are different will be considered those of the representative subactivity. The fields which are different are: different active flag\n2 activities exported.\n2 active activities statistics exported.\n2 not available teachers exported.\nHighest stage timetable: 4 scheduled activities exported.\nCurrent stage timetable: 5 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/impossible5-s1/timetables/test-liviu-2-impossible-current/test-liviu-2-impossible_activities.xml",
+        "time_assigned": 5,
+        "total": 5,
+        "fitness_total_reported_by_fet": 10000.0,
+        "broken_constraints_reported_by_fet": 1,
+        "basic_checks": "PASS",
+        "assignment_sha256": "ee6076a87c946129d1487ab5eafebe8612ad6ea3354dfa16bc9557d8fa92d8e6"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/impossible5-s1/timetables/test-liviu-2-impossible-highest/test-liviu-2-impossible_activities.xml",
+        "time_assigned": 4,
+        "total": 5,
+        "fitness_total_reported_by_fet": 20000.0,
+        "broken_constraints_reported_by_fet": 2,
+        "basic_checks": "PASS",
+        "assignment_sha256": "15c50379805c504695b572d1e7992be43507ad2017805e50855fe2860ffe7b0d"
+      }
+    ],
+    "status": "TIME_LIMIT",
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "4"
+      ],
+      [
+        "Current stage timetable",
+        "5"
+      ]
+    ],
+    "fixed_starting_times": 5
+  },
+  {
+    "label": "large1517",
+    "repeat": 1,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Eric-Carolus/MHS_July2.fet",
+    "sha256": "2298957fb84690adc2b4ae92dfb664e58001ea0210b21563af0cef6665d5fc2f",
+    "seed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "limit_s": 2,
+    "exit_code": 0,
+    "wall_s": 2.070376,
+    "user_s": 2.02,
+    "system_s": 0.01,
+    "max_rss_kib": 37776.0,
+    "output": "reverse-engineering/fet/benchmark/large1517-s1",
+    "tail": "Starting timetable generation...\nTime exceeded\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/large1517-s1/csv/MHS_July2.\n0 activity tags exported.\n21 rooms (with buildings) exported.\n22 subjects exported.\n24 teachers exported.\n13 years exported.\n37 groups exported.\n112 subgroups exported.\n235 activities exported.\n235 active activities statistics exported.\n24 not available teachers exported.\nHighest stage timetable: 1496 scheduled activities exported.\nCurrent stage timetable: 1496 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/large1517-s1/timetables/MHS_July2-current/MHS_July2_activities.xml",
+        "time_assigned": 1496,
+        "total": 1517,
+        "fitness_total_reported_by_fet": 420019.95,
+        "broken_constraints_reported_by_fet": 63,
+        "basic_checks": "PASS",
+        "assignment_sha256": "561ace46074392def24a0a9e2872b8043b7a89314af0630c67dfd692e112cecf"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/large1517-s1/timetables/MHS_July2-highest/MHS_July2_activities.xml",
+        "time_assigned": 1496,
+        "total": 1517,
+        "fitness_total_reported_by_fet": 420019.95,
+        "broken_constraints_reported_by_fet": 63,
+        "basic_checks": "PASS",
+        "assignment_sha256": "ffc5b6a2a143caaa72c95a4f357da4d0477841f4693a018939b18ad1665105c5"
+      }
+    ],
+    "status": "TIME_LIMIT",
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "1496"
+      ],
+      [
+        "Current stage timetable",
+        "1496"
+      ]
+    ],
+    "fixed_starting_times": 0
+  },
+  {
+    "label": "german589",
+    "repeat": 1,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Volker-Dirr/German_subact_constr.fet",
+    "sha256": "0561e968310e81c8897bc43fb14fde2b1adf5605a3b7299743b5b80ae17db864",
+    "seed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 9.94367,
+    "user_s": 9.89,
+    "system_s": 0.01,
+    "max_rss_kib": 23228.0,
+    "output": "reverse-engineering/fet/benchmark/german589-s1",
+    "tail": "Starting timetable generation...\nTime exceeded\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/german589-s1/csv/German_subact_constr.\n1 activity tags exported.\n34 rooms (with buildings) exported.\n19 subjects exported.\n33 teachers exported.\n6 years exported.\n42 groups exported.\n140 subgroups exported.\n260 activities exported.\n256 active activities statistics exported.\n33 not available teachers exported.\nHighest stage timetable: 573 scheduled activities exported.\nCurrent stage timetable: 573 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/german589-s1/timetables/German_subact_constr-current/German_subact_constr_activities.xml",
+        "time_assigned": 573,
+        "total": 589,
+        "fitness_total_reported_by_fet": 320025.35,
+        "broken_constraints_reported_by_fet": 55,
+        "basic_checks": "PASS",
+        "assignment_sha256": "073e902bb7953035eff3f81f9c3a03a5e8446156cf85f7d132a34531c71fa622"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/german589-s1/timetables/German_subact_constr-highest/German_subact_constr_activities.xml",
+        "time_assigned": 573,
+        "total": 589,
+        "fitness_total_reported_by_fet": 320025.3,
+        "broken_constraints_reported_by_fet": 55,
+        "basic_checks": "PASS",
+        "assignment_sha256": "df5bd426cc2cdda8aef7e363c67822c78665ddae27cd8b3751db17fa78c02a3e"
+      }
+    ],
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "573"
+      ],
+      [
+        "Current stage timetable",
+        "573"
+      ]
+    ],
+    "fixed_starting_times": 1,
+    "status": "TIME_LIMIT"
+  },
+  {
+    "label": "german589",
+    "repeat": 2,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Volker-Dirr/German_subact_constr.fet",
+    "sha256": "0561e968310e81c8897bc43fb14fde2b1adf5605a3b7299743b5b80ae17db864",
+    "seed": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 9.995268,
+    "user_s": 9.95,
+    "system_s": 0.0,
+    "max_rss_kib": 23756.0,
+    "output": "reverse-engineering/fet/benchmark/german589-s2",
+    "tail": "Starting timetable generation...\nTime exceeded\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/german589-s2/csv/German_subact_constr.\n1 activity tags exported.\n34 rooms (with buildings) exported.\n19 subjects exported.\n33 teachers exported.\n6 years exported.\n42 groups exported.\n140 subgroups exported.\n260 activities exported.\n256 active activities statistics exported.\n33 not available teachers exported.\nHighest stage timetable: 380 scheduled activities exported.\nCurrent stage timetable: 357 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/german589-s2/timetables/German_subact_constr-current/German_subact_constr_activities.xml",
+        "time_assigned": 357,
+        "total": 589,
+        "fitness_total_reported_by_fet": 4640380.9,
+        "broken_constraints_reported_by_fet": 622,
+        "basic_checks": "PASS",
+        "assignment_sha256": "d4b7a3375d4a3dcef0ae0d743515f130e2031e242ae35672590beecc5804eda7"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/german589-s2/timetables/German_subact_constr-highest/German_subact_constr_activities.xml",
+        "time_assigned": 380,
+        "total": 589,
+        "fitness_total_reported_by_fet": 4180328.6,
+        "broken_constraints_reported_by_fet": 538,
+        "basic_checks": "PASS",
+        "assignment_sha256": "8cbba6cf5a82057ebce81e1fcc4bdf28825e80bd19412cdf2c092df4eec10e89"
+      }
+    ],
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "380"
+      ],
+      [
+        "Current stage timetable",
+        "357"
+      ]
+    ],
+    "fixed_starting_times": 1,
+    "status": "TIME_LIMIT"
+  },
+  {
+    "label": "german589",
+    "repeat": 3,
+    "input": "research/fet/fet-7.12.0/examples/official/by-Volker-Dirr/German_subact_constr.fet",
+    "sha256": "0561e968310e81c8897bc43fb14fde2b1adf5605a3b7299743b5b80ae17db864",
+    "seed": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "limit_s": 10,
+    "exit_code": 0,
+    "wall_s": 9.986226,
+    "user_s": 9.94,
+    "system_s": 0.0,
+    "max_rss_kib": 23208.0,
+    "output": "reverse-engineering/fet/benchmark/german589-s3",
+    "tail": "Starting timetable generation...\nTime exceeded\nFET - export comments\nExport completeCSV files were exported to directory /home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/german589-s3/csv/German_subact_constr.\n1 activity tags exported.\n34 rooms (with buildings) exported.\n19 subjects exported.\n33 teachers exported.\n6 years exported.\n42 groups exported.\n140 subgroups exported.\n260 activities exported.\n256 active activities statistics exported.\n33 not available teachers exported.\nHighest stage timetable: 582 scheduled activities exported.\nCurrent stage timetable: 582 scheduled activities exported.\n\n",
+    "validated_outputs": [
+      {
+        "path": "reverse-engineering/fet/benchmark/german589-s3/timetables/German_subact_constr-current/German_subact_constr_activities.xml",
+        "time_assigned": 582,
+        "total": 589,
+        "fitness_total_reported_by_fet": 140010.75,
+        "broken_constraints_reported_by_fet": 24,
+        "basic_checks": "PASS",
+        "assignment_sha256": "fb88f5276fd3b8d9d58b8e4d3c176e80101eb2157bf92da747b4f94053aab329"
+      },
+      {
+        "path": "reverse-engineering/fet/benchmark/german589-s3/timetables/German_subact_constr-highest/German_subact_constr_activities.xml",
+        "time_assigned": 582,
+        "total": 589,
+        "fitness_total_reported_by_fet": 140012.75,
+        "broken_constraints_reported_by_fet": 25,
+        "basic_checks": "PASS",
+        "assignment_sha256": "111568b1f52f25d1a97ae6e40c64a10cca388c628ea2d16ffb67af675a4f3684"
+      }
+    ],
+    "placed_reported_by_fet": [
+      [
+        "Highest stage timetable",
+        "582"
+      ],
+      [
+        "Current stage timetable",
+        "582"
+      ]
+    ],
+    "fixed_starting_times": 1,
+    "status": "TIME_LIMIT"
+  }
+]

@@ -1,0 +1,4495 @@
+{
+  "archive_path": "research/fet/fet-7.12.0.tar.xz",
+  "archive_sha256": "ff3d1e0be7708a648f6c4a5078f49d0b0926283c065791105229753c7b697cd4",
+  "source_url": "https://lalescu.ro/liviu/fet/download/fet-7.12.0.tar.xz",
+  "downloaded_in_this_task": false,
+  "version": "7.12.0",
+  "commit": null,
+  "files": [
+    {
+      "path": "research/fet/fet-7.12.0/CONTRIBUTORS",
+      "sha256": "204e66b9d9f9e58a8f680a301eeb6f3e6d13489752c4edcbba37212a13f86bf2",
+      "bytes": 607
+    },
+    {
+      "path": "research/fet/fet-7.12.0/REFERENCES",
+      "sha256": "85479cdf0dffe202a0d0e942d212dee18e434151dcd59452b0b965329f12997e",
+      "bytes": 5475
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/algorithm-references.txt",
+      "sha256": "b43cb2ef15361188fd736b79ff3f98b7c6013e29c65e951b75c8e8ac018b6bf3",
+      "bytes": 102
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/improve-todo-item-197.txt",
+      "sha256": "1030635cf2319c2065ddc2cd8af059bedd3e93479c14570900021188c53e2654",
+      "bytes": 9548
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/algorithm-details.txt",
+      "sha256": "d014015eac9117b9af5844cce5f7cdb9c2819b0d9e88b31e8c11c10f488b81af",
+      "bytes": 4053
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/2018-07-28-should-improve-theoretically/readme-improving-theoretically.txt",
+      "sha256": "bf783c6d0c2cb5efe4591f596aad7681f0fff7468395884c57df79b2a01ef7a5",
+      "bytes": 1764
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/2018-07-28-should-improve-theoretically/old-stable-code-2018-07-28/generate.cpp-old-practically-better.txt",
+      "sha256": "767ec41b8a097fe3258b425618bcb50f107fb2635294dfa66f5a06fc4b20a6ec",
+      "bytes": 315745
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/2018-07-28-should-improve-theoretically/old-stable-code-2018-07-28/generate.h-old-practically-better.txt",
+      "sha256": "db299c0a3a1fbbdf51109b66b6c24d5f0131227c3413e72b640b79df85faa071",
+      "bytes": 6955
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/2018-07-28-should-improve-theoretically/new-code-2018-07-28/generate.cpp-new-theoretically-better.txt",
+      "sha256": "e3889cd2cae485111b02606b0122b6c0d4beabbfa3ad38ebc744aa81ab4d1493",
+      "bytes": 335639
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/2018-07-28-should-improve-theoretically/new-code-2018-07-28/generate.h-new-theoretically-better.txt",
+      "sha256": "812db728e0a6aea7267abe2e5ac31ab757a417993fbecca3fea25373400afbdd",
+      "bytes": 7469
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/improve-studentsmaxgapsperday.txt",
+      "sha256": "a5ee436f33148ff339bbdceedb32d3e16f084c376b303493c62a5a5a1284fefb",
+      "bytes": 37171
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/algorithm-description.txt",
+      "sha256": "13316e880b0df45e79bd8b8dd9e44543becf80f3051d096c1eaeb0b66462e169",
+      "bytes": 2887
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/algorithm/algorithm-code.txt",
+      "sha256": "53e530f01077a729d3114dca3732e8493a23320d247ab2c8846ec43ddd8a33ea",
+      "bytes": 508
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/installing-compiling-running/instructions.txt",
+      "sha256": "2369a16e2929ad840c9ae622d33289420b3da18667e0c68f1f1d0391cb422672",
+      "bytes": 117
+    },
+    {
+      "path": "research/fet/fet-7.12.0/doc/adding-new-translations/adding-new-translations.txt",
+      "sha256": "d87ef0960043ac3b17a88e9c7efd0baf4fc9f9aacdd356b21c456a6ee77f73cb",
+      "bytes": 9766
+    },
+    {
+      "path": "research/fet/fet-7.12.0/THANKS",
+      "sha256": "c4807713ec6123808750bce52918a9598c88f7989a9e86a3809438dcce3c4940",
+      "bytes": 6629
+    },
+    {
+      "path": "research/fet/fet-7.12.0/fet.xml",
+      "sha256": "20c19797a8e52c9ca2977caa5491dd92c712fe1075de7f91bd8d2f65aa40e950",
+      "bytes": 356
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/terms/2/puris_12-const7.fet",
+      "sha256": "d459a4161fcbf9a6e13bac0cba5dd386630fd75bb54959af72f4cb3640316fb4",
+      "bytes": 618002
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/terms/2/puris_12-const78_01.fet",
+      "sha256": "a9e240b8c967c3eea286035fdab6700f2695ba9b8a9b329953798fd97dc87e84",
+      "bytes": 708056
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/terms/1/puris_2020-2021_9_01.fet",
+      "sha256": "9d54ab330ec1266bdff154378905f2cd00bbc374c24ef7cbd092fd4df295d375",
+      "bytes": 263094
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Argentina/Horario_ISJ.fet",
+      "sha256": "0b3c1b70162b98f3af18fb220c0bef390bb8726ce17eb8141e5a2013d0925305",
+      "bytes": 90848
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/South-Africa/2021/SIBUKOSETFU/SIBUKOSETFU.fet",
+      "sha256": "9d436c70c713dec54cd38dcbed84c4ff482ff377caa38bdb5d9f6923252b2d97",
+      "bytes": 260985
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/South-Africa/Western-Cape/Robertson/MHS_Covid_Final.fet",
+      "sha256": "17f2965defba8cb31f28beb5ae7100b42a933a7ba5fad55969001c756ce0b1a5",
+      "bytes": 1013466
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/South-Africa/difficult/Collegiate_Junior_School2.fet",
+      "sha256": "e29e40f1078e0d6157654efb55d657aef46e2d263c016cfd13c0cea286a56605",
+      "bytes": 403741
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/South-Africa/difficult/Insight_Learning_Centre2.fet",
+      "sha256": "59a0d41afb0bd8a184ba147eecb2f7fd3c852d0888d4ee80885edb7a79119ea6",
+      "bytes": 1587165
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hungary/Varosmajori_Gimnazium_Budapest/vmg-20180901b-9.fet",
+      "sha256": "a549b2d0e70b04f503cdf590338e5d94cf180f954c7b941e953623572952f3da",
+      "bytes": 419288
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hungary/Varosmajori_Gimnazium_Budapest/vmg-20180901b-readme.txt",
+      "sha256": "337b1a5d1c0246c656749e2d67b128c5f1b83058f2acf5a450759ae4de231f49",
+      "bytes": 2844
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hungary/Varosmajori_Gimnazium_Budapest/vmg-20180901b-2.fet",
+      "sha256": "1ae1afcd16be2d4fe216efc670b02953655ae676a0018dbedbcd3324d2e60396",
+      "bytes": 419695
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hungary/Bethlen/2007-2008-difficult/Bethlen_2007_2008.fet",
+      "sha256": "d8b423b3b551364c0032d82a92a8210568fe325f89129c6d2c7ab379a72c369a",
+      "bytes": 786796
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hungary/Bethlen/2008-2009/1-older/Bethlen-2008-2009-old.fet",
+      "sha256": "4da1691ea34f048437b1516054323c39a6a3628678a2ab72505a000b1a67d4db",
+      "bytes": 385707
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hungary/Bethlen/2008-2009/2-newer/Bethlen-2008-2009.fet",
+      "sha256": "67e7b029b217a9732d552ec9f0d460d8045d71b89b57a98206f8f701bb2e3c20",
+      "bytes": 473140
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/United-Kingdom/Hopwood/Hopwood.fet",
+      "sha256": "3559b8fbf22297fbfbd751fc04322f0df1b5316a032c3d7f4d8433aba0ccabbc",
+      "bytes": 161020
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Italy/2009/liceo-scientifico.fet",
+      "sha256": "2fe4c019352219a5b2c8932d46e02958b5efafccd3b520ed647d945f69456c93",
+      "bytes": 288816
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Italy/2010/base2010-23.fet",
+      "sha256": "b4b6074c09361fb2a54f362cb66da173b59c28d1e9cf31807d23b0fb532b146a",
+      "bytes": 415917
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Italy/2010/Liceo-2010.fet",
+      "sha256": "1f5e7715442a1a09d498058db350baafce23b2365b89283bf5f395129e0afbc3",
+      "bytes": 556630
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Italy/2007/simple/simpler-Italian.fet",
+      "sha256": "3af01ffca446c22b0dcacf3f7e1da2e6a819df71a883b1d74b794bc477875cf3",
+      "bytes": 267481
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Italy/2007/difficult/highschool-Ancona.fet",
+      "sha256": "576d9e70cdfc7e71e1e245fd63bfaf963875031d7853c9dbd27e1a63a5594c25",
+      "bytes": 319603
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Sudan/Khartoum-2010-02-13.fet",
+      "sha256": "b97db96c73826f09cd0471d0d67fb5aa61d8c5cbe8056ec2f0e8871e3d15dd2a",
+      "bytes": 118153
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Sudan/Khartoum-2010-02-13-readme.txt",
+      "sha256": "6fd984625b62a229b093043265cd8f6d3fe2da0578c07f7870a4bfe5f9c57713",
+      "bytes": 178
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Belize/Sacred-Heart-College/shc-2013/shc-2013-more-difficult.fet",
+      "sha256": "e8ccd8a841c7d30e106351a1c69b6c80acbdb028076c5aadaab9a4c87cbcd4eb",
+      "bytes": 501450
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Belize/Sacred-Heart-College/shc-2013/shc-2013.fet",
+      "sha256": "2d64376cb12e5c23583a5dce77ee40a70395da92c238f8bc52434e853cbd0fae",
+      "bytes": 493687
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Belize/Sacred-Heart-College/shc-2007/shc_6_gaps_per_teacher.fet",
+      "sha256": "cf04b2dc1100eb55979c929a1ca850af899b6a8ed3154bfb0288f83e4eb1b9ee",
+      "bytes": 540272
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Belize/Sacred-Heart-College/shc-2007/sacred_heart_college.fet",
+      "sha256": "bac556514818ff2c8072e4a7640718127f48451e1e53597ac35173c3bf423c0d",
+      "bytes": 540087
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Belize/Sacred-Heart-College/shc-2012/test-2012.fet",
+      "sha256": "0dacf2ea818067034dc94d63e918d21f0f4713c6884d2295e25a6aec468564cf",
+      "bytes": 496642
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Belize/Sacred-Heart-College/shc-2008/shc-prelim-08.fet",
+      "sha256": "04d8367d5d1f30658b0d111c2b3c8cc160f3d50b71842c4ab20367736cc9b60d",
+      "bytes": 396169
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/DGS-Pro/dgspro200809.fet",
+      "sha256": "62fddb3e3179699cd8664a0cb953b3728356c1a4db803426e0cb6336d16a4e43",
+      "bytes": 229180
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/DGS-Pro/older/DGS_Pro_Germany.fet",
+      "sha256": "1d57d38380919e7855db8356b2f9a879c389a2784a6960332e6d569e9ceea5ad",
+      "bytes": 203577
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/test-virtual-rooms-3/readme-German-test-virtual-rooms-3.txt",
+      "sha256": "606f562a1beb77bc8bc532c25e13db80bae3758a0e498f085f474a05efec16f6",
+      "bytes": 86
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/test-virtual-rooms-3/German-test-virtual-rooms-3.fet",
+      "sha256": "deb525b9c82c28f30ff0d381fbe1fd2c65550ce0f6c5965e9f9c29b7226a08e3",
+      "bytes": 328856
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/test-virtual-rooms-1/readme-German-test-virtual-rooms-1.txt",
+      "sha256": "0b7f99834df3f91a76d23a9cba10b9eea104ce6c8b296c8ec9e60746ec363671",
+      "bytes": 243
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/test-virtual-rooms-1/German-test-virtual-rooms-1.fet",
+      "sha256": "6c2a7b7e270eb345f961be6d79c330655d0247915d79c8c336ff2116f358aae1",
+      "bytes": 342766
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/test-virtual-rooms-2/German-test-virtual-rooms-2.fet",
+      "sha256": "7a919ac96961592cc798da9ad55a682e2cc0ce9211892db755e9eae0324de785",
+      "bytes": 337164
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/test-virtual-rooms-2/readme-German-test-virtual-rooms-2.txt",
+      "sha256": "e408fc5c668afd5b59f082d2c056627cb129fa815539d930d98ce7786155a528",
+      "bytes": 268
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/constraints-min-days-100-few-0/German-100_and_0.fet",
+      "sha256": "78c2100a3551dea8c20845827184efd1fe199d441e99584edd37fd6b781b7a5f",
+      "bytes": 328547
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/using_subactivities_constraints/German_subact_constr.fet",
+      "sha256": "975f3007cbceefb8abe0a319cb7eb9b2d54e8c9084b4af665347803afc0a3ae1",
+      "bytes": 327980
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-1/older/secondary_school.fet",
+      "sha256": "5f161fdbe5ad3b5feb47e15e0e6c3a92f5d997210638bf4c76a0cb8f459758b1",
+      "bytes": 1143872
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-2/GYR-more-difficult.fet",
+      "sha256": "6235d93d84dda1274b703196ecf882853323e0b64d64ddeed3ec7f694679050d",
+      "bytes": 1463548
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-2/GYR-more-difficult-readme.txt",
+      "sha256": "17129f7d2767e9c57d12c94651b9fc59ac4b92a5c42bf7391577b9cfe8071df1",
+      "bytes": 135
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-2/GYR-readme.txt",
+      "sha256": "6a38d5e53dfbe8b86d54c81f6f7a6d4c1fc05ae4d26407ab4804587b6f9a12cd",
+      "bytes": 141
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-2/GYR.fet",
+      "sha256": "e2fe22b2b8afdf81d14e011a20159bdf018d8d16512b4980d2651350916c3f17",
+      "bytes": 1407362
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-2/GYR-5-gaps-per-teacher-readme.txt",
+      "sha256": "88109d5766a12be64bc511bd41297d3fdc109ad52535f50bb8fa27a082657a86",
+      "bytes": 146
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Germany/secondary-school-2/GYR-5-gaps-per-teacher.fet",
+      "sha256": "bc9036ff11f373b6917bafec5787189a5624adbf8611186533c011ee9ec949df",
+      "bytes": 1407547
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Bulgaria/Lom_high_school_2007-2008.fet",
+      "sha256": "0fd340826ef4ef1704ed1ea144f4ea0fc923ea2e05d18f3f54d40b77cc5f0501",
+      "bytes": 289099
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Malta/Klikk-SLP/Klikks-SLP-readme.txt",
+      "sha256": "d80f01a1520e089135857d4d6acb5283669192bdf54cded3e7f42181ef513496",
+      "bytes": 150
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Malta/Klikk-SLP/Klikks-SLP.fet",
+      "sha256": "20b70165d2d2927a1edb31f39c3e5ecff1e2ff6929d327c9ae99689c3eddf7e3",
+      "bytes": 1089347
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hong-Kong/secondary-school-1/Yew-Chung-Intl-School/2008-09-difficult.fet",
+      "sha256": "623a1a94ded4dcfef4f0f49bb86345f736b5fa0306889a9edf776d2aa95bb198",
+      "bytes": 552912
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hong-Kong/secondary-school-2/Preparation-sample.ods",
+      "sha256": "81d41e0c11ec1a69c2be3e7d1c3b8ac398ab480a862dcf993456385e6049b618",
+      "bytes": 16472
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Hong-Kong/secondary-school-2/FET-2020-07-30-SAMPLE_HK_6_period.fet",
+      "sha256": "1a684ce1cfdb4c387a6aefce0caca7f977d08e5fa64da8646cfe9ca3305455a8",
+      "bytes": 1425731
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Spain/2-secondary-school/secondary-school.fet",
+      "sha256": "75fdbc2a822ed4439dd46055f4d768ed71b2441f32816ab6d8c7df089b50e133",
+      "bytes": 586297
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Spain/3-school/primaria.fet",
+      "sha256": "c0139010682e8f66decb5f14b02f9a2bc0a91d5205c334bea3c498be4b313f40",
+      "bytes": 138212
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Spain/4-secondary-and-vocational-school/SPAIN_20-21.fet",
+      "sha256": "812407eab893735c5aa47d32c124f39003415595183421ead8ed0007f13f50f9",
+      "bytes": 882011
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Spain/4-secondary-and-vocational-school/SPAIN_20-21-locked.fet",
+      "sha256": "e26be6ea6957badb58e05be58f850cd51cbff59fcfcb1ce73e74c4669bcab50d",
+      "bytes": 1323122
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Spain/4-secondary-and-vocational-school/readme-SPAIN_20-21.txt",
+      "sha256": "811ecfcd295cbf19fa2cc8d9c04277995ff4e6da06af5d722f9908b7b698c59f",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Spain/1-school/school.fet",
+      "sha256": "f833bedfe75a82509cbf4c64cc88117f084925eabe2f6537117848fcfd8d9913",
+      "bytes": 306611
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Egypt/Dakahlia/institution-2012-2013.fet",
+      "sha256": "c1865bf78e132a22d68d27f1e226d97d40aac2810fb809de19c94471453f6cc3",
+      "bytes": 530040
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Egypt/Dakahlia/input_Lectures_40.fet",
+      "sha256": "2d420082021cdebba64e73bab1161cda1a83b1397daf9048a9b7c99710cfdb47",
+      "bytes": 362170
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Vietnam/2-secondary-school/VietNamHungYen.fet",
+      "sha256": "d145d123c7ad763881175878bcb628ba039250ecb90c7c70937f2951c0b08df7",
+      "bytes": 160861
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Vietnam/3-THCS-(Mo-hinh-truong-hoc-moi)/TKB-THCS-DucHop_KimDong_HungYen-(8_2015).fet",
+      "sha256": "2dbb34647d7a9c2a4d0f6f86f9ebba88d03364a3fd40c85af3223dc61257b8a3",
+      "bytes": 123322
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Vietnam/1-Le-Qui-Don_Lam-Ha/Khoi-chieu.fet",
+      "sha256": "ecbef5cfa05d468c4b16cabd6f577913a41a5e3d24a08e914e4ea1c250ab2261",
+      "bytes": 157534
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Vietnam/1-Le-Qui-Don_Lam-Ha/Khoi-sang.fet",
+      "sha256": "5c0cd530d7e6576861c303003d1bed26b4ec474341aad7e36ef1f3e55be03beb",
+      "bytes": 175745
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Iran/Sharif-University/Sharif.fet",
+      "sha256": "745cf8574e7b46508638bc4a35199892bf1906b6561f42e2ef99308f559ea900",
+      "bytes": 377518
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Brazil/2/EEBLJ-Diurno.fet",
+      "sha256": "0181cf1b97a7deadb33dc8b381ba755e167581e5d9192ce24556d8913239bc4e",
+      "bytes": 776869
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Brazil/2/EEBLJ-Diurno-readme.txt",
+      "sha256": "c8fa136e7c78da3fb13eb827449c8ec04af56b7005530365efdfb40d0a812ced",
+      "bytes": 37
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Brazil/2/EEBLJ-Noturno.fet",
+      "sha256": "6dd7feb1b434eb021c40f199da22d92430412c6defece555139a0f240b4aff04",
+      "bytes": 57392
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Brazil/1/Brazil.fet",
+      "sha256": "135d9d7d5b63a86e1c803e4045b03606e8148deae5ec9add6877bc65d137cc46",
+      "bytes": 199754
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Brazil/1/Brazil-more-difficult.fet",
+      "sha256": "a519c571884f4a68598c0e586eaa96b7f4e134ff18179add84f9523a8ca9d685",
+      "bytes": 200002
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Brazil/3/ACHILES-MANHA.fet",
+      "sha256": "7f0997922ee5cc54d1b98343f00efd35a3eaa788f4256266885aa7e673158026",
+      "bytes": 73488
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/anonymous/2/2017/lk-example.fet",
+      "sha256": "b82e1c897c6c5d0fd33aa399681f1ccaf8f21e3373e13d9fe9ac5922bd31c573",
+      "bytes": 223557
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/anonymous/1/2008/anonymous-1-2008.fet",
+      "sha256": "be653636f122144a39606dc37a3abd7207c9ba3aca877d3c65984b720027aa59",
+      "bytes": 179089
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/anonymous/1/2007/anonymous-1-2007.fet",
+      "sha256": "fbe777054386f5cf369a83a9426a72e2e0c53be0fd7ebf9f4988fd9020120451",
+      "bytes": 134045
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Saudi-Arabia/Arabic_Saudi_2.fet",
+      "sha256": "2d3f507a67d97d72f167d2b5368c50f3c8bb041779a42b4c4e074acf549caf67",
+      "bytes": 272749
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Saudi-Arabia/may-not-solve/Arabic_Saudi_Examination_readme.txt",
+      "sha256": "50f0c4241eaed0fbe58696e8881efcc2e9c4b1957248f5a741f7b4dc68354bab",
+      "bytes": 143
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Saudi-Arabia/may-not-solve/Arabic_Saudi_Examination.fet",
+      "sha256": "a0e66aab66e2d474767347cf608e0179fc40f7351939ec502d7d47799e762794",
+      "bytes": 136278
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Saudi-Arabia/Arabic_Saudi_1.fet",
+      "sha256": "6e11c6f2f2c8c1c00c922b987c7f97d3556ba7c1de4786140c3d6985767eb4ec",
+      "bytes": 293225
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Saudi-Arabia/Arabic_Saudi_3.fet",
+      "sha256": "ed1ba40854b3dec1deb1f2fd1f71c3242a5b30ad521d6cd8ae6a297bd61a46f1",
+      "bytes": 289647
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Syria/Hama/2019/Industrial-high-school.fet",
+      "sha256": "d4ed5a8883b52b3d88f86d2eb8e8a778f4f5deafffb91e0bc0e9cb6268baab6b",
+      "bytes": 207280
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Syria/Hama/2019/High-school.fet",
+      "sha256": "540d945329c5568f447ed61e7e31f8f1dc3b2bf519683596e1eef9171a111ecb",
+      "bytes": 277018
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Oradea/School-10-Oradea-2007-2008.fet",
+      "sha256": "55d04f52ddafea28866d0541ee07b48c28863526b30f4551803d8ac524cb4a9b",
+      "bytes": 205853
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Oradea/FS-2008-2009-difficult.fet",
+      "sha256": "bef480f38f14063c48d7459c9e7ff0bf57308711a7800f5f82fc7ec828a8d6ed",
+      "bytes": 249859
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Constantin-Brancusi-School-Medgidia/2019-2020/Orar_4_6.fet",
+      "sha256": "eca6815f918ed0c7be98819211cbfce14fa75a67369e0a22376a92b1a2eefc2f",
+      "bytes": 223681
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Constantin-Brancusi-School-Medgidia/2013-2014/Orar_5_3.fet",
+      "sha256": "fce1fb37a65d5db44c94cec39daa788d202b8c5be5bfb4c1ace8fa1ce454959c",
+      "bytes": 233567
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Pedagogic-High-School-Tg-Mures/2007-2008_sem1-d.fet",
+      "sha256": "42cfce75a326f392f44260ae46c3c6e4f5308bfbd28e50a6bc7c00420133872c",
+      "bytes": 378461
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Pedagogic-High-School-Tg-Mures/2006-2007.fet",
+      "sha256": "8ee108cb018e627d1264791547f13079813207772dfb45866571ff23e2159c87",
+      "bytes": 352351
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Pedagogic-High-School-Tg-Mures/2007-2008_sem1-d-test-students-max-span-per-day.fet",
+      "sha256": "f849a755471f1cc91794528b5c585075fd94fad6f21cb40f3b3066fb2b4dda0f",
+      "bytes": 379996
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Pedagogic-High-School-Tg-Mures/2007-2008_sem1-a.fet",
+      "sha256": "f81ee5ca4d5fcaede0d2d5dae55849a8e60349491ebbce6174ca9beec02d8337",
+      "bytes": 363900
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Econ-Timisoara-difficult/2007-2008-sem-2/Econ-Timisoara.fet",
+      "sha256": "f6610a0a4aedd5cbab8b31a6048e0957467cb7f0b166984ac1a4606c8b31a1a4",
+      "bytes": 2259036
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Econ-Timisoara-difficult/2009-2010-sem-1/Econ-v0.8.fet",
+      "sha256": "d37150bced2cd53b7f6dc338d26606c4cdb75c9addb86709161f698b78ec1d67",
+      "bytes": 728757
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Econ-Timisoara-difficult/2009-2010-sem-1/Econ-v0.8-readme.txt",
+      "sha256": "8b1441fcd87754bff8c39a37529e5781dcaa4e0d218afcc742f4c40f58a22cdf",
+      "bytes": 369
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Econ-Timisoara-difficult/2008-2009-sem-1/Econ-Tim-ver8.fet",
+      "sha256": "2d6cc2653089678af49c65eecaa786629ec6af4a9a1a44861ed6c5e363aa2092",
+      "bytes": 1342785
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Econ-Timisoara-difficult/2009-2010-sem-2/v1_7.fet",
+      "sha256": "4fff17ebd733f9f4b88d5651e35f2144a538018a4afcdc4d4521a14092092ca6",
+      "bytes": 815695
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Econ-Timisoara-difficult/2009-2010-sem-2/v1_7-readme.txt",
+      "sha256": "c6c48ed321e7ec2cb85e7356f82bd99c8efcb13a5a5d79bad06b12a51b62619f",
+      "bytes": 182
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Romania/Faculty-Computers-Craiova/Computers-Craiova.fet",
+      "sha256": "71633e0b88624f83c99bd9276b7d0378eb7f6da4fe14eb4b1bbe1c5ba5a5cc51",
+      "bytes": 251939
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Morocco/Goulmima/Lycee-Goulmima.fet",
+      "sha256": "a21ba8acd7d955879199757bdcd5ae0c948f93069559f50ade892f67405ed663",
+      "bytes": 979757
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Morocco/Hadkourt/lycee-Farabi-readme-English.txt",
+      "sha256": "4e9145bafa7280662645c392664aff1c7b1cea5e9b909f43338ff6339d8d5147",
+      "bytes": 6809
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Morocco/Hadkourt/lycee-Farabi.fet",
+      "sha256": "acf5b8f06245da10947c84102d22827fb42f8e621926d97614db168b097b2de0",
+      "bytes": 744235
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Morocco/Hadkourt/old-without-max-7-hours/lycee-Farabi-old.fet",
+      "sha256": "a708360371c04665d2622ccb9486d2b2786d9387929fcc0b08d1be4759bed76a",
+      "bytes": 326133
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Morocco/Hadkourt/lycee-Farabi-readme-Arabic.txt",
+      "sha256": "fad246eebe27b33f7f074605d6861fdd6be16e6797e9d5c07ce9517bc476cf14",
+      "bytes": 13572
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Morocco/Morocco-readme.txt",
+      "sha256": "f337de1da0040c1cf7aa2f3357b3ab67c35f457cd9bdb287c4b08bf48ef38cd7",
+      "bytes": 569
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Algerian-college/Find-the-gaps.fet",
+      "sha256": "193fbe3b7b2f0025afd761383042aa56ef4831971ee0e104906ae7ff9508a39a",
+      "bytes": 405108
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Algerian-college/Find-the-gaps-readme.txt",
+      "sha256": "17664767472a4600ce0b89a3993a5e812646997da6452b84c752077e6fbc642b",
+      "bytes": 1997
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Faculte-SNV-BBA/SNV-BBA-2019-2020-S1-VF.fet",
+      "sha256": "83a3391e2047c890ebf2487e262b79bfa7a9ae6b3c7b4665c51540fe41aefad4",
+      "bytes": 591098
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Mechanical-Batna_Univ/EXAM-2013-2014-S1.fet",
+      "sha256": "df1f063fada8e15113137123d86ebf6edc86ce034bf1692526cf41ed943405e4",
+      "bytes": 52057
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Mechanical-Batna_Univ/EXAM-2013-2014-S1-readme.txt",
+      "sha256": "0c274a2a8843594b9366a78a4da93d288836f2b30c843a94fe39c6f435a44b3e",
+      "bytes": 235
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Mechanical-Batna_Univ/ET2012-2013-S2.fet",
+      "sha256": "b5ebf3428efa47b5ae4fbfe59e693ca470423211fd9833cf24df330b36953db7",
+      "bytes": 204348
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Algeria/Mechanical-Batna_Univ/ET2012-2013-S1.fet",
+      "sha256": "35fbd5154e11ab80bb11b99314d8be2d67d5351e985a4eaa02c2d3435c3705fb",
+      "bytes": 190513
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Denmark/small-school.fet",
+      "sha256": "db751066273b5bed562cc6cce5b53a68289dd93bcefc45712e22b2a4fa5119e3",
+      "bytes": 23103
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/REVA-University/REVA-UNIVERSITY_JANUARY2016.fet",
+      "sha256": "332584e2804b977fbfcd7ebbcdd9b5f966c5b2bad2f0b6ded199769b2575a6d7",
+      "bytes": 857148
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/St-Marys-College/St-Marys-College-Puthanagadi.fet",
+      "sha256": "f89b3ac7db9561cc787427f6c5d1487d9b71051d33572110401fca3575b9f13c",
+      "bytes": 391884
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/2021/St-Joseph-EMHSS-Puthanangadi/stjosephemhss1.fet",
+      "sha256": "aba13c643381a981ed8b77d32725e73e527557e4bcca94545595a2624adb5e6d",
+      "bytes": 528166
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/2021/St-Joseph-EMHSS-Puthanangadi/stjosephemhss.fet",
+      "sha256": "65032bdf67d88781c43422f0a769ce340572fd9472e2a1c2189ef7a3a31e84ed",
+      "bytes": 572537
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/Kurukshetra/Institute-of-Technology/MED_2019-20-1.fet",
+      "sha256": "04f7bded305a2fdd451a639b67758dc07c00ccae9e411473c73ec85e038d25a1",
+      "bytes": 321957
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/Chennai/Anna-University/timetable_July_Nov_09_9.fet",
+      "sha256": "85fe79ab27d8b163197c11721bf2961ae5d40f90a8e855d441ab23a309c250a1",
+      "bytes": 131056
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/India/New-Delhi/Eng_College.fet",
+      "sha256": "20675cdca85469c22810c3fd538e8fd9fa32fdd398f263b2e336fd290ba2be69",
+      "bytes": 624463
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Tunisia/Licee-secondaire-Hanibal-a-L-Ariana/Diff1TverouillageTPass3.fet",
+      "sha256": "02d6310b8ea9ca546f4aa77a2481be6b801c53537f0025b93dbf1c4133f10c09",
+      "bytes": 6115859
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Tunisia/Licee-secondaire-Hanibal-a-L-Ariana/Diff1TverouillageTPass3-readme.txt",
+      "sha256": "187cd2f92b5788a003f9de540feae7f22361a7d9f526f60995a61aab4b2ae371",
+      "bytes": 98
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Russia/Russian-Medical-College/timetable-ru.fet",
+      "sha256": "c9309c43a7a1f9a4f2b352e61954eadbe4f12b0451a62ed1c59e1c77d1e4c441",
+      "bytes": 872546
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/United-Arab-Emirates/IBDP-School-2016.fet",
+      "sha256": "fd60c9640e8876f04497ca08197b18a781dff5334466e0e3fb25f72eed988c58",
+      "bytes": 2077854
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Indonesia/SMK-Negeri-1-Arahan-Kab-Indramayu/netura_2016-2017.fet",
+      "sha256": "2fc9e862059230964fd0bdeb4db97d4f26d968615dc7c643bf62d9160ca0401b",
+      "bytes": 307400
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Indonesia/TelPolytech-Bandung/2010-2011/TelPolytech_even.fet",
+      "sha256": "9ab9855bf7928fa2e73a7e1af62989bf013e984caaf2b5647a7309a93d37b175",
+      "bytes": 1151350
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Indonesia/TelPolytech-Bandung/2010-2011/TelPolytech_odd.fet",
+      "sha256": "dfc5705ff1253a2148bbe44a5306bba560cb6b0e8dcc24accb58f497e8bad5ff",
+      "bytes": 1397800
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/ErnstJagerCSY2016T2a.fet",
+      "sha256": "ecdacc2adba4c894fee4758fe0c78ff7312c80be0dc55fed4b8d41907bb534e4",
+      "bytes": 114858
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/EGS2016T2d.fet",
+      "sha256": "413922debc01c1507be2261b9789406d25169eed3d5587445968eccbdd0d943a",
+      "bytes": 284744
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/NamibiaPSY16T1f.fet",
+      "sha256": "1041089780ec50a8bbe8254423ae647449f22510b495b4873ef517493f09beee",
+      "bytes": 512837
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/ConcordiaY2016T2a.fet",
+      "sha256": "5f626a51e1f32963fe44af00d5ef1ae6cdf99ef1b51ed146d51640ba2f81ebbb",
+      "bytes": 569384
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/HashiyanaPSY16T2a.fet",
+      "sha256": "73d87256e72b975ec0bdb1f89747d407dcc8436e97346304a56a6fbdaf43e987",
+      "bytes": 106752
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/Moses-vd-Byl-Y2016-T1b.fet",
+      "sha256": "9a78d2997ed30c8653ab62f28f46af83c0addd539f2832809f7a9a1867bbbe04",
+      "bytes": 280414
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/HavanaPSY2016T2b.fet",
+      "sha256": "d91b979577f0902ec94e79fe2a181c75a54a1959c76aca6fce33f22fed90e3c0",
+      "bytes": 276026
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/RehobothPSY16T1a.fet",
+      "sha256": "776c272877ad59f23a034c895fe75914e8e917cc11687cb0db61a785541af0c9",
+      "bytes": 172565
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/GoreangabJSSY2016T2b.fet",
+      "sha256": "18059c4480dfc39f7fd856b7d503f0df2b735c95449198871461776f89397aef",
+      "bytes": 452697
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/StAndrewsPSY2016T2a.fet",
+      "sha256": "5ee3cadc5dcd5a0f3850f79a1097979c3554a74be647cf6d02623dbb01d2ef10",
+      "bytes": 116978
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/NamutuniPSY16T2a.fet",
+      "sha256": "d04d8a9e0741d044b46f3cfd62ed0f2e354e230e227aa7cb166aff75f131bcee",
+      "bytes": 210026
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-7-2016/RehobothHSY2016T2d.fet",
+      "sha256": "f02fc7db07a3ebb88065faf8c12772d6624b6c1b2b03fc6143751a584a06732b",
+      "bytes": 510961
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/MAPS.fet",
+      "sha256": "4a14488694d5fb66227321ffeaa1183c4a79e36f585effc21b347981113f9e9a",
+      "bytes": 233248
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/may-take-hours/CONCORDIA.fet",
+      "sha256": "43d454846616ece741c35246014c0740cf4a1f2224e44db2e6417576af549e03",
+      "bytes": 589081
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/KPS.fet",
+      "sha256": "46cf0c43984657619f9af99d956831116eea1377b48ddacf1edafa8b3adc9711",
+      "bytes": 299589
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/Shipena.fet",
+      "sha256": "82b9254baa128d6070b532011785eac2d4cbc0aac9797c3e82eb630ba4509900",
+      "bytes": 589744
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/FGPS.fet",
+      "sha256": "53476d2a6dd9997ce167906f0808b9d28efe47f23d7e489a4b0fca78a4b74a13",
+      "bytes": 148246
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/PutSS.fet",
+      "sha256": "dca2fcfdc84e93beb00b2bf1b311de12d061b6a04353cfd0e938999609ec4f9d",
+      "bytes": 238138
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/JMSS.fet",
+      "sha256": "15864e1d0bcc3505db4aa42cce657553bcfd3643c582ce27d113c1d299730bd4",
+      "bytes": 410471
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-2/WTHS.fet",
+      "sha256": "df78d165af09d45d90004c65ebbf410fa66151f8a09b3fc71ff4b4ae9f61d33c",
+      "bytes": 377773
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-6-2016/MAPSY16T1d.fet",
+      "sha256": "1f8b12fdd1533461de3194ba5002c5f57def7b643d83e9d5aa7da3916ae83c7d",
+      "bytes": 251211
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-6-2016/ConcordiaY2016T1b.fet",
+      "sha256": "1e15facfebdc0b1f64a9b0259ee27e4002e24d3f1db6d7b3189415717715a8ab",
+      "bytes": 570843
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-8-2017/PutuavangaSSY2017T1a.fet",
+      "sha256": "56c442cabb03e54c17eeeb4e0428410e9e7d55f1eed0910689d335cd935b8e36",
+      "bytes": 366407
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-8-2017/NehaleSS2017T1a.fet",
+      "sha256": "1cdfa1fa46ed8e8bf92d3c05792a270b74f319ac1c20a1021c11deb53d72bbde",
+      "bytes": 454542
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-8-2017/KalengaPSY2017T1d.fet",
+      "sha256": "67b4d13586815fc7659cc48c2807f33bd8eb527df1cf17b4cec29818d7af4448",
+      "bytes": 316136
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-3/StPaulsColY13T1a.fet",
+      "sha256": "70d179f75416bcbb231cb635c05bc4523de78042ba7f6309ad383367835305f4",
+      "bytes": 1215455
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-3/ConColY13T1a.fet",
+      "sha256": "ceb9c3ac8b57fda43fe9a4fcf372f00b489a3e66fe770c5b30f4b5c74eedc6b5",
+      "bytes": 574856
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-4/ConcordiaY15T1a.fet",
+      "sha256": "d6cd79d7d0fc763e81b2b98563a69f04cab17dd5c5c1d9e5028c1262d399656a",
+      "bytes": 688359
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-1/Van_RhynFinal.fet",
+      "sha256": "458f22cb108e9a50a1c4be3b618794d1be87cff1cd10fe95b35ea80accbff37f",
+      "bytes": 206494
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-1/PBS.fet",
+      "sha256": "866e54725a416cd628eaae2d29f4ff72439c2bdf876a1a4ce26fd21d15670f71",
+      "bytes": 546651
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Bobby/set-5/KalengaPSY15T1a.fet",
+      "sha256": "190f90dbb5c5f0fe8e51c957108272a4412566de6a825fa548dfbfaa4f010410",
+      "bytes": 233606
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Namibia/by-Willy/Highlands_Christian_School.fet",
+      "sha256": "934c81cf6a0711f81d8af9053ef23bc11b6071f7284b5db37436751b70caa833",
+      "bytes": 296211
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Gymnasio/Gymnasio.fet",
+      "sha256": "08c9f22cac4d83ba6b9796f767e8ac03218f1953f311d030db172c3a332827e0",
+      "bytes": 226134
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Vartholomio/2008-2009.fet",
+      "sha256": "50aca4fdb5b5ad09aacdbc24a80fea56e3418d7b740125c57d4be4b38d03de23",
+      "bytes": 145943
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Corfu/THE-2008-2009-exams-sep.fet",
+      "sha256": "febe238509ea6c74547798e79378939f40cecf55a12e4cbc05762fe73ca0261f",
+      "bytes": 536968
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Didymoteicho/6th-Primary-School.fet",
+      "sha256": "c95e1d281315d4b94f31e2e4e0897504b48ec8157b33d2789fae0eeb1bb3d3e1",
+      "bytes": 393824
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Little-Music-School/MSA.fet",
+      "sha256": "78b37eb4dfcfd2fbedace6679c1c5f18cbc590aa0d9a74b776b3ec16da94f4a4",
+      "bytes": 181921
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Pireus-difficult/8th-highschool-readme.txt",
+      "sha256": "a99edaac010020f8bf0cf7c5012c7fa26f3868615caf5f6a80a44db822dd29c7",
+      "bytes": 635
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-official/Greece/Pireus-difficult/8th-highschool.fet",
+      "sha256": "e467cd042b4edde8d25b9c35f0bf96a6ad2a6af498cebe724e9c0815012c412c",
+      "bytes": 282464
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/2/puris_12-const7.fet",
+      "sha256": "013108a7f463347dfe401dda4a5c8d16848cbd0054c150d31f43cf9a0d8e9d0d",
+      "bytes": 617204
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/2/puris_12-const78_01.fet",
+      "sha256": "211a1d619a32242cd1d98fe5710d434dc1cba5a509a40380dc8cec4eadad7adb",
+      "bytes": 707258
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/term_test_activities.csv",
+      "sha256": "21ed503e9f9232170948b235a67a7fc49581abd6062f3bc2abaa9622d04835ed",
+      "bytes": 2008
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/terms-example-3.fet",
+      "sha256": "e286ce248e47694a41e1e7154ae018025ed39cb32712640cde1555eb7d7052cc",
+      "bytes": 263385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/terms-example-4.fet",
+      "sha256": "ae49c6871ebbf56a27dc918f2620c11042c0849ff0babd047aa01774b04b3984",
+      "bytes": 263385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/terms-example-2.fet",
+      "sha256": "ce03ab51885a4fae4df244f927a04155408e18af0627f24acf1fb551c1ccff52",
+      "bytes": 262758
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/simple-terms-example.fet",
+      "sha256": "f7ef17e55a3e0b582b57a06d474477387499a299e09c8a512e3286f0aeb5ceed",
+      "bytes": 7507
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/puris_2020-2021_9_01.fet",
+      "sha256": "fe3a37088f013317890ada248947e758d5cd2be6663f0028d753121526154ed8",
+      "bytes": 262323
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/terms-example-1.fet",
+      "sha256": "eac63f6cb2ed62d3915db7e538679152a1da94522d7cf97b2bf6af26af8b8101",
+      "bytes": 63912
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/terms-example-5.fet",
+      "sha256": "d35239bdb070e081ac75bf96ea0f860a5dc0146ac132c486c9be09b16ee2ab2a",
+      "bytes": 263385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-terms/1/terms-example-6.fet",
+      "sha256": "0e6c7a3479b2ca317fea5e45dc5415d74fd58fbeab3822c66c5252dacbc23a72",
+      "bytes": 263385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/problem-cannot-be-solved/test-liviu10.fet",
+      "sha256": "288d3e99513dee7b9e9371e07406d80e715cc86a6d82b827596d19b46a8e8967",
+      "bytes": 10036
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/problem-cannot-be-solved/readme.txt",
+      "sha256": "93d6945d967484abff3e61cc47254ade7f259f7c09fdd3f9ed77a1761e570405",
+      "bytes": 353
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/problem-cannot-be-solved/test-liviu7.fet",
+      "sha256": "72aab404494f988ede37fb45cee3891c4adf22c9b2dfc330d97e68d9d47f4fa5",
+      "bytes": 9526
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/4/Ganima_Annex_Moro_2_data_and_timetable.fet",
+      "sha256": "25e4e476063cf3ba77adbfcd5aa235ea1dbec21b444df328c169a87e919b4eb6",
+      "bytes": 351407
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/4/Ganima_Annex_Moro_2_data_and_timetable-readme.txt",
+      "sha256": "e909eb9e7b0834fce64f14ed8f9365cb85b7dad74de9962ed3af1219f7a63009",
+      "bytes": 260
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/simple-test-bug-2020-02-29/readme.txt",
+      "sha256": "b822932ba4eba1ee759190fd979e757b8d604ddb04769d96b91d270cff07f02b",
+      "bytes": 86
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/simple-test-bug-2020-02-29/check-2020-02-29-bug-morocco.fet",
+      "sha256": "fe7e241cf3812ed6d88c06f488d20e1fcea147ebc98a60749718d0cad0544e85",
+      "bytes": 3710
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/3-by-Omar-Ben-Ali/easy/modified.fet",
+      "sha256": "a8b4e28165ed0056e900fbad336c8c2e812e389e875175ed171fa90146c1bc5d",
+      "bytes": 230951
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/3-by-Omar-Ben-Ali/easy/College_test1.fet",
+      "sha256": "52b548b50503b3577f31c91ebe11ca859837b7d411e2aae51727fd9dc93365cb",
+      "bytes": 230912
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/3-by-Omar-Ben-Ali/difficult/Colege_test_2.fet",
+      "sha256": "f7e5b60d399ac53ec1101e00d8f01c7a7b370046488b7b76f6b19d870a6ccf70",
+      "bytes": 320725
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/3-by-Omar-Ben-Ali/Colege-test.fet",
+      "sha256": "98daee906e37df92f35224afdd0ca07226468a08836261f2749f4697fd71142b",
+      "bytes": 264589
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/1/farabi090909locked02.fet",
+      "sha256": "894bdf717fc98d0a842a7189acc8954fe1c081ace0f6721de5db911abace3645",
+      "bytes": 462894
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/1/farabi432.fet",
+      "sha256": "11a234eebb25566b8f702588581aa781cad158d8abd2c40411c2e796a7bae715",
+      "bytes": 246955
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/1/sample-morocco.fet",
+      "sha256": "4b58e6dc42a1897797ce558777049de6805ad7b796b5660662a4e20fe8222fab",
+      "bytes": 203955
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/1/sample-morocco-2019-10-30.fet",
+      "sha256": "bf2e5e81b1a39dfe26dab86dbefb2cd265f35395302b9e86513137f564ba9816",
+      "bytes": 205494
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/by-Benahmed-Abdelkrim/1/TEST_EDT018_019_BIS_66_data_and_timetable.fet",
+      "sha256": "8390bcf54a91ed410eb1360cb119693bb70d7327514d2b0ec5cf5fef7df21114",
+      "bytes": 623170
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/by-Benahmed-Abdelkrim/1/TEST_EDT018_019_BIS_99_data_and_timetable.fet",
+      "sha256": "e0a49505258139cd562433cee6199302befcc0238ea830e9aa381cac3f4195e9",
+      "bytes": 619403
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/by-Benahmed-Abdelkrim/1/TEST_EDT018_019_BIS_66.fet",
+      "sha256": "edd062686f86a36634b11a72b9f12c9522a81fda7a13fc5a4c354d62389c16ef",
+      "bytes": 301568
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/by-Benahmed-Abdelkrim/1/readme.txt",
+      "sha256": "c9a3d7e18477a6e8274d27901841d0fb5911073d9221ff4072d4b7c16353731f",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/by-Benahmed-Abdelkrim/1/TEST_EDT018_019_BIS_99.fet",
+      "sha256": "05a962fca1e3426a353ded2beb29acedf248638bb3a565d120cc64ea543362b8",
+      "bytes": 298465
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/2-by-eleptik/morocco2016.fet",
+      "sha256": "6e7db5a28e2a6ca7a022995b8f533878a77931c420fb38289d09248035e6643e",
+      "bytes": 237563
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/2-by-eleptik/modified2.fet",
+      "sha256": "297a3bc61a92524a42833f14e4bb1e45ca461034d65b58974edbd1859066f24f",
+      "bytes": 247417
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/2-by-eleptik/modified2_data_and_timetable.fet",
+      "sha256": "bd06631f3a36e71438c5fc3d92ca6400d05263232973bbeb4e177796ad02e737",
+      "bytes": 423167
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/5/Sample-Morocco-2018.fet",
+      "sha256": "306786264f982a4b356696ad895a4326e38a3f8640286b06ef36ebc86f99efc1",
+      "bytes": 431431
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/5/Sample-Morocco-2018_data_and_timetable.fet",
+      "sha256": "a49d3b1e18983e20e033b8b312ca676ea11df4306023535686ff33e1aa30a9da",
+      "bytes": 875583
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco-old-format/5/readme.txt",
+      "sha256": "8cd79234a93513bbb7ec7f6681822b6eb0e3cffe0a16f02a0b6992eb8a76e25d",
+      "bytes": 86
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/1/farabi090909locked02.fet",
+      "sha256": "483809f6d105376bf0bae8ef69f221d673f8fb494769553ac8729a53351665f6",
+      "bytes": 464893
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/1/farabi432.fet",
+      "sha256": "fba23faba4b858e3e360b593fca57746bea692972babf0b8cee839dc2e8855cd",
+      "bytes": 248832
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/1/sample-morocco.fet",
+      "sha256": "bec21738cbcbcfb0188838b948efd57950ca8a5f7b129eb43b790f1615ec9aa5",
+      "bytes": 205953
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/1/sample-morocco-2019-10-30.fet",
+      "sha256": "e48bd3179b7da9ff7044400b7a23cc7b3da134ee2c2aebeab47f50fa2926f754",
+      "bytes": 207414
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/new-by-Benahmed-Abdelkrim/TestMinH_Morni_Stu_data_and_timetable.fet",
+      "sha256": "140c9e076f9e92465463372dd2c06644cf63434512be6e05b1dec812dda3f1c9",
+      "bytes": 755028
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/new-by-Benahmed-Abdelkrim/TestMinH_Morni_Stu_random_seed_before.txt",
+      "sha256": "e5cc25b58c4ddd4c67b8e39f0c8c9847e3324794030d26c29156f1543faace78",
+      "bytes": 316
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/new-by-Benahmed-Abdelkrim/TestMinH_Morni_Stu_random_seed_after.txt",
+      "sha256": "ebdb04181dd0d5c21480b82b5e06bcca62310e274510063f8015755b8034bbe2",
+      "bytes": 318
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Morocco/new-by-Benahmed-Abdelkrim/readme.txt",
+      "sha256": "531401fbf16ef342490872888ecdacf6665da23e205fe7a05842972ae473dcab",
+      "bytes": 47
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/3-by-Benahmed-Abdelkrim-virtual-rooms/Test_Virtual_Rooms_NoSubG_data_and_timetable.fet",
+      "sha256": "2c8c71ec8fe8688eedcaaaa747e4ad719456bd51fee1c34fa2ef12b49539c5d3",
+      "bytes": 583108
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/3-by-Benahmed-Abdelkrim-virtual-rooms/Test_Virtual_Rooms_NoSubG_random_seed_after.txt",
+      "sha256": "0ac0830adc38620c2c8959ea78f2aee8e933959d7fe4b102ce48a6fce994d17e",
+      "bytes": 242
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/3-by-Benahmed-Abdelkrim-virtual-rooms/Test_Virtual_Rooms_NoSubG_random_seed_before.txt",
+      "sha256": "0308f06e4653ce0e122e0cc630c9131a9ca8899ebea84ed5e9393192f7452768",
+      "bytes": 245
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/3-by-Benahmed-Abdelkrim-virtual-rooms/Test_Virtual_Rooms_NoSubG.fet",
+      "sha256": "6fb2c22046d3fbd21d7ea1ac3b23b3a02a174e83ccb7f997e8c95993591884d1",
+      "bytes": 278807
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/3-by-Benahmed-Abdelkrim-virtual-rooms/Test_Virtual_Rooms_NoSubG.txt",
+      "sha256": "18c23e908deef79bcfc7cf43a159a0d397afad210b3618be31c15a949bc67801",
+      "bytes": 609
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/4-by-Benahmed-Abdelkrim/MHALI2_mod_3.fet",
+      "sha256": "1fc6250a25d2b05531fbb3a924be61022b273a659bfc7a794f9db1e6bf32c39c",
+      "bytes": 538677
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/4-by-Benahmed-Abdelkrim/MHALI2_mod_3_data_and_timetable.fet",
+      "sha256": "90053e901e49b5dee7f7bc5ddcddea7fe927cf896b9f41beacacfdcf3f4966a9",
+      "bytes": 1011689
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/4-by-Benahmed-Abdelkrim/readme.txt",
+      "sha256": "5431b03c0baaa6c76463c90ebbba06b31e5a8e13173ad39b52cc4b90c39c00eb",
+      "bytes": 74
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/4-by-Benahmed-Abdelkrim/MHALI2_mod_3_random_seed_before.txt",
+      "sha256": "8634446c98c63c74139262f4ff48a1dbbc5eb3a7cefb592e0f7c45eaf61be042",
+      "bytes": 315
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/2-by-Benahmed-Abdelkrim/abc_test_15_data_and_timetable.fet",
+      "sha256": "2089b010a9126dc3b3a5e2b6963be4ce229fc9f06e1b12f65b73766fe3607be2",
+      "bytes": 572624
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/2-by-Benahmed-Abdelkrim/abc_test_15_random_seed_before.txt",
+      "sha256": "29f285786a0bd1ed60a2c147a7d6cd6a956a3f28d5a5847569886a763116cf9d",
+      "bytes": 317
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/2-by-Benahmed-Abdelkrim/abc_test_15.fet",
+      "sha256": "29c154612ec9e1cdffb6843a6b73bc5275d02a8cfcc714b7d2837b278e91cdcd",
+      "bytes": 381132
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/2-by-Benahmed-Abdelkrim/abc_test_15_random_seed_after.txt",
+      "sha256": "89a13f53b3499e5a528b932bd0af2023b3b3d0b8e6fac33d9de77f46e0d13b8c",
+      "bytes": 321
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/2-by-Benahmed-Abdelkrim/readme.txt",
+      "sha256": "e1532b53614bffc42b6374766d276cfc2bec98e2db3b2a8a85608590ec67707e",
+      "bytes": 1937
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/1/sample_algeria.fet",
+      "sha256": "cce932864784ed5bf1d07728564e0ed2710649a266c2caf3a3e6f0f5c886c1bb",
+      "bytes": 317639
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria/1/sample_algeria_2.fet",
+      "sha256": "4e6f66e1f37efb86febf2202841ff9c3f18fd77bd4ebaf7e6067258da65282e4",
+      "bytes": 318048
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/10-by-bachiri401/3.fet",
+      "sha256": "ad6300575c933883097186759ab796202654154132397cd6e05ba4b1a1ff1608",
+      "bytes": 446572
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/10-by-bachiri401/3_data_and_timetable.fet",
+      "sha256": "520a76e8975b566601735a9a02e2cdb6f8b9fba33c25fdb0ce5aafff60c689c8",
+      "bytes": 679429
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/10-by-bachiri401/readme.txt",
+      "sha256": "dc86cf9f70d3d08a0d781b8437b4588fce66abd81312e5ab9f3218c0c3d75271",
+      "bytes": 223
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/2/readme.txt",
+      "sha256": "2da635e7b7c66311a386b6649d187206d11d4151ecb8edf3997f47e4a9e03a52",
+      "bytes": 118
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/2/1.fet",
+      "sha256": "24ae9ec3902d3f8e7318fb19a7d8016ed1b9e27753d1d91246ae92c23cd55b37",
+      "bytes": 537723
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/8/hydar-imd_data_and_timetable.fet",
+      "sha256": "e761d5b9ad09265fc897802c8b25be1d26733c4cc80454e3861e22261717cc2f",
+      "bytes": 806337
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/8/hydar-imd.fet",
+      "sha256": "e5d8b2684a6d5235df32f46dd87f1c98ac4c22084b1eb827725739bf417dc586",
+      "bytes": 465907
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/8/readme.txt",
+      "sha256": "048c4e87fced57dcce8ccb907e0df1662d7dcd6349f7f66b6352a68784020e8b",
+      "bytes": 368
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/7-by-Benahmed-Abdelkrim/New_Table_td.fet",
+      "sha256": "d2220dba5529927acc38b347915cfb60d262437c97e25525d8cc43171c253619",
+      "bytes": 457799
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/7-by-Benahmed-Abdelkrim/T_inform_bis2.fet",
+      "sha256": "2b0d37ac72d678ea5c78f83358ea9607b28daf79df2cf254cb01d35c01a6d6fb",
+      "bytes": 399301
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/7-by-Benahmed-Abdelkrim/T_inform_bis2_data_and_timetable.fet",
+      "sha256": "328d9ea7a1c408746909c95ebee33892bb4cabee90e34512bf78219abb2e1239",
+      "bytes": 578875
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/simple-test-bug-2020-02-29/check-2020-02-29-bug-algeria.fet",
+      "sha256": "4dd2859183e46d4b9cf9db597b2f48494c2a1d527d42725545163660cc8ed7d8",
+      "bytes": 3470
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/simple-test-bug-2020-02-29/readme.txt",
+      "sha256": "b822932ba4eba1ee759190fd979e757b8d604ddb04769d96b91d270cff07f02b",
+      "bytes": 86
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/EDT_CEM_bis_1.fet",
+      "sha256": "197253b1b798f5ae47b40e5bd8e0439d6ec57205d30671a23b7b1caedd82bad5",
+      "bytes": 378514
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/EDT_CEM_bis_1-readme2.txt",
+      "sha256": "898ffe1e3a69ac3cc0da129b92619a38ceddb38d40a65b1468e9e020860b1b5b",
+      "bytes": 3864
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/cem_19mars_breaks.fet",
+      "sha256": "1bd510e6b2de6fb0487123d93c77ea68bf53dfcbfe932ba6b5c734971eded63d",
+      "bytes": 249798
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/BAkrim_data_and_timetable.fet",
+      "sha256": "69d6e13f44d87c730b9a4c1efebab3e58ab89f75680fde69c3cab41608124a75",
+      "bytes": 682674
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/cem_19mars_breaks_salles_suf-readme.txt",
+      "sha256": "fc202f482ddd9490ccdf64328d325e4f3eaaa7cee1770464f76e7bbb44df9f91",
+      "bytes": 251
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/EDT_CEM_bis_1-readme.txt",
+      "sha256": "d040c1ff526cedbcadddb9f7a12c6376016ec1f86fb32838c61011378bb17e3e",
+      "bytes": 3224
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/cem_19mars_breaks_salles_suf.fet",
+      "sha256": "07864b0f4d1b03be836997ac8653fac6713cf351c43432feba2589cfad8100d7",
+      "bytes": 249778
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/readme-BAkrim.txt",
+      "sha256": "402d9dfe860310a74b3fd6423c1b44d8f08b22a97b882aa0c3c5488b8e0aec10",
+      "bytes": 171
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/4-by-Benahmed-Abdelkrim/cem_19mars_breaks-readme.txt",
+      "sha256": "827c2223ed3347071e8f86f86283dc3de2c0798afba8eff66f3b2b328a9fea96",
+      "bytes": 1008
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/1/sample_algeria.fet",
+      "sha256": "62a2d1c03c2f46288142f4dd11e3c4863fee33caab87392d4831e687867f8cf7",
+      "bytes": 314493
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/1/sample_algeria_2.fet",
+      "sha256": "9f1f41e9aa4e002c67b5165d8f1c224fd0a547ea60979613d0f98cd5b828726b",
+      "bytes": 314902
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/3/Lycee_Salem_2_data_and_timetable.fet",
+      "sha256": "99d1962c438b3d9a20505db9719bee73e608dafb34dd95d091dce342739f7059",
+      "bytes": 398661
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/3/readme.txt",
+      "sha256": "4f343e12684f3a26bd3103245cbd19a10a6fbf449007ef07003d8473ae7190f0",
+      "bytes": 73
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/6-by-Benahmed-Abdelkrim-difficult/test_5_Newfet_R_mod_spr_2.fet",
+      "sha256": "4f66bf42e0296688065492899686f061d4ef7eecc741bf6d7034add4e9a448a8",
+      "bytes": 461775
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/6-by-Benahmed-Abdelkrim-difficult/rattrapage_coordination.fet",
+      "sha256": "4e5259a038878697203cb3884e5b303549a65ddfd05b3e827191f5fbe267c984",
+      "bytes": 461732
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/6-by-Benahmed-Abdelkrim-difficult/test_5_Newfet_R_mod_spr_2_data_and_timetable.fet",
+      "sha256": "8948d30657f05c90b0f25ee7ba02dfdce9f09453e4202ac1d2ba48bf05e4b457",
+      "bytes": 685087
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/6-by-Benahmed-Abdelkrim-difficult/rattrapage_coordination_data_and_timetable.fet",
+      "sha256": "d4800dea826478493457c51ef0dac57542bead4de83515951763c827861df5bf",
+      "bytes": 685016
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/5/AMIROUCHE.fet",
+      "sha256": "925c24e5ecb243bb8b605637b6c9c0e0d46782cc22c8438ac516ad79cbdc24c9",
+      "bytes": 364809
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-mornings-afternoons/Algeria-old-format/5/readme.txt",
+      "sha256": "b2c90a40afb5d9b85a699e4bd756b147c635d3fb6bf3aae09b363351f946984f",
+      "bytes": 73
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Volker-Dirr/German_subact_constr.fet",
+      "sha256": "0561e968310e81c8897bc43fb14fde2b1adf5605a3b7299743b5b80ae17db864",
+      "bytes": 329394
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Eric-Carolus/MHS_July_readme.txt",
+      "sha256": "34bfd93214c98c6b3ca3e3b56bf813b5555d0ab423db51f029e0937528761724",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Eric-Carolus/MHS_July2.fet",
+      "sha256": "2298957fb84690adc2b4ae92dfb664e58001ea0210b21563af0cef6665d5fc2f",
+      "bytes": 814099
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_2_shifts.fet",
+      "sha256": "d57d0ff1a6367c8fdb609736ddbae21b436a0dc607703d4e5bf8334708eed3c3",
+      "bytes": 565222
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_default.fet",
+      "sha256": "349c4f86f81b0f9ef1f5b24e01e6a738a8a0be2dc3a8ccb49fa7c01b3bd6378c",
+      "bytes": 497892
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_rooms.fet",
+      "sha256": "9dcfc2e9c35a5f64f7034ed73e1003ff7314ea9c4151d0f4397bd5b810dae6de",
+      "bytes": 524119
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_double_lessons.fet",
+      "sha256": "c0577767c2d7c50b64e5f0919941e2de9bbecbdcef2c1b869ffc12f4382c3c84",
+      "bytes": 506917
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-activityum/GSSS-FET-v0.1.fet",
+      "sha256": "98534c081c1b2518f80fd5806633890e008c44f9e80789c110eeac333f77018a",
+      "bytes": 404007
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-activityum/GSSS-FET-v1.fet",
+      "sha256": "1a7d114b8ca43c384d9011662905cbb34d133b09e7d98156fc68412ab0067af3",
+      "bytes": 414686
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-activityum/readme.txt",
+      "sha256": "15679f7c1c916bfeb9b9fdc1727154e32f1e3892cd3d10525179730e5fee9c15",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-activityum/GSSS-FET-v0.1_data_and_timetable.fet",
+      "sha256": "6875e1e13e7f434988b1f5185bb0b38207a67fe47c913c55ee2c63f2439d1e8c",
+      "bytes": 643439
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-xdv/standby.fet",
+      "sha256": "97b575d22ef862db7e670346b6cc621d0cb94795ccd5eb9a2a9b1ad1ad3059fb",
+      "bytes": 56503
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/official/by-xdv/readme.txt",
+      "sha256": "a895da85681cfc50e7ecd3bba26a7b2fe8493c502a6b88bc5c62c7e57f574be0",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/block-planning/by-Darren-McDonald/Blocks-8-overflow-readme.txt",
+      "sha256": "6b780573d0407a9a3f7ae2e7d0fd8b6f609e935439c1a7046cbe43bdf0f90a52",
+      "bytes": 716
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/block-planning/by-Darren-McDonald/Blocks-8-overflow.fet",
+      "sha256": "449e9059d05d725313f484be0ffa2b0ba1c0528c83b5e0a5b95881bff424a6b8",
+      "bytes": 1217934
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/block-planning/by-Darren-McDonald/Blocks-8-overflow_data_and_timetable.fet",
+      "sha256": "c7a5e05dbb951684465c116f852d4e3ada3578e7b0cd10125ba64045c3b6ac2d",
+      "bytes": 1384248
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/problem-cannot-be-solved/test-liviu10.fet",
+      "sha256": "7dd6e5aeec8dbb000d66010fcce916c9edaf89a4eb3572b0faefbf4845c1d959",
+      "bytes": 10463
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/problem-cannot-be-solved/readme.txt",
+      "sha256": "93d6945d967484abff3e61cc47254ade7f259f7c09fdd3f9ed77a1761e570405",
+      "bytes": 353
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/problem-cannot-be-solved/test-liviu7.fet",
+      "sha256": "0cfe543d18e04691522304e743eed303ae6557cc83e4bc2e805bcc9051b7ed1f",
+      "bytes": 9953
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/by-Eric-Carolus/MHS_July_MA_readme.txt",
+      "sha256": "34bfd93214c98c6b3ca3e3b56bf813b5555d0ab423db51f029e0937528761724",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/by-Eric-Carolus/MHS_July_MA.fet",
+      "sha256": "072c4509adcd694f02a6a91389af8e164db5f9e612923a235c871f9bac28a83f",
+      "bytes": 1163376
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/farabi090909locked02.fet",
+      "sha256": "8933a3372b24ec9379dd6edaf2d364cfec1fece48457c6f29dc1694b74833642",
+      "bytes": 472873
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/farabi432.fet",
+      "sha256": "92e0fc40424ee424a83d71b11f2c1cd9bdd18e9d43bdc196cbb3db0895d4ea92",
+      "bytes": 257000
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/sample-morocco.fet",
+      "sha256": "a9150ec99f8d51b9a8af923ae40db863a56f3d2a0621873949811643c708ada6",
+      "bytes": 213933
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/sample-morocco-2019-10-30.fet",
+      "sha256": "4d8d176bf76968e9517ead70ba02c5a100d476f329fe549fc951f626434f8104",
+      "bytes": 215410
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/6-by-Benahmed-Abdelkrim/test_10.fet",
+      "sha256": "d2e4f0a8ddbe5d4bb74fc953b2e93a63ce2462f3c513de6f9a024218d59851dc",
+      "bytes": 357514
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/6-by-Benahmed-Abdelkrim/test_10_locked.fet",
+      "sha256": "ef8bd3a6e12d3b39d7ad978567b2ce14438e7ad9d35a1e31e73d81fe0fe2e349",
+      "bytes": 696490
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/Test_View_Time_H_With_0_Gaps.fet",
+      "sha256": "e4d33758efa04ebeed6badcd9c931413d7816df088a397e4756df87a70830664",
+      "bytes": 527807
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/readme.txt",
+      "sha256": "a502711bdff6828b56a03190a55d3725bb09bb93d6ac916a709d5cffadc892d8",
+      "bytes": 222
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/1/sample_algeria.fet",
+      "sha256": "ba2488034110e4c7e600ec69bd126a20c3fe5bd5d65d5690d76682cdb6702acb",
+      "bytes": 324098
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/1/sample_algeria_2.fet",
+      "sha256": "e2435c49db4d488948a2a4d29c60e1e6e578aa31439fade304db8fae0d1abede",
+      "bytes": 324539
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/3/Test-Max_3consecutive-days.fet",
+      "sha256": "728472b415e7773fc9f98752ec708f6aa2696032a718925f958db3ab3dd52300",
+      "bytes": 353243
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/3/Test-Max_3consecutive-days_data_and_timetable.fet",
+      "sha256": "4d9cc2b9798719e5250e8a5b125bde8d3936c9e41501747b06c14e2f7f4e91b1",
+      "bytes": 549273
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/4-max-three-consecutive-days/benahmed_5_bis_2-M3.fet",
+      "sha256": "034a5ff26df874aff0714b2462215235d6b93d37b7b979f2d176f1c426b33b31",
+      "bytes": 303259
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/4-max-three-consecutive-days/benahmed_5_bis_2-M3_data_and_timetable.fet",
+      "sha256": "77af7fc9057a608b35bd3062203151682602cb2aeb312e38de99d00f22f09d21",
+      "bytes": 533586
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/Benahmed_without_R_Q_inf.fet",
+      "sha256": "1ad049bd7758271cc69dd1c6138f5249e57c46ac576ae9415238c26b927abeb3",
+      "bytes": 396589
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/Benahmed_without_R_Q_inf_data_and_timetable.fet",
+      "sha256": "07702bd614b79d52430bdfed604280ce042b9e89937be670cf139847e89704c6",
+      "bytes": 870457
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/only_R_Q_Inf.fet",
+      "sha256": "e1d453f6cae34c57e6d48e40565251eb019a96a0f2d993edc8c69d508e515aca",
+      "bytes": 45408
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/readme-only-R_Q.txt",
+      "sha256": "417671667d8164db4df2ccfdd1249cdd9138187a1b49c60af49d01f800299470",
+      "bytes": 74
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/EDT_new_Virt_R_95-percent_21_22_random_seed_before.txt",
+      "sha256": "9034ff99c803c26e778568132b13524e74ca1bc73dc32444acecbdfa56fe13de",
+      "bytes": 241
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/EDT_new_Virt_R_95-percent_21_22.fet",
+      "sha256": "87793d823a3f78cd0cf23fb177b88db08678f30ffc2eb40b48e9b9c426fbe62d",
+      "bytes": 295261
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/EDT_new_Virt_R_95-percent_21_22_data_and_timetable.fet",
+      "sha256": "2827d92f9b9043073237c26da0d3d04f94d0cebb01bb7e3e0eeef7c67f1b3816",
+      "bytes": 599545
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/readme.txt",
+      "sha256": "a009fd93aada74fb0e02da9ba037fceb43d87335c300c43890296eb9a204765f",
+      "bytes": 58
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/EDT_new_Virt_R_95-percent_21_22_random_seed_after.txt",
+      "sha256": "3b0704d10818d15a28cda1547ba9626d46333ad18046d571e1031b248dba110a",
+      "bytes": 234
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/8-Ex_rattrapage/EDT_26_27_test_Ratt_locked.fet",
+      "sha256": "7ac220cb2569bd32cccc7d554b551ef4273ccf13f44be4e2b3dade919c330ab3",
+      "bytes": 919064
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/small-example.fet",
+      "sha256": "2221805661f390ca8837ade610bc1502f28ca80f357ac293f6cb80951b0e75e1",
+      "bytes": 21662
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/by-Darren-McDonald/Blocks-8-overflow-readme.txt",
+      "sha256": "6b780573d0407a9a3f7ae2e7d0fd8b6f609e935439c1a7046cbe43bdf0f90a52",
+      "bytes": 716
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/by-Darren-McDonald/old/Blocks_anonymous_overflow.fet",
+      "sha256": "69c8554e3003226f3572c094d2af0d081a3e17176af7f60285a9aa9e1d825fd3",
+      "bytes": 1239776
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/by-Darren-McDonald/old/Blocks_anonymous-locked.fet",
+      "sha256": "6b48eb06e46559d3e6a79f8c99a8b60dc2284ed1c9aa2f23264f10b9ada63c94",
+      "bytes": 1334203
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/by-Darren-McDonald/old/Blocks_anonymous.fet",
+      "sha256": "02abde0730ea4c49206c7b27c763e7cfa4baa2a3112ee634897ed847f849a333",
+      "bytes": 1177803
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/by-Darren-McDonald/Blocks-8-overflow.fet",
+      "sha256": "e5d9299f7b20ab17a5a30f25a4fc4597b09a504faeba618c457f788796a1d58c",
+      "bytes": 1217677
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/FET-5-block-planning/by-Darren-McDonald/Blocks-8-overflow_data_and_timetable.fet",
+      "sha256": "5ab954cd4c97a203d66eb0ef8dbf0889c5da3c0c9a71aea95ceff9dcba44fe76",
+      "bytes": 1383991
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-craiova.fet",
+      "sha256": "d384be55a37b2982a684730d94195a8fc569862a831f736642e3fa92ee9c6a6b",
+      "bytes": 318764
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-teachers-begin-or-end.fet",
+      "sha256": "1737aaccff1983f983fa8f9764b68c4831508d41c69e9e55162ae532d0677e1a",
+      "bytes": 393536
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/readme.txt",
+      "sha256": "40753f7247802ad615a3b37eb812ca624f23dd58156969d4307b17dd8537ba89",
+      "bytes": 418
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-10.fet",
+      "sha256": "14f5dfb665a9d7ec2667aa530036a6d0885b54689c5d687f729bc7f2641de9e5",
+      "bytes": 393050
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-11-helped-correct-a-cycling-bug.fet",
+      "sha256": "6b2d4aa22337c8a34b4749bde1e68591fbaab5893f093e31a1787905d1a37584",
+      "bytes": 392989
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-11.fet",
+      "sha256": "6b2d4aa22337c8a34b4749bde1e68591fbaab5893f093e31a1787905d1a37584",
+      "bytes": 392989
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-2-early1.fet",
+      "sha256": "a088ee217958a4957a3735ccb43202f1eeba69080653714485f7847f8998edc8",
+      "bytes": 392843
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-2-noearly.fet",
+      "sha256": "21b0af3f3b684bf894a61339f614afa1fad6a45cb7697377050a0cd8d4bb27a5",
+      "bytes": 392844
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-2.fet",
+      "sha256": "41e397a26e949a97301753cc5f39f8c01ff7e609f2f3d6c1232afac64922dca4",
+      "bytes": 392843
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-3-too-difficult.fet",
+      "sha256": "cfd6f7e2466c8f9e3dba7ddbcf570de5c4c72f2e02b5f02e038258ac50ee1971",
+      "bytes": 393171
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-3.fet",
+      "sha256": "cfd6f7e2466c8f9e3dba7ddbcf570de5c4c72f2e02b5f02e038258ac50ee1971",
+      "bytes": 393171
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-4.fet",
+      "sha256": "14a390a53af6780357deab69cd8a08c5bb8e9798ddfeb1230670494db6bd5d0a",
+      "bytes": 393171
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-5.fet",
+      "sha256": "4e14e453a7c4c351bb4760af89a011b32be0951bf5fa8954bee5fd34dc21baa5",
+      "bytes": 396589
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-6.fet",
+      "sha256": "857b7d5c50a186943caae810e2d3e8b5ef2f7bd0579e66996bd49cd8c0bccf9e",
+      "bytes": 396590
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-7.fet",
+      "sha256": "e61a5bb8614e3720605d68a5d4822683d0f1e5f0bcaa298950c53c2b94254f53",
+      "bytes": 404335
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-8.fet",
+      "sha256": "de035f9b42d015e39c3e002d09c75937f2891a7f6f7380d5c70b78417c720e22",
+      "bytes": 402749
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-9.fet",
+      "sha256": "b65694eaf1eff45dd58bbf488aeff459a564cc6980c446fc91afa756ebe90281",
+      "bytes": 399028
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-3.fet",
+      "sha256": "e2d3c0aac981e5294d04ebca89ba1e72cac9aa5790e5f7313d9eca2dcaaaa6d0",
+      "bytes": 25848
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-4.fet",
+      "sha256": "d902ed0e04e826f5e347d29782e2cdb04876f7d617c1ba2e284a889d9cafcf11",
+      "bytes": 396967
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-1.fet",
+      "sha256": "3f919fa476320aab8a62d282b09845de379deea8bd3823ac871c64fbe35bd25b",
+      "bytes": 9827
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-2.fet",
+      "sha256": "1e5a07e3b4a5fed107e29d9003a942d460cda8c5b8b80eb3d022a32e46894f53",
+      "bytes": 392989
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-5.fet",
+      "sha256": "eb8bc8e00ea0f5686701f888f9c85fc919ebe2f09b98ef21399dbd7808cfeeec",
+      "bytes": 398038
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-1.fet",
+      "sha256": "74f90c6dd43331b8464d82aca71b74c7ec8dc493e5f22aae5c4f863429533678",
+      "bytes": 392839
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-1.fet",
+      "sha256": "850db45cd0bec5d61e8917ef9c028b977af99fa153fbd5155ab2aae84fcd03be",
+      "bytes": 414683
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-2.fet",
+      "sha256": "cdb092da1701fe38400d9c82baa4b11028c317650b06797826f33aedc56168ae",
+      "bytes": 414683
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-3.fet",
+      "sha256": "0958997b421bef30019917db5d3d0fadcf7f3345f1de0118612daecf82102bf2",
+      "bytes": 414475
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-4.fet",
+      "sha256": "772b5a0ccd40e15704ee029e57d7fc2b66378c57686cf07078fd58486704a7c0",
+      "bytes": 414265
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-5.fet",
+      "sha256": "7e6d33827ecd731678d46b5f29268f7838790f8f04d231c270f27387ffb36f48",
+      "bytes": 414265
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-6.fet",
+      "sha256": "56316b473dfb441f1ac431fb76be69ff45fa8e8bd8c977cdc946634df274c841",
+      "bytes": 413944
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-7.fet",
+      "sha256": "0912ac512057aafd4ac047c3f571fc732f33d11d2665fa228c5dcc2fb977f2d3",
+      "bytes": 413524
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-8.fet",
+      "sha256": "35dba18b7e40ecd17813f8ab13d1af1e71ad7d793eaf02725e6e9bfa054528a2",
+      "bytes": 412579
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-9.fet",
+      "sha256": "0029da960d872b3416c65f452b735fd6a2821ae315ab395c4fbec98010fcb0a0",
+      "bytes": 412052
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/readme.txt",
+      "sha256": "8fe925273b8c005041e931b7689f930e0733bafc834a7fe5f9f8cb691015bf61",
+      "bytes": 293
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-craiova-simplified-locks-at-170.fet",
+      "sha256": "7c069df567a408ea41e58231a1cc5633f6811c21ea1f5598396e806460d3eb3a",
+      "bytes": 334192
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-simplified-locks-at-570.fet",
+      "sha256": "e2224392350bb0484fc0734f7ac854db0826afd150c22bf03a43f549ed4d937b",
+      "bytes": 414894
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/small-test.fet",
+      "sha256": "a49c1639e55fe03022d33c9c6ce68ec0006b64453a1d17c7727c8c69be9edca1",
+      "bytes": 6853
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-craiova-locks-at-389-390-391.fet",
+      "sha256": "847dee34f861015675bd0d6c1c70bad34ebffcc183c21f95c30b671a6b6c3b3a",
+      "bytes": 332771
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-1.fet",
+      "sha256": "63a6ddecc7e58f97e3e277debed8bb777e407f25e24caf7c54bfd24de7ba8596",
+      "bytes": 261676
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-2.fet",
+      "sha256": "8fe7a3719fe8cfb2c02d638a5680353a23e190a7216317b22919ce467e33f347",
+      "bytes": 261999
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-3.fet",
+      "sha256": "e3e6844d060c020b4da93b9a843a1dbbb5f66080c685ceefc9a49e545fff57e2",
+      "bytes": 264688
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-4.fet",
+      "sha256": "d15fe1859c4b9d28e46e913886dfdc876eb8079c9785005f3b77505812dc665a",
+      "bytes": 264172
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-5.fet",
+      "sha256": "41e36351be7eef86586bd30f6644f4a3165e754477ec8d08767bb11e5d2ac1ec",
+      "bytes": 264385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-6.fet",
+      "sha256": "1cf9aec26f75b72686f23a30ef98066911d86c4538a67b49823cc359a37056d6",
+      "bytes": 264385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-7-solvable.fet",
+      "sha256": "1eee8ebedc00e26398e14a0564175365dd7bdf2e87944c8bd4cc91b8ae9f4ee5",
+      "bytes": 264385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-8-solvable.fet",
+      "sha256": "78e3251d11ebd57e8f97f30e03e07bef302efb0d96bcb0634979a2c7d0e596d4",
+      "bytes": 264385
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-liviu2.fet",
+      "sha256": "071619172b10f6eaa24796f57fc84ac88ceef8846f80828f3c5a865c6131dfa3",
+      "bytes": 206691
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-liviu3.fet",
+      "sha256": "b555de9d84e97a01c8b7d2ae5fc0b109f52d0a982e500347a427581d3dac4b54",
+      "bytes": 206691
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-liviu-impossible.fet",
+      "sha256": "5fcfb3aebda8d28e8ca6120bf513ce4fbf1ac781ad1fe849fe16d1812f5e7718",
+      "bytes": 206441
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-modified.fet",
+      "sha256": "410e506d4c6cf745bbec0f4a69d543f9e3cc69501a88d3e8f90ba8dbf75ee8be",
+      "bytes": 207315
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-modified2-impossible.fet",
+      "sha256": "54fcad2c10e72f87e4f1d19d89650c1adacf4a298b5c1de04085fa429eba5452",
+      "bytes": 207606
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test_13_03_26-liviu2-impossible.fet",
+      "sha256": "5bd1ff9ddf7f7ec061deae707198277155e08b345ed6cd2fdb129a639a3f3cce",
+      "bytes": 213589
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test_13_03_26-liviu3.fet",
+      "sha256": "e9474fb191395e7fb476188cf416e1d0519cd9761e3aa92e8dca359c4fa4e84a",
+      "bytes": 213589
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test_13_03_26-liviu-impossible.fet",
+      "sha256": "4d5ead39bdc13be8bb462c84a25c17731fd9d714c8458a1f5b0dde9160c932db",
+      "bytes": 213203
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-3.fet",
+      "sha256": "fd4fffd51be88d76365a85bd289b22311d7d3972cbdf2f06f3a8393c1c1c18b4",
+      "bytes": 213489
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-durations-2.fet",
+      "sha256": "9d9552b568f9970a066ccd2225ccdccdf88fae43e8b87b1a1479baba6905ac7a",
+      "bytes": 160070
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-2-impossible.fet",
+      "sha256": "75331c572b3f1a2fc6a20773f131ecefe8cdda9e56d4dfe1f73597e40e4e04a7",
+      "bytes": 17515
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu.fet",
+      "sha256": "32db4e752759ae81d03e20901c3d0e9480c6fd2cb7e76d223e950e551761a713",
+      "bytes": 9520
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-22-exams/test-liviu.fet",
+      "sha256": "352b1a75cbad1363cfbcbbc06b377f7856b905338585203ce619f69781e6129c",
+      "bytes": 160618
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-22-exams/test-liviu2.fet",
+      "sha256": "3359e292934d4d234fe7230a3cf9273b7b39c659296bcdda501d0aa468ed24db",
+      "bytes": 160618
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/test_Benahmed1_2H_2_modified.fet",
+      "sha256": "8061173b37e78ca71fd133143d430ee4ab895b32cad21a82e1a179c997c7ce34",
+      "bytes": 213918
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu.fet",
+      "sha256": "5db0fa360390bc85335ba9126a94c69f1961063e8085248cbb79f4628e175e9c",
+      "bytes": 17948
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu2-impossible.fet",
+      "sha256": "b4b1c57fc6a312c9491766adbf52c6efca2e47fd96e04d01b011c637c01eaec5",
+      "bytes": 18264
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu-test-timisoara1.fet",
+      "sha256": "0e1faad9213b63c58165e4b0e768139504eb798409c796abc9cd38a6f9c0f525",
+      "bytes": 2682225
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu-test-timisoara2.fet",
+      "sha256": "7ef34e1815afa5a2cb29286244b4a6b2453e744b356f0b305778e5dba52a115c",
+      "bytes": 2681805
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/tests/2026-03-28-exams/liviu-impossible-3.fet",
+      "sha256": "73914043d006a9dd38a812e3221380efb48bc72b1b45459336f51ab16a49ca75",
+      "bytes": 32173
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/readme.txt",
+      "sha256": "735fa3809f62e2f5de92f6da00d9b05bd97c1adbe9d22d2d5832ac9c43939eff",
+      "bytes": 240
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/2/readme.txt",
+      "sha256": "8403d930c9515cca4d09e6effdac43932dbcefba19084ba27fbca499278ea2b1",
+      "bytes": 74
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/2/test_10_activities_per_teacher.fet",
+      "sha256": "5ad81c0719f970db9cc7316be928d778b5b9879bb0bb209cc997d0c5f73a41a3",
+      "bytes": 210683
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/Exam_MOD_NEW_3_teachers_per_building_real_room.fet",
+      "sha256": "8da1a865fa4656cf55cbe19efac572b4dbc554f14d84ba1d2257f963b0687146",
+      "bytes": 159750
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test3_nsrt6.fet",
+      "sha256": "1125ff37177cd40791e44038f5980d096a8bc7758e6c1b6151e99caf33de5ec6",
+      "bytes": 206441
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_13_03_26.fet",
+      "sha256": "a70ac0319ce260aefa0a7c9bb7acdc0f4baa60b412869cecd32ad771c4ad2b64",
+      "bytes": 212933
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed1.fet",
+      "sha256": "0e3230e7be81f9632caa77093e8ce88fcca49b90e6c7cc1f5888aa01d5594aeb",
+      "bytes": 212916
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed1_2H_2.fet",
+      "sha256": "598ce5c3b4f53209c1e52b83767a34b2eb2c1183d7719c6ae675800c411141c6",
+      "bytes": 213137
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed2.fet",
+      "sha256": "1d19529a621fcd3af4d1ed44cf4ef95dbcd85d0a286751a6929b2cfe2c2b79a5",
+      "bytes": 207442
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed3.fet",
+      "sha256": "588f2d791d4fdef63b0946901395d992f9f6beb1b04cd1a6ede6f8ffbe940a3d",
+      "bytes": 211080
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed3_nsrt5.fet",
+      "sha256": "aa0b1cdc618c70c54f2de17d73dba17d55dbe89b738e29742264be085775d8ab",
+      "bytes": 191657
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed3_nsrt6.fet",
+      "sha256": "d337e40a1cc53e9a5cadcd6204ae89b7a444f2ade51d6503a2db889adada51f2",
+      "bytes": 212980
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/3/readme.txt",
+      "sha256": "46740556cd6ee4e35fcf2d7113c0deb97e0051cc01531a220c6df986dc39d5ba",
+      "bytes": 167
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/3/test_Benahmed6.fet",
+      "sha256": "fe82100dad1917887cb0fed6f2c97b819e240ed5fb720d0b633e068c1e565e18",
+      "bytes": 158882
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/3/test_Benahmed8.fet",
+      "sha256": "693cacfaaf5dc0ffad9e213d643c48934e3c84d9e745df0f189d35d3d778bd11",
+      "bytes": 175717
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/4/test_Benahmed15.fet",
+      "sha256": "9d7a48e6f302e52fa10f960c3976448db663f2af526b1037cb7a6d6ca4f5ec17",
+      "bytes": 201684
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/5/readme.txt",
+      "sha256": "6e175ab904b05f8009e3aacda42a1ca01eb28c08ba43b9ef658f1d9b559a0e5a",
+      "bytes": 74
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/5/Exam_assign_a_teacher_all_days.fet",
+      "sha256": "eb5f17792aac2929b51763693a1e1688a50cac49b6011efed428ebafe7c2271c",
+      "bytes": 160874
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/5/Exam_assign_a_teacher_one_day.fet",
+      "sha256": "c6907a8afa32eae6c92fc6204048516471965d73983c2e9dd773f1fb5dccf5aa",
+      "bytes": 219160
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/6/readme.txt",
+      "sha256": "7a147bfcc9bdc1842d8bf2fe681ec1a7c72f8ff2c53e98ec824291157ed62cb4",
+      "bytes": 74
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/6/Exam_assign_a_teacher_one_day_2.fet",
+      "sha256": "e51bdd51c7063936fe4a2050702d484b163a5ff2d565bdae8a999b4c37196888",
+      "bytes": 184969
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/7/BEM_05-2026.fet",
+      "sha256": "33d25f6af37b2fbdc3992d2b913631ec0fa8fc9553751955451af0eb9160af3d",
+      "bytes": 188740
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/7/readme.txt",
+      "sha256": "9c68df781b03ef8a6562ebe60911e0bba46a3413d56ecc277255f4ce88db65ac",
+      "bytes": 4114
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/8/readme.txt",
+      "sha256": "4145c8119ee32b7180e69743b27735ba0f17d80e7dec6c485a06bc8218d695e1",
+      "bytes": 74
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/8/BEM_05-2026_mod1.fet",
+      "sha256": "0419fd8d9c56591cd30534ce38df6beae67619954d886cef10e4b5b2144d4e14",
+      "bytes": 273140
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/readme-exams.txt",
+      "sha256": "d56779b9a2559c8c430c3fed1b8937771e376111f0af97a00e708e709e27fda8",
+      "bytes": 153
+    },
+    {
+      "path": "research/fet/fet-7.12.0/examples/exams/by-Youssef-Houiet/SURV-EXAM-REG-NAT-MAROC.fet",
+      "sha256": "c874c1852f51127f114b1aa684c313c66c24df62561ebbca79f1b74ae433561a",
+      "bytes": 282143
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/gcc/COPYING.RUNTIME",
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74",
+      "bytes": 3324
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/gcc/COPYING3.LIB",
+      "sha256": "a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c",
+      "bytes": 7639
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/gcc/COPYING3",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "bytes": 35147
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/gcc/COPYING",
+      "sha256": "231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c",
+      "bytes": 18002
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/gcc/COPYING.LIB",
+      "sha256": "a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861",
+      "bytes": 26527
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/qt/LICENSE",
+      "sha256": "2004ee3ef8282a85f7dbd035dfacf63cf03d569537bc08655ffeb140ea3671c5",
+      "bytes": 44738
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/qt/LICENSE.FDL",
+      "sha256": "c256483c2d1e8a51b62fc7a44a58f21cb4ef23fa840c7d33e3658035fd8cf62f",
+      "bytes": 23016
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/qt/COPYING.txt",
+      "sha256": "eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea",
+      "bytes": 11358
+    },
+    {
+      "path": "research/fet/fet-7.12.0/licenses/qt/Copyright.txt",
+      "sha256": "d1f5b8f5eba2e9073463bc29b30572d84033f59e8d8057a95dff37c3414305b9",
+      "bytes": 5324
+    },
+    {
+      "path": "research/fet/fet-7.12.0/man/fet.1.gz",
+      "sha256": "4fd236d3d70af05e8e5208936b3cae348c69f0608a7efcb0d5c8c61f4c4c0ec1",
+      "bytes": 762
+    },
+    {
+      "path": "research/fet/fet-7.12.0/man/fet-cl.1.gz",
+      "sha256": "da4b22cfd4524455b7f375164cfcd4c8ff40d8917595a9ad6b0336a614c2d0bc",
+      "bytes": 956
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiestagsform_template.ui",
+      "sha256": "e17595914c670e37b765ca1082391f1fba4dd2748037734afc351118c4239977",
+      "bytes": 3450
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablegeneratemultipleform_template.ui",
+      "sha256": "dea4ab1d1382d6fac4f704fba0ac28d2dae6919d6519c51f2317d6fcfef5029f",
+      "bytes": 8211
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/commentsform_template.ui",
+      "sha256": "b222cabac1fcb910e0fe5ca80223f7d26ba46420c9498353fbb6500970667295",
+      "bytes": 1048
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addexistingstudentsgroupsform_template.ui",
+      "sha256": "9d7b44b0a4294d1721a51efb46a4680eb321b916aa66f3e186beeff92d3d2f3b",
+      "bytes": 3239
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/changemindaysselectivelyform_template.ui",
+      "sha256": "78c03f6f63a5587cd05f054851cc6c0c0501af55fdb366c62e01d603efd9ff66",
+      "bytes": 6044
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/termsform_template.ui",
+      "sha256": "87440f502a5e57998b5e282b3ada3ca25a99d8fc0ad7293f1884be467d33651d",
+      "bytes": 2955
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentsgroupform_template.ui",
+      "sha256": "304fa564bcfc74eb3eb5afe5ee0d95cc83cf13d74375a63b24e358fff65466b8",
+      "bytes": 2785
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/randomseedform_template.ui",
+      "sha256": "e6099ed77a7e369208946318bc135eb59c5eb601df4eea572077281d88596751",
+      "bytes": 5894
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentscomboboxesstyleform_template.ui",
+      "sha256": "6c935039f8a0335039e512954895677001ecbb09d4623cbf79f91145b91d7a11",
+      "bytes": 2523
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpmoroccoform_template.ui",
+      "sha256": "1f7d0f8f00467e7e6d1490b7e3e3300b7bba85fbb1772bffdbdd2a619068f99b",
+      "bytes": 1710
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addgroupactivitiesininitialorderitemform_template.ui",
+      "sha256": "58850d7c26d9a2ed7ee38ea3589950cdf57395788a9c5931d34153feb94ee962",
+      "bytes": 6017
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/notificationcommandform_template.ui",
+      "sha256": "e4ec19f1a3d29449db006cd4de32aa04e9972490f1cd811b34a53e5df407e80b",
+      "bytes": 6529
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsrestoredatafrommemoryform_template.ui",
+      "sha256": "9d26b2af81295b39ab0cdfd71684a900b4d036f03867314a5367554b3602d2e8",
+      "bytes": 5887
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/removeredundantconfirmationform_template.ui",
+      "sha256": "0194be75c09ef24c4abe8f76b8f4e46485b7161266420b75b3571ae79b654ab0",
+      "bytes": 1565
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersubjectsqualificationsform_template.ui",
+      "sha256": "60613f163d9675c522ad32debfd8944a6a75353e0c13eed28aff4aaa30a4e5b4",
+      "bytes": 3114
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableshowconflictsform_template.ui",
+      "sha256": "9f3cdee191a8315d162740ea2c9c8e2352c5012893816f751eb465b54f747e1e",
+      "bytes": 748
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subjectsform_template.ui",
+      "sha256": "1ba8d32fdade81bfee0336e72694625266663d2d50dea409a4b4ce2c469b0b58",
+      "bytes": 3692
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyteacherform_template.ui",
+      "sha256": "785a2cc46a7627efdf14090e7b6e867343b5946c3bf000dcf18f7244f6a77d93",
+      "bytes": 4797
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/locked.dxf",
+      "sha256": "34734cffb59c38e5f8d9cbe85bdc24b8a871c6c3c6ca87604c6ff86b5d86a6c9",
+      "bytes": 24750
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/subgroup.png",
+      "sha256": "7687c0ed2da9980fcc2bdce01fcb80331384996aa5b665da09d1d8f36abfaafe",
+      "bytes": 903
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/locked.svg",
+      "sha256": "fc7f700956f5f23e9eef73765876e3c48fa19e38700c2ffa091b4868047237eb",
+      "bytes": 8500
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/subgroup.svg",
+      "sha256": "ed55a59c16c4d7f9e8b7bb2a5fdb7d186ced6c27e5f732db37f898b8c617a27e",
+      "bytes": 2497
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/group.png",
+      "sha256": "4e5f436ad6dd18af9347efe8cf7ca7d8d0f905c5d74d257b8c961d65d88370b5",
+      "bytes": 742
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/readme-images.txt",
+      "sha256": "05c4787c5d125104c940dc07453371ec21d0c11c1e2573a1ff5121b7cdd96459",
+      "bytes": 443
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/unlocked.dxf",
+      "sha256": "580a1d5cec25a5b2cf8bd5d11102003c1f166d9beaebf2c47ebe3a55be3ea16f",
+      "bytes": 24949
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/unlocked.svg",
+      "sha256": "fbb6025fee6d2c7a4311285d613854eb9b9b70665d498b87342f37f86cf333d6",
+      "bytes": 8689
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/locked.png",
+      "sha256": "513a13bf85c712669e1a1082b6de27cc1e0ff3f1db7cf23f73e51674dea0dc35",
+      "bytes": 4561
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/group.svg",
+      "sha256": "38ed99bbde9e0853deff1e34c0e96707165f5135fc3e4d7945b3e5fc8ba6cbe1",
+      "bytes": 2162
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/images/unlocked.png",
+      "sha256": "a80c0494d8574fae3848a7874a323bffee0b89c14d79d0685295a529f7b821c6",
+      "bytes": 4778
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsautosaveform_template.ui",
+      "sha256": "a62cc3cb839b7b940fe7fd9a7de1bdb0420313ecd5a8136cb0976467feaa4dfa",
+      "bytes": 7653
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentsyearform_template.ui",
+      "sha256": "f6646ab860decb8432ad44b24d71bbbbd350be8463b7df847e5af2157fb04661",
+      "bytes": 2223
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addremovemultipleconstraintsactivitiesoccupymaxdifferentroomsform_template.ui",
+      "sha256": "b0368d658311d48194aa1c6335059cf696030c6738ae336b57d28fa15330446a",
+      "bytes": 5250
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subjectsstatisticsform_template.ui",
+      "sha256": "24e556969013f59658961c767c1442944b50c18399f4d403032b88edc6e05db5",
+      "bytes": 1450
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpaboutlibrariesform_template.ui",
+      "sha256": "94d08a3beb5d67fd7c0f68b3a2c412049422653a2bfaffafc8037908ba03bb46",
+      "bytes": 1975
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/roommakeeditvirtualform_template.ui",
+      "sha256": "02430665c4f24b744375884b3058f0eafe7bc4e2688cbf5e921ec5d1abdf19cd",
+      "bytes": 3703
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activityplanningconfirmationform_template.ui",
+      "sha256": "9411bb63cbdbd32e308c057b6d940d28871418091e3902efbd05b220f9c664dd",
+      "bytes": 1647
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiesroomsstatisticsform_template.ui",
+      "sha256": "cebcd146f3c75e68dbb2da46536fe3db69b022447e840b557d7367f5e61eb71f",
+      "bytes": 1516
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablegenerateform_template.ui",
+      "sha256": "52c0472ba024bc627bc5a97fdfa10c1c9ed09859a331bafb4aa84efcf1bb3108",
+      "bytes": 4990
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpblockplanningform_template.ui",
+      "sha256": "359589e6428e647a401a09a6ab1ef8e129582c217cadb1076f2df7e991aee89e",
+      "bytes": 901
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentsnotavailabletimestimehorizontalform_template.ui",
+      "sha256": "a77c7a4fbbfbd7578f47b4d2ea3ab80dc768e140bcf8dfceeda4faf7f3d504bc",
+      "bytes": 4916
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helptipsform_template.ui",
+      "sha256": "d91eac2f334217c159b9491fff078e5d6efe433639e6e6c62e6c5002e2d99f3b",
+      "bytes": 853
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpalgeriaform_template.ui",
+      "sha256": "9301fef4770c3c6563c202555c11068a99f82662ddc951d6b83a10377a0da9cc",
+      "bytes": 1710
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/groupactivitiesininitialorderitemsform_template.ui",
+      "sha256": "36a138693caf343bd043c530dc6f4f256935a70effda824db6e104e4afedb7b9",
+      "bytes": 8387
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpfaqform_template.ui",
+      "sha256": "860df206dfca0ecf36929b29f565bb2300033dc144809027a7a860e7a81df175",
+      "bytes": 867
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpaboutform_template.ui",
+      "sha256": "7b64d65613dabbac45f011557af48bc4c76b95184cae167ac1278260ad0de50c",
+      "bytes": 10007
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/changeminhalfdaysselectivelyform_template.ui",
+      "sha256": "0bdbc3c0c5cf9c33e639695d6d4f479122c86931d70bde5ce88f5c5bfda34f8d",
+      "bytes": 6067
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addremovemultipleconstraintsactivitiessamestartinghourform_template.ui",
+      "sha256": "9edb0757dcef5b38d20657e3758442d90d72ec3c8090c6100347f9fad1f94913",
+      "bytes": 4915
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentssubgroupform_template.ui",
+      "sha256": "f9671aa71c82d715796dad84b71cae5c23ccbb52adf66823cc4c8d26cb7e8945",
+      "bytes": 3328
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/removeredundantform_template.ui",
+      "sha256": "17b4e99bf2f85700b6e331f47640e706bd520ffb846afd6e2f4157b778e7a5b9",
+      "bytes": 6405
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifygroupactivitiesininitialorderitemform_template.ui",
+      "sha256": "092fccafe0dae6e868b027234e5ab320cf045fd3dcf356ca9f684da2ef669bcb",
+      "bytes": 6016
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/buildingsform_template.ui",
+      "sha256": "f49e4207c15c4cfbf5ac5cba78c063e3bf0aef9914a4b54b6aaeb7972c9b2d4f",
+      "bytes": 3363
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpinstructionsform_template.ui",
+      "sha256": "3b3ea486126d903b5693ffd7ccc29a6f02f97f20298a6bb075a4e1700ee70174",
+      "bytes": 883
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsrestoredatafromdiskform_template.ui",
+      "sha256": "ba1316937d28b8ee0922351d32635f12f52b5221b03d5958f10d77b215c36230",
+      "bytes": 7765
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentsyearform_template.ui",
+      "sha256": "8f1e2ecda506682f83fb5acd529a2a990d25eacb57226ca8935813be2940775d",
+      "bytes": 2230
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helptermsform_template.ui",
+      "sha256": "3ca8c80ae690229d6e012ba14e1ece8734e63efc9aa8e4e0e07e89968717fd0a",
+      "bytes": 876
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/splityearform_template.ui",
+      "sha256": "00a414c7cb8e6a4f1ed57906065a020de257159dad8148cabd8a0ae2661d8026",
+      "bytes": 15720
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersstatisticsform_template.ui",
+      "sha256": "6291040aa1e0250bc028385796041f136ab3fc6389e3d4c8b61d9b6b281d8f31",
+      "bytes": 3052
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addteacherform_template.ui",
+      "sha256": "82ba832041740f00145da3e3141642cd4abac5c1a3e2ae4cc83feca45280a076",
+      "bytes": 4795
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentsgroupform_template.ui",
+      "sha256": "57959580fc58259d2e12deb126f9a974a84d904b567392bf9656e3f7379717e0",
+      "bytes": 2946
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyroomform_template.ui",
+      "sha256": "e65c7a19ee03c0148d843353b1467d4536b66cbbbc3a3a5732cd0008b58065b0",
+      "bytes": 2517
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsstyleandcolorschemeform_template.ui",
+      "sha256": "81f520560b3a9184547393170ae8bc71e9f94e6396d96f56d5a63cd5ff98518d",
+      "bytes": 3572
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/spreadconfirmationform_template.ui",
+      "sha256": "7b053340afeb6af811f42ea143da29930a9380274d0d5a22e6a6482ac6299581",
+      "bytes": 1539
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentsstatisticsform_template.ui",
+      "sha256": "9389e15bf854baa9a7de6855583776457a7d7573c7b14badf71872ac37545db2",
+      "bytes": 3415
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/interface_images.qrc",
+      "sha256": "8295d0712699d191e3efaed5d42ec3a42bbee45ad46b353ddbb4a7a01463c52d",
+      "bytes": 258
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addbuildingform_template.ui",
+      "sha256": "2d3e4d764c8b2d32302b005ed3e108bfad4414167adf0fe2acf192cfd4bdb46e",
+      "bytes": 1450
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifybuildingform_template.ui",
+      "sha256": "90e40bacaf4e1be1741300d2dd6d577d74675888b97c7a278e04a2c72355d3c3",
+      "bytes": 1380
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersnotavailabletimestimehorizontalform_template.ui",
+      "sha256": "868fc0f48f82f748095662135e33284ba24ec57a89915160d2aeaf7c9ecf7642",
+      "bytes": 4268
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitytagsform_template.ui",
+      "sha256": "e659afbbc41d8b817fd2bf36b608210d2bf7ab9f1cdf6030653cda7297e254d6",
+      "bytes": 4438
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/spreadmindaysconstraintsfivedaysform_template.ui",
+      "sha256": "c1805634e651bc820e59363594cda534a8cf4b806fa2f8fa7a9778954bae6116",
+      "bytes": 11338
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addexistingstudentssubgroupsform_template.ui",
+      "sha256": "a508876caa92385ce3fdb52feabd61ef7c2a2840c4ba308205d7f29d9ec1f122",
+      "bytes": 3284
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addroomform_template.ui",
+      "sha256": "d1e2e2cad3c94c6c07e3ca9685fae4215ce99c72f3e0473e5962bae47ae45a7e",
+      "bytes": 2782
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablestowriteondiskform_template.ui",
+      "sha256": "010c2217d5d3a8f46095fa09a93f41106679099c49b8dadf1437e9f2572cb4a7",
+      "bytes": 8177
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/restoredatastateform_template.ui",
+      "sha256": "af23b02505b65a0def8f95919560c7ce0ea03d59897000e923445fd93d33c5d2",
+      "bytes": 2953
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/savetimetableconfirmationform_template.ui",
+      "sha256": "6a9a538ecd051d1ffbe58f2817415844ae0fb3faf7fb19be9ccffd4ea7ae3720",
+      "bytes": 1559
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingstimetablehtmllevelform_template.ui",
+      "sha256": "84250e5e4fa11aa3b202956986ebd3eb6df20abf0b36053e5c45a86c395bf9fa",
+      "bytes": 5502
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentssubgroupform_template.ui",
+      "sha256": "7227a569fa033e14854c40021ba9307a03f34058782833fe1abf1585308ce7f1",
+      "bytes": 3336
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/getmodefornewfileform_template.ui",
+      "sha256": "e72d9839f4dbf604217e44b8f76f0d989543ddc0f51e35ebc88ff753f18e6ef9",
+      "bytes": 3178
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiesroomsstatisticsform.h",
+      "sha256": "087891befa0fc5f66fe49eb828d2050f8725caf8196ace31765e0e0e17aaa3ef",
+      "bytes": 1448
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiestagsform.h",
+      "sha256": "3c262ec86ecb417a876eb0f8cbad8ef2f65c5c4558fc1a76726e08f6718574c7",
+      "bytes": 1502
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activityplanningconfirmationform.h",
+      "sha256": "f5e24bccdd19af007f309391592fda14f2bc82869fc5f937b782e257b70722b6",
+      "bytes": 1275
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activityplanningform.h",
+      "sha256": "94b3aa37489a6436f8cd1d9dad018064f0237a502ffdde30c137fe3bc8dad31a",
+      "bytes": 5293
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitytagsform.h",
+      "sha256": "0d40c7a35aa1d3663017b0aed221d31cee2694c92b95f54d7da7eddd3dc3024c",
+      "bytes": 1496
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addactivityform.h",
+      "sha256": "3358c79f37978bb6c5e5f02f38337774b1dffc3e59d35baccbb5dd6b843ead71",
+      "bytes": 3006
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addbuildingform.h",
+      "sha256": "88b885f94b10fd3f8b14569188f4a00d455370fc6319394df0a36947336e9640",
+      "bytes": 1418
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addexistingstudentsgroupsform.h",
+      "sha256": "80000311f31700cc93dd9662698d803b1dc68ab98a311af8c63c1229ea3e4e88",
+      "bytes": 1793
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addexistingstudentssubgroupsform.h",
+      "sha256": "ce8ff848ed9feb47e9adcdb90b30e5ede1a7cf717a17425b46d94dbbe1e70515",
+      "bytes": 1876
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addgroupactivitiesininitialorderitemform.h",
+      "sha256": "5f87a799f2f2b1fc4d43f9300d27c2ad0f6fb97fc41ae98886dd0689dbc94168",
+      "bytes": 2075
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addremovemultipleconstraintsactivitiesoccupymaxdifferentroomsform.h",
+      "sha256": "b37252edb8f2e6b6061fbc82e5c372a5218a7c0914cace5234fc67f87af70143",
+      "bytes": 1792
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addremovemultipleconstraintsactivitiessamestartinghourform.h",
+      "sha256": "fa463fa10703b0f6c344a53d42320ae20accc435397bf97b298f2bb9af5b5670",
+      "bytes": 1736
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addroomform.h",
+      "sha256": "54c937535cee64a4622eb3d8313134f340325c5cd4c97b82ec5304d3fb444e27",
+      "bytes": 1398
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentsgroupform.h",
+      "sha256": "591e6d830ff6639408da1bd1abe1221abb6ced4c328df14903d2ec0090634660",
+      "bytes": 1492
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentssubgroupform.h",
+      "sha256": "eff44e46416797fd32b70ae07338282a395f93f1d7257c86355b8274667674f8",
+      "bytes": 1544
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentsyearform.h",
+      "sha256": "0e7aa76aec7feb2ba89eea4bd8b9b00ad8a5090a0e8360a399ebba0d7542e4c6",
+      "bytes": 1457
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addteacherform.h",
+      "sha256": "3cc94421a196f5e2906da035f6c78ba2f994345526ad9c3fc7f10a472c00f1ff",
+      "bytes": 1315
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/advancedfilterform.h",
+      "sha256": "a4b81accb6845453839ae2ab78247f0a6af52766ebe6a7cba1b88b6389b709c7",
+      "bytes": 2248
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/advancedlockunlockform.h",
+      "sha256": "e1766fc647eba28b72d0bc1d09dc3fbcc3e719aaa0d9769e96f5bd2a5954396b",
+      "bytes": 3872
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/allspaceconstraintsform.h",
+      "sha256": "c27a10878224ed9c1267f501606739bdc7d0cbce3478e1a2d9b71cb35b033519",
+      "bytes": 2273
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/alltimeconstraintsform.h",
+      "sha256": "7e7b7e4722baf9c712422a19c634b2451b1704461ddc01d7d1da8c27bc64214c",
+      "bytes": 2263
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/buildingsform.h",
+      "sha256": "955ccafef342771c8dfd3ecffe833f197ee4cffae460f4dbecb4c6f023956d9d",
+      "bytes": 1423
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/changemindaysselectivelyform.h",
+      "sha256": "0fdd882e4644bcf7cf9735a8a755d73a855db0bb71518e960f1d9fac7bcd2234",
+      "bytes": 1746
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/changeminhalfdaysselectivelyform.h",
+      "sha256": "26f9defd1b6c194d738858126b118923230da97f794b55cccacf2dd2ddbf68d5",
+      "bytes": 1769
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/commentsform.h",
+      "sha256": "3fe8b9151bf3956e35139d434449b29e8253fbb5afc414612cd48e6313bf15c5",
+      "bytes": 1098
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/daysform.h",
+      "sha256": "1c2acea76afd74cbaaeebd70cf2ad6b322c5682fea9ff479c6c240c53b1f87b9",
+      "bytes": 1412
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/fet.h",
+      "sha256": "c26a5155f534926fa8632435835c8b0603caf10ad71e2c9a223591a76c637ea0",
+      "bytes": 2180
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/fetmainform.h",
+      "sha256": "faee1d5096fa636f71d2ca652606a55e7a77cf75ca147815f62df4c6b8bfc1b9",
+      "bytes": 66842
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/getmodefornewfileform.h",
+      "sha256": "edaa1aa7ec10eae9ab83e7a9e291926a0359a82c03906efe236daeedbb94be70",
+      "bytes": 1192
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/groupactivitiesininitialorderitemsform.h",
+      "sha256": "8f527e5765ca0702f9880187428d96c0f87441318b645d1736bbcd905e932d38",
+      "bytes": 2379
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpaboutform.h",
+      "sha256": "2121208cd45bcb9b62c8068a5f2abb0a2e2023d513f5eb9390e1fc63b214015f",
+      "bytes": 1307
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpaboutlibrariesform.h",
+      "sha256": "40e46b7dceba43c6cb3b08abbba10e89f83a86cce99a1fc7d23b579d822e435d",
+      "bytes": 1368
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpalgeriaform.h",
+      "sha256": "c12eb4c2ea70496c8a07acaf8645882ef3488a192a5fe897f89cf9036a89e61f",
+      "bytes": 1403
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpblockplanningform.h",
+      "sha256": "2524b99c9fb31e7b608de7c6b5c8b602d5b67260fb253ad89671a084ec3034b9",
+      "bytes": 1379
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpfaqform.h",
+      "sha256": "912c47a1a7c450dae9117c80f389055c7328247db9398078a5ed5a6e6f9a70bf",
+      "bytes": 1307
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpinstructionsform.h",
+      "sha256": "78fcb4ddf12936d1e094e64f9f2b8a1cf88d692db554af09217e03e2a562f618",
+      "bytes": 1380
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpmoroccoform.h",
+      "sha256": "e676550c50c7d73cf5fea5f46bdc7e6a2b10c3a5f498ff20fcf30f18248551ce",
+      "bytes": 1400
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helponstudentsminhoursdaily.cpp",
+      "sha256": "b14803e1336824fe2d6e02b3a12c110aa4858c4d16cd6521965169fd51e3eaf1",
+      "bytes": 2734
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helponstudentsminhoursdaily.h",
+      "sha256": "94d77ee34a534ca14008b6897dba368a583f8acd3a9c1f17e947c9a42ea054ae",
+      "bytes": 1311
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helptermsform.h",
+      "sha256": "2475520442492adfc02cd284c7192c56a7fbe43fa4e79d37b97ac7da35753ce7",
+      "bytes": 1315
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helptipsform.h",
+      "sha256": "bf290518750a1e3d9665bcfa4758ad08d86ba3b0f52764e40be6b0d14cc693fd",
+      "bytes": 1315
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/hoursform.h",
+      "sha256": "c57d32a3dea3953a2f1707f54b96fa591dafc9fce139ff4544889cab7e5e2211",
+      "bytes": 1415
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/institutionnameform.h",
+      "sha256": "f2218111db6a42f37ca10bcc1cb1c99c081f81e303427d973503309352c2d659",
+      "bytes": 1147
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listspaceconstraints.h",
+      "sha256": "4695b2e8993e1f5d337b880aa5c5ee709980f66ce533330bcde524738eddbf13",
+      "bytes": 4161
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listtimeconstraints.h",
+      "sha256": "06a2dedcdc5382f76420ea0685be81f5c4ee300b7aa262853888b396daa56aeb",
+      "bytes": 4538
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/longtextmessagebox.cpp",
+      "sha256": "d3e65cbc38fd02ac55f0c74465f6e3fa5fbecab4c402cf763e1a196f50a76bb6",
+      "bytes": 11292
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/longtextmessagebox.h",
+      "sha256": "eb76ab79a1ac54f2ed3df4403925347b0eab7e66bf9069ccc97d2d53389b7fb1",
+      "bytes": 3360
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/longtextmessagebox_auxiliary.h",
+      "sha256": "33668654f60aab1df3b1159f804f7d1e44dac3bea63039b4a5720d7c601f60da",
+      "bytes": 1497
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyactivityform.h",
+      "sha256": "936ee5bf2d3543dab55f7f6b57750eb8edad76cdf56677eb1e6462989d941318",
+      "bytes": 2677
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifybuildingform.h",
+      "sha256": "a040fad5a852483c83af90bd5680d33952e28ffb2cfbaa28c98c71f47a5b1053",
+      "bytes": 1518
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifydayform.h",
+      "sha256": "c1e734ce6b0d3637366e2ca3e4e0887690d20b305f7828f6f9b58364051b5da4",
+      "bytes": 1208
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifygroupactivitiesininitialorderitemform.h",
+      "sha256": "f31a71a04558cf5b3329beb35efa41a508e6e4a50f12da9397a76d9e90b79ed3",
+      "bytes": 2188
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyhourform.h",
+      "sha256": "4bd96f958c5c656bb0a78254a34c08e7662965c846f1bb1798eb6075343a639c",
+      "bytes": 1215
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyrealdayform.h",
+      "sha256": "b94e5e99b5dfb9837523f8e6efc010dcbfccfbbfc479cff37772a1b3154da69a",
+      "bytes": 1236
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyrealhourform.h",
+      "sha256": "263bacf40a8215a59485c752ca8cd861c6829e42066a8287b690bf07301b3341",
+      "bytes": 1243
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyroomform.h",
+      "sha256": "3f1c8cd96d6a36829f548a97a4f7385661dfa21bf088a66bfdbc24f1903e11ca",
+      "bytes": 1597
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentsgroupform.h",
+      "sha256": "0f141328ed91e5b02cddf6b25131c14837464cf109615bb197cf3864d0324595",
+      "bytes": 1657
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentssubgroupform.h",
+      "sha256": "aa40828f0e58b284223e31c5a51e618bcbb2409f4ce7fbe13d68a67990ec7094",
+      "bytes": 1737
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentsyearform.h",
+      "sha256": "a28d05dd5c467f7954fe70c97987898f1c8dea64b7f63813ce087f132c528a2e",
+      "bytes": 1600
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifysubactivityform.h",
+      "sha256": "a77059c1a2eb159035f69dd258699c12fea564170283c824c44adc5a3c1bf5db",
+      "bytes": 2607
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyteacherform.h",
+      "sha256": "5bb2c172aae9af034e1f8f68acf562305a8dccabd0b935be58933696160dd7f9",
+      "bytes": 1326
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifytimeconstraints.h",
+      "sha256": "2564e1d5df1de803a9c7b72c69609bb0e853670e49024550c435a26a529fba3a",
+      "bytes": 2552
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/notificationcommandform.h",
+      "sha256": "03a3ffae3f920659f176b7db2d61d1d70ad3f39532f3f67feaadca7962e3001f",
+      "bytes": 1367
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/randomseedform.h",
+      "sha256": "9c01c435c7f37d770ad3587ce10aeee5a6302179c2a49d0628393e1426d9ead9",
+      "bytes": 1127
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/removeredundantconfirmationform.h",
+      "sha256": "6a0a44232579aa0fff8181c831e6599541e0c9e89c0c364e86adceae6967c3bf",
+      "bytes": 1262
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/removeredundantform.h",
+      "sha256": "e230e878cb3b66325e650c93cb80b334e68b0f2027c1e065769ff24b61f56a75",
+      "bytes": 1248
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/restoredatastateform.h",
+      "sha256": "5bdc700db31627f3b15d738726f89cacb930f5802339009fc2184456b3be1b82",
+      "bytes": 1520
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/roommakeeditvirtualform.h",
+      "sha256": "d959ec6cac83a56cc88bcf7033de4845edbb5efd1c321ea0279da7e4e255a276",
+      "bytes": 1456
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/savetimetableconfirmationform.h",
+      "sha256": "c4d61bf749dc2c2bac4e12b3a4dcdd3da54f025c472dd45eda5dd8be9eafc9d7",
+      "bytes": 1254
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsautosaveform.h",
+      "sha256": "468f6ff70181ff1a9008228077f759092291543592938a57b8b8fdd3a59d443b",
+      "bytes": 1457
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsdatatoprintintimetablesform.h",
+      "sha256": "41cbca877607a494debef3ad43b8ce817f2a0cb222aced1bab65c7be25027850",
+      "bytes": 1331
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsrestoredatafromdiskform.h",
+      "sha256": "8e2906367b1d5baf6a2c76d3d41b271401d961da5efd088634b78232c8f30361",
+      "bytes": 1523
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsrestoredatafrommemoryform.h",
+      "sha256": "6b2b43a3f6c7653b2598f0d1c68b4575e93ffb2268726ca1a084cce80073f733",
+      "bytes": 1541
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsstyleandcolorschemeform.h",
+      "sha256": "c640d9beeb6ad7feb07bfd30f94cbc6dd57480cedb67164e3f224af0e038667c",
+      "bytes": 1477
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingstimetablehtmllevelform.h",
+      "sha256": "c7b2d9e5c47913f157a34a7bfaff79fd69ce0df90ae47076f56a9e0018393b07",
+      "bytes": 1222
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/sparseitemmodel.cpp",
+      "sha256": "b988c5bf021d39f656a2861f775e6ccb2c8a65cf1f4900974342d9b5cbd63354",
+      "bytes": 4290
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/sparseitemmodel.h",
+      "sha256": "98c4f0e6da4d46302e8a5710e872ad9fd5145a53c43037bb79edd1598aace2a8",
+      "bytes": 2228
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/sparsetableview.cpp",
+      "sha256": "2a71b350d0a4ebe04ceded60b254be86a19942a0516d50bcf3c2e457404b561e",
+      "bytes": 4927
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/sparsetableview.h",
+      "sha256": "3ab915c3066bcae1f5c77ad9951bbc1a6e90b34d0776d986d03605a75f553fab",
+      "bytes": 1684
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/splityearform.h",
+      "sha256": "532a8c90f06b6c0ca9ccf1847deda7b3c037a0137485de656ce3df917111b2a6",
+      "bytes": 2457
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/spreadconfirmationform.h",
+      "sha256": "ffed5674af153eb6c687ced9688da9e00c8ca14f77ccb6e8cc0c942d8113e122",
+      "bytes": 1200
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/spreadmindaysconstraintsfivedaysform.h",
+      "sha256": "2d6fbc1c54d4d4362c861d4ad1402d7ef066cd927208e1d7587baf0ccf0d5cda",
+      "bytes": 1400
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/statisticsprintform.h",
+      "sha256": "f86fa7bed8abf83bd8aebc16f63e84bbe6a99f2e77a2d6647eb9b4930bd31ab8",
+      "bytes": 3293
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentscomboboxesstyleform.h",
+      "sha256": "28e19e3386add9c463ffcea8ebb1ee6e552ad9ecf8bbed7497930baff665f87b",
+      "bytes": 1216
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentsnotavailabletimestimehorizontalform.h",
+      "sha256": "fe0f7534ef8fa507c646766d0040b0b786b7be2dadf78c835d77d293645a4650",
+      "bytes": 2893
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentsstatisticsform.h",
+      "sha256": "20e29cf67bf3e8dec2687867d28ec1dbc016b446b6045d47acb21dd84cd1ba62",
+      "bytes": 1673
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subactivitiesform.h",
+      "sha256": "04e74768e5f76318eb31a339749e67697176329db8c2e0b915869c59ad3afc40",
+      "bytes": 2278
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subjectsform.h",
+      "sha256": "d17ec250f50097f993c47a1229b65e17a13601dbd18cf326d4cb2a3ac911a0d3",
+      "bytes": 1351
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subjectsstatisticsform.h",
+      "sha256": "8d99bc18b34e4639bfbcb566d0f48f79606089bf9098ceffc358b89cb9069d14",
+      "bytes": 1391
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersform.h",
+      "sha256": "4903de12f07b230b06ec838d37d87aca2e5b5e25fbb5c7c24ea9603e59cb7456",
+      "bytes": 1551
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersnotavailabletimestimehorizontalform.h",
+      "sha256": "e4fffe31f896316ce2621739afc5968c1b987cb4021f198581842e9e65de54c9",
+      "bytes": 2831
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersstatisticsform.h",
+      "sha256": "377cdfb360ca90f9e689c1340c13bb595b3c393e4819b1792498286cf03e203e",
+      "bytes": 1629
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersubjectsqualificationsform.h",
+      "sha256": "0bd879c8e68c1bbf14ff4c232e1ce5346a4427ac6da6b8f22afec2254a93bab2",
+      "bytes": 1686
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/termsform.h",
+      "sha256": "b3a7e46daa7566a77ca0ddbca025afc8c13cdf9d33e94659d9199e700602a3aa",
+      "bytes": 1076
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablegenerateform.h",
+      "sha256": "5b285a8a6df1ee62591e5cfadef2b5dc79adee3104d2c8bf5ee762dbff8b12ad",
+      "bytes": 2123
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablegeneratemultipleform.h",
+      "sha256": "c1b0f079627e158c0ad307e8235110e144f34c51da2098ef68016dd5baf35c4f",
+      "bytes": 3662
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableprintform.h",
+      "sha256": "6e3a7c6d61e067a5cd89caa446f220b85c4528f507b4a845ecaff2cec8afdce2",
+      "bytes": 3690
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableshowconflictsform.h",
+      "sha256": "4d2205cc4679b46c99388a1735d9d691d29e577529a39456a03095b1b506ae48",
+      "bytes": 1190
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablestowriteondiskform.h",
+      "sha256": "1f788b32382dccc445b70ad1bc95a9cbb01b24a8ff7d2f0b12113b7daed43484",
+      "bytes": 1216
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteachersdayshorizontalform.h",
+      "sha256": "5c732d1751c587feb5c1340445889be55e7674c0d1a972ee7c58b2b25cc55936",
+      "bytes": 3109
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteachersdaysverticalform.h",
+      "sha256": "c2b3cc89ec4403ca6eb53fe05d659f1fb5580b41e6a0276421e4fbb97a437653",
+      "bytes": 3076
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listofrelatedtimeconstraintsform.h",
+      "sha256": "a00567f7b2f063121d688422a723fd995e2cc0c41818b3b5e1d04539a4ca9aa7",
+      "bytes": 2726
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listofrelatedspaceconstraintsform.h",
+      "sha256": "d695d8655102d8734596f6d4ac447cb8f89c3324de9afc0bfe3c090d9ac07ef8",
+      "bytes": 2740
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentsdayshorizontalform.h",
+      "sha256": "865c5670e0461782854503b1cf26ec4bd540d480d25f5b161d16afaf969d1f82",
+      "bytes": 3268
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentsdaysverticalform.h",
+      "sha256": "c07159606b280460790c7990a652ee683c1b1607322a34ec25e2e3e9d16a3971",
+      "bytes": 3235
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomsdayshorizontalform.h",
+      "sha256": "28af8e31b8d389dce6d4bfda0486fe9d4d863ef7ae9af1b739d57bf23daf94ef",
+      "bytes": 3014
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomsdaysverticalform.h",
+      "sha256": "228a6319cc83826e9099776f06627d1c63c67f30fbc0f38bedc18f3155bac365",
+      "bytes": 2981
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomstimehorizontalform.h",
+      "sha256": "e1db620741dbd3582e7d70cb50de50db193bb6cc25f35f5f51d238c5264372aa",
+      "bytes": 3067
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentstimehorizontalform.h",
+      "sha256": "0a3df85e80292cb206dfd614399e39e449fe2b4c7dee0c77cc545cfb9e14999b",
+      "bytes": 3659
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteacherstimehorizontalform.h",
+      "sha256": "822685aec5384e7c2ab39562a603b588a019ec193a9e3314e820790888ef7e05",
+      "bytes": 3252
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentstimehorizontalform_template.ui",
+      "sha256": "bd69f8740d2b8342fb21824c8e84475642af4f53eb3e3396e96f3f87ecc9cd50",
+      "bytes": 9729
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomstimehorizontalform_template.ui",
+      "sha256": "c525d9aea84b8233a29dfe0d65c0e5e7b416a6dba64eb2d7a7865ed67c4bfb5b",
+      "bytes": 7965
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteacherstimehorizontalform_template.ui",
+      "sha256": "a1b26350c9be1522571286fbcebf46caac35baf571f82be7af5b61dcd3d93a61",
+      "bytes": 10236
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteachersdaysverticalform_template.ui",
+      "sha256": "b7f90fa81484c4e5404cc879d4137a58413d3e96167ebfd773f5a5e0259b2310",
+      "bytes": 7276
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomsdayshorizontalform_template.ui",
+      "sha256": "e2ed2e363013dca929ac6cb01ef30b7ea3266cd7a0ec108625f2471dcc1ae219",
+      "bytes": 7228
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomsdaysverticalform_template.ui",
+      "sha256": "5967f2b7c21a40957578da466e9ddd02b8bbcf2bb0bd72e0d6d5a4137e3d80ed",
+      "bytes": 7222
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentsdayshorizontalform_template.ui",
+      "sha256": "464ea1d7fc6580fc707015c31c5cb8880a7ea62e25cccc636941baf4bda43d3c",
+      "bytes": 8627
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentsdaysverticalform_template.ui",
+      "sha256": "88cdf7fa07c1cf611256502460330fd997fed692529e61396a44f9643d4ae444",
+      "bytes": 8623
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteachersdayshorizontalform_template.ui",
+      "sha256": "ebc5bc541660920b4c440235594169ab0718a9f15e0ed1333572ed557999faf1",
+      "bytes": 7282
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/exportinterface.h",
+      "sha256": "4cdf39fc7d282e931b0ac8ea20b7ffb4aa79969c36fb0bca5c1415d3866fba81",
+      "bytes": 4608
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/importinterface.h",
+      "sha256": "1468a46b889605f4a55b0bc279b498337fa986ebe82f636da3b48d8c64a1213c",
+      "bytes": 4586
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/messageboxesinterface.cpp",
+      "sha256": "4a86ed2408f13dd8638fc0650406a32ad09da6d2cf2e6045b6b9dfc71c21e693",
+      "bytes": 8688
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/fet.cpp",
+      "sha256": "7eeb83bd82df5a4a742abda6561159d9261c31b25f2dbaae522641c7ab9f3b9c",
+      "bytes": 189956
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/CMakeLists.txt",
+      "sha256": "c39043b4618e4afc1a3edb859fcc7836807e7893536328de08d35abfbe6673bb",
+      "bytes": 12348
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/alltimeconstraintsform_template.ui",
+      "sha256": "4a4f7f163bf838af69b3b365cc9f4c13df325db367778aa9de99206fb88fba30",
+      "bytes": 7299
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/allspaceconstraintsform_template.ui",
+      "sha256": "364d74d725c351308609c231460ec10c46a41c0c4c751ed7aa2a7d80613c5fbc",
+      "bytes": 7754
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listofrelatedtimeconstraintsform_template.ui",
+      "sha256": "520921a7f39d1bcaa084ac8a3eb81105d4c4b06eb3163664382064f44fe96400",
+      "bytes": 7237
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listofrelatedspaceconstraintsform_template.ui",
+      "sha256": "5c7c96c7a1d356613a2652a875ac41df9da7ee2da6558ee8cd1c22bdc6cc8e31",
+      "bytes": 6755
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/humanreadabledataform.h",
+      "sha256": "16e94ee83d5748f2bb849b54d40512c4bcea9a27f07e0a3b0eda0ff24ef2cd8c",
+      "bytes": 1455
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/humanreadabledataform_template.ui",
+      "sha256": "6e2d26c5b27c0fb11d2b38a05e7dbc76021be8a96db9afc456f23f8821299d04",
+      "bytes": 8365
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiesform.h",
+      "sha256": "0db788e109754c05d520fd5a83fbcec338d82cb3b3a655c2d38a136d9eb1f653",
+      "bytes": 2353
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/groupsform.h",
+      "sha256": "71b4795eb5536a284376ae717bb4631252660e2af4accb257aa4e7dad57fac70",
+      "bytes": 1461
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/groupsform_template.ui",
+      "sha256": "e2540fd3d96d0cf71c2ad9e08e017f0b3a0ca61df2bd2bdf0debadca1bef8534",
+      "bytes": 6148
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/roomsform.h",
+      "sha256": "491399a1fde5d4b26522dd1d01e34da2a94b4859cbdc2c44f176f719034b69ca",
+      "bytes": 1442
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/roomsform_template.ui",
+      "sha256": "b7a3c6a880f2f13245403dd0c54e139e08f75292bd7fa643054d71e087d94e9a",
+      "bytes": 5132
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subgroupsform.h",
+      "sha256": "b96ac917aac3d4f2c5c46d1cd5fc1c7b42bc8fcd2885d62cef0a30cec55ff20e",
+      "bytes": 1555
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subgroupsform_template.ui",
+      "sha256": "716bb563228ad0e868343d6dbec78ade09f688f3a94018ffd2d78f3c4eb6689d",
+      "bytes": 6736
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/yearsform.h",
+      "sha256": "0f0e9d6beae6a13190aa974859e9569f5c9af2e1ffc19bb91f203f5a75d22bb9",
+      "bytes": 1351
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/yearsform_template.ui",
+      "sha256": "8bd742ff0a26cec54348e272cfb8714cfc26b6352152368b18d620a5979fcf97",
+      "bytes": 4249
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addormodifytimeconstraint.h",
+      "sha256": "a068c26045f6c8c3cfad366267c45d57b4fbf14c24455f88ef0ec81d4a84b6d7",
+      "bytes": 14539
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addormodifyspaceconstraint.h",
+      "sha256": "168c595d274d33718755ebbedea389c90ec13493c96007decc62289e27c45eb2",
+      "bytes": 10467
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifydayform_template.ui",
+      "sha256": "c5438f846a2abd3d0cf04c78df175d76a3318c284f75118d5aad6d4d12796021",
+      "bytes": 2354
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyrealdayform_template.ui",
+      "sha256": "a5dd8eec3c6f885ee5edb9fff1fe64dbf2149897e07182ebd8a09a99e6c274ae",
+      "bytes": 2498
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyhourform_template.ui",
+      "sha256": "a9720603d5345be2337bb42dc5e18b06ad5ad2da356e66281031144ca435921a",
+      "bytes": 2357
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyrealhourform_template.ui",
+      "sha256": "24f0fb582f0f3faf852782fdde65aeed85cf3120a72f38d1953884b978d92ad0",
+      "bytes": 2501
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/institutionnameform_template.ui",
+      "sha256": "22d3b912722145fd93b6e6b3390b04374d977542d6058b24f09209be03360a96",
+      "bytes": 1067
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsdatatoprintintimetablesform_template.ui",
+      "sha256": "7af9ea35298296d8266cb258f5bd38a35782bb71de6459a7674ac7508b46c526",
+      "bytes": 210755
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/daysform_template.ui",
+      "sha256": "079edf76411b1168d8d81f9730f5cf6355b5367a70e24f90389aa7d8a61568a4",
+      "bytes": 3850
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/hoursform_template.ui",
+      "sha256": "92bd0d24cb8c95d59ed973760fb559c80d8b24b4ea411860b30029855ffe4bdd",
+      "bytes": 3872
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addactivityform_template.ui",
+      "sha256": "fdb846e717437f8e2eae07f9d14e950035e232851d76a280a638020eae63a387",
+      "bytes": 15442
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/statisticsexport.h",
+      "sha256": "813d45200c1fb58f7b3b710c190a81d0c95115173c238fe3ed28217d44ee3382",
+      "bytes": 5543
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/statisticsexport.cpp",
+      "sha256": "a372e8ee687abfc1e6d24ca27b56be6d649ecb31b52b73914f781c0e553e2833",
+      "bytes": 119025
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersform_template.ui",
+      "sha256": "2c8c309089ee52c198cc62a535baf7ee8d82c3b262a8ace621754d54cff7e4d2",
+      "bytes": 5005
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/fetmainform_template.ui",
+      "sha256": "584c47cca3159f85ac1b7d40af2c5d7ffe9924a2719e3245490260276737fd90",
+      "bytes": 90986
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subactivitiesform_template.ui",
+      "sha256": "65a5e860061ab93a235d59078fd778a95fff0294f085cd940fd1d1162e422ee2",
+      "bytes": 14222
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiesform_template.ui",
+      "sha256": "daee74eff3f7f2f0687b072fc956ee52939a76b2dee3daff67f9e122b56256c8",
+      "bytes": 14918
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyactivityform_template.ui",
+      "sha256": "da42bab5e048f848639922ec423990247d6133c87453c95dfb620d129b266d44",
+      "bytes": 12031
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifysubactivityform_template.ui",
+      "sha256": "64b0d362c15d0b15afcead4c4d7cf5e271b1f6ac86bca32da4e86392ab205ec1",
+      "bytes": 14413
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/roomsform.cpp",
+      "sha256": "48156393b4cebd92da728cb7d18b6756ad2ff8b79fb827cd6cd5efe6a8913bc2",
+      "bytes": 21193
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addremovemultipleconstraintsactivitiesoccupymaxdifferentroomsform.cpp",
+      "sha256": "26ec2f808d17f5c804bd27879979fea96cbf2d3d98ccfa00efd88e7ede9c5f5c",
+      "bytes": 6958
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersform.cpp",
+      "sha256": "abf22f10bbbb92c3ec6422778d6f95621bdf96f11c52a4870dfb168b6b064a75",
+      "bytes": 25442
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpaboutform.cpp",
+      "sha256": "87934f9ecab5f4d3261d51ea98c01bf2f23a9dd90b3631374772b3791b3978e2",
+      "bytes": 79199
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addbuildingform.cpp",
+      "sha256": "2e95ec9320e17d3d2942caba35b2565ae194c9bdcc3be48a613cee77c9a94a84",
+      "bytes": 2220
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifydayform.cpp",
+      "sha256": "83dc569841bc8c93e8010f39418acc05ee0e43385e7fa7468a9d714aa587d9b0",
+      "bytes": 1642
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/removeredundantform.cpp",
+      "sha256": "e9de48ee20444ca655350e812375238226a636e0529e8cca923f3c0e63a59514",
+      "bytes": 14351
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablegeneratemultipleform.cpp",
+      "sha256": "b242a9d4bd4ff0f97859afe5694acc796af71a5a101346276776438b50e28ae3",
+      "bytes": 63950
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/notificationcommandform.cpp",
+      "sha256": "9c8c3340d21e00b37ae877be427e1f81fcd88242c068dc2bdff9843d91073ab7",
+      "bytes": 9116
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableshowconflictsform.cpp",
+      "sha256": "07e4a339bfe478b873827015aa612aa82a2c012f9c96f1c1728cbc5c184b9c2b",
+      "bytes": 1963
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentsyearform.cpp",
+      "sha256": "9f9386eae7022b36ef3439a7f91dbee78ab8870b0c2804646c82702c066842c7",
+      "bytes": 3923
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addormodifytimeconstraint.cpp",
+      "sha256": "40b103a89e018ad25a8102bcabdf0b480ae09f97f061585e813c04bc79de5c4e",
+      "bytes": 1017495
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifybuildingform.cpp",
+      "sha256": "074545ad2fb7730fc018783d477d05813a51f36dd6d48f102834811af61c5db6",
+      "bytes": 2460
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyrealdayform.cpp",
+      "sha256": "1186827d27da92741487b62f26f3b36a318bbdcbc5b4e69ce43a043e656ac146",
+      "bytes": 1678
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/spreadmindaysconstraintsfivedaysform.cpp",
+      "sha256": "1d678b8bb229ca12601852cc76a537a86a00b10fb1c3470190bb35b9ebf7d2a5",
+      "bytes": 18608
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/hoursform.cpp",
+      "sha256": "89f7f1b74cf42adcfe10def177927d30e20cac5b7bc54c7eb984a9d696c8158d",
+      "bytes": 19541
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/daysform.cpp",
+      "sha256": "ac2f4088828c18bc281287c9f789205b9fba6b2f2d444399838a8761b30afa79",
+      "bytes": 20115
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyroomform.cpp",
+      "sha256": "74ee873bbdec5aec4c981acb2528cf902874ae78f2c21eb050d416aa1fecb2a0",
+      "bytes": 3676
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/utilities.cpp",
+      "sha256": "1efd94b46ec53dfd679246a89826a4ab9eff1f6c63f0d9121d9b55049f5f0496",
+      "bytes": 36667
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listspaceconstraints.cpp",
+      "sha256": "8ee44677b699d848cbdec7bcbb9a9a782a7e890058ab81aecd8be807398d4380",
+      "bytes": 128320
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentsyearform.cpp",
+      "sha256": "9f831bc2695a9d1bb59e053c6cbff541bbb5a415081a612466a54e6f2b3ad935",
+      "bytes": 10734
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/getmodefornewfileform.cpp",
+      "sha256": "c9f235f78d03602b68e09700ca143b7a7586e4e30f805350dc2f03f88b4b47d2",
+      "bytes": 4573
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpaboutlibrariesform.cpp",
+      "sha256": "e437bc4eee88c1cf25fd926a5acb2f1113700d3dc60d9fcc684f05fc7b06297f",
+      "bytes": 2800
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/advancedlockunlockform.cpp",
+      "sha256": "376c83c4b5e88c3a09bbbd2fb07e0803d1101837200c798449728546439e9734",
+      "bytes": 158550
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsdatatoprintintimetablesform.cpp",
+      "sha256": "8cf7fbfc180348c5abbfa12c9af37a6ab3f27690b970ecceee4324a93bb62e44",
+      "bytes": 177915
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteacherstimehorizontalform.cpp",
+      "sha256": "92647f5e3c6866014a5408ee6b2d32c23d59f21d619fededaa55d7f92586bd28",
+      "bytes": 91711
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/groupsform.cpp",
+      "sha256": "df18d237a43a0575cd61e761887dbd831595c373b99fd7fdfe7ecd306d7b509e",
+      "bytes": 25630
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyactivityform.cpp",
+      "sha256": "cd75d363dfa4544a7986677c25573925dc46ea84ff4406579f67fd96a60386f0",
+      "bytes": 24192
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/commentsform.cpp",
+      "sha256": "84f5226ad0f7051809f984afd55bb607b900cee428ee193bdfb90da2009efd09",
+      "bytes": 2159
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/randomseedform.cpp",
+      "sha256": "5b9aec0539ff97e4e683b7a4c4be1e02939c05de6fadc59faa27b0ac75051b5f",
+      "bytes": 12729
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addgroupactivitiesininitialorderitemform.cpp",
+      "sha256": "31489d96dff1decfae2d89285d894a0b58ecb6677e017bd2848a08a37ccb6a64",
+      "bytes": 12389
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersnotavailabletimestimehorizontalform.cpp",
+      "sha256": "4dc627c5418c98bf0491b9f195668a42e1ad5ff3d745df8ec6f7a73097f1a4cc",
+      "bytes": 33620
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subjectsstatisticsform.cpp",
+      "sha256": "fe7ca05c8b4fb1ff5d7da9621f2c5033eef3dc1666597834727b31580aee0599",
+      "bytes": 3453
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyrealhourform.cpp",
+      "sha256": "f1f2b5fdc7099e7aecf853db8627d9e1b5c9398513506d908b8cb8a966c2fe7a",
+      "bytes": 1687
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersubjectsqualificationsform.cpp",
+      "sha256": "d6a26e9035676447c1f4a125f12089ecdb57589049058e960263b67f5dedef5c",
+      "bytes": 6174
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentsdaysverticalform.cpp",
+      "sha256": "1dba0e9d90ffc71e4df480db6d2f43f5d84a7e06c0bddf30f55021bb4dff74e7",
+      "bytes": 83662
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitytagsform.cpp",
+      "sha256": "48402c4cccf23da6422c59944d93e1ed71418f50a24a747bba294e46c8af761d",
+      "bytes": 20273
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helptermsform.cpp",
+      "sha256": "d4e03a1de23cdb8cd9783d5f567567478f05fdd5e0930146233abda0ff49ba6f",
+      "bytes": 2431
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsstyleandcolorschemeform.cpp",
+      "sha256": "1948084398153383edd2ecdbae3738a752e67c1b90edf4ba39953200e78373a1",
+      "bytes": 3347
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableprintform.cpp",
+      "sha256": "8ad1c52d848b0291a3485e395435d050db15a1052b8c2c4c50524a19e16079a4",
+      "bytes": 94335
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/removeredundantconfirmationform.cpp",
+      "sha256": "00cc03d1d4e4e851101e6df8aed58cfdd0e5fd8bac81485ec40db75c3dbb6a21",
+      "bytes": 4214
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyhourform.cpp",
+      "sha256": "cdc7d2ea59abb2345bb44202c42584cdb596c490ce5c8a9c11ccc48fe43a38f0",
+      "bytes": 1651
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiesform.cpp",
+      "sha256": "6703937da9f3311c53e3d8ce596adab80af9d3b936dc2c1d750080eb2a3d5ce3",
+      "bytes": 47259
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentsgroupform.cpp",
+      "sha256": "1cf9ea1bfee2483c175c1264972f1cf423554a0647d4c5837ba78e2ff92e12d6",
+      "bytes": 4878
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/statisticsprintform.cpp",
+      "sha256": "05ac9feeb6ac7a404cbced1663ed9504b6031276515e8ff6c2dd1a9dacdf87c3",
+      "bytes": 45115
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/allspaceconstraintsform.cpp",
+      "sha256": "2f0e41b3dd4f680d5e1192aacbf919fe8bace9d736f568ecd480a4ac5bfd7f15",
+      "bytes": 43098
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/changemindaysselectivelyform.cpp",
+      "sha256": "e06b1d021b271dca7f0757cd93fa71ef3e5b206a1ed69828fa0ae7306decb692",
+      "bytes": 5150
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addexistingstudentssubgroupsform.cpp",
+      "sha256": "598230255b38ab0434814c5c83323b3f6b68b75b8f47c725aa6f4654684a9197",
+      "bytes": 6229
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomstimehorizontalform.cpp",
+      "sha256": "4a647a5fd8a1f81ee808d7570cb54cf46b52ea8ea616031dd21fcc5e98401f1f",
+      "bytes": 73865
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subactivitiesform.cpp",
+      "sha256": "97350650a7eb567df4033cb1e01cac6af152c67ba8be22a8f803ab42acf10d52",
+      "bytes": 40406
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listofrelatedspaceconstraintsform.cpp",
+      "sha256": "6c4497e9aabb5055954206bfee0377823a4696bd3d4297cb25b90d10d915875a",
+      "bytes": 42345
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subjectsform.cpp",
+      "sha256": "5e47ca0d0484b959fc6c548914cce87bf6821740b461e723e9006db97831899f",
+      "bytes": 17926
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/savetimetableconfirmationform.cpp",
+      "sha256": "99ab82415da7aa011df967315ca12e4b032bfb490bb6eec6720bb555bec3a315",
+      "bytes": 3346
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/fetmainform.cpp",
+      "sha256": "9ded9c4949ff1b2081f85dfb5c98bf6e56633fd9c255ca79198d804ec5177e6a",
+      "bytes": 1019643
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activityplanningconfirmationform.cpp",
+      "sha256": "d3576c2e0ba1108aef2742169dd5319151333c423e075e9ba73305aaafb77eab",
+      "bytes": 3580
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addteacherform.cpp",
+      "sha256": "baa6bc95ea0c3f59a189cd30ff3fbe87b2c2a2801e40343432cc590b2cdbcc30",
+      "bytes": 9542
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentssubgroupform.cpp",
+      "sha256": "b713337833870be433fe942b2ca5177f77e1cd398a0b1d375b503dfbfd63795a",
+      "bytes": 3723
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifytimeconstraints.cpp",
+      "sha256": "4161e3290de0420730adb0f8b7dbf596f3cce1a5c15919132bfae2655ed117c0",
+      "bytes": 53077
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/buildingsform.cpp",
+      "sha256": "d1263bef277ecbcd1709c78798479a668a6e2239832a7a63dd747d9d63ade3b1",
+      "bytes": 15062
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpmoroccoform.cpp",
+      "sha256": "27c95aeabe68e9fecadd0e8ef7acb9dc241406d364aa9df8006d80e62b2deded",
+      "bytes": 8188
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/termsform.cpp",
+      "sha256": "3b4f9db8b688bb0a9385f748d16c1db0c6fab4b27ed801436b13039f7fa6c626",
+      "bytes": 3729
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablestowriteondiskform.cpp",
+      "sha256": "83542c6d5b6d2e6ef82949d12f05ae886523f8c738ce916de8dcb10896fb7985",
+      "bytes": 3688
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/utilities.h",
+      "sha256": "8ff94c59e1350841d0dab14f923bc734115c6f90d61ecfd412df4014442cb6f8",
+      "bytes": 4207
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addroomform.cpp",
+      "sha256": "9290c90584c5f20d78d71291c13b0e2bcd5624d064af0b2123e8c05ee622f831",
+      "bytes": 3405
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/splityearform.cpp",
+      "sha256": "59dd4a0ac6378f5c553433efd1608a397347ddf84ed5047f726dd08ba226a57d",
+      "bytes": 41351
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/advancedfilterform.cpp",
+      "sha256": "d0b198a64def04ca0b3ca8a4d0c539115d7ae3967434b6cd2cfb47c706fc2a99",
+      "bytes": 10421
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifystudentsgroupform.cpp",
+      "sha256": "6bb90cdfc202e9316f2a4982d846a74f0f4ed1d9ce6398024c68a9e6a70e4ab9",
+      "bytes": 3495
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/yearsform.cpp",
+      "sha256": "1dffba50c149c695356a94dee530d2fe6ec56fc247e5387f30e208869937a8f4",
+      "bytes": 18255
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addactivityform.cpp",
+      "sha256": "aa154cf58ae6c5b8ba96b4ac091a42b2c5da9aef8bd86004e8f934ee3bca8853",
+      "bytes": 60186
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/spreadconfirmationform.cpp",
+      "sha256": "261777a272e9870c6a9491304e4fa6297283aa9cec7624e1db15ef67ad5b79f7",
+      "bytes": 3953
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentsdayshorizontalform.cpp",
+      "sha256": "3533a536491be289142c113d780f9152bf5de1632c7a030fb84c8053b6d10e7c",
+      "bytes": 83820
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listofrelatedtimeconstraintsform.cpp",
+      "sha256": "41c82112162529469ddf7d5db6c7e99434ca21f08a06ed669ed680d2ab10d1b4",
+      "bytes": 42629
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpalgeriaform.cpp",
+      "sha256": "6a8067d0bffec107fe32e5c2e474eb4f893d4f6efb28c85bbe2bfacac91a8bac",
+      "bytes": 5722
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/teachersstatisticsform.cpp",
+      "sha256": "83cce6e7e3d6550dc19ab17dd5011b9ec27066fe1f6f098953af6ad080734e20",
+      "bytes": 5281
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteachersdayshorizontalform.cpp",
+      "sha256": "d86dbfe7459a63015c3f219aba0ceb00524eb339f076ef99b248d68f193e8dba",
+      "bytes": 64881
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addexistingstudentsgroupsform.cpp",
+      "sha256": "83bb13d88d5fc7ae3960f39435d60df1123e273f5bb0639b7e09ede29e5c5647",
+      "bytes": 5868
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addremovemultipleconstraintsactivitiessamestartinghourform.cpp",
+      "sha256": "faccce85bd88a10e4df92349f00b207e434fcecbe4bc7b685e35700e2f89a8f8",
+      "bytes": 6513
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifysubactivityform.cpp",
+      "sha256": "7849119072ba6ce0e36a2a3910d3b3d4681539906214eb5eefa00200bd4dbdf4",
+      "bytes": 21396
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewstudentstimehorizontalform.cpp",
+      "sha256": "34d28a5f0063e5ee7570b1cfc5db0244c116af5b9edbc3880269b918f2c122c1",
+      "bytes": 104476
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/changeminhalfdaysselectivelyform.cpp",
+      "sha256": "90a61dd7c28cd14adb71090bc667a281d66ae75e96d38d21a7010c88e22adfaa",
+      "bytes": 4543
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpinstructionsform.cpp",
+      "sha256": "41561dc629ac74ad24efd92650976bca2a4023132d185cb39f343f5da61a0f14",
+      "bytes": 12537
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingstimetablehtmllevelform.cpp",
+      "sha256": "1510bbd50dab44243073497ceff992dba39d8dbbedf14b3e41521b6fb7f7a9a9",
+      "bytes": 3140
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/subgroupsform.cpp",
+      "sha256": "6cf5fd9856e85670ca0343057ef04c3f9f8a586283c9b9a16384ab719685fa97",
+      "bytes": 30930
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiesroomsstatisticsform.cpp",
+      "sha256": "500572ea68d86aba7305b63a56af568e9386021db62fa116b3e6dcfdf1dec3a8",
+      "bytes": 12105
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpfaqform.cpp",
+      "sha256": "fff72a3f77276bd6c244e12d683b5db199d9c734046f2c0c05f6eea4aefdf4f2",
+      "bytes": 59754
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetablegenerateform.cpp",
+      "sha256": "5593f3dd49dabbd87da0a78bf8707cf5a3d21e1e768e889ee3a5b80ccff860cc",
+      "bytes": 44129
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addstudentssubgroupform.cpp",
+      "sha256": "0c1dd0ee62f3458d7f6442242a18f4109294d6cbe4e604c1910b616d55ca8e51",
+      "bytes": 5196
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/exportinterface.cpp",
+      "sha256": "bb5b9b7ad26d2fc7401ec975a11344087e364becc9a4eab39c555fc69e92e672",
+      "bytes": 71162
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentscomboboxesstyleform.cpp",
+      "sha256": "a958fe0d7cc758fbb78bb24ffa8cd751b9d208486e14fcde573e299c97f6743e",
+      "bytes": 2187
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/alltimeconstraintsform.cpp",
+      "sha256": "2f3e01be2d178e09f943b2b521c8d9838dbc72b466522455f7f5f6ef7d3089d8",
+      "bytes": 41891
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifyteacherform.cpp",
+      "sha256": "4ef03498f8effb07b65938c7e9b67ba3f869938a851fbbc595205d3baa4f86ca",
+      "bytes": 8182
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helpblockplanningform.cpp",
+      "sha256": "cdac5f337e95bc32e37f827371d08353c2dfa2ef4e6fbf0135d530696d7267c0",
+      "bytes": 17110
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/helptipsform.cpp",
+      "sha256": "951918635dac1764e8cf387f7b7b7fbb6ff526276bf85ce9f7c746b2489628a9",
+      "bytes": 7660
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsrestoredatafromdiskform.cpp",
+      "sha256": "b4d1b4601615716480e77d5926a7a7e0dd6b2ac4b6ee9904314350e7f53ea7c9",
+      "bytes": 3204
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/groupactivitiesininitialorderitemsform.cpp",
+      "sha256": "1d83a3d75451e2857082c25377975dbbafda6d82ae97323e9815ea01f602d076",
+      "bytes": 37653
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomsdayshorizontalform.cpp",
+      "sha256": "9ec4436a5fd53b880bf9b8107d3f7fde69bd403516a3304ea67f716536fb1868",
+      "bytes": 62342
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activityplanningform.cpp",
+      "sha256": "85b5f4582c8a227df9a998378531ce7d5008213a219e9fc8866b8eea385c589a",
+      "bytes": 185839
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/listtimeconstraints.cpp",
+      "sha256": "eeb3b89587d69fa450cc7735a7fe65f18ebfa184bea25072fad6802763cffc6d",
+      "bytes": 372590
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentsnotavailabletimestimehorizontalform.cpp",
+      "sha256": "ad2812fb87af5f186e2ff8c8337322b28692dbb393d6ed43a5e264d913af1298",
+      "bytes": 36706
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/importinterface.cpp",
+      "sha256": "03b2230486dacd081f034f630078f32c1121ede7dd89c6b148234bd3c9253cae",
+      "bytes": 127706
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/activitiestagsform.cpp",
+      "sha256": "1c166582ee454ed68c44cb60f4b0a153e124aede2f485f08931ae53dd6c2aded",
+      "bytes": 5718
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/roommakeeditvirtualform.cpp",
+      "sha256": "8dc3e2a7f92cd3c9ab135c09549116f85240464e693b14dac2f3566e7d2e8150",
+      "bytes": 12244
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewteachersdaysverticalform.cpp",
+      "sha256": "dc40dd5891d86f1242fd297b416467cc16ae3116457379d1f3ebb8800e208b96",
+      "bytes": 64768
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/restoredatastateform.cpp",
+      "sha256": "0bb123145024e7228767b4043f7b605643107d68603101d92d59751f658fd4b7",
+      "bytes": 8518
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/modifygroupactivitiesininitialorderitemform.cpp",
+      "sha256": "63bf3a7d138f494f658ba27397e423c9e6bc0956a48ef55ccb3864efa7335d9c",
+      "bytes": 12904
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/institutionnameform.cpp",
+      "sha256": "5728aaea8cb55bb713731aa42e86e1adbcffa7c9cfb534bef402d959ffa394cf",
+      "bytes": 2245
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/studentsstatisticsform.cpp",
+      "sha256": "ee6cd178f5e5714a14a364f965087059f9edb1b493bebf8f17b12d5c036cac89",
+      "bytes": 11880
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsautosaveform.cpp",
+      "sha256": "34b47b133ec569c9175eba873077b1cdac20a9e2fde35e899747184a31cdbf70",
+      "bytes": 4663
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/settingsrestoredatafrommemoryform.cpp",
+      "sha256": "0363048c830103d41d702a73eaa449535af86005ad1336249fa2966fe99e8d14",
+      "bytes": 4154
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/addormodifyspaceconstraint.cpp",
+      "sha256": "916b93c4fc93513fdfece6cc6924e3ede54e7eaa08053ecd5c7df9a0a1fe2e41",
+      "bytes": 315208
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/humanreadabledataform.cpp",
+      "sha256": "7b801f07d21648fdfc85d266af2f4d52f7b3b0614e05ab39af75a6be30e25b8d",
+      "bytes": 20849
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/interface/timetableviewroomsdaysverticalform.cpp",
+      "sha256": "bb90cbb62eaccdcfbbb23070334769ba0be6a5680c4f53b0a140a00aad721a18",
+      "bytes": 62229
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/activity.h",
+      "sha256": "0115e3a50b4c635d43c10e79761c29f79177d3318a53344440c8d7e0ba7d8342",
+      "bytes": 8026
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/activitytag.h",
+      "sha256": "e54a53d21def0da0bd9fd4d92b7fe284de5a1fee41586a8f308c14c03611b94f",
+      "bytes": 1795
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/building.h",
+      "sha256": "757b6e573d6f8cac4a34cbb5b527bd13d42ab1a705af39aed13b02aacb483c32",
+      "bytes": 1690
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/generate_pre.h",
+      "sha256": "c97a9a0e03b7dc3b758fcc76933aad51ccde123f5ccf33ece8478effa9bc8741",
+      "bytes": 86558
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/lockunlock.h",
+      "sha256": "0b5d1d30d37556e8387cadde9eb0ec716dfc267c903ccdbcb3944029690aba01",
+      "bytes": 1847
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/room.h",
+      "sha256": "82a6b875d070dc8f6f4944477917090397c82807082f16cc6e594d7d43adaf50",
+      "bytes": 2192
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/rules.h",
+      "sha256": "c8e6186c5b929767f688cb269c72d05ffba0ff0b57e9dca794392e8418e76ade",
+      "bytes": 68493
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/solution.h",
+      "sha256": "f7c3b1bd610ea8ef614517cfac3a48621be44c0af0e0cef45913bde11b55e56c",
+      "bytes": 3845
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/spaceconstraint.h",
+      "sha256": "4ff011b5f57906770250ddc5b3357cda3a877751561de9cd2677e5ce1a359e95",
+      "bytes": 143282
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/studentsset.h",
+      "sha256": "590fc5bf0cbd5d760653f6c89275e9934ef2295087e7ef29798a63ce0fec557d",
+      "bytes": 4044
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/subject.h",
+      "sha256": "f70dd35eeccd4fe8578b31156a555fbea115d329946f8a64a435f61dd067a982",
+      "bytes": 1678
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/teacher.h",
+      "sha256": "986a2271959c6dc688c452f9499e2572d5a841856b8a17ffde92d11e87f1fb33",
+      "bytes": 2896
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timetable_defs.h",
+      "sha256": "bffaeda0e227d36cc07b960d86d66738a26a8330a339651438d2cbf2c5d6f791",
+      "bytes": 51447
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timetable.h",
+      "sha256": "efa2dffaba90b6def0f462bcd097506c0bae74ade79b02bec13bc768be882797",
+      "bytes": 1337
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/activity.cpp",
+      "sha256": "cb73bb9a77e2cc84158033f6b8c0c0e1a99bd580623d9b957fd03e19bd2f1048",
+      "bytes": 23273
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/activitytag.cpp",
+      "sha256": "e32699a09161d36fb5c56e08982bc39e2765f99b6f1765fc2c1d3d69e8e36a93",
+      "bytes": 4939
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/building.cpp",
+      "sha256": "73bbeae0c7686d770edcb13964365d8342dbb56197d33aa370a5e9101d602ff4",
+      "bytes": 3300
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/lockunlock.cpp",
+      "sha256": "fe95d67d623bd7dfdafc833ca1df10f948797406aebfab149697762bee327a62",
+      "bytes": 5588
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/room.cpp",
+      "sha256": "051c48ec0697093aaff910448d72a48c31dec366cd48454c457346543afa9ca7",
+      "bytes": 7696
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/solution.cpp",
+      "sha256": "d77e5dc507b8a07cbaa57189307a35791423fab565aed0b2e48e49af424f2aca",
+      "bytes": 17783
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/studentsset.cpp",
+      "sha256": "59f4c6dde7da30933df9972051f68296c7a641cd988c68a90e43a22092ee6466",
+      "bytes": 15784
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/subject.cpp",
+      "sha256": "d140bc02027cfeb4e63db05d13fa2bd3158abae7c516b0403adb7f5d1c84c4ae",
+      "bytes": 3799
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/teacher.cpp",
+      "sha256": "5f7cfe588b7b11d25da2dacb4e417f7e70b58a95a888e2955ea6414629d503c9",
+      "bytes": 10879
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timetable.cpp",
+      "sha256": "03a9f14177f90c44661c1400f28978070cee0a09a1bcc17f3089eee47494eb9e",
+      "bytes": 1097
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timetable_defs.cpp",
+      "sha256": "1703ac557c754eee4a7f5bd2d29f5444076dda9e405f2cb5cd97f880f68e415b",
+      "bytes": 15641
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/generate_pre.cpp",
+      "sha256": "e4fcd33201e4998ffacb10beaf197fe9d55bb88666a7d7571092b45ef7115b6d",
+      "bytes": 1142403
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/rules.cpp",
+      "sha256": "5dffec7257bfa5bf143568f8d6f7972850b91096ba0a170e09d6c55e352eb891",
+      "bytes": 1965419
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timeconstraint.h",
+      "sha256": "f7c5ca4e8a9802bc41be848d8c0cbdd46ee1259aeb910a8ce7a10ce4d92944a0",
+      "bytes": 464587
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/CMakeLists.txt",
+      "sha256": "542acd4d7aa2dbfac4039ae27eff55449937ff15715da32447e784491f8817cb",
+      "bytes": 798
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/messageboxes.h",
+      "sha256": "5e9f430176e6db1c11d411e3205730e97fc04f007f2429bd346f81777da28245",
+      "bytes": 6314
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/matrix.h",
+      "sha256": "34d80ad0b114956e6b1bbca1bec905c72fdb06281e4b8c403a8ac85aab355666",
+      "bytes": 4422
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timeconstraint.cpp",
+      "sha256": "d6f070978ea3fccf6791b0d109b3bdea49a87e26cb387537e218b7469778d535",
+      "bytes": 2583969
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/generate.h",
+      "sha256": "60ed04561db5dd22ea69521e1735763a0ce1ba5141e75c0c9e582148f16d1e9c",
+      "bytes": 18563
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/spaceconstraint.cpp",
+      "sha256": "928e28fca90e56c5fc575f17c4fa45c31767684a11a114cd63aa176d6f930323",
+      "bytes": 786277
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timetableexport.cpp",
+      "sha256": "67c920a148f67c338948246db9c463731aeab851bec3ef7baa6173a808377368",
+      "bytes": 951946
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/timetableexport.h",
+      "sha256": "f9890e491797fd8abe11dc482980695ea35200a4a306f7b41090326058a6c127",
+      "bytes": 41829
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/engine/generate.cpp",
+      "sha256": "c972ca82c045c8080e69fd4b43e4591501e1bdf684fe9b60af0757302e33bcd0",
+      "bytes": 1312416
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/exportcl.h",
+      "sha256": "c8f2cfb0ad230036a32b707a87a505b9323185b15ef1bfb6db0aff61d5a23356",
+      "bytes": 3674
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/fetcl.cpp",
+      "sha256": "451391e82b973833bf2cd2a09e911c5885cb2e248fb50e892767fbd978bad5a4",
+      "bytes": 206265
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/fetcl.h",
+      "sha256": "23a73bd7c2a478b89b6206049bd70b2796624fc06a60c0deeff10264a1da87f4",
+      "bytes": 1886
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/longtextmessageboxcl.cpp",
+      "sha256": "f4ce692f92f0fc080495ae957a972192d644634de70714a4d92377ae9cba5c0b",
+      "bytes": 4829
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/longtextmessageboxcl.h",
+      "sha256": "5e22eadb799c666afe5125ec2e35adbfdb8e784d67ff6723d8b2857661be75d9",
+      "bytes": 3360
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/messageboxescl.cpp",
+      "sha256": "5c5642429bcedb4058d09c9a182396dd806a0938e3df6bbefcbb29c1b029f626",
+      "bytes": 13983
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/CMakeLists.txt",
+      "sha256": "c73d5dec2eae100e68584a0c92a1b5847e5123957a447ac6a252c7ed589696df",
+      "bytes": 662
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/settingscl.cpp",
+      "sha256": "3c828c270edec11ff89c151aed7741e6a18ddfd55979b7ad3d98f68e6d1dd44c",
+      "bytes": 38183
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/cl/exportcl.cpp",
+      "sha256": "53096f037e41c50cba1d41f2a46709aa1fc0cdb3cad5da9a94628ce2b6259e05",
+      "bytes": 64762
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/src-cl.pro",
+      "sha256": "32fa10215882f8a485cb37f8bcbc30e007807b98452b7d76f34c8863af2002e0",
+      "bytes": 1814
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/src.pro",
+      "sha256": "d603b42d118d6223017f66636ddaaccbf46275457a94239c8094bf9bb397da7f",
+      "bytes": 17292
+    },
+    {
+      "path": "research/fet/fet-7.12.0/src/CMakeLists.txt",
+      "sha256": "252384db307aa995893efb98af66f53940fb929a329415fa2a05933143572fd2",
+      "bytes": 245
+    },
+    {
+      "path": "research/fet/fet-7.12.0/AUTHORS",
+      "sha256": "bb540dec081d5615da2b9ced638e09b4fbf5d37355324d24629154305055a98c",
+      "bytes": 309
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_bg.ts",
+      "sha256": "1c9c51c31a5aa41b57e32421fc80e9acb64c5d88e3043884b0dfbfd70ffce0b0",
+      "bytes": 5087353
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_bs.ts",
+      "sha256": "db17298928edd634a0d2c1ddbdacdc64e68ae095a057c263a5f49a48f3ec0b2d",
+      "bytes": 5668403
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_ca.ts",
+      "sha256": "1f8302c36f6b430cdf8f6df24c21ebaae85a1b29c923c0b6e80cd02f5a3f481e",
+      "bytes": 5126572
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_cs.ts",
+      "sha256": "65d9862c7943b21b7913139836de6b74322fb576bc602c96626af5bfd063017c",
+      "bytes": 4965690
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_da.ts",
+      "sha256": "6e5ce7ea485a154d515794777f02d5d46e8faba4404f7fde9c3518b70dc0aa24",
+      "bytes": 4921541
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_de.ts",
+      "sha256": "d67e4b6c3f68d9e822adc16f24b34023c293ec66e1614f3ce58ecf02b88d670d",
+      "bytes": 5218217
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_en_GB.ts",
+      "sha256": "648ff5115527ebf62a7521dba30ced9774c3930cdac72d5c4fc37c632bb9abc3",
+      "bytes": 4868105
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_eu.ts",
+      "sha256": "d6979fb42c1a634d36a248d229d67ed3493744907527e432e5fe000be9ad8c05",
+      "bytes": 4909109
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_fa.ts",
+      "sha256": "7a8ae8c96a4fe67a8a46495faef770655da717b5dec0096b32e87112174e2d3f",
+      "bytes": 5015451
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_gl.ts",
+      "sha256": "881fb4f665b6b086307308fdf8ac51699cf3ebcc47de184befb486ec501e1290",
+      "bytes": 5016409
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_he.ts",
+      "sha256": "04be915c6ff0c6b832f2bcab2fce31ee3920aa2396bda461fb9b7d76e5d36fd9",
+      "bytes": 4892410
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_hu.ts",
+      "sha256": "229a689177c0a207f6fec8e27bd50eb16c4c7cc817c36958f3074c3f08166a95",
+      "bytes": 4879874
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_id.ts",
+      "sha256": "fb234f311c41766575d2e91a1d0e2e4e469186981b54243a2d729596e95cf8f8",
+      "bytes": 5023559
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_ja.ts",
+      "sha256": "5e38a457a7c39ff553e1c3484cc875aadf173c34f474dc90ef0988020104da58",
+      "bytes": 5017168
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_lt.ts",
+      "sha256": "368301d00b19ed7c6529d4499b11e0b713822d2615c171ef3f332b36d3dc2df1",
+      "bytes": 4929783
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_mk.ts",
+      "sha256": "f6945d41dff6e7d52454ef2de4bfc27edc3b26b7544329ab74e18d20234b22aa",
+      "bytes": 4928088
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_ms.ts",
+      "sha256": "b1b3f65d360eaeb4afc4ef4bbbb54d66f81989240ee938d56e50ba941913230c",
+      "bytes": 4885422
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_nl.ts",
+      "sha256": "491549f1c10f863b2a6c23f59837cca515c8da493c30ca6f1c4b04bf92b13289",
+      "bytes": 4869059
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_pl.ts",
+      "sha256": "14a5952104648833015650dc9876101b6e9adb3b06d3029f7d51c9e43e629e32",
+      "bytes": 4900174
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_ru.ts",
+      "sha256": "dbe1f94a74384c2385ced95f9ba3127814cf45358cccda71fb13743c3e060bb4",
+      "bytes": 5195374
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_si.ts",
+      "sha256": "518d5d5330a13c89d3d35b938e7fdc33bb305675c94655122b152c6843e738d5",
+      "bytes": 4891658
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_sk.ts",
+      "sha256": "80f11ed584e59f389a76bfbc9c29e48b9c3e2a76bd904c669b035028800f86dd",
+      "bytes": 4959960
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_sq.ts",
+      "sha256": "6b3547461017c19a52452a8410e64f09b7cf54062127dfb088fcf8ea86193e91",
+      "bytes": 4997470
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_sr.ts",
+      "sha256": "7ad651c4f06e88360704cd5c9b20150cfc538c2ab3c828bdcec4a32247d57aa4",
+      "bytes": 5143879
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_tr.ts",
+      "sha256": "ada4045b1ed429ecbcd561c5f37fd7838a8a004f8bb828c625c5edf31f98bb6a",
+      "bytes": 5536234
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_uk.ts",
+      "sha256": "fdcd95b9212860585bf950e784f3ce46e8626ddd520a4ef77cef461b785330ed",
+      "bytes": 5037637
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_untranslated.ts",
+      "sha256": "33ec44322ee37105f8e485a4c45076266bec3eb76b18cb45292b99987c938f89",
+      "bytes": 4866079
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_vi.ts",
+      "sha256": "aff2741fe588118b4dc40d263327dbf66f8eb71f0594a0b132640e270a2c7fdf",
+      "bytes": 5673247
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_zh_CN.ts",
+      "sha256": "90a6b10919cf3ee58f361baed789f3823dfb666b208bf23a626125c80a588d5d",
+      "bytes": 4884918
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_zh_TW.ts",
+      "sha256": "ce2fbde9d7a4261458bd0a877038111ac407133af617451e63a3b39d370ba8d8",
+      "bytes": 4958627
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/test-all-constraints-readme.txt",
+      "sha256": "3e10b080fbdebb7c0d69600e6635057973899f59672d17c88b41fb3806ff74f3",
+      "bytes": 912
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_es.ts",
+      "sha256": "e07d80edb415eaeb39fe4404dc3431a5454c2e06c8e0eb6fd3a04c059f1291a4",
+      "bytes": 5545143
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_pt_BR.ts",
+      "sha256": "435061172fe216083e7ad0452ed1366cc75cb5886e9deaa62692176b28e70ae6",
+      "bytes": 5534321
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_ro.ts",
+      "sha256": "01f8a02f09b50df88f466c6fef0c6f6489e33bc2147d54a600beca52973ee25e",
+      "bytes": 5623746
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_ar.ts",
+      "sha256": "da36386ca7d551f4748aa83a534ab7501922c320d1d24efa5417b31f9f452142",
+      "bytes": 5931884
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/test-all-constraints-block-planning.fet",
+      "sha256": "b38acde0a8bd6c4073e19156f45ebbeb5af2bf94d485d2706d2e65c3d546c635",
+      "bytes": 124380
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/test-all-constraints-mornings-afternoons.fet",
+      "sha256": "35474ba7a4d553a277ffd2586bc765591eb5ce01c25bca893fb7fb770bef9a18",
+      "bytes": 167384
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/test-all-constraints-official.fet",
+      "sha256": "376c66cd2065ab071f9090615dab37efb63fd033ed8768b67ff5765cab1ddd7e",
+      "bytes": 125732
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/test-all-constraints-terms.fet",
+      "sha256": "9ff2394b34d378bbeef4dec740470add44f79a72799702c71a0d5906358bb372",
+      "bytes": 125909
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_el.ts",
+      "sha256": "8a2b2a6d8c6f9c571673bc3d7311f1a140effed3ce10d1df31071814f5c116e6",
+      "bytes": 6685137
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_fr.ts",
+      "sha256": "376d5a01dcdfc0f1e966c58da0dc326b90105c9efcbe6ef06f9fdf6d51f5d76e",
+      "bytes": 5671616
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_uz.ts",
+      "sha256": "fd5894e30d59da80b058f111258b382fad24e24eb4a176bebfda02b987199e38",
+      "bytes": 5629765
+    },
+    {
+      "path": "research/fet/fet-7.12.0/translations/fet_it.ts",
+      "sha256": "14fcc62516c2c20d3d134dbd0d32f5591b52fccdbf32a0fd4b60a6a4bd8a309c",
+      "bytes": 5723868
+    },
+    {
+      "path": "research/fet/fet-7.12.0/fet.desktop",
+      "sha256": "a113052ac52422772bade51a1e00c3bb3cc0a3cc782be44c99b2543caee7351d",
+      "bytes": 5156
+    },
+    {
+      "path": "research/fet/fet-7.12.0/ChangeLog",
+      "sha256": "7998ae0fa6e2ecdb7d2dd95b3b0609ce3f1d55e25f47e37dd39fc15790e08d37",
+      "bytes": 216718
+    },
+    {
+      "path": "research/fet/fet-7.12.0/TODO",
+      "sha256": "7b9c3b1a1d0ffbdfb00176e9fb331cab589040c07fd8e3f3109dbcb8f8c6863c",
+      "bytes": 678909
+    },
+    {
+      "path": "research/fet/fet-7.12.0/TRANSLATORS",
+      "sha256": "52a08c9b1b4ac349139c4a9832c93fe59c96bad88d819aca50ee0795cc5e64df",
+      "bytes": 6753
+    },
+    {
+      "path": "research/fet/fet-7.12.0/COPYING.FDL",
+      "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4",
+      "bytes": 22955
+    },
+    {
+      "path": "research/fet/fet-7.12.0/COPYING",
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "bytes": 34523
+    },
+    {
+      "path": "research/fet/fet-7.12.0/fet.pro",
+      "sha256": "b1bf0e9e8fe9292e1fefaee452adf4fab2129d513674abc11d62dbf54205398d",
+      "bytes": 1590
+    },
+    {
+      "path": "research/fet/fet-7.12.0/tmp/cl/Tmp-dir-placeholder-cl",
+      "sha256": "a87bd58e0dc76c1811ed8767853db9e831377d1591dbe2cc14d759c63422e88c",
+      "bytes": 105
+    },
+    {
+      "path": "research/fet/fet-7.12.0/tmp/interface/Tmp-dir-placeholder-interface",
+      "sha256": "8f3dd5bb910c170f0940e40c681e28b582c2a3ca22028829969449cf7dc8dd54",
+      "bytes": 96
+    },
+    {
+      "path": "research/fet/fet-7.12.0/CMakeLists.txt",
+      "sha256": "2b79876c8d4eb3808bb857797b594233849fa203e8df3bc995a1a189e8a84cc4",
+      "bytes": 4753
+    },
+    {
+      "path": "research/fet/fet-7.12.0/VERSION",
+      "sha256": "1caca191e89ef6eca36ec0c0e79bdc7ccac96b89f9ec19028db03171ec6f2f7f",
+      "bytes": 7
+    },
+    {
+      "path": "research/fet/fet-7.12.0/README",
+      "sha256": "79fce57edba7644fc4d811a3007387939f4b3c79791e0661532e26b015a4ec2b",
+      "bytes": 62682
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/fet.rc",
+      "sha256": "e9ddfe00ff75721e256db41a8086d57d83493eb3ee55e43dda8063acb07e51c4",
+      "bytes": 25
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/256x256/fet.png",
+      "sha256": "aece2d94800e4b7ef899b8386469c1f2196c919224a6de37cbb9cd707de13157",
+      "bytes": 11186
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/512x512/fet.png",
+      "sha256": "fddf1ed1146f8928a768a52cbbb09d87105671894108c0e4afe9f1fdee52414f",
+      "bytes": 22592
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/fet-text.svg",
+      "sha256": "3dce0cf0fdf33cd40d6ecbd6eefdf6f1ced60c9bbf8fceece54c881955873c08",
+      "bytes": 5906
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/fet.icns",
+      "sha256": "260af0d957c7d5366ea8e7f77a4b0e210c4e70a4ccb073c02a25469f3ff72afa",
+      "bytes": 197985
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/fet.ico",
+      "sha256": "64fbf7cad0726382edd36dbe760e8eb61ba1419c6c237c280b78dc37bf06e3e4",
+      "bytes": 78798
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/fet.png",
+      "sha256": "7e95827da3bc89bf981e4bdbad25e7d4ef13c21ca4c6388b05f9ff199d8ef7a6",
+      "bytes": 5564
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/fet.rc",
+      "sha256": "e9ddfe00ff75721e256db41a8086d57d83493eb3ee55e43dda8063acb07e51c4",
+      "bytes": 25
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/fet.svg",
+      "sha256": "711f2f5979dd2214e016bc1c7a5d1b71e957fa7688655af1903ae7d7ff60b813",
+      "bytes": 9881
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/old/readme-icons-old.txt",
+      "sha256": "8a262d50a15fa4bfea363d7f019d7819821919622190814067c673a04762347c",
+      "bytes": 2154
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/256x256/fet.png",
+      "sha256": "6e176890f21d15909fc5f073398b6f94f9e217b8975904e5d7c8fce6488094ca",
+      "bytes": 12449
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/512x512/fet.png",
+      "sha256": "746f033aeeb984adff278e3a750939f845ab3b5110c04ed4a5e7f27951af91a7",
+      "bytes": 25910
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/readme-icons.txt",
+      "sha256": "323b60a785b838273b54a8c2fe5ec5e704e8711ebc6cfd8fa64d6dfd0b4bdf91",
+      "bytes": 553
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/fet.png",
+      "sha256": "bafe01c93606cf2aff8cc4addcb9a5c6821d92770f95df2b5546e67a58c0f248",
+      "bytes": 6609
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/fet.svg",
+      "sha256": "fbf9506bdfcd2028531b040976a16038741a9576d579cd95bba2d72852f6e425",
+      "bytes": 10306
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/fet-text.svg",
+      "sha256": "9a1436bab7078bee72eff8ce9b1bd626a9139abe3fd4a3180a87a5b9954e0915",
+      "bytes": 7676
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/fet.ico",
+      "sha256": "0aed82c9a2a43517f171fff6429ecff158b54e6b286b7d1cb45786f520514b6a",
+      "bytes": 338038
+    },
+    {
+      "path": "research/fet/fet-7.12.0/icons/fet.icns",
+      "sha256": "9a0d7bae7882ccf3ba13985033a1bddf12d2ebff29c09467bc792ca47d412e2b",
+      "bytes": 776959
+    }
+  ]
+}

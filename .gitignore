@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+*.egg-info/
+
+# Local credentials and exported API collections.
+.env
+.env.*
+!.env.example
+*.postman_collection.json
+
+# Local third-party source, binaries, captures and real timetable data.
+/research/
+/reverse-engineering/
+

@@ -1,0 +1,1192 @@
+[
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-Volker-Dirr/German_subact_constr.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-activityum/GSSS-FET-v1.fet",
+    "activities": 686,
+    "duration": 686,
+    "days": "6",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 24,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-activityum/GSSS-FET-v0.1_data_and_timetable.fet",
+    "activities": 708,
+    "duration": 708,
+    "days": "6",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 24,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-activityum/GSSS-FET-v0.1.fet",
+    "activities": 708,
+    "duration": 708,
+    "days": "6",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 24,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_default.fet",
+    "activities": 511,
+    "duration": 511,
+    "days": "5",
+    "hours": "7",
+    "mode": "Official",
+    "teachers": 28,
+    "rooms": 21
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_2_shifts.fet",
+    "activities": 539,
+    "duration": 547,
+    "days": "5",
+    "hours": "11",
+    "mode": "Official",
+    "teachers": 30,
+    "rooms": 21
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_double_lessons.fet",
+    "activities": 384,
+    "duration": 409,
+    "days": "5",
+    "hours": "7",
+    "mode": "Official",
+    "teachers": 28,
+    "rooms": 21
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-Alexey-Chernous/PochtSchool_rooms.fet",
+    "activities": 396,
+    "duration": 425,
+    "days": "5",
+    "hours": "7",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 19
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-xdv/standby.fet",
+    "activities": 40,
+    "duration": 40,
+    "days": "10",
+    "hours": "4",
+    "mode": "Official",
+    "teachers": 12,
+    "rooms": 4
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/official/by-Eric-Carolus/MHS_July2.fet",
+    "activities": 1517,
+    "duration": 1610,
+    "days": "10",
+    "hours": "13",
+    "mode": "Official",
+    "teachers": 24,
+    "rooms": 21
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/block-planning/by-Darren-McDonald/Blocks-8-overflow_data_and_timetable.fet",
+    "activities": 485,
+    "duration": 485,
+    "days": "34",
+    "hours": "8",
+    "mode": "Block_Planning",
+    "teachers": 0,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/block-planning/by-Darren-McDonald/Blocks-8-overflow.fet",
+    "activities": 485,
+    "duration": 485,
+    "days": "34",
+    "hours": "8",
+    "mode": "Block_Planning",
+    "teachers": 0,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Youssef-Houiet/SURV-EXAM-REG-NAT-MAROC.fet",
+    "activities": 478,
+    "duration": 478,
+    "days": "10",
+    "hours": "1",
+    "mode": "Mornings_Afternoons",
+    "teachers": 169,
+    "rooms": 67
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/6/Exam_assign_a_teacher_one_day_2.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "3",
+    "hours": "3",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 49
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/2/test_10_activities_per_teacher.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/5/Exam_assign_a_teacher_one_day.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "3",
+    "hours": "3",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 49
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/5/Exam_assign_a_teacher_all_days.fet",
+    "activities": 378,
+    "duration": 378,
+    "days": "3",
+    "hours": "3",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 49
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/4/test_Benahmed15.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/8/BEM_05-2026_mod1.fet",
+    "activities": 549,
+    "duration": 549,
+    "days": "9",
+    "hours": "1",
+    "mode": "Official",
+    "teachers": 61,
+    "rooms": 54
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/3/test_Benahmed6.fet",
+    "activities": 354,
+    "duration": 354,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/3/test_Benahmed8.fet",
+    "activities": 342,
+    "duration": 342,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed2.fet",
+    "activities": 424,
+    "duration": 424,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test3_nsrt6.fet",
+    "activities": 424,
+    "duration": 424,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed3_nsrt6.fet",
+    "activities": 454,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed1.fet",
+    "activities": 454,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed3.fet",
+    "activities": 480,
+    "duration": 480,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_13_03_26.fet",
+    "activities": 454,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/Exam_MOD_NEW_3_teachers_per_building_real_room.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "3",
+    "hours": "4",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 42
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed1_2H_2.fet",
+    "activities": 449,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/1/test_Benahmed3_nsrt5.fet",
+    "activities": 454,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/exams/by-Benahmed-Abdelkrim/7/BEM_05-2026.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "3",
+    "hours": "3",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 49
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-28-exams/liviu-impossible-3.fet",
+    "activities": 80,
+    "duration": 80,
+    "days": "5",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 3,
+    "rooms": 3
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-22-exams/test-liviu.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "3",
+    "hours": "5",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 42
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-22-exams/test-liviu2.fet",
+    "activities": 392,
+    "duration": 392,
+    "days": "3",
+    "hours": "5",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 42
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-4.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-8.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-7-solvable.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-1.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "5",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-4.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-6.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-craiova-locks-at-389-390-391.fet",
+    "activities": 434,
+    "duration": 933,
+    "days": "6",
+    "hours": "12",
+    "mode": "Official",
+    "teachers": 66,
+    "rooms": 23
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-7.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-3.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-1.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-5.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-6.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-3.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-5.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-9.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/small-test.fet",
+    "activities": 3,
+    "duration": 4,
+    "days": "2",
+    "hours": "2",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-craiova-simplified-locks-at-170.fet",
+    "activities": 434,
+    "duration": 933,
+    "days": "6",
+    "hours": "12",
+    "mode": "Official",
+    "teachers": 66,
+    "rooms": 23
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-2.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-2.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/test-german-simplified-locks-at-570.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-10-18-activities-max-number-of-students/brazil-max-students-8-solvable.fet",
+    "activities": 400,
+    "duration": 400,
+    "days": "5",
+    "hours": "10",
+    "mode": "Official",
+    "teachers": 27,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-liviu2.fet",
+    "activities": 424,
+    "duration": 426,
+    "days": "12",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu.fet",
+    "activities": 10,
+    "duration": 10,
+    "days": "5",
+    "hours": "12",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 2
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-2-impossible.fet",
+    "activities": 5,
+    "duration": 5,
+    "days": "5",
+    "hours": "12",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 2
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test_13_03_26-liviu2-impossible.fet",
+    "activities": 454,
+    "duration": 457,
+    "days": "10",
+    "hours": "3",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-durations-2.fet",
+    "activities": 392,
+    "duration": 784,
+    "days": "3",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 49,
+    "rooms": 42
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-modified.fet",
+    "activities": 424,
+    "duration": 424,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-liviu3.fet",
+    "activities": 424,
+    "duration": 430,
+    "days": "12",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test_13_03_26-liviu-impossible.fet",
+    "activities": 454,
+    "duration": 457,
+    "days": "10",
+    "hours": "3",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-liviu-impossible.fet",
+    "activities": 424,
+    "duration": 426,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test3_nsrt6-modified2-impossible.fet",
+    "activities": 424,
+    "duration": 424,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 28
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test_13_03_26-liviu3.fet",
+    "activities": 454,
+    "duration": 457,
+    "days": "10",
+    "hours": "3",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-16-exams/test-liviu-3.fet",
+    "activities": 449,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-8.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-craiova.fet",
+    "activities": 434,
+    "duration": 933,
+    "days": "6",
+    "hours": "12",
+    "mode": "Official",
+    "teachers": 66,
+    "rooms": 23
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-4.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-6.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-1.fet",
+    "activities": 10,
+    "duration": 10,
+    "days": "5",
+    "hours": "12",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-7.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-teachers-begin-or-end.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-2-noearly.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-1.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-5.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-11.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-4.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-2-early1.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-3.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-3.fet",
+    "activities": 8,
+    "duration": 8,
+    "days": "2",
+    "hours": "4",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-5.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-11-helped-correct-a-cycling-bug.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-3-too-difficult.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-9.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-2.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-2.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2025-09-29-activities-begin-or-end-day/test-german-10.fet",
+    "activities": 589,
+    "duration": 630,
+    "days": "5",
+    "hours": "6",
+    "mode": "Official",
+    "teachers": 33,
+    "rooms": 34
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu2-impossible.fet",
+    "activities": 40,
+    "duration": 40,
+    "days": "5",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 2
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu.fet",
+    "activities": 40,
+    "duration": 40,
+    "days": "5",
+    "hours": "8",
+    "mode": "Official",
+    "teachers": 2,
+    "rooms": 2
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu-test-timisoara1.fet",
+    "activities": 1166,
+    "duration": 2390,
+    "days": "5",
+    "hours": "14",
+    "mode": "Official",
+    "teachers": 201,
+    "rooms": 44
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/liviu-test-timisoara2.fet",
+    "activities": 1166,
+    "duration": 2390,
+    "days": "5",
+    "hours": "14",
+    "mode": "Official",
+    "teachers": 201,
+    "rooms": 44
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/tests/2026-03-25-exams/test_Benahmed1_2H_2_modified.fet",
+    "activities": 449,
+    "duration": 454,
+    "days": "10",
+    "hours": "2",
+    "mode": "Mornings_Afternoons",
+    "teachers": 40,
+    "rooms": 38
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/problem-cannot-be-solved/test-liviu10.fet",
+    "activities": 9,
+    "duration": 9,
+    "days": "6",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 1,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/problem-cannot-be-solved/test-liviu7.fet",
+    "activities": 9,
+    "duration": 9,
+    "days": "6",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 1,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/by-Eric-Carolus/MHS_July_MA.fet",
+    "activities": 1517,
+    "duration": 1610,
+    "days": "20",
+    "hours": "12",
+    "mode": "Mornings_Afternoons",
+    "teachers": 24,
+    "rooms": 21
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/Test_View_Time_H_With_0_Gaps.fet",
+    "activities": 582,
+    "duration": 647,
+    "days": "10",
+    "hours": "5",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 24
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/Benahmed_without_R_Q_inf.fet",
+    "activities": 798,
+    "duration": 798,
+    "days": "10",
+    "hours": "6",
+    "mode": "Mornings_Afternoons",
+    "teachers": 32,
+    "rooms": 24
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/Benahmed_without_R_Q_inf_data_and_timetable.fet",
+    "activities": 798,
+    "duration": 798,
+    "days": "10",
+    "hours": "6",
+    "mode": "Mornings_Afternoons",
+    "teachers": 32,
+    "rooms": 24
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/5-by-Benahmed-Abdelkrim/only_R_Q_Inf.fet",
+    "activities": 57,
+    "duration": 76,
+    "days": "10",
+    "hours": "6",
+    "mode": "Mornings_Afternoons",
+    "teachers": 4,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/EDT_new_Virt_R_95-percent_21_22.fet",
+    "activities": 507,
+    "duration": 549,
+    "days": "10",
+    "hours": "5",
+    "mode": "Mornings_Afternoons",
+    "teachers": 33,
+    "rooms": 43
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/2-Etablissement-moyen/EDT_new_Virt_R_95-percent_21_22_data_and_timetable.fet",
+    "activities": 507,
+    "duration": 549,
+    "days": "10",
+    "hours": "5",
+    "mode": "Mornings_Afternoons",
+    "teachers": 33,
+    "rooms": 43
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/4-max-three-consecutive-days/benahmed_5_bis_2-M3_data_and_timetable.fet",
+    "activities": 673,
+    "duration": 690,
+    "days": "10",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 25
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/4-max-three-consecutive-days/benahmed_5_bis_2-M3.fet",
+    "activities": 673,
+    "duration": 690,
+    "days": "10",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 25
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/6-by-Benahmed-Abdelkrim/test_10.fet",
+    "activities": 573,
+    "duration": 638,
+    "days": "10",
+    "hours": "5",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 24
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/6-by-Benahmed-Abdelkrim/test_10_locked.fet",
+    "activities": 573,
+    "duration": 638,
+    "days": "10",
+    "hours": "5",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 24
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/3/Test-Max_3consecutive-days_data_and_timetable.fet",
+    "activities": 573,
+    "duration": 640,
+    "days": "10",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 25
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/3/Test-Max_3consecutive-days.fet",
+    "activities": 573,
+    "duration": 640,
+    "days": "10",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 34,
+    "rooms": 25
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/1/sample_algeria_2.fet",
+    "activities": 773,
+    "duration": 819,
+    "days": "12",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 42,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/1/sample_algeria.fet",
+    "activities": 773,
+    "duration": 819,
+    "days": "12",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 42,
+    "rooms": 0
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/8-Ex_rattrapage/EDT_26_27_test_Ratt_locked.fet",
+    "activities": 642,
+    "duration": 718,
+    "days": "10",
+    "hours": "5",
+    "mode": "Mornings_Afternoons",
+    "teachers": 45,
+    "rooms": 25
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/sample-morocco-2019-10-30.fet",
+    "activities": 435,
+    "duration": 526,
+    "days": "12",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 30,
+    "rooms": 17
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/farabi432.fet",
+    "activities": 435,
+    "duration": 526,
+    "days": "12",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 30,
+    "rooms": 17
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/sample-morocco.fet",
+    "activities": 435,
+    "duration": 526,
+    "days": "12",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 30,
+    "rooms": 17
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/mornings-afternoons/Morocco/1/farabi090909locked02.fet",
+    "activities": 435,
+    "duration": 526,
+    "days": "12",
+    "hours": "4",
+    "mode": "Mornings_Afternoons",
+    "teachers": 30,
+    "rooms": 17
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/terms/2/puris_12-const78_01.fet",
+    "activities": 1467,
+    "duration": 1494,
+    "days": "25",
+    "hours": "5",
+    "mode": "Terms",
+    "teachers": 36,
+    "rooms": 2
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/terms/2/puris_12-const7.fet",
+    "activities": 1467,
+    "duration": 1494,
+    "days": "25",
+    "hours": "5",
+    "mode": "Terms",
+    "teachers": 36,
+    "rooms": 2
+  },
+  {
+    "path": "research/fet/fet-7.12.0/examples/terms/1/puris_2020-2021_9_01.fet",
+    "activities": 534,
+    "duration": 534,
+    "days": "25",
+    "hours": "5",
+    "mode": "Terms",
+    "teachers": 35,
+    "rooms": 0
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "school": {"school_id": "empty-demo", "academic_year": "2026-2027", "term": "demo-term"},
+  "time_slots": [],
+  "classes": [],
+  "teachers": [],
+  "subjects": [],
+  "teaching_requirements": []
+}

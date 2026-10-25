@@ -1,0 +1,677 @@
+{
+  "collection_path": "docs/stkb (s19).postman_collection.json",
+  "mode": "explicit read-only call whitelist; credentials and raw response values not retained",
+  "requests": [
+    {
+      "request_number": 1,
+      "call": "thoikhoabieu.dangnhap",
+      "query_keys": [
+        "call",
+        "username",
+        "password"
+      ],
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 220,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "dangnhap": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "length": 0,
+            "first": null
+          }
+        },
+        "authentication": "str"
+      },
+      "success": false,
+      "authentication": "not-confirmed"
+    },
+    {
+      "request_number": 2,
+      "call": "thoikhoabieu.getThongTinTruongHoc",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 562,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getThongTinTruongHoc": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "license": "bool",
+            "licenseUrl": "str",
+            "school": {
+              "truelifeId": "str",
+              "name": "str",
+              "avatar": "str",
+              "properties": {
+                "length": 2,
+                "first": {
+                  "name": "str",
+                  "value": "str"
+                }
+              }
+            },
+            "expiredDate": "str"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.14
+    },
+    {
+      "request_number": 15,
+      "call": "thoikhoabieu.getDanhSachDiemTruong",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 523,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachDiemTruong": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 2,
+              "first": {
+                "id": "str",
+                "ma": "str",
+                "ten": "str",
+                "type": "str",
+                "dtc": "str",
+                "parent_id": "str",
+                "ma_moet": "str",
+                "so_lop": "int"
+              }
+            },
+            "count": "int"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.091
+    },
+    {
+      "request_number": 16,
+      "call": "thoikhoabieu.getDanhSachLopHocNew",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "hocKy",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 9045,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachLopHocNew": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 38,
+              "first": {
+                "id": "str",
+                "nam_hoc": "str",
+                "khoi": "str",
+                "ten": "str",
+                "truelife_id": "str",
+                "diem_truong_id": "str",
+                "diem_truong_ma": "str",
+                "diem_truong_ten": "str",
+                "diem_truong_type": "str",
+                "diem_truong_chinh": "str"
+              }
+            },
+            "count": "str"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.133
+    },
+    {
+      "request_number": 17,
+      "call": "thoikhoabieu.getDanhSachMonHocNew",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 2537,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachMonHocNew": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 20,
+              "first": {
+                "id": "str",
+                "ten": "str",
+                "sTen": "str",
+                "stt": "str",
+                "khoi_hoc": "str"
+              }
+            },
+            "count": "int"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.084
+    },
+    {
+      "request_number": 18,
+      "call": "thoikhoabieu.getDanhSachGiaoVienNew",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "pattern",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 49894,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachGiaoVienNew": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 109,
+              "first": {
+                "gv_id": "str",
+                "giao_vien_id": "str",
+                "full_name": "str",
+                "ho": "str",
+                "ten": "str",
+                "image_url": "str",
+                "dien_thoai": "str",
+                "dia_chi": "str",
+                "email": "str",
+                "ma_dinh_danh": "str",
+                "gioi_tinh": "str",
+                "ngay_sinh": "str",
+                "truelife_id": "str",
+                "ma_diem_truong": "str"
+              }
+            },
+            "count": "str"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.399
+    },
+    {
+      "request_number": 19,
+      "call": "thoikhoabieu.getPhanCongChuyenMonNew",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "hocKy",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 62344,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getPhanCongChuyenMonNew": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 527,
+              "first": {
+                "gv_id": "str",
+                "giao_vien_id": "str",
+                "hoc_ky": "str",
+                "mon_hoc_id": "str",
+                "so_tiet": "str",
+                "lop_id": "str"
+              }
+            },
+            "count": "int"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.216
+    },
+    {
+      "request_number": 9,
+      "call": "thoikhoabieu.getDSThoikhoabieu",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "hocKy"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 2829,
+      "format": "non-json",
+      "elapsed_s": 0.237
+    },
+    {
+      "request_number": 3,
+      "call": "thoikhoabieu.getDanhSachLopHoc",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "hocKy",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 3254,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachLopHoc": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 38,
+              "first": {
+                "id": "str",
+                "nam_hoc": "str",
+                "khoi": "str",
+                "ten": "str",
+                "truelife_id": "str"
+              }
+            },
+            "count": "str"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.198
+    },
+    {
+      "request_number": 4,
+      "call": "thoikhoabieu.getDanhSachMonHoc",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 2536,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachMonHoc": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 20,
+              "first": {
+                "id": "str",
+                "ten": "str",
+                "sTen": "str",
+                "stt": "str",
+                "khoi_hoc": "str"
+              }
+            },
+            "count": "str"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.191
+    },
+    {
+      "request_number": 5,
+      "call": "thoikhoabieu.getDanhSachGiaoVien",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "pattern",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 47107,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachGiaoVien": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 109,
+              "first": {
+                "gv_id": "str",
+                "giao_vien_id": "str",
+                "full_name": "str",
+                "ho": "str",
+                "ten": "str",
+                "image_url": "str",
+                "dien_thoai": "str",
+                "dia_chi": "str",
+                "email": "str",
+                "ma_dinh_danh": "str",
+                "gioi_tinh": "str",
+                "ngay_sinh": "str",
+                "truelife_id": "str"
+              }
+            },
+            "count": "str"
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.187
+    },
+    {
+      "request_number": 6,
+      "call": "thoikhoabieu.getPhanCongChuyenMon",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "hocKy",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 62329,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getPhanCongChuyenMon": "int"
+        },
+        "object": {
+          "length": 1,
+          "first": {
+            "aRoot": {
+              "length": 527,
+              "first": {
+                "gv_id": "str",
+                "giao_vien_id": "str",
+                "hoc_ky": "str",
+                "mon_hoc_id": "str",
+                "so_tiet": "str",
+                "lop_id": "str"
+              }
+            }
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.126
+    },
+    {
+      "request_number": 13,
+      "call": "thoikhoabieu.getDanhSachToBoMon",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 17381,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachToBoMon": "int"
+        },
+        "object": {
+          "length": 11,
+          "first": {
+            "id": "str",
+            "truong_id": "str",
+            "ten": "str",
+            "to_truong_id": "str",
+            "to_truong_ten": "str",
+            "nam_hoc": "str",
+            "to_pho_id": "str",
+            "to_pho_ten": "str",
+            "old_id": "str",
+            "to_pho2_id": "str",
+            "ban_giam_hieu_id": "str",
+            "gv_id": "str",
+            "full_name": "str",
+            "dien_thoai": "str",
+            "ma_dinh_danh": "str",
+            "thanh_vien": {
+              "length": 14,
+              "first": {
+                "gv_id": "str",
+                "full_name": "str",
+                "dien_thoai": "str",
+                "ma_dinh_danh": "str"
+              }
+            },
+            "mon_hoc": {
+              "length": 0,
+              "first": null
+            }
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.262
+    },
+    {
+      "request_number": 20,
+      "call": "thoikhoabieu.getDanhSachToBoMonNew",
+      "query_keys": [
+        "call",
+        "truongTrueLifeId",
+        "namHoc",
+        "start",
+        "limit"
+      ],
+      "scope_source": "existing collection variables; no login scope substitution",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 20936,
+      "shape": {
+        "header": {
+          "jsessionid": "str",
+          "sysdate": "str",
+          "ojid": "str"
+        },
+        "success": "bool",
+        "error": {
+          "outputValidation": "int",
+          "getDanhSachToBoMonNew": "int"
+        },
+        "object": {
+          "length": 11,
+          "first": {
+            "id": "str",
+            "truong_id": "str",
+            "ten": "str",
+            "to_truong_id": "str",
+            "to_truong_ten": "str",
+            "nam_hoc": "str",
+            "to_pho_id": "str",
+            "to_pho_ten": "str",
+            "old_id": "str",
+            "to_pho2_id": "str",
+            "ban_giam_hieu_id": "str",
+            "gv_id": "str",
+            "full_name": "str",
+            "dien_thoai": "str",
+            "ma_dinh_danh": "str",
+            "thanh_vien": {
+              "length": 14,
+              "first": {
+                "gv_id": "str",
+                "full_name": "str",
+                "dien_thoai": "str",
+                "ma_dinh_danh": "str"
+              }
+            },
+            "mon_hoc": {
+              "length": 4,
+              "first": {
+                "mon_hoc_id": "str",
+                "ten": "str",
+                "sTen": "str"
+              }
+            }
+          }
+        },
+        "authentication": "str"
+      },
+      "success": true,
+      "elapsed_s": 0.272
+    }
+  ]
+}

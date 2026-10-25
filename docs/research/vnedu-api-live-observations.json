@@ -1,0 +1,70 @@
+{
+  "scope": "collection school/year/semester, no credentials/PII/raw row values retained",
+  "counts": {
+    "classes": 38,
+    "teachers": 109,
+    "subjects": 20,
+    "assignment_rows": 527,
+    "sites": 2
+  },
+  "declared_counts_equal_returned": {
+    "classes": true,
+    "teachers": true,
+    "subjects": true,
+    "assignments": true
+  },
+  "assignment_references": {
+    "missing_class_by_id": 0,
+    "missing_subject_by_id": 0,
+    "missing_teacher_by_gv_id": 5,
+    "missing_teacher_by_giao_vien_id": 5
+  },
+  "subject_id_categories": {
+    "assignment_rows_negative": 38,
+    "homeroom_rows_minus_2": 38,
+    "negative_assignment_subject_counts": {
+      "-2": 38
+    }
+  },
+  "so_tiet": {
+    "field_present_all": true,
+    "all_values_are_strings": true,
+    "numeric_values": 527,
+    "invalid_or_blank": 0,
+    "nonpositive": 527,
+    "nonintegral": 0,
+    "histogram": {
+      "0": 527
+    },
+    "semantic_unit": "UNKNOWN: response identifies so_tiet, but does not itself prove weekly unit"
+  },
+  "duplicates_same_assignment_key": 0,
+  "site_filter_checks": [
+    {
+      "classes": 21,
+      "teachers": 60,
+      "assignments": 288,
+      "missing_class_reference": 0,
+      "missing_teacher_reference": 5,
+      "classes_outside_requested_site": 0
+    },
+    {
+      "classes": 17,
+      "teachers": 48,
+      "assignments": 239,
+      "missing_class_reference": 0,
+      "missing_teacher_reference": 0,
+      "classes_outside_requested_site": 0
+    }
+  ],
+  "timetable_list_format": {
+    "strict_json": false,
+    "bytes": 2829,
+    "starts_with_markup": false,
+    "php_notice_marker": false,
+    "contains_json_envelope_marker": true,
+    "contains_html_doctype": false,
+    "contains_login_word": false
+  },
+  "additional_read_requests": 12
+}

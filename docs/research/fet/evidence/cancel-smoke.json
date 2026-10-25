@@ -1,0 +1,32 @@
+{
+  "command": [
+    "/home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/fet-cl",
+    "--inputfile=/home/ddevtk/code/vnedu_tkb/research/fet/fet-7.12.0/examples/mornings-afternoons/Algeria/7-by-Benahmed-Abdelkrim/Test_View_Time_H_With_0_Gaps.fet",
+    "--outputdir=/home/ddevtk/code/vnedu_tkb/reverse-engineering/fet/benchmark/cancel-smoke",
+    "--timelimitseconds=30",
+    "--language=en",
+    "--writetimetablesdayshorizontal=false",
+    "--writetimetablesdaysvertical=false",
+    "--writetimetablestimehorizontal=false",
+    "--writetimetablestimevertical=false",
+    "--writetimetableconflicts=true",
+    "--writetimetablesxml=true",
+    "--exportcsv=true",
+    "--randomseeds10=1",
+    "--randomseeds11=2",
+    "--randomseeds12=3",
+    "--randomseeds20=4",
+    "--randomseeds21=5",
+    "--randomseeds22=6"
+  ],
+  "signal": "SIGTERM",
+  "sent_while_running": true,
+  "requested_after_s": 0.25,
+  "wall_s": 0.2822232400012581,
+  "exit_code": 0,
+  "outputs": [
+    "reverse-engineering/fet/benchmark/cancel-smoke/timetables/Test_View_Time_H_With_0_Gaps-current/Test_View_Time_H_With_0_Gaps_activities.xml",
+    "reverse-engineering/fet/benchmark/cancel-smoke/timetables/Test_View_Time_H_With_0_Gaps-highest/Test_View_Time_H_With_0_Gaps_activities.xml"
+  ],
+  "log": "This file contains the result (log) of last operation\n\nFET command line generation started on 10/25/26 9:52 PM\n\nStarting timetable generation...\nGeneration interrupted\n"
+}

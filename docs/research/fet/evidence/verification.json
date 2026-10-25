@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "reports": 7,
+  "source_files_unchanged": 897,
+  "source_links_checked": 963,
+  "local_links_checked": 991,
+  "constraint_classes": 357,
+  "time_classes": 275,
+  "space_classes": 82,
+  "benchmark_runs": 14,
+  "complete_runs": 6,
+  "timeout_runs": 8,
+  "sigterm_smoke": "PASS",
+  "scope": "Documentation and research/build/benchmark artifacts only; no Scheduling Core implementation."
+}
