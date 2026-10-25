@@ -16,4 +16,6 @@ dist/
 # Local third-party source, binaries, captures and real timetable data.
 /research/
 /reverse-engineering/
+/.worktrees/
+/.superpowers/
 
