@@ -3,6 +3,7 @@
 from bisect import bisect_left
 from collections import defaultdict
 from dataclasses import dataclass
+from itertools import pairwise
 
 from tkb_core.contracts.capabilities import check_capabilities
 from tkb_core.contracts.input import ScheduleInput
@@ -73,7 +74,7 @@ def normalize(problem: ScheduleInput, options: SolveOptions | None = None) -> No
             by_session[slot.day, slot.session].append(slot)
             by_day[slot.day].append((slot.start_minute, slot.end_minute))
         for sequence in by_session.values():
-            for left, right in zip(sequence, sequence[1:]):
+            for left, right in pairwise(sequence):
                 assert left.end_minute is not None and right.start_minute is not None
                 if left.end_minute > right.start_minute:
                     raise CoreError(
@@ -85,7 +86,7 @@ def normalize(problem: ScheduleInput, options: SolveOptions | None = None) -> No
             (min(a for a, _ in times), max(b for _, b in times))
             for _, times in sorted(by_day.items())
         ]
-        if any(left[1] > right[0] for left, right in zip(ranges, ranges[1:])):
+        if any(left[1] > right[0] for left, right in pairwise(ranges)):
             raise CoreError(
                 "INPUT_INVALID", "TIMELINE_ORDER", "Day ranges must follow cycle-wide time order"
             )

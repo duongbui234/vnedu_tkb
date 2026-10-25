@@ -2,6 +2,7 @@
 
 from collections import Counter, defaultdict
 from collections.abc import Sequence
+from itertools import pairwise
 
 from tkb_core.contracts.capabilities import check_capabilities
 from tkb_core.contracts.input import ScheduleInput
@@ -75,12 +76,12 @@ def validate_schedule(
             days[s.day].append((s.start_minute, s.end_minute))
         for group in sessions.values():
             ordered = sorted(group)
-            if any(a[2] > b[1] for a, b in zip(ordered, ordered[1:])):
+            if any(a[2] > b[1] for a, b in pairwise(ordered)):
                 add("INPUT_INVALID", "Invalid chronological period order")
         day_ranges = [
             (min(a for a, _ in span), max(b for _, b in span)) for _, span in sorted(days.items())
         ]
-        if any(a[1] > b[0] for a, b in zip(day_ranges, day_ranges[1:])):
+        if any(a[1] > b[0] for a, b in pairwise(day_ranges)):
             add("INPUT_INVALID", "Day ranges do not follow cycle-wide minute order")
         if violations:
             return ValidationReport(valid=False, violations=tuple(violations))
