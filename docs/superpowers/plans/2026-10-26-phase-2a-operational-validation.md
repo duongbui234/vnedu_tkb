@@ -197,10 +197,10 @@ Consumes protocol mục2; produces input1.1, WitnessArtifact và manifest có SH
 
 Consumes cùng wheel, lock và dataset bundle; produces environment manifests và preflight status.
 
-- [ ] Cài venv theo platform, verify đúng wheel/lock/input hashes; chạy full Core suite + installed-wheel mini solve/validate/score và no-solver scorer smoke.
-- [ ] Test ready/non-ready registry, malformed/stale result, invalid locks và unknown custom hard bằng tiny cases đã có; không đưa các case invalid vào latency feasible.
-- [ ] Validate/evaluate mọi W bằng input cuối trước run đo; xác nhận Z=0 và C positive lower bound; UNSAT có bằng chứng30>29. Bất kỳ generator/hard mismatch thì dừng campaign.
-- [ ] Windows unavailable/install/probe fail → BLOCKED rõ ràng. Không chạy Linux thay rồi đánh dấu Windows pass.
+- [ ] Cài venv theo platform, verify đúng wheel/lock/input hashes; chạy full Core suite + installed-wheel mini solve/validate/score và no-solver scorer smoke. **Linux PASS (2026-10-26); Windows BLOCKED**, chưa nghiệm thu hai OS.
+- [x] Test ready/non-ready registry, malformed/stale result, invalid locks và unknown custom hard bằng tiny cases đã có; không đưa các case invalid vào latency feasible.
+- [ ] Validate/evaluate mọi W bằng input cuối trước run đo; xác nhận Z=0 và C positive lower bound; UNSAT có bằng chứng30>29. Bất kỳ generator/hard mismatch thì dừng campaign. **Linux installed-wheel PASS đủ36 datasets; Windows BLOCKED.**
+- [x] Windows unavailable/install/probe fail → BLOCKED rõ ràng. Không chạy Linux thay rồi đánh dấu Windows pass.
 
 ### Task 3 — Resource supervisor
 
@@ -247,3 +247,7 @@ Kế hoạch có thể chuyển sang implementation tooling khi người dùng d
 Người dùng đã duyệt triển khai **chỉ Task 1**; các câu “chỉ lập kế hoạch” phía trên mô tả lượt lập kế hoạch ban đầu. Task 1 generator/tests đã triển khai trong worktree `feature/phase2a-synthetic-generator`; 270 tests pass (232 Core + 38 generator), lint/type-check/build pass. Xuất và verify lại 36 datasets, không solve/search hoặc đo latency/RAM cho chúng. Xem [báo cáo Task 1](../../phase-2a-generator-report.md). Task 2–5 còn nguyên chưa triển khai; chưa commit/merge/push.
 
 Review độc lập Task 1 hoàn tất: Ship within Task 1 scope, không Critical/Important/Minor findings. Windows/installed-wheel/performance và filesystem thù địch chưa được kiểm chứng; giới hạn và rulings ghi trong báo cáo Task 1.
+
+## Ghi nhận Task 2 Linux — 2026-10-26
+
+Người dùng duyệt thực hiện phần Linux. Hai clean venv dùng cùng wheel/lock, installed-package path/source check,232 Core tests,13 CLI smoke cases, registry pending-rule/no-solver guard và verify36datasets đều PASS. Windows **BLOCKED**, Task2 overall **PARTIAL**; không bắt đầu Task3-5, không benchmark hoặc2B/2C. Xem [báo cáo preflight](../../phase-2a-operational-report.md). Chỉ report/kế hoạch thay đổi; chưa commit/merge/push Task2.
