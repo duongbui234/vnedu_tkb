@@ -1,6 +1,6 @@
 """Typed domain records; parsing these records does not prove scheduling feasibility."""
 
-from typing import Annotated, Self
+from typing import Annotated, Literal, Self
 
 from pydantic import (
     BaseModel,
@@ -184,3 +184,24 @@ class Diagnostic(DomainModel):
     resource_ids: tuple[Identifier, ...] = ()
     slot_ids: tuple[Identifier, ...] = ()
     occurrence_ids: tuple[Identifier, ...] = ()
+
+
+class HardConstraintConfigV11(HardConstraintConfig):
+    """Policy rule identity, distinct from a rule type code."""
+
+    id: Identifier
+
+
+class SoftConstraintConfigV11(HardConstraintConfigV11):
+    """Explicit priority and weight; no inferred defaults."""
+
+    priority: Annotated[StrictInt, Field(ge=1, le=3)]
+    weight: PositiveInt
+
+
+class ConstraintConfigV11(DomainModel):
+    """Versioned policy manifest with already-resolved effective scopes."""
+
+    policy_version: Literal["0.1"]
+    hard: tuple[HardConstraintConfigV11, ...] = ()
+    soft: tuple[SoftConstraintConfigV11, ...] = ()

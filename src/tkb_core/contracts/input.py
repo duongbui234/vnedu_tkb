@@ -3,13 +3,14 @@
 import hashlib
 import json
 from collections.abc import Iterable, Sequence
-from typing import Literal, Self
+from typing import Any, Literal, Self
 
 from pydantic import StrictBool, model_validator
 
 from tkb_core.domain.models import (
     ClassGroup,
     ConstraintConfig,
+    ConstraintConfigV11,
     DomainModel,
     Entity,
     LockedAssignment,
@@ -38,7 +39,7 @@ def _references(values: Iterable[str], known: set[str], label: str) -> None:
 class ScheduleInput(DomainModel):
     """Domain contract, independent of vnEdu responses, storage and solver libraries."""
 
-    schema_version: Literal["1.0"]
+    schema_version: Literal["1.0", "1.1"]
     school: SchoolContext
     time_slots: tuple[TimeSlot, ...]
     classes: tuple[ClassGroup, ...]
@@ -47,8 +48,25 @@ class ScheduleInput(DomainModel):
     rooms: tuple[Room, ...] = ()
     teaching_requirements: tuple[TeachingRequirement, ...]
     locked_assignments: tuple[LockedAssignment, ...] = ()
-    constraint_config: ConstraintConfig = ConstraintConfig()
+    constraint_config: ConstraintConfig | ConstraintConfigV11 = ConstraintConfig()
     manage_rooms: StrictBool = False
+
+    @model_validator(mode="before")
+    @classmethod
+    def choose_policy(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            data = dict(data)
+            if data.get("schema_version") == "1.1":
+                if "constraint_config" not in data:
+                    raise ValueError("Version 1.1 requires explicit policy config")
+                data["constraint_config"] = ConstraintConfigV11.model_validate(
+                    data["constraint_config"]
+                )
+            elif data.get("schema_version") == "1.0":
+                data["constraint_config"] = ConstraintConfig.model_validate(
+                    data.get("constraint_config", {})
+                )
+        return data
 
     @model_validator(mode="after")
     def check_references(self) -> Self:
@@ -81,6 +99,20 @@ class ScheduleInput(DomainModel):
             _references(rule.scope.teacher_ids, ids["teacher"], "rule teacher")
             _references(rule.scope.subject_ids, ids["subject"], "rule subject")
             _references(rule.scope.room_ids, ids["room"], "rule room")
+        if isinstance(self.constraint_config, ConstraintConfigV11):
+            from tkb_core.constraints.registry import parse_parameters
+
+            rules = (*self.constraint_config.hard, *self.constraint_config.soft)
+            _unique((r.id for r in rules), "rule ID")
+            sessions = {s.session for s in self.time_slots}
+            teaching_slots = {s.id for s in self.time_slots if s.can_teach}
+            for rule in rules:
+                parsed = parse_parameters(rule.code, rule.parameters)
+                if parsed is not None:
+                    if hasattr(parsed, "slot_ids"):
+                        _references(parsed.slot_ids, teaching_slots, "rule teaching slot")
+                    if hasattr(parsed, "session_ids"):
+                        _references(parsed.session_ids, sessions, "rule session")
         requirements = {r.id: r for r in self.teaching_requirements}
         _unique((lock.occurrence_id for lock in self.locked_assignments), "occurrence lock")
         for lock in self.locked_assignments:
@@ -128,6 +160,16 @@ class ScheduleInput(DomainModel):
             for rule in data["constraint_config"][kind]:
                 for resource in ("class_ids", "teacher_ids", "subject_ids", "room_ids"):
                     rule["scope"][resource].sort()
+        if self.schema_version == "1.1":
+            from tkb_core.constraints.registry import parse_parameters
+
+            for kind in ("hard", "soft"):
+                data["constraint_config"][kind].sort(key=lambda r: r["id"])
+                for rule in data["constraint_config"][kind]:
+                    if parse_parameters(rule["code"], rule["parameters"]) is not None:
+                        for key in ("slot_ids", "session_ids"):
+                            if key in rule["parameters"]:
+                                rule["parameters"][key].sort()
         payload = json.dumps(
             data, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False
         )
