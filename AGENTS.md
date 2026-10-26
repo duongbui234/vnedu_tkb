@@ -18,3 +18,16 @@
 - Pin dependency changes with `uv.lock`; runtime dependencies stay separate from dev.
 - Report commands actually executed, test results, phase boundaries and limitations.
   Do not claim benchmark/performance results without measurements.
+# Next Step Suggestions
+
+After completing each task:
+- Analyze the current project state.
+- Suggest exactly one logical next action.
+- Provide a ready-to-send Vietnamese prompt.
+- Prioritize unfinished work, bugs, tests, and dependencies.
+- Do not execute the suggested action automatically.
+
+End every response with:
+
+**Gợi ý tiếp theo:**
+> [Prompt cụ thể để người dùng copy và gửi]
