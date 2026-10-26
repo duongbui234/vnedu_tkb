@@ -143,3 +143,71 @@ def test_mismatch_and_budget(
     assert out.diagnostics[0].code == code if code else not out.diagnostics
     if scenario == "budget":
         assert out.quality.tier_runs[0].raw_status == "NOT_RUN" and out.assignments
+
+
+@pytest.mark.parametrize("status", ["FEASIBLE", "UNKNOWN", "PREFIX"])
+def test_unproved_second_tier_stops_before_third(
+    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch, status: str
+) -> None:
+    quality_case["constraint_config"]["soft"] = [
+        {
+            "id": "avoid",
+            "code": "TEACHER_AVOID_SLOTS",
+            "parameters": {"slot_ids": ["1-AM-1"]},
+            "weight": 1,
+            "priority": 1,
+        },
+        {
+            "id": "load",
+            "code": "TEACHER_MAX_PERIODS_PER_DAY",
+            "parameters": {"limit": 3},
+            "weight": 1,
+            "priority": 2,
+        },
+        {
+            "id": "window",
+            "code": "TEACHER_PREFERRED_PERIOD_WINDOW",
+            "parameters": {"first_period": 1, "last_period": 4, "session_ids": ["AM", "PM"]},
+            "weight": 1,
+            "priority": 3,
+        },
+    ]
+    p = prepare(ScheduleInput.model_validate(quality_case))
+    built = build_model(p)
+    compiled = compile_soft(p, built)
+    calls = []
+
+    def fake(
+        prepared: Any, built: Any, compiled: Any, options: Any, priority: Any, budget: float
+    ) -> StageOutcome:
+        calls.append(priority)
+        session = "AM" if priority is None or (status == "PREFIX" and priority == 2) else "PM"
+        aa = tuple(
+            ScheduleAssignment(
+                occurrence_id=f"r::{i}",
+                slot_id=f"1-{session}-{start}",
+                class_ids=("c",),
+                teacher_ids=("t",),
+            )
+            for i, start in enumerate((1, 3, 4), 1)
+        )
+        score = _evaluate_validated(p.normalized.problem, aa)
+        raw_status = ("OPTIMAL" if status == "PREFIX" else status) if priority == 2 else "OPTIMAL"
+        return StageOutcome(
+            SolveStatus(raw_status),
+            aa if raw_status != "UNKNOWN" else (),
+            {r.rule_id: (r.raw_penalty, r.weighted_penalty) for r in score.rules},
+            {k: score.tiers[k - 1] for k in (1, 2, 3)},
+            1.0,
+            None if priority is None else 0.0,
+        )
+
+    monkeypatch.setattr("tkb_core.solver.objectives._run_stage", fake)
+    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=5.0))
+    if status == "PREFIX":
+        assert out.status == "MODEL_INVALID" and not out.assignments
+        assert out.diagnostics[0].code == "INTERNAL_STAGE_INCONSISTENCY"
+        return
+    assert calls == [None, 1, 2] and out.status == "FEASIBLE"
+    assert out.quality.optimal_prefix == (1,) and out.score.tiers == (0, 1, 0)
+    assert out.quality.tier_runs[2].raw_status == "NOT_RUN"

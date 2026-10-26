@@ -1,7 +1,16 @@
-# Solver Phase 1 — cách chạy và giới hạn
+# Solver — Phase 2A và tuyến tương thích Phase 1
 
 Thiết kế được duyệt: [Phase 1](superpowers/specs/2026-10-26-phase-1-design.md).
 Implementation độc lập, không sao chép FET/STKB; không có API, SQLite hoặc UI.
+
+Định hướng tiếp theo nằm ở [đặc tả Phase 2 đề xuất](superpowers/specs/2026-10-26-phase-2-quality-design.md).
+S01–S04 đã được triển khai trong Phase 2A; kết quả kiểm tra nằm ở [báo cáo](phase-2a-report.md).
+Tuyến input 1.1 compile soft expressions chính xác, chạy feasibility rồi từng active tier,
+freeze chỉ OPTIMAL, dừng ở tier chưa proof và giữ incumbent đã kiểm chứng.
+Mỗi candidate giữ lại được hard checker và independent score evaluator kiểm lại;
+raw/weighted/tier khác expression solver → MODEL_INVALID/INTERNAL_SCORE_MISMATCH.
+Cả budget CP-SAT dùng chung, wall time evaluator/preprocessing không tính vào giới hạn đó.
+Phần dưới ghi lại tuyến input 1.0/Phase 1 giữ tương thích.
 
 ## Pipeline
 

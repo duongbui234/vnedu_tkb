@@ -66,3 +66,24 @@ def test_objective_bound_guard(
     with pytest.raises(CoreError) as err:
         compile_soft(p, build_model(p))
     assert err.value.diagnostics[0].code == "OBJECTIVE_RANGE"
+
+
+def test_exact_bound_with_many_alternatives(quality_case: dict[str, Any]) -> None:
+    quality_case["time_slots"] = [
+        {"id": str(i), "day": 1, "session": "AM", "period": i} for i in range(1, 2001)
+    ]
+    quality_case["teaching_requirements"][0].update(periods_per_cycle=1, block_durations=[1])
+    quality_case["constraint_config"]["soft"] = [
+        {
+            "id": "rule",
+            "code": "TEACHER_AVOID_SLOTS",
+            "parameters": {"slot_ids": [str(i) for i in range(1, 2001)]},
+            "weight": 2**53 - 1,
+            "priority": 1,
+        }
+    ]
+    p = prepare(ScheduleInput.model_validate(quality_case))
+    built = build_model(p)
+    compiled = compile_soft(p, built)
+    built.model.minimize(compiled.tiers[1])
+    assert not built.model.validate()

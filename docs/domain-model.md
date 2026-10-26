@@ -98,3 +98,14 @@ exit 0 = INPUT_VALID, exit 2 = INPUT_INVALID hoặc UNSUPPORTED_FEATURE; stdout 
 JSON object, không in raw input hoặc traceback. `--help` giữ help text chuẩn argparse.
 Lệnh solve/validate-schedule/benchmark chưa có. Fixture tên feasible_small là bài
 nhỏ được chuẩn bị cho Phase 1, chưa phải kết luận của solver hiện tại.
+
+## Bổ sung Phase 2A
+
+Input 1.1 yêu cầu constraint_config.policy_version=0.1 và rule IDs duy nhất; priority nguyên1–3, weight nguyên dương, params strict. Input 1.0/hash/serialization không đổi.
+Bốn codes được hỗ trợ: TEACHER_AVOID_SLOTS, TEACHER_MAX_PERIODS_PER_SESSION,
+TEACHER_MAX_PERIODS_PER_DAY, TEACHER_PREFERRED_PERIOD_WINDOW. Chỉ teacher scope;
+empty teacher set là global; effective scopes cùng family không được overlap.
+Unknown enabled trả UNSUPPORTED_FEATURE, unknown disabled giữ raw JSON; known params sai luôn bị từ chối.
+Fingerprint 1.1 sort known sets/rules, giữ unknown array order và split order.
+Output 1.2 có quality/ScoreReport và từng stage proof/measurements; không scalar hóa vector.
+Xem [đặc tả](superpowers/specs/2026-10-26-phase-2-quality-design.md) và [nghiệm thu](phase-2a-report.md).

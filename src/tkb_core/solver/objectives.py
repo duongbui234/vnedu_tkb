@@ -182,6 +182,8 @@ def run_quality(
         expected_tiers = {p: candidate.tiers[p - 1] for p in compiled.tiers}
         if expected_rules != outcome.rule_values or expected_tiers != outcome.tier_values:
             return finish(SolveStatus.MODEL_INVALID, "INTERNAL_SCORE_MISMATCH")
+        if any(candidate.tiers[p - 1] != tiers[p].incumbent_value for p in prefix):
+            return finish(SolveStatus.MODEL_INVALID, "INTERNAL_STAGE_INCONSISTENCY")
         if score is None or score.tiers is None or candidate.tiers < score.tiers:
             assignments = outcome.assignments
             validation = hard

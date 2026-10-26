@@ -70,3 +70,62 @@ def test_hard_modes_and_unknown_rejected(quality_case: dict[str, Any]) -> None:
     p = ScheduleInput.model_validate(quality_case)
     assert solve(p).status == "UNSUPPORTED_FEATURE"
     assert evaluate_score(p, ()).status == "UNSUPPORTED_FEATURE"
+
+
+def test_timed_alias_is_counted_once_and_room_choices_do_not_multiply(
+    quality_case: dict[str, Any],
+) -> None:
+    quality_case["time_slots"] = [
+        {"id": s, "day": 1, "session": s, "period": 1, "start_minute": 0, "end_minute": 45}
+        for s in ("avoid", "alias", "other")
+    ]
+    quality_case["teachers"][0]["available_slot_ids"] = ["alias"]
+    quality_case["teaching_requirements"][0].update(
+        periods_per_cycle=1, block_durations=[1], room_required=True
+    )
+    quality_case["manage_rooms"] = True
+    quality_case["classes"][0]["size"] = 20
+    quality_case["rooms"] = [{"id": "room-a", "capacity": 30}, {"id": "room-b", "capacity": 30}]
+    quality_case["constraint_config"]["soft"] = [
+        {
+            "id": "rule",
+            "code": "TEACHER_AVOID_SLOTS",
+            "parameters": {"slot_ids": ["avoid", "other"]},
+            "weight": 1,
+            "priority": 1,
+        }
+    ]
+    p = ScheduleInput.model_validate(quality_case)
+    r = solve(p)
+    assert r.valid_schedule and r.assignments[0].slot_id == "alias"
+    assert r.quality.score.tiers == (1, 0, 0)
+    assert evaluate_score(p, r.assignments).tiers == (1, 0, 0)
+    duplicate = {
+        **quality_case["constraint_config"]["soft"][0],
+        "id": "second",
+        "parameters": {"slot_ids": ["alias"]},
+    }
+    quality_case["constraint_config"]["soft"].append(duplicate)
+    assert solve(ScheduleInput.model_validate(quality_case)).status == "INPUT_INVALID"
+
+
+def test_soft_limits_do_not_remove_locked_teaching(quality_case: dict[str, Any]) -> None:
+    quality_case["locked_assignments"] = [
+        {"occurrence_id": f"r::{i}", "slot_id": f"1-AM-{start}"}
+        for i, start in enumerate((1, 3, 4), 1)
+    ]
+    quality_case["constraint_config"]["soft"] = [
+        {
+            "id": "rule",
+            "code": "TEACHER_MAX_PERIODS_PER_DAY",
+            "parameters": {"limit": 0},
+            "weight": 7,
+            "priority": 2,
+        }
+    ]
+    p = ScheduleInput.model_validate(quality_case)
+    r = solve(p)
+    assert r.valid_schedule and r.quality.optimal_prefix == (2,)
+    assert r.quality.score.tiers == (0, 28, 0)
+    p.teaching_requirements[0].block_durations = (1,)
+    assert solve(p).status == "INPUT_INVALID"

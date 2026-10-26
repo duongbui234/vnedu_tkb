@@ -150,7 +150,10 @@ def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
                     excess, [0, sum(n * v for v, n in terms) - params.limit]
                 )
                 costs.append(excess)
-        raw = sum(costs)
+        # Bound the aggregate before weighting: unselected placement alternatives must
+        # not inflate CP-SAT's syntactic objective domain and overflow it.
+        raw = built.model.new_int_var(0, raw_bound, f"raw_{rule.id}")
+        built.model.add(raw == sum(costs))
         rules.append(
             CompiledRule(rule.id, rule.priority, raw, raw * rule.weight, raw_bound, weighted_bound)
         )

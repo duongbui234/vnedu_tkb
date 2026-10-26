@@ -54,3 +54,46 @@ def test_empty_and_no_soft(quality_case: dict[str, Any]) -> None:
     p = ScheduleInput.model_validate(quality_case)
     report = evaluate_score(p, ())
     assert report.status == "OK" and report.tiers == (0, 0, 0)
+
+
+@pytest.mark.parametrize(
+    "code,params,start,expected",
+    [
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"session_ids": ["AM"], "limit": 3}, "1-AM-1", 0),
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"session_ids": ["AM"], "limit": 0}, "1-AM-1", 2),
+        (
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            {"session_ids": ["AM"], "first_period": 2, "last_period": 3},
+            "1-AM-3",
+            1,
+        ),
+        (
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            {"session_ids": ["AM"], "first_period": 2, "last_period": 3},
+            "1-AM-1",
+            1,
+        ),
+        (
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            {"session_ids": ["AM"], "first_period": 2, "last_period": 3},
+            "1-PM-1",
+            0,
+        ),
+    ],
+)
+def test_public_two_period_cases(
+    quality_case: dict[str, Any], code: str, params: dict[str, Any], start: str, expected: int
+) -> None:
+    quality_case["teaching_requirements"][0].update(periods_per_cycle=2, block_durations=[2])
+    quality_case["teachers"].append({"id": "unused"})
+    quality_case["constraint_config"]["soft"] = [
+        {"id": "rule", "code": code, "parameters": params, "weight": 1, "priority": 1}
+    ]
+    p = ScheduleInput.model_validate(quality_case)
+    assignment = ScheduleAssignment(
+        occurrence_id="r::1", slot_id=start, class_ids=("c",), teacher_ids=("t",)
+    )
+    assert evaluate_score(p, (assignment,)).tiers == (expected, 0, 0)
+    quality_case["constraint_config"]["soft"][0]["enabled"] = False
+    r = evaluate_score(ScheduleInput.model_validate(quality_case), (assignment,))
+    assert r.rules == () and r.tiers == (0, 0, 0)

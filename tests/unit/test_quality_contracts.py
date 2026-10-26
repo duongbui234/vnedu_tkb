@@ -99,3 +99,39 @@ def test_effective_scopes_and_unsupported(quality_data: dict[str, Any]) -> None:
     with pytest.raises(CoreError) as err:
         validate_rule_config(ScheduleInput.model_validate(quality_data))
     assert err.value.diagnostics[0].code == "RULE_SCOPE"
+
+
+@pytest.mark.parametrize(
+    "code,params",
+    [
+        ("TEACHER_AVOID_SLOTS", {"slot_ids": []}),
+        ("TEACHER_AVOID_SLOTS", {"slot_ids": ["1-AM-1", "1-AM-1"]}),
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"limit": True, "session_ids": ["AM"]}),
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"limit": -1, "session_ids": ["AM"]}),
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"limit": 1, "session_ids": []}),
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"limit": 1, "session_ids": ["bad"]}),
+        ("TEACHER_MAX_PERIODS_PER_SESSION", {"limit": 1, "session_ids": ["AM", "AM"]}),
+        ("TEACHER_MAX_PERIODS_PER_DAY", {"limit": 1.5}),
+        ("TEACHER_MAX_PERIODS_PER_DAY", {"limit": "1"}),
+        (
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            {"first_period": 3, "last_period": 2, "session_ids": ["AM"]},
+        ),
+        (
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            {"first_period": 0, "last_period": 2, "session_ids": ["AM"]},
+        ),
+        (
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            {"first_period": 1, "last_period": 2, "session_ids": ["AM"], "day_ids": [1]},
+        ),
+    ],
+)
+def test_parameter_boundaries(
+    quality_case: dict[str, Any], code: str, params: dict[str, Any]
+) -> None:
+    quality_case["constraint_config"]["soft"] = [
+        {"id": "rule", "code": code, "parameters": params, "weight": 1, "priority": 1}
+    ]
+    with pytest.raises((ValidationError, ValueError)):
+        ScheduleInput.model_validate(quality_case)

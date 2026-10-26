@@ -65,7 +65,9 @@ def test_evaluate_score_without_solver_imports(
 import builtins,sys
 original=builtins.__import__
 def guarded(name,*args,**kwargs):
-    if name.startswith(('ortools','tkb_core.preprocessing','tkb_core.constraints.soft','tkb_core.solver.objectives','tkb_core.solver.model_builder')):
+    blocked=('ortools','tkb_core.preprocessing','tkb_core.constraints.soft',
+             'tkb_core.solver.objectives','tkb_core.solver.model_builder')
+    if name.startswith(blocked):
         raise ImportError('blocked '+name)
     return original(name,*args,**kwargs)
 builtins.__import__=guarded

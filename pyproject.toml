@@ -35,6 +35,7 @@ include = [
     "/docs/solver-design.md",
     "/docs/constraint-catalog.md",
     "/docs/phase-1-report.md",
+    "/docs/phase-2a-report.md",
 ]
 
 [tool.pytest.ini_options]

@@ -2,7 +2,7 @@
 
 from typing import Annotated, Literal, Self
 
-from pydantic import Field, StrictFloat, StrictInt, model_validator
+from pydantic import Field, StrictBool, StrictFloat, StrictInt, model_validator
 
 from tkb_core.domain.enums import SolveStatus
 from tkb_core.domain.models import Diagnostic, DomainModel, Identifier, NonNegativeInt, PositiveInt
@@ -58,7 +58,7 @@ class StageRun(DomainModel):
     incumbent_value: NonNegativeInt | None = None
     best_bound: StrictFloat | None = None
     wall_time: Annotated[StrictFloat, Field(ge=0)] | None = None
-    proved_optimal: bool = False
+    proved_optimal: StrictBool = False
 
     @model_validator(mode="after")
     def evidence(self) -> Self:

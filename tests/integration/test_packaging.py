@@ -37,6 +37,7 @@ def test_build_excludes_research_and_private_inputs(tmp_path: Path) -> None:
                 "docs/solver-design.md",
                 "docs/constraint-catalog.md",
                 "docs/phase-1-report.md",
+                "docs/phase-2a-report.md",
             }, relative
     with zipfile.ZipFile(next(tmp_path.glob("*.whl"))) as wheel:
         for name in wheel.namelist():

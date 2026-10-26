@@ -60,3 +60,20 @@ def test_output_v12_roundtrip_and_quality_guards() -> None:
     assert ScheduleResult.model_validate_json(r.model_dump_json()) == r
     with pytest.raises(ValidationError):
         ScheduleResult.model_validate({**r.model_dump(), "input_fingerprint": "b" * 64})
+
+
+def test_proof_flags_are_strict_and_quality_matches_success() -> None:
+    with pytest.raises(ValidationError):
+        StageRun(priority=1, raw_status="OPTIMAL", incumbent_value=0, proved_optimal="true")
+    from tkb_core.contracts.output import ValidationReport
+
+    with pytest.raises(ValidationError):
+        ScheduleResult(
+            schema_version="1.2",
+            status="FEASIBLE",
+            input_fingerprint="a" * 64,
+            valid_schedule=True,
+            validation=ValidationReport(valid=True),
+            metadata=SolverRunMetadataV12(solver_executed=False),
+            quality=QualityReport(status="NOT_EVALUATED"),
+        )

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.1",
+  "school": {
+    "school_id": "demo",
+    "academic_year": "demo",
+    "term": "demo"
+  },
+  "time_slots": [
+    {
+      "id": "A",
+      "day": 1,
+      "session": "AM",
+      "period": 1
+    },
+    {
+      "id": "B",
+      "day": 1,
+      "session": "AM",
+      "period": 2
+    }
+  ],
+  "classes": [
+    {
+      "id": "c"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "sub"
+    }
+  ],
+  "teaching_requirements": [
+    {
+      "id": "r",
+      "class_ids": [
+        "c"
+      ],
+      "teacher_ids": [
+        "t"
+      ],
+      "subject_id": "sub",
+      "periods_per_cycle": 1
+    }
+  ],
+  "constraint_config": {
+    "policy_version": "0.1",
+    "hard": [],
+    "soft": [
+      {
+        "id": "avoid",
+        "code": "TEACHER_AVOID_SLOTS",
+        "parameters": {
+          "slot_ids": [
+            "B"
+          ]
+        },
+        "weight": 1,
+        "priority": 1
+      },
+      {
+        "id": "window",
+        "code": "TEACHER_PREFERRED_PERIOD_WINDOW",
+        "parameters": {
+          "session_ids": [
+            "AM"
+          ],
+          "first_period": 2,
+          "last_period": 2
+        },
+        "weight": 5,
+        "priority": 2
+      }
+    ]
+  }
+}

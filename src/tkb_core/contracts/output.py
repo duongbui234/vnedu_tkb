@@ -99,6 +99,10 @@ class ScheduleResult(DomainModel):
         if self.schema_version == "1.2":
             if not isinstance(self.metadata, SolverRunMetadataV12) or self.quality is None:
                 raise ValueError("Quality output requires versioned metadata/report")
+            if self.valid_schedule and self.quality.status == "NOT_EVALUATED":
+                raise ValueError("Valid quality output requires complete evaluation")
+            if self.status == SolveStatus.OPTIMAL and self.quality.status == "SCORED_FEASIBLE":
+                raise ValueError("Partial quality proof cannot claim optimality")
             if self.metadata.objective_value is not None or self.metadata.best_bound is not None:
                 raise ValueError("Quality is not a global scalar objective")
             if (
