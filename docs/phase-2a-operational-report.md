@@ -205,3 +205,59 @@ Final suite352 PASS là gate sau các sửa này. Review không được chạy 
 - Windows/native Windows measurement, time-to-first-feasible và school-size latency/RAM/quality vẫn UNKNOWN/NOT_RUN. Chưa đáp ứng nghiệm thu hai OS hoặc pilot performance.
 
 Các quyết định có tác động: OPEN file actions để tránh fd holes; WNOWAIT để kiểm ownership trước signal; mask SIGINT chỉ trong critical region; isolated lightweight/SIGINT drivers để kiểm đúng supported context; permanent-backend-failure được báo unconfirmed thay vì cam kết điều bất khả thi. Không có deferred minor; giới hạn reviewer chưa kiểm là execution/docs mới/Windows/performance, execution do tác giả chạy và lưu evidence, Windows/performance vẫn blocked/not run.
+
+## Task 4 Linux — orchestration và tests, chưa chạy campaign
+
+Phạm vi lượt triển khai 2026-10-27: chỉ tooling theo [kế hoạch Task 4](superpowers/plans/2026-10-27-phase-2a-task4-linux-pilot-campaign.md), trong worktree `phase2a-generator`, branch `feature/phase2a-task4-linux-orchestration`, base `33b8023`. Windows **BLOCKED**. Không gọi API, đổi Core/generator/dependencies hoặc chạy prepare/warmup/pilot/primary thực tế. Các mục đo campaign trong kế hoạch gốc còn unchecked.
+
+### Cơ chế đã triển khai
+
+- `benchmarks/run_benchmarks.py::build_campaign_plan`, `CampaignPlan`, `PlannedCase`: ma trận cố định108 primary (36datasets×3repeats,81feasible/27UNSAT), pilot riêng BASE10/seed101/repeat0, một RNG2026 theo thứ tự dataset đã sort cho mỗi repeat. Strict contracts chặn schema/fields/budgets/membership/order sai; seed solver42/workers1. Không phát sinh solve khi build plan hoặc import module.
+- `check_headroom`: lấy min giữa host MemAvailable và remaining của mọi finite cgroup2 ancestor đã xác minh; reserve2GiB ngoài target. Không đọc được hierarchy/controller hoặc namespace không xác minh thì BLOCKED. Đây là admission estimate, không hard cap RAM.
+- `_campaign_owner`: advisory flock và active marker trong common Git directory, dùng chung repository kể cả linked worktrees. Marker RUNNING/NEEDS_REVIEW cũ chặn, không tự xóa hay signal PID cũ. Nhiều campaign không cùng sở hữu tài nguyên theo protocol này.
+- `check_case`: tách correctness/performance/quality. COMPLETE+UNKNOWN không pilot pass; feasible sai INFEASIBLE hoặc declared optimum kém witness là FAIL; UNSAT phải là precheck INFEASIBLE/solver_executed=false, không coi score null bằng0. TIGHT đối chiếu witness/P2 lower bound; kernel RSS vượt cap vẫn NOT_MET dù sampling chưa thấy spike. Không tính median/P95 hoặc Task5 statistics.
+- `execute_campaign`: một phase tường minh, chạy tuần tự bằng `run_cli_once` có sẵn. Identity source/wheel/lock/interpreter/machine/input được kiểm lại trước run. START lưu admission snapshot/load/power/workload cùng timestamp, terminal receipt băm raw artifacts/verdict, journal append+fsync, state atomic replace. Resume phải tường minh, giữ terminal outcomes cả NOT_MET/failure; partial directory/START chưa terminal/malformed hoặc drift bị chặn. Không auto retry hoặc làm đẹp mẫu bằng bỏ case. Warmup và pilot đạt mới mở primary.
+- `main`: `--phase prepare|warmup|pilot|primary` bắt buộc; reject flags lẫn phase. Prepare tương lai tạo root mới, xác minh36 witnesses/proofs bằng installed subprocess giới hạn150s/1GiB, freeze plan/environment/seal; không import generator/preprocessing vào controller để thực hiện bước này. Đây không phải benchmark solver. Không tự khởi chạy phase tiếp theo.
+
+Tests mới ở `benchmarks/tests/test_campaign_linux.py`: metadata bundle tự tạo, filesystem scopes và typed execution boundary mô phỏng; journal, receipts, hashes, counts và thứ tự được kiểm trên file thực. Không dùng fixtures đó làm bằng chứng correctness hay hiệu năng của bộ trường thật. Bộ supervisor cũ vẫn chạy native lifecycle/tiny installed integration khi kiểm toàn bộ.
+
+### Kiểm chứng và giới hạn
+
+Final suite/review được ghi tại checkpoint cuối phần này. Lint/format, mypy27Core+29extended files và wheel/sdist build đã PASS trong lượt này. Existing Task3-v2 certificate chỉ nói về source cũ; không dùng nó chứng nhận source controller đã mở rộng. Bằng chứng Task4 nằm ở root riêng `benchmarks/artifacts/phase2a/task4-linux-tooling-v1/`, giữ nguyên frozen Task1/Task2/Task3.
+
+Không có latency/RAM/quality số đo school-size, không có kết luận pilot readiness/performance hoặc Windows support. Prepare end-to-end36 và mọi phase thực tế vẫn chưa chạy; kiểm chứng tooling không thay thế runbook đo sau authorization. Source sửa sau sealing phải dùng campaign mới; stale marker hoặc unconfirmed reap cần con người kiểm tra trước recovery. Advisory lock không chặn chương trình ngoài protocol sử dụng CPU/RAM. Sampling vẫn có thể bỏ lỡ spike, watchdog có cleanup overhead, parent SIGKILL không bảo đảm cleanup.
+
+Quyết định có tác động: bundle unit chỉ là metadata và không hợp Core input, nên không thể dùng để authorize execution thật; machine identity chỉ freeze thuộc tính ổn định (CPU model, OS/RAM-total/interpreter/thread environment), tránh CPU MHz biến thiên làm mọi case drift. Fresh headroom vẫn bắt buộc từng case. Chi phí nếu hai quyết định này chưa đủ: cần thêm integration execution và mở rộng identity khi có môi trường mới; không thay dữ liệu/hệ thống để ép gate pass.
+
+### Review Task4 và sửa bằng regression
+
+Một fresh reviewer xác định5 Important và1 Minor; không Critical. Năm Important đã sửa trong một lượt, cùng safety finding của tác giả về linked worktrees. Tests mới quan sát RED trước sửa, GREEN sau sửa:
+
+1. CANCELLED kèm cleanup/reap chưa xác nhận phải giữ NEEDS_REVIEW, kể cả lost ownership/PID mismatch. Không nhả marker IDLE chỉ vì status là CANCELLED.
+2.27 UNSAT thành công là qualified PASS/NOT_APPLICABLE, không bị đếm failed; synthetic108 thành công và resume phải failed=0.
+3. UNSAT bị watchdog/resource ngắt trước result giữ correctness NOT_ASSESSED; quality/performance N/A theo policy. Không biến lỗi thực thi thành bác bỏ capacity proof.
+4. Pre-spawn NOT_STARTED có thể chỉ có expected_input_sha256. Giữ terminal failure trên resume, không bịa actual fingerprint và không coi đó là correctness failure.
+5. Journal có UTC timestamp; START lưu load/power/workload context, unknown/uncontrolled được ghi rõ. Đây là observations, không phải môi trường đã được kiểm soát.
+6. Owner marker dùng common Git directory, nên các linked worktrees cùng repository không chạy campaign chồng nhau. Không spawn process khi import để tìm scope này.
+
+**Deferred Minor:** identity gate đầu hàm có thể trả counters0/NOT_STARTED khi resume bị source/input drift mặc dù đã có lịch sử. Đây là blocked invocation state, **không dùng làm coverage tổng**. Journal/state lịch sử vẫn giữ nguyên; chưa bổ sung contract historical-progress/unavailable vì ngoài fix Important của lượt review này.
+
+Các quyết định từ review: warmup chỉ setup/independently valid output, không bổ sung target exact-score chưa được duyệt; actual execution/Windows/performance còn chưa kiểm; docs do tác giả rà, không có fresh prose review; không mở lại thuật toán Core/generator; hashes/seals là consistency evidence trong workflow local tin cậy, không cryptographic authenticity trước người có thể viết lại toàn bộ artifacts. Chi phí tương ứng: warmup không thay score regression, tooling chưa chứng minh vận hành thực, docs chưa có independent editorial sign-off, không có algorithm proof mới và không dùng hashes như attestation chống sửa có chủ đích.
+
+Hai full-suite commands đầu có external timeout120s khi regression còn chạy, không có pytest verdict; diagnostic thấy heavy generator roundtrip/JSON và sau đó native supervisor tests. Lượt final cho phép tối đa300s cho **test command**, không đổi budget solver/watchdog/RAM của campaign. Giữ cả logs chưa đạt; không claim hai lượt đó PASS hoặc gọi chúng là benchmark.
+
+### Checkpoint nghiệm thu tooling Task4 Linux
+
+| Lệnh/kiểm tra đã thực hiện | Kết quả |
+|---|---|
+| `uv sync --locked --extra solver` | PASS, không đổi dependency/lock |
+| `uv run --extra solver pytest` (default Core suite) | **232 passed,14.55s** |
+| `TKB_PREFLIGHT_DIR=<frozen-preflight> timeout 300s uv run --extra solver pytest tests benchmarks/tests -q` | **416 passed,134.04s**; không skips, gồm64campaign unit tests,38generator,82supervisor và232Core |
+| Existing installed-wheel tiny CLI roundtrip | PASS trong full suite, hard-valid/score(1,1,2),4rule scores, measurementOK; source SHA khớp controller mới |
+| `uv run ruff check .` | PASS |
+| `uv run ruff format --check src tests benchmarks` | PASS,50files |
+| `uv run mypy`; `uv run mypy src/tkb_core benchmarks/generate_synthetic.py benchmarks/run_benchmarks.py` | PASS,27/29files |
+| `uv build` | PASS, wheel+sdist; packaging regressions thuộc Core suite |
+| Integrity và preservation |36dataset manifests+81artifact hashes,52preflight files,8historical Task3 files PASS;12protected context files giống main; Core/generator/lock không đổi |
+
+Evidence mới: `benchmarks/artifacts/phase2a/task4-linux-tooling-v1/verification-manifest.json`, logs gồm cả các lượt chưa đạt và bản sao installed tiny run; không sửa raw record để đổi provenance paths. Đây là test evidence, không phải measured campaign. Report/plan/tooling chưa commit, merge hoặc push; main/origin giữ nguyên33b8023. Task4 Linux **TOOLING VERIFIED / EXECUTION NOT RUN**, Task4 hai OS chưa nghiệm thu; Windows **BLOCKED**. Không bắt đầu Task5/2B/2C.

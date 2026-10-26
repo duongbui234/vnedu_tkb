@@ -222,6 +222,8 @@ Consumes36verified datasets; produces108run records/OS.
 - [ ] Watchdog/resource stop chỉ dừng child thuộc run, giữ evidence; không sửa input, publish schedule hoặc tự retry với cấu hình dễ hơn. Run hỏng không bị xóa khỏi báo cáo.
 - [ ] Cross-validate results giữa OS sau khi thu; optional workers4/seed sweep là campaign phụ có nhãn, chỉ sau baseline.
 
+**Implementation snapshot 2026-10-27:** Task4 Linux orchestration/tests đã được triển khai trên nhánh feature, **416tests PASS**, lint/format/mypy/build PASS; một fresh review và một lượt sửa Important đã hoàn tất; chưa thực hiện prepare/warmup/pilot/primary thực tế, chưa commit/merge/push. Các execution checkboxes bên trên giữ unchecked. Windows BLOCKED, Task5 chưa bắt đầu. [Chi tiết tooling/runbook](2026-10-27-phase-2a-task4-linux-pilot-campaign.md), [báo cáo](../../phase-2a-operational-report.md#task-4-linux--orchestration-và-tests-chưa-chạy-campaign).
+
 ### Task 5 — Tổng hợp và quyết định
 
 Consumes raw records; produces report với correctness verdict và pilot performance verdict tách biệt.
