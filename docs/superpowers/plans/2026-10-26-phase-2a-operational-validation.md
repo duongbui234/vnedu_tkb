@@ -206,10 +206,12 @@ Consumes cùng wheel, lock và dataset bundle; produces environment manifests v�
 
 Consumes installed Python path + CLI args/budget; produces one run record/artifact directory.
 
-- [ ] Tests fail trước cho subprocess sleep quá watchdog, child allocate spike rồi release, child ngắn, exit3/INFEASIBLE hoặc4/UNKNOWN hợp lệ, native exit bất thường, output hỏng, PID/resource probe error; expected không bao giờ đổi crash/timeout thành INFEASIBLE hoặc missing RSS thành0.
+- [x] Tests fail trước cho subprocess sleep quá watchdog, child allocate spike rồi release, child ngắn, exit3/INFEASIBLE hoặc4/UNKNOWN hợp lệ, native exit bất thường, output hỏng, PID/resource probe error; expected không bao giờ đổi crash/timeout thành INFEASIBLE hoặc missing RSS thành0.
 - [ ] Implement two OS probes trong runner, normalize units, owner wait/reap riêng; direct child và file redirection. Test KiB→bytes bằng literal1024, Windows bytes giữ nguyên; compare kernel peak với sampled telemetry, không tự thay metric.
 - [ ] Test một child memory lớn rồi child nhỏ: run thứ hai không mang peak tích lũy run thứ nhất. Linux/Windows native probe test phải chạy thật trên OS tương ứng; mocked Windows adapter trên Linux chưa nghiệm thu Windows.
-- [ ] `uv run pytest benchmarks/tests/test_run_benchmarks.py -q` PASS và logs chỉ rõ method/status trước mass measurement.
+- [x] `uv run pytest benchmarks/tests/test_run_benchmarks.py -q` PASS và logs chỉ rõ method/status trước mass measurement.
+
+**Execution snapshot:** Linux implementation/tests PASS (82 supervisor tests, full352 PASS); Windows **BLOCKED**, Task3 overall **PARTIAL**. Chỉ Linux backend, chưa triển khai hai OS/campaign. Xem [báo cáo Task3](../../phase-2a-operational-report.md#task-3-linux--resource-supervisor-triển-khai-sau-task-2).
 
 ### Task 4 — Campaign tuần tự
 

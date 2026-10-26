@@ -138,3 +138,70 @@ Các hash chỉ kiểm integrity/tái lập, không phải chữ ký nguồn. Ev
 ## Review độc lập
 
 Reviewer đã đối chiếu report với raw evidence và source: không Critical/Important findings. Một minor về câu mô tả lower bound đã được làm rõ trong báo cáo bằng dấu ≥ và ranges thực; không đổi evidence/Core hoặc chạy thêm search. Không có verdict Windows/performance. Reviewer không rerun probes/tests; bằng chứng thực thi do tác giả chạy và lưu ở các file đã nêu.
+
+## Task 3 Linux — resource supervisor (triển khai sau Task 2)
+
+**VERIFIED — Linux implementation/tests PASS**, sau lượt sửa Important findings từ review. **Windows BLOCKED; Task3 hai OS vẫn PARTIAL.** Không thực hiện Task4/5, campaign, tuning, benchmark hoặc2B/2C. Core/tree, dependency/lock và generator giữ nguyên.
+
+### Files và APIs
+
+- `benchmarks/run_benchmarks.py`: strict tooling contracts version1.0, `kib_to_bytes`, `supervise_linux`, `verify_cli_output`, `classify_run`, `run_cli_once`.
+- `benchmarks/tests/test_run_benchmarks.py`:82 tests, gồm native Linux, fault injection và explicit installed-wheel tiny smoke.
+- Cập nhật report này, Task3 checklist trong plan vận hành và execution checklist trong implementation plan; scope/plan đã viết trước vẫn giữ làm context.
+
+Chỉ có helper cho **một run**; tên file theo kế hoạch nhưng chưa có command chạy matrix/campaign, resume/sweep hoặc aggregation. Không thêm Core API, CLI entrypoint, model adapter hoặc package dependency. Chưa commit/merge/push lượt này; worktree `phase2a-generator`, branch `feature/phase2a-task3-linux-supervisor`.
+
+### Hành vi đã kiểm chứng
+
+Một installed Python child trực tiếp qua `posix_spawn`, stdin `/dev/null`, stdout/stderr vào files bằng POSIX_SPAWN_OPEN. File actions OPEN thay DUP2/CLOSE vì regression cho parent đóng fd0/1 đã chứng minh cách DUP2 có thể trộn streams; regression mới pass. Output root mới tạo độc quyền, root/sentinel có sẵn giữ nguyên.
+
+Chỉ owner `wait4(pid,WNOHANG)` reap. `waitid(...WNOWAIT)` chỉ kiểm child relationship trước signal, không reap; thiếu API → blocked. SIGINT được mask tạm trong critical interval spawn/reap, mask gốc truyền cho child và khôi phục parent; cả injection ngay sau spawn và SIGINT thật trong standalone driver đều cleanup/reap đúng, mask không đổi sau run.
+
+Watchdog/resource stop đi qua TERM, grace1s và KILL nếu cần; RSS sampling mỗi50ms là best effort. Exit/status/signal, CPU và ru_maxrss được ghi riêng; `ru_maxrss*1024` là kernel peak bytes. Probe mất khi child vừa exit được recheck bằng wait4; probe thật lỗi giữ BLOCKED/null+reason cho phần thiếu. Không dùng peak tích lũy của tất cả children, không lấy RAM host/uv/parent làm metric thay thế.
+
+Verification reuse CLI hiện có để kiểm hard/score/proof metadata; parser từ chối malformed/duplicate/nonfinite JSON, stale/version mismatch, stdout/result khác nhau, score/proof sai. Các payload giả mới trước hết **được ScheduleResult.model_validate xác nhận hợp schema**, sau đó vẫn bị CLI độc lập từ chối; không chỉ dựa vào schema rejection. Proof metadata chỉ được kiểm consistency, không tái chứng minh tối ưu bằng một file bên ngoài.
+
+Identity lấy từ một captured byte buffer có hash đối chiếu expected sau runtime preflight, dùng chính buffer đó để parse/fingerprint; recheck trước spawn và trước/sau verification. Test thay A→B trong preflight rồi trả A ngay trước spawn bị chặn, không có record thành công gắn fingerprint B cho run A.
+
+Harness status tách khỏi Core solver status. Native signal/unrecognized exit là CRASH, exit3/INFEASIBLE và4/UNKNOWN có payload hợp lệ là COMPLETE nhưng không có lịch hợp lệ. Stop/cancel/measurement failure không bật RunRecord.valid_schedule dù raw result có thể hard-valid. Evidence process/measurement/output đều giữ riêng khi nhiều lỗi đồng thời.
+
+### Commands và kết quả thật
+
+| Kiểm chứng | Kết quả |
+|---|---|
+| `uv sync --locked --extra solver` | PASS, không đổi lock |
+| `TKB_PREFLIGHT_DIR=... timeout 120s uv run --extra solver pytest tests benchmarks/tests -q` | **352 passed,40.36s**;232 Core +38 generator +82 supervisor; installed smoke không SKIP |
+| `uv run ruff check .` | PASS |
+| `uv run ruff format --check src tests benchmarks` | PASS,49files |
+| `uv run mypy` | PASS,27 Core files |
+| `uv run mypy src/tkb_core benchmarks/generate_synthetic.py benchmarks/run_benchmarks.py` | PASS,29files |
+| `uv build` | PASS; packaging test xác nhận benchmark tooling/research không vào wheel/sdist |
+| Persistent installed-wheel tiny smoke | COMPLETE, hard-valid,4 rule scores, vector(1,1,2), kernel measurement OK |
+| Recheck52 hashes của evidence Task2, lock và source/tree | PASS, không thay inputs/wheel/Core |
+
+Các thời gian trên là thời gian chạy tests, **không phải benchmark**. Kernel RSS/CPU trong tiny-run là kiểm chứng phép đo, không đại diện hiệu năng trường thật. Không solve bất kỳ bộ10/20/40 lớp nào.
+
+### Review, RED→GREEN và các lần gate chưa đạt
+
+Một fresh independent reviewer đọc toàn bộ code/tests và nêu4 Important findings; không có Critical/Minor. Tác giả sửa trong một lượt và chạy lại suite:
+
+1. Cleanup chưa bảo vệ đoạn initialization sau spawn: regression one-shot KeyboardInterrupt quan sát RED→GREEN, native SIGINT test pass.
+2. Input identity TOCTOU giữa hash/read: regression A→B→A quan sát RED→GREEN; hash/parse nay dùng cùng checked snapshot.
+3. Tests giả score/proof cũ chỉ sai schema: bổ sung2 regression hợp schema. Hai test mới pass với verifier hiện có; đây là coverage gap, không giả rằng production fix đã RED→GREEN.
+4. RuntimeError lặp ở poll có thể bỏ qua signal và busy-loop: regression quan sát RED→GREEN; normal loop nhường cleanup ngay, không phụ thuộc một ordinary poll thành công khác.
+
+Các checkpoint riêng trước review đã pass73 tests; suite tổng đầu tiên **1 failed,342 passed** vì test so RSS large/small chạy trong parent pytest nặng, hai kernel peaks đều156725248bytes. Đã đưa cả hai runs vào **cùng fresh lightweight parent**, không tăng cap hoặc trừ/đổi số kernel. **INFERRED:** RSS trước exec/lifetime baseline của parent có thể chi phối phép đo child; cần giữ parent supervisor nhẹ và luôn công bố method.
+
+Một lượt tổng tiếp theo exit130 tại test SIGINT gửi vào shared pytest parent, trong khi test riêng pass. Đã cô lập ca SIGINT thật trong fresh standalone driver không load solver-native ở parent. Không sửa/override signal handlers của host hoặc thay đổi Core để làm test xanh. Nguyên nhân tương tác signal context/native libraries là suy luận, chưa quy kết thành lỗi OR-Tools. Supported execution là standalone parent kiểm chứng, không phải arbitrary long-lived host đã có custom/native signal handlers.
+
+Final suite352 PASS là gate sau các sửa này. Review không được chạy lại sau fix; các fixes được kiểm chứng bằng regressions + suite xanh, không tự tuyên bố reviewer đã ký verdict mới.
+
+### Evidence và giới hạn còn lại
+
+- Final evidence: `benchmarks/artifacts/phase2a/task3-linux-v2/`, gồm `tiny-run/run.json`, stdout/stderr/result, installed-smoke driver/output và `logs/full-final-pytest.txt`. Source SHA trong tiny-run khớp code supervisor hiện tại.
+- Giữ cả `task3-linux-v1/` và logs các gate chưa đạt; không xóa thất bại để làm đẹp kết quả. Frozen `task1-v1/` và `preflight-linux-v1/` giữ nguyên.
+- Nếu wait4 backend hỏng vĩnh viễn, không thể chứng nhận đã reap. Sau stop attempts, record **BLOCKED/REAP_UNCONFIRMED**, không bịa peak/exit hay publish schedule, không spin vô hạn. Regression khôi phục native backend để test owner thu hồi child; trong tình huống thật có thể cần external recovery. Đây không phải cleanup-success claim.
+- Khi mất ownership (ECHILD/PID mismatch), không signal PID không còn xác nhận. Không đo descendant tree, không hard memory cap, không bảo đảm cleanup khi parent bị SIGKILL hoặc kernel không đáp ứng. Sampling có thể bỏ lỡ spike.
+- Windows/native Windows measurement, time-to-first-feasible và school-size latency/RAM/quality vẫn UNKNOWN/NOT_RUN. Chưa đáp ứng nghiệm thu hai OS hoặc pilot performance.
+
+Các quyết định có tác động: OPEN file actions để tránh fd holes; WNOWAIT để kiểm ownership trước signal; mask SIGINT chỉ trong critical region; isolated lightweight/SIGINT drivers để kiểm đúng supported context; permanent-backend-failure được báo unconfirmed thay vì cam kết điều bất khả thi. Không có deferred minor; giới hạn reviewer chưa kiểm là execution/docs mới/Windows/performance, execution do tác giả chạy và lưu evidence, Windows/performance vẫn blocked/not run.
