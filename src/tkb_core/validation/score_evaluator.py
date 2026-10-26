@@ -133,7 +133,7 @@ def evaluate_score(
         validate_rule_config(problem)
         check_capabilities(problem)
     except CoreError as exc:
-        status = (
+        status: Literal["UNSUPPORTED_FEATURE", "INPUT_INVALID"] = (
             "UNSUPPORTED_FEATURE" if exc.status.value == "UNSUPPORTED_FEATURE" else "INPUT_INVALID"
         )
         return error(status, exc.diagnostics[0].code)

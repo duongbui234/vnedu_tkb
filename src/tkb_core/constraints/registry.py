@@ -27,7 +27,7 @@ class RuleDefinition:
     policy_id: str
     parameters: type[DomainModel]
     unit: str = "teaching_periods"
-    supported_modes: tuple[str, ...] = ()
+    supported_modes: tuple[str, ...] = ("soft",)
 
 
 DEFINITIONS = {
@@ -86,12 +86,13 @@ def validate_rule_config(problem: "ScheduleInput") -> None:
                     a = slots[covered_id]
                     if a.start_minute is None:
                         return covered_id in targets
-                    return any(
-                        slots[b].start_minute is not None
-                        and a.start_minute < slots[b].end_minute
-                        and slots[b].start_minute < a.end_minute
-                        for b in targets
-                    )
+                    assert a.end_minute is not None
+                    for target in targets:
+                        b = slots[target]
+                        if b.start_minute is not None and b.end_minute is not None:
+                            if a.start_minute < b.end_minute and b.start_minute < a.end_minute:
+                                return True
+                    return False
 
                 overlap = any(
                     s.can_teach and hits(s.id, params.slot_ids) and hits(s.id, op.slot_ids)

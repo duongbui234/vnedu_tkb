@@ -49,7 +49,7 @@ def _run_stage(
     budget: float,
 ) -> StageOutcome:
     if priority is None:
-        built.model.clear_objective()
+        built.model.clear_objective()  # type: ignore[no-untyped-call]
     else:
         built.model.minimize(compiled.tiers[priority])
     if built.model.validate():
@@ -182,7 +182,7 @@ def run_quality(
         expected_tiers = {p: candidate.tiers[p - 1] for p in compiled.tiers}
         if expected_rules != outcome.rule_values or expected_tiers != outcome.tier_values:
             return finish(SolveStatus.MODEL_INVALID, "INTERNAL_SCORE_MISMATCH")
-        if score is None or candidate.tiers < score.tiers:
+        if score is None or score.tiers is None or candidate.tiers < score.tiers:
             assignments = outcome.assignments
             validation = hard
             score = candidate
@@ -204,6 +204,7 @@ def run_quality(
             )
             built.model.add(compiled.tiers[priority] == optimum)
         else:
+            assert score is not None and score.tiers is not None
             tiers[priority] = StageRun(
                 priority=priority,
                 raw_status=status,

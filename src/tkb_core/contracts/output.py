@@ -82,11 +82,12 @@ class ScheduleResult(DomainModel):
         if isinstance(data, dict):
             data = dict(data)
             version = data.get("schema_version")
-            metadata_type = {
+            metadata_types: dict[str, type[RunMetadata]] = {
                 "1.0": RunMetadata,
                 "1.1": SolverRunMetadata,
                 "1.2": SolverRunMetadataV12,
-            }.get(version)
+            }
+            metadata_type = metadata_types.get(version) if isinstance(version, str) else None
             if metadata_type is not None:
                 data["metadata"] = metadata_type.model_validate(data.get("metadata", {}))
         return data
@@ -134,7 +135,7 @@ class ScheduleResult(DomainModel):
 
     @model_serializer(mode="wrap")
     def serialize_version(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
-        data = handler(self)
+        data = dict(handler(self))
         if self.schema_version != "1.2":
             data.pop("quality", None)
         return data

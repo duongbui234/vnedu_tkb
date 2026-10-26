@@ -86,8 +86,8 @@ class QualityReport(DomainModel):
 
     @model_validator(mode="after")
     def evidence(self) -> Self:
-        active = [r.priority for r in self.tier_runs]
-        if None in active or active != sorted(set(active)):
+        active = [r.priority for r in self.tier_runs if r.priority is not None]
+        if len(active) != len(self.tier_runs) or active != sorted(set(active)):
             raise ValueError("Tiers must be unique and ordered")
         prefix = tuple(r.priority for r in self.tier_runs[: len(self.optimal_prefix)])
         if self.optimal_prefix != prefix or any(

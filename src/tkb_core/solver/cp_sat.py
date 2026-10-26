@@ -4,13 +4,20 @@ from importlib.metadata import version
 from time import perf_counter
 
 from tkb_core.contracts.input import ScheduleInput
-from tkb_core.contracts.output import ScheduleResult, SolverRunMetadata, ValidationReport
+from tkb_core.contracts.output import (
+    ScheduleResult,
+    SolverRunMetadata,
+    SolverRunMetadataV12,
+    ValidationReport,
+)
+from tkb_core.contracts.score import QualityReport, StageRun
 from tkb_core.domain.enums import SolveStatus
 from tkb_core.domain.errors import CoreError
-from tkb_core.domain.models import Diagnostic, ScheduleAssignment
+from tkb_core.domain.models import ConstraintConfigV11, Diagnostic, ScheduleAssignment
 from tkb_core.preprocessing.feasibility import prepare
 from tkb_core.solver.options import SolveOptions
 from tkb_core.validation.independent_validator import validate_schedule
+from tkb_core.validation.score_evaluator import evaluate_score
 
 
 def map_status(status: int) -> SolveStatus:
@@ -32,6 +39,10 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
     solver_version: str | None = None
     solver_wall: float | None = None
     executed = False
+    quality_input = False
+    quality = QualityReport(status="NOT_EVALUATED")
+    feasibility_run = StageRun()
+    active_priorities: tuple[int, ...] = ()
 
     def finish(
         status: SolveStatus | str,
@@ -39,15 +50,32 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         diagnostics: tuple[Diagnostic, ...] = (),
         validation: ValidationReport | None = None,
     ) -> ScheduleResult:
+        selected_quality = quality
+        if quality_input and validation is not None and validation.valid and not active_priorities:
+            checked_score = evaluate_score(problem, assignments)
+            if checked_score.status != "OK":
+                return finish(
+                    "MODEL_INVALID",
+                    diagnostics=(
+                        Diagnostic(
+                            code="INTERNAL_SCORE_ERROR", message="Score verification failed"
+                        ),
+                    ),
+                )
+            selected_quality = QualityReport(status="NOT_REQUESTED", score=checked_score)
+        metadata_type = SolverRunMetadataV12 if quality_input else SolverRunMetadata
+        extra = {"feasibility_run": feasibility_run} if quality_input else {}
+        result_extra = {"quality": selected_quality} if quality_input else {}
         return ScheduleResult(
-            schema_version="1.1",
+            schema_version="1.2" if quality_input else "1.1",
             status=SolveStatus(status),
             input_fingerprint=fingerprint,
             valid_schedule=bool(validation and validation.valid),
             assignments=assignments,
             diagnostics=diagnostics,
             validation=validation,
-            metadata=SolverRunMetadata(
+            metadata=metadata_type(
+                **extra,
                 solver_executed=executed,
                 solver_version=solver_version,
                 wall_time=perf_counter() - started,
@@ -56,6 +84,7 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
                 num_workers=applied.num_workers if applied else None,
                 time_limit_seconds=applied.time_limit_seconds if applied else None,
             ),
+            **result_extra,
         )
 
     try:
@@ -66,6 +95,11 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         )
         problem = ScheduleInput.model_validate(problem.model_dump(warnings="error"))
         fingerprint = problem.fingerprint()
+        quality_input = problem.schema_version == "1.1"
+        if isinstance(problem.constraint_config, ConstraintConfigV11):
+            active_priorities = tuple(
+                sorted({r.priority for r in problem.constraint_config.soft if r.enabled})
+            )
     except (ValueError, TypeError, AttributeError):
         return finish(
             "INPUT_INVALID",
@@ -89,6 +123,12 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
                         message="Independent validation rejected the empty result",
                     ),
                 ),
+            )
+        if quality_input and active_priorities:
+            quality = QualityReport(
+                status="SCORED_FEASIBLE",
+                score=evaluate_score(problem, ()),
+                tier_runs=tuple(StageRun(priority=p) for p in active_priorities),
             )
         return finish(
             "FEASIBLE",
@@ -116,6 +156,19 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
     try:
         solver_version = version("ortools")
         built = build_model(prepared)
+        if quality_input and active_priorities:
+            from tkb_core.constraints.soft import compile_soft
+            from tkb_core.solver.objectives import run_quality
+
+            compiled = compile_soft(prepared, built)
+            outcome = run_quality(prepared, built, compiled, applied)
+            executed = outcome.solver_executed
+            solver_wall = outcome.solver_wall_time
+            quality = outcome.quality
+            feasibility_run = outcome.feasibility_run
+            return finish(
+                outcome.status, outcome.assignments, outcome.diagnostics, outcome.validation
+            )
         solver = cp_model.CpSolver()
         solver.parameters.max_time_in_seconds = applied.time_limit_seconds
         solver.parameters.num_search_workers = applied.num_workers
@@ -124,6 +177,7 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         raw_status = solver.solve(built.model)
         solver_wall = solver.wall_time
         status = map_status(int(raw_status))
+        feasibility_run = StageRun(raw_status=status, wall_time=solver_wall)
         if status not in (SolveStatus.OPTIMAL, SolveStatus.FEASIBLE):
             return finish(
                 status,
@@ -165,6 +219,8 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
                 ),
             )
         return finish(status, assignments=assignments, validation=report)
+    except CoreError as exc:
+        return finish(exc.status, diagnostics=exc.diagnostics)
     except (ValueError, TypeError, RuntimeError, OverflowError):
         return finish(
             "MODEL_INVALID",
