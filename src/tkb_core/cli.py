@@ -13,10 +13,12 @@ from pydantic import BaseModel, ValidationError
 
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.contracts.output import ScheduleResult
+from tkb_core.contracts.score import ScoreReport
 from tkb_core.domain.errors import CoreError
-from tkb_core.solver.cp_sat import solve
+from tkb_core.domain.models import ConstraintConfigV11, Diagnostic
 from tkb_core.solver.options import SolveOptions
 from tkb_core.validation.independent_validator import validate_schedule
+from tkb_core.validation.score_evaluator import evaluate_score
 
 
 class _ArgumentError(ValueError):
@@ -106,12 +108,24 @@ def _write_atomic(destination: Path, content: str) -> None:
 def main(argv: Sequence[str] | None = None) -> int:
     """Exit 0 valid, 2 input/unsupported, 3 infeasible, 4 unknown, 5 model failure."""
     args = list(sys.argv[1:] if argv is None else argv)
+    evaluation = bool(args and args[0] == "evaluate-score")
+
+    def emit_error(status: str, code: str, message: str) -> int:
+        if not evaluation:
+            return _error(status, code, message)
+        report = ScoreReport(
+            status="UNSUPPORTED_FEATURE" if status == "UNSUPPORTED_FEATURE" else "INPUT_INVALID",
+            diagnostics=(Diagnostic(code=code, message=message),),
+        )
+        print(report.model_dump_json())
+        return 2
+
     if (
         args
         and not args[0].startswith("-")
-        and args[0] not in {"validate-input", "solve", "validate-schedule"}
+        and args[0] not in {"validate-input", "solve", "validate-schedule", "evaluate-score"}
     ):
-        return _error(
+        return emit_error(
             "UNSUPPORTED_FEATURE",
             "COMMAND_NOT_IMPLEMENTED",
             "Command is not implemented in Phase 1",
@@ -135,24 +149,72 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     checking.add_argument("path", type=Path)
     checking.add_argument("result", type=Path)
+    scoring = commands.add_parser(
+        "evaluate-score", help="Independently recompute preference scores"
+    )
+    scoring.add_argument("path", type=Path)
+    scoring.add_argument("result", type=Path)
     try:
         namespace = parser.parse_args(args)
     except _ArgumentError:
-        return _error("INPUT_INVALID", "INVALID_ARGUMENTS", "Invalid command arguments; see --help")
+        return emit_error(
+            "INPUT_INVALID", "INVALID_ARGUMENTS", "Invalid command arguments; see --help"
+        )
     try:
         problem = _read_model(namespace.path, ScheduleInput)
         fingerprint = problem.fingerprint()
-        if namespace.command == "validate-schedule":
+        if namespace.command in ("validate-schedule", "evaluate-score"):
             previous = _read_model(namespace.result, ScheduleResult)
             if previous.input_fingerprint != fingerprint:
-                return _error(
+                return emit_error(
                     "INPUT_INVALID", "STALE_RESULT", "Result does not match the current input"
                 )
+            if problem.schema_version == "1.1" and previous.schema_version != "1.2":
+                return emit_error(
+                    "INPUT_INVALID", "RESULT_VERSION", "Result version does not match input"
+                )
+            score = None
+            if namespace.command == "evaluate-score" or problem.schema_version == "1.1":
+                score = evaluate_score(problem, previous.assignments)
+                if score.status != "OK":
+                    if namespace.command == "evaluate-score":
+                        print(score.model_dump_json())
+                        return 5 if score.status == "INTERNAL_ERROR" else 2
+                    return emit_error(
+                        "INPUT_INVALID", score.diagnostics[0].code, "Schedule could not be scored"
+                    )
+                if previous.quality is not None:
+                    declared = previous.quality.score
+                    if declared is not None:
+                        expected = score.model_dump(mode="json")
+                        actual = declared.model_dump(mode="json")
+                        actual["rules"].sort(key=lambda r: r["rule_id"])
+                        if actual != expected:
+                            return emit_error(
+                                "INPUT_INVALID",
+                                "RESULT_SCORE_MISMATCH",
+                                "Declared score differs from recomputation",
+                            )
+                    config = problem.constraint_config
+                    if isinstance(config, ConstraintConfigV11):
+                        active = sorted({r.priority for r in config.soft if r.enabled})
+                        if active != [r.priority for r in previous.quality.tier_runs] or (
+                            active and declared is None
+                        ):
+                            return emit_error(
+                                "INPUT_INVALID",
+                                "RESULT_SCORE_MISMATCH",
+                                "Quality report does not cover active policy",
+                            )
+                if namespace.command == "evaluate-score":
+                    print(score.model_dump_json())
+                    return 0
             report = validate_schedule(problem, previous.assignments)
             print(
                 json.dumps(
                     {
-                        "schema_version": "1.1",
+                        "schema_version": "1.2" if problem.schema_version == "1.1" else "1.1",
+                        **({"score": score.model_dump(mode="json")} if score is not None else {}),
                         "status": "SCHEDULE_VALID" if report.valid else "SCHEDULE_INVALID",
                         "valid_schedule": report.valid,
                         "input_fingerprint": fingerprint,
@@ -162,6 +224,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             return 0 if report.valid else 2
         if namespace.command == "solve":
+            from tkb_core.solver.cp_sat import solve
+
             if namespace.output is not None:
                 _check_output(namespace.path, namespace.output)
             values = {
@@ -180,7 +244,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 try:
                     _write_atomic(namespace.output, serialized)
                 except OSError:
-                    return _error(
+                    return emit_error(
                         "INPUT_INVALID",
                         "OUTPUT_WRITE_ERROR",
                         "Could not atomically write the result file",
@@ -191,11 +255,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
     except CoreError as exc:
         diagnostic = exc.diagnostics[0]
-        return _error(exc.status.value, diagnostic.code, diagnostic.message)
+        return emit_error(exc.status.value, diagnostic.code, diagnostic.message)
     except ValidationError:
-        return _error("INPUT_INVALID", "OPTIONS_INVALID", "Solver options violate their contract")
+        return emit_error(
+            "INPUT_INVALID", "OPTIONS_INVALID", "Solver options violate their contract"
+        )
     except (OSError, ValueError, RecursionError):
-        return _error(
+        return emit_error(
             "INPUT_INVALID", "INVALID_INPUT", "Input or output path could not be processed"
         )
     print(

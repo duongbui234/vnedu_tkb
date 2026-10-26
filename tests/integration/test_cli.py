@@ -76,7 +76,9 @@ def test_generated_json_schema_describes_versions() -> None:
     for contract in (ScheduleInput, ScheduleResult):
         schema = contract.model_json_schema()
         version = schema["properties"]["schema_version"]
-        assert version.get("const") == "1.0" or version.get("enum") == ["1.0", "1.1"]
+        assert version.get("enum") == (
+            ["1.0", "1.1"] if contract is ScheduleInput else ["1.0", "1.1", "1.2"]
+        )
         assert "schema_version" in schema["required"]
 
 
