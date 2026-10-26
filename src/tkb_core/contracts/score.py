@@ -99,6 +99,14 @@ class QualityReport(DomainModel):
         if self.status in ("SCORED_FEASIBLE", "LEXICOGRAPHIC_OPTIMAL"):
             if self.score is None or self.score.status != "OK":
                 raise ValueError("Scored quality requires successful evaluation")
+        if self.score is not None and self.score.status == "OK":
+            assert self.score.tiers is not None
+            if any(
+                r.proved_optimal and r.incumbent_value != self.score.tiers[r.priority - 1]
+                for r in self.tier_runs
+                if r.priority is not None
+            ):
+                raise ValueError("Proved tier value differs from independently scored schedule")
         if self.status == "LEXICOGRAPHIC_OPTIMAL" and (not active or len(prefix) != len(active)):
             raise ValueError("Every active tier requires proof")
         if self.status == "NOT_EVALUATED" and self.score is not None:

@@ -67,7 +67,7 @@ Một lần solve fixture priority, 1 occurrence, 2 placements, 2 rules; workers
 | P2 | OPTIMAL, value5/bound5, 0.000204s |
 | Hard checker / score recomputation | PASS / MATCH |
 
-Không đo time-to-first-feasible bằng callback. Không so FET/STKB hoặc kết luận hiệu năng trường thật từ fixture nhỏ này. Logs đo/wheel smoke/ledger lưu local trong `.superpowers/sdd/2026-10-26-phase-2a/` và không vào package.
+Không đo time-to-first-feasible bằng callback. Không so FET/STKB hoặc kết luận hiệu năng trường thật từ fixture nhỏ này. Số đo và kết luận chính được lưu trong báo cáo này; logs đo/wheel smoke/ledger được chuyển sang thư mục evidence trong môi trường smoke tạm `/tmp/tkb-phase2a-3c459ia4/` trước khi dọn workspace của plan, không vào package. Thư mục tạm không phải nơi lưu trữ lâu dài.
 
 ## Quyết định triển khai và giới hạn
 
@@ -80,4 +80,21 @@ Không đo time-to-first-feasible bằng callback. Không so FET/STKB hoặc k�
 
 ## Review cuối
 
-Đang chuẩn bị whole-branch review độc lập theo executing-plans; cập nhật kết quả và các regression fixes trước khi bàn giao.
+Reviewer độc lập đã rà range `7f58f71..c885fd5`, tự chạy 225 tests pass và chỉ ra hai Important; không có Critical:
+
+1. Input1.1 lỗi options/mutated/model-constructed data đôi khi trả result1.1. Đã nhận diện schema trước bước validation có thể fail; result1.2/NOT_EVALUATED được giữ, không xuất assignments và không bỏ revalidation.
+2. Proved tier incumbent_value có thể mâu thuẫn với score. Đã thêm guard đối chiếu exact score của prefix; parser và cả hai CLI commands bác payload mâu thuẫn.
+
+Cả hai có tests đã quan sát RED→GREEN. Test forged score cũ được giữ structurally coherent để tiếp tục kiểm nhánh independent RESULT_SCORE_MISMATCH thay vì chỉ parser rejection.
+
+**Sau lượt sửa duy nhất:** `uv run --extra solver pytest -q`: **229 passed, 4.63s**; ruff check PASS; format check PASS (44 files); mypy PASS (27 files). Wheel được rebuild và chạy smoke lại sau sửa. Không dispatch reviewer lần hai; dùng regression tests và toàn suite để kiểm chứng lượt sửa theo executing-plans.
+
+**Minor giữ lại:** default `RuleDefinition.supported_modes=("soft",)` không gây fail-open cho bốn rule hiện tại vì đều có compiler/evaluator; khi thêm entry tương lai cần khai báo unsupported trước. Chưa thay đổi để tránh mở rộng lượt sửa; không phải capability cho 2B/2C.
+
+**Các điểm reviewer đã cân nhắc:**
+
+- Nghi vấn S01 giao ngày khác đã rút lại: timeline dùng phút từ gốc cycle và public gates chặn day ranges chồng nhau. Không nhận local-clock minutes của từng ngày như thể cùng gốc.
+- Proof từ file ngoài không được chứng nhận tối ưu lại; chỉ kiểm hard/score và structural consistency. Không dùng metadata đã chỉnh sửa như chứng chỉ tối ưu mới.
+- Production performance, Windows và 2B/2C ngoài phạm vi kiểm chứng; không suy từ synthetic2A.
+
+Nhánh đã giữ lại để người dùng review/tích hợp; chưa merge/push. Checkout gốc vẫn giữ tài liệu/AGENTS chưa commit. Các quyết định và hệ quả trước tích hợp: giữ copy context ngoài commit code (cần đối chiếu docs khi merge), metadataV12 ở output.py (giữ correlation schema), registry dispatch riêng (thêm rule phải cập nhật hai implementation paths).

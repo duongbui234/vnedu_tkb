@@ -33,6 +33,9 @@ def test_solve_score_and_forged_score(
     raw["quality"]["score"]["rules"][0]["raw_penalty"] += 1
     raw["quality"]["score"]["rules"][0]["weighted_penalty"] += 1
     raw["quality"]["score"]["tiers"][0] += 1
+    # Keep forged proof structurally coherent so independent recomputation is exercised.
+    raw["quality"]["tier_runs"][0]["incumbent_value"] += 1
+    raw["quality"]["tier_runs"][0]["best_bound"] += 1
     r.write_text(json.dumps(raw))
     assert main(["evaluate-score", str(p), str(r)]) == 2
     out = json.loads(capsys.readouterr().out)
@@ -79,3 +82,27 @@ raise SystemExit(main(['evaluate-score',sys.argv[1],sys.argv[2]]))
     )
     assert proc.returncode == 0, proc.stderr
     assert json.loads(proc.stdout)["status"] == "OK"
+
+
+def test_proof_value_must_match_scored_prefix(tmp_path: Path, capsys: Any) -> None:
+    import pytest
+    from pydantic import ValidationError
+
+    from tkb_core.contracts.input import ScheduleInput
+    from tkb_core.contracts.output import ScheduleResult
+    from tkb_core.solver.cp_sat import solve
+
+    fixture = Path(__file__).parents[1] / "fixtures/quality/priority_tradeoff.json"
+    data = json.loads(fixture.read_text())
+    result = solve(ScheduleInput.model_validate(data)).model_dump(mode="json")
+    assert result["quality"]["score"]["tiers"][0] == 0
+    result["quality"]["tier_runs"][0]["incumbent_value"] = 999
+    with pytest.raises(ValidationError):
+        ScheduleResult.model_validate(result)
+    p = tmp_path / "p.json"
+    r = tmp_path / "r.json"
+    p.write_text(json.dumps(data))
+    r.write_text(json.dumps(result))
+    for command in ("evaluate-score", "validate-schedule"):
+        assert main([command, str(p), str(r)]) == 2
+        assert json.loads(capsys.readouterr().out)["status"] == "INPUT_INVALID"

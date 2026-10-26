@@ -129,3 +129,21 @@ def test_soft_limits_do_not_remove_locked_teaching(quality_case: dict[str, Any])
     assert r.quality.score.tiers == (0, 28, 0)
     p.teaching_requirements[0].block_durations = (1,)
     assert solve(p).status == "INPUT_INVALID"
+
+
+@pytest.mark.parametrize("failure", ["options", "mutation", "constructed"])
+def test_recognized_v11_validation_errors_still_emit_v12(
+    quality_data: dict[str, Any], failure: str
+) -> None:
+    p = ScheduleInput.model_validate(quality_data)
+    options = SolveOptions()
+    if failure == "options":
+        options.time_limit_seconds = -1.0
+    elif failure == "mutation":
+        p.constraint_config.soft[0].priority = 4
+    else:
+        p = ScheduleInput.model_construct(schema_version="1.1", school="invalid")
+    r = solve(p, options)
+    assert r.status == "INPUT_INVALID" and r.schema_version == "1.2"
+    assert r.quality.status == "NOT_EVALUATED" and r.quality.score is None
+    assert not r.assignments and not r.metadata.solver_executed

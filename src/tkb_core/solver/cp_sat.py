@@ -39,7 +39,7 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
     solver_version: str | None = None
     solver_wall: float | None = None
     executed = False
-    quality_input = False
+    quality_input = isinstance(problem, ScheduleInput) and problem.schema_version == "1.1"
     quality = QualityReport(status="NOT_EVALUATED")
     feasibility_run = StageRun()
     active_priorities: tuple[int, ...] = ()
