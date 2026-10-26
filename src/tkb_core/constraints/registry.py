@@ -27,16 +27,30 @@ class RuleDefinition:
     policy_id: str
     parameters: type[DomainModel]
     unit: str = "teaching_periods"
-    supported_modes: tuple[str, ...] = ("soft",)
+    supported_modes: tuple[str, ...] = ()
 
 
 DEFINITIONS = {
     d.code: d
     for d in (
-        RuleDefinition("TEACHER_AVOID_SLOTS", "S01", AvoidSlotsParameters),
-        RuleDefinition("TEACHER_MAX_PERIODS_PER_SESSION", "S02", MaxSessionParameters),
-        RuleDefinition("TEACHER_MAX_PERIODS_PER_DAY", "S03", MaxDayParameters),
-        RuleDefinition("TEACHER_PREFERRED_PERIOD_WINDOW", "S04", PeriodWindowParameters),
+        RuleDefinition(
+            "TEACHER_AVOID_SLOTS", "S01", AvoidSlotsParameters, supported_modes=("soft",)
+        ),
+        RuleDefinition(
+            "TEACHER_MAX_PERIODS_PER_SESSION",
+            "S02",
+            MaxSessionParameters,
+            supported_modes=("soft",),
+        ),
+        RuleDefinition(
+            "TEACHER_MAX_PERIODS_PER_DAY", "S03", MaxDayParameters, supported_modes=("soft",)
+        ),
+        RuleDefinition(
+            "TEACHER_PREFERRED_PERIOD_WINDOW",
+            "S04",
+            PeriodWindowParameters,
+            supported_modes=("soft",),
+        ),
     )
 }
 

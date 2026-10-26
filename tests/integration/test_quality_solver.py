@@ -147,3 +147,51 @@ def test_recognized_v11_validation_errors_still_emit_v12(
     assert r.status == "INPUT_INVALID" and r.schema_version == "1.2"
     assert r.quality.status == "NOT_EVALUATED" and r.quality.score is None
     assert not r.assignments and not r.metadata.solver_executed
+
+
+def test_pending_rule_reusing_known_parameters_is_rejected_before_solving(
+    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from tkb_core.constraints.registry import DEFINITIONS, RuleDefinition
+    from tkb_core.contracts.capabilities import check_capabilities
+    from tkb_core.domain.errors import CoreError
+    from tkb_core.domain.rule_parameters import MaxDayParameters
+
+    # A parameter shape already has implementations; this new code has no approved capability.
+    monkeypatch.setitem(
+        DEFINITIONS, "PENDING_RULE", RuleDefinition("PENDING_RULE", "pending", MaxDayParameters)
+    )
+    quality_case["constraint_config"]["soft"] = [
+        {
+            "id": "pending",
+            "code": "PENDING_RULE",
+            "parameters": {"limit": 0},
+            "weight": 1,
+            "priority": 1,
+        }
+    ]
+    problem = ScheduleInput.model_validate(quality_case)
+    with pytest.raises(CoreError) as error:
+        check_capabilities(problem)
+    assert error.value.status == "UNSUPPORTED_FEATURE"
+    assert error.value.diagnostics[0].code == "CUSTOM_RULE"
+
+    result = solve(problem)
+    assert result.status == "UNSUPPORTED_FEATURE"
+    assert not result.metadata.solver_executed and not result.assignments
+    assert result.quality.status == "NOT_EVALUATED" and result.quality.score is None
+
+    score = evaluate_score(problem, ())
+    assert score.status == "UNSUPPORTED_FEATURE"
+    assert score.tiers is None and not score.rules
+    validation = validate_schedule(problem, ())
+    assert not validation.valid
+    assert validation.violations[0].code == "UNSUPPORTED_FEATURE"
+
+    # Keeping a declaration disabled must not start applying the reused MaxDay logic.
+    quality_case["constraint_config"]["soft"][0]["enabled"] = False
+    problem = ScheduleInput.model_validate(quality_case)
+    result = solve(problem)
+    assert result.valid_schedule
+    assert result.quality.status == "NOT_REQUESTED"
+    assert result.quality.score.rules == () and result.quality.score.tiers == (0, 0, 0)

@@ -135,3 +135,23 @@ def test_parameter_boundaries(
     ]
     with pytest.raises((ValidationError, ValueError)):
         ScheduleInput.model_validate(quality_case)
+
+
+def test_new_rule_definitions_start_without_capabilities() -> None:
+    from tkb_core.constraints.registry import RuleDefinition
+    from tkb_core.domain.rule_parameters import MaxDayParameters
+
+    pending = RuleDefinition("PENDING_RULE", "pending", MaxDayParameters)
+    assert pending.supported_modes == ()
+
+
+def test_phase2a_rules_explicitly_support_soft_only() -> None:
+    from tkb_core.constraints.registry import DEFINITIONS
+
+    assert set(DEFINITIONS) == {
+        "TEACHER_AVOID_SLOTS",
+        "TEACHER_MAX_PERIODS_PER_SESSION",
+        "TEACHER_MAX_PERIODS_PER_DAY",
+        "TEACHER_PREFERRED_PERIOD_WINDOW",
+    }
+    assert all(rule.supported_modes == ("soft",) for rule in DEFINITIONS.values())

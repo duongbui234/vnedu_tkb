@@ -89,7 +89,7 @@ Cả hai có tests đã quan sát RED→GREEN. Test forged score cũ được gi
 
 **Sau lượt sửa duy nhất:** `uv run --extra solver pytest -q`: **229 passed, 4.63s**; ruff check PASS; format check PASS (44 files); mypy PASS (27 files). Wheel được rebuild và chạy smoke lại sau sửa. Không dispatch reviewer lần hai; dùng regression tests và toàn suite để kiểm chứng lượt sửa theo executing-plans.
 
-**Minor giữ lại:** default `RuleDefinition.supported_modes=("soft",)` không gây fail-open cho bốn rule hiện tại vì đều có compiler/evaluator; khi thêm entry tương lai cần khai báo unsupported trước. Chưa thay đổi để tránh mở rộng lượt sửa; không phải capability cho 2B/2C.
+**Minor đã xử lý trong lượt bổ sung:** `RuleDefinition.supported_modes` mặc định `()`; chỉ S01–S04 được khai báo `("soft",)` tường minh. Entry mới không tự nhận capability, kể cả dùng lại parameter model đã có implementation. Không mở hard mode hoặc Phase 2B/2C.
 
 **Các điểm reviewer đã cân nhắc:**
 
@@ -98,3 +98,9 @@ Cả hai có tests đã quan sát RED→GREEN. Test forged score cũ được gi
 - Production performance, Windows và 2B/2C ngoài phạm vi kiểm chứng; không suy từ synthetic2A.
 
 Nhánh đã giữ lại để người dùng review/tích hợp; chưa merge/push. Checkout gốc vẫn giữ tài liệu/AGENTS chưa commit. Các quyết định và hệ quả trước tích hợp: giữ copy context ngoài commit code (cần đối chiếu docs khi merge), metadataV12 ở output.py (giữ correlation schema), registry dispatch riêng (thêm rule phải cập nhật hai implementation paths).
+
+## Bổ sung — đóng capability mặc định
+
+Đã quan sát RED→GREEN: entry mới trước sửa mặc nhiên có soft và không bị capability guard từ chối; sau sửa mặc định không có mode. Thêm ba regression tests: default đóng, bốn entry hiện có soft tường minh, và entry pending dùng lại MaxDayParameters bị solve/evaluate_score/validate_schedule từ chối. Solve không chạy CP-SAT hoặc xuất assignments/score cho entry pending bật; declaration tắt không tạo penalty.
+
+Kiểm chứng bổ sung: `uv sync --locked --extra solver`; full pytest **232 passed**; ruff check, format check, mypy và build sdist/wheel đều được chạy. Không đổi schema, fingerprint, dependency/uv.lock, compiler/evaluator hoặc các rule nghiệp vụ. Commit bản sửa chỉ gồm registry, hai file regression tests và báo cáo này; chưa push. AGENTS và báo cáo nghiên cứu chưa commit được giữ nguyên.
