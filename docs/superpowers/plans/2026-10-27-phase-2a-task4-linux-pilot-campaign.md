@@ -171,9 +171,9 @@ Parent interpreter chính là installed venv Python; không thêm flag giả OS/
 
 ## 7. Runbook tương lai — chỉ sau authorization chạy
 
-- [ ] PREPARE: kiểm scope authorization; tạo root mới; frozen wheel/Core/bundle versions đúng; verify36 witnesses/proofs riêng process; freeze108case plan/order, environment và source identities. Windows ghi BLOCKED. Chưa có correctness/performance claim của trường lớn.
-- [ ] WARMUP: tiny setup theo§3, lưu ngoài mẫu. Core có wall metadata tự nhiên nhưng không thu nó vào performance summary.
-- [ ] PILOT: BASE10/seed101/workers1/solver42, đúng60s/150s/1GiB, fresh process; đọc raw +independent verdict. Fail/NOT_MET/BLOCKED → stop và báo, không đổi budgets.
+- [x] PREPARE: kiểm scope authorization; tạo root mới; frozen wheel/Core/bundle versions đúng; verify36 witnesses/proofs riêng process; freeze108case plan/order, environment và source identities. Windows ghi BLOCKED. Chưa có correctness/performance claim của trường lớn.
+- [x] WARMUP: tiny setup theo§3, lưu ngoài mẫu. Core có wall metadata tự nhiên nhưng không thu nó vào performance summary.
+- [x] PILOT: BASE10/seed101/workers1/solver42, đúng60s/150s/1GiB, fresh process; đọc raw +independent verdict. Fail/NOT_MET/BLOCKED → stop và báo, không đổi budgets.
 - [ ] PRIMARY khi pilot PASS và đã được phép: thực hiện108rows theo order freeze; headroom/identity gate từng run; posthoc kernel RAM/time gate; lưu cả UNKNOWN, timeout, resource/crash và pending khi dừng. Không chạy song song.
 - [ ] Hoàn tất/gián đoạn: lưu campaign state/coverage và per-case verdicts, giữ raw evidence; không nhận Task5 statistics/cross-OS đã hoàn tất. Linux-only kết quả, Windows BLOCKED. Các ngưỡng chưa đạt phải giữ NOT_MET, không sửa plan sau khi nhìn số.
 
@@ -195,3 +195,8 @@ Chỉ tạo tài liệu này và read-only readiness snapshot; không viết/s�
 Branch `feature/phase2a-task4-linux-orchestration`, base33b8023. §6 APIs/tests đã có; final review và kiểm chứng được ghi trong [báo cáo operational](../../phase-2a-operational-report.md#task-4-linux--orchestration-và-tests-chưa-chạy-campaign). Các ghi chú §8 là lịch sử lượt lập kế hoạch, không phải trạng thái source hiện tại. Không chạy §7, không Task5/2B/2C, không commit/merge/push; Windows BLOCKED. CLI contract nay đã implement, các command ví dụ chỉ chạy sau authorization execution và không dùng main33b8023 chưa chứa tooling.
 
 Final tooling gate: **416 passed,134.04s**, gồm64campaign unit tests và existing installed tiny integration;232Core tests riêng PASS, lint/format/mypy27+29files/build PASS. Một fresh review:5Important+1Minor, đã sửa5Important và1author safety finding qua RED→GREEN; Minor progress khi identity-block được ghi rõ trong report. Full regression timeout300s là giới hạn kiểm thử, budgets campaign giữ nguyên. Bằng chứng `benchmarks/artifacts/phase2a/task4-linux-tooling-v1/verification-manifest.json`; chưa chạy§7 hoặc Task5, Windows BLOCKED.
+
+
+## 10. Execution snapshot sau authorization
+
+User cho phép prepare/warmup/pilot Linux sau khi commit/push tài liệu. Frozen GitHEAD5b13ca4; campaign `linux-pilot-20261027-v1`:36witness/proof verification PASS, warmup PASS, pilot BASE10 PASS (hard-valid, OPTIMAL, vector0, wall58,461s/peak166,996MiB). OwnerIDLE; source và budgets giữ nguyên. Primary0/108 NOT_RUN; WindowsBLOCKED; chưa Task5/2B/2C. [Báo cáo per-case/evidence/giới hạn](../../phase-2a-pilot-linux-report.md). Các ghi chú chưa authorization/NOT_RUN ở các snapshot trước là lịch sử; quyền mới chỉ bao gồm3phase đã chạy, không primary.

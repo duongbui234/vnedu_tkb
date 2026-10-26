@@ -261,3 +261,8 @@ Hai full-suite commands đầu có external timeout120s khi regression còn ch�
 | Integrity và preservation |36dataset manifests+81artifact hashes,52preflight files,8historical Task3 files PASS;12protected context files giống main; Core/generator/lock không đổi |
 
 Evidence mới: `benchmarks/artifacts/phase2a/task4-linux-tooling-v1/verification-manifest.json`, logs gồm cả các lượt chưa đạt và bản sao installed tiny run; không sửa raw record để đổi provenance paths. Đây là test evidence, không phải measured campaign. Report/plan/tooling chưa commit, merge hoặc push; main/origin giữ nguyên33b8023. Task4 Linux **TOOLING VERIFIED / EXECUTION NOT RUN**, Task4 hai OS chưa nghiệm thu; Windows **BLOCKED**. Không bắt đầu Task5/2B/2C.
+
+
+## Task4 Linux — prepare/warmup/pilot thực tế sau authorization
+
+**VERIFIED — PILOT PASS**, campaign `linux-pilot-20261027-v1`, frozen HEAD5b13ca4. Prepare36datasets PASS; warmup PASS; một BASE10 pilot hard-valid/OPTIMAL, score(0,0,0), wall58,461s/peak175108096bytes, performanceMET. Source/budgets không đổi, ownerIDLE. **Primary0/108, chưa chạy; WindowsBLOCKED**, chưa Task5/2B/2C. Xem [báo cáo pilot và giới hạn](phase-2a-pilot-linux-report.md). Các mục NOT_RUN ở phần trước là snapshot tooling trước execution, không phải trạng thái mới nhất.
