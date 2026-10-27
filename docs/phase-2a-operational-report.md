@@ -266,3 +266,8 @@ Evidence mới: `benchmarks/artifacts/phase2a/task4-linux-tooling-v1/verificatio
 ## Task4 Linux — prepare/warmup/pilot thực tế sau authorization
 
 **VERIFIED — PILOT PASS**, campaign `linux-pilot-20261027-v1`, frozen HEAD5b13ca4. Prepare36datasets PASS; warmup PASS; một BASE10 pilot hard-valid/OPTIMAL, score(0,0,0), wall58,461s/peak175108096bytes, performanceMET. Source/budgets không đổi, ownerIDLE. **Primary0/108, chưa chạy; WindowsBLOCKED**, chưa Task5/2B/2C. Xem [báo cáo pilot và giới hạn](phase-2a-pilot-linux-report.md). Các mục NOT_RUN ở phần trước là snapshot tooling trước execution, không phải trạng thái mới nhất.
+
+
+## Task4 Linux — primary campaign hoàn tất
+
+**VERIFIED — COMPLETE108/108, pending0, ownerIDLE.** Runner ghi `failed=63` theo qualification gate, không phải63correctness failures; không có verdict correctnessFAIL hoặc historical safety stop trong receipts đã kiểm.108primary+2setup/pilot receipts/hash/order/budgets đã được đối chiếu, raw outcomes giữ nguyên. Audit hiện tại có `MACHINE_DRIFT` do MemTotal lệch4KiB; không bypass gate hoặc chạy lại. [Báo cáo per-case coverage và giới hạn](phase-2a-primary-linux-report.md). Chưa Task5/2B/2C; WindowsBLOCKED.

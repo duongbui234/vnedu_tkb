@@ -174,8 +174,8 @@ Parent interpreter chính là installed venv Python; không thêm flag giả OS/
 - [x] PREPARE: kiểm scope authorization; tạo root mới; frozen wheel/Core/bundle versions đúng; verify36 witnesses/proofs riêng process; freeze108case plan/order, environment và source identities. Windows ghi BLOCKED. Chưa có correctness/performance claim của trường lớn.
 - [x] WARMUP: tiny setup theo§3, lưu ngoài mẫu. Core có wall metadata tự nhiên nhưng không thu nó vào performance summary.
 - [x] PILOT: BASE10/seed101/workers1/solver42, đúng60s/150s/1GiB, fresh process; đọc raw +independent verdict. Fail/NOT_MET/BLOCKED → stop và báo, không đổi budgets.
-- [ ] PRIMARY khi pilot PASS và đã được phép: thực hiện108rows theo order freeze; headroom/identity gate từng run; posthoc kernel RAM/time gate; lưu cả UNKNOWN, timeout, resource/crash và pending khi dừng. Không chạy song song.
-- [ ] Hoàn tất/gián đoạn: lưu campaign state/coverage và per-case verdicts, giữ raw evidence; không nhận Task5 statistics/cross-OS đã hoàn tất. Linux-only kết quả, Windows BLOCKED. Các ngưỡng chưa đạt phải giữ NOT_MET, không sửa plan sau khi nhìn số.
+- [x] PRIMARY khi pilot PASS và đã được phép: thực hiện108rows theo order freeze; headroom/identity gate từng run; posthoc kernel RAM/time gate; lưu cả UNKNOWN, timeout, resource/crash và pending khi dừng. Không chạy song song.
+- [x] Hoàn tất/gián đoạn: lưu campaign state/coverage và per-case verdicts, giữ raw evidence; không nhận Task5 statistics/cross-OS đã hoàn tất. Linux-only kết quả, Windows BLOCKED. Các ngưỡng chưa đạt phải giữ NOT_MET, không sửa plan sau khi nhìn số.
 
 Các command phase trên là giao diện sẽ được viết/review, **không phải lệnh có thể chạy ngay với code33b8023**. Khi người dùng chỉ duyệt triển khai tooling, chỉ làm§6 rồi dừng. Khi người dùng duyệt chạy cảpilot/primary, có thể thực hiện§7 liên tục nếu gates pass, không hỏi lại giữa các cases.
 
@@ -200,3 +200,8 @@ Final tooling gate: **416 passed,134.04s**, gồm64campaign unit tests và exist
 ## 10. Execution snapshot sau authorization
 
 User cho phép prepare/warmup/pilot Linux sau khi commit/push tài liệu. Frozen GitHEAD5b13ca4; campaign `linux-pilot-20261027-v1`:36witness/proof verification PASS, warmup PASS, pilot BASE10 PASS (hard-valid, OPTIMAL, vector0, wall58,461s/peak166,996MiB). OwnerIDLE; source và budgets giữ nguyên. Primary0/108 NOT_RUN; WindowsBLOCKED; chưa Task5/2B/2C. [Báo cáo per-case/evidence/giới hạn](../../phase-2a-pilot-linux-report.md). Các ghi chú chưa authorization/NOT_RUN ở các snapshot trước là lịch sử; quyền mới chỉ bao gồm3phase đã chạy, không primary.
+
+
+## 11. Primary execution snapshot sau authorization
+
+Primary Linux đã chạy nguyên108frozen rows, COMPLETE108/108/pending0, ownerIDLE; không retry hay đổi ngân sách. Qualification-not-met63 được giữ nguyên, không đồng nghĩa correctnessFAIL. Đã kiểm108primary/110total receipts, frozen order/guards/budgets/raw hashes và per-case verdicts. [Báo cáo coverage/evidence](../../phase-2a-primary-linux-report.md). Audit sau execution phát hiện MemTotal lệch4KiB, current execution gateMACHINE_DRIFT được giữ nguyên; không chạy lại hoặc sửa identity. Chưa Task5/2B/2C; WindowsBLOCKED.
