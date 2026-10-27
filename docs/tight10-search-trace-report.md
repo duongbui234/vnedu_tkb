@@ -117,3 +117,7 @@ Không chạy full pytest vì các fixture native khác sẽ vượt authorizati
 Fresh reviewer không findings. Reviewer tự kiểm17manifest digests,candidate/driver hashes,107protected hashes,parent/child identity snapshots,raw markers/byte offsets/counters/metrics; tự recompute260assignments hard-valid vàscore(12,77,4) bằng installed Core dưới guardCpSolver. Không rerun tests/runtime gate/model construction/search;test-command results dựa trên evidence tác giả đã chạy. Không có deferred findings hoặc fix pass,không đổi source sau approval.
 
 Báo cáo/plan chronology được lưu trên nhánh hiện tại,chưa merge/push. Đã dùng quyền user cấp cho đúng một native solve;mọi trace/thí nghiệm tiếp theo cần yêu cầu riêng và snapshot/policy tương ứng. Các artifacts/raw results/candidate lịch sử không bị viết lại.
+
+## Kế hoạch đối chứng tiếp sau trace
+
+Đã lập [kế hoạch cặp logging OFF→ON](superpowers/plans/2026-10-27-tight10-logging-pair.md): hai fresh runs cùng model/seed/workers/budget/guards, common snapshot và approval mới; ghi pre/post workload/power và giới hạn n=1/mode. OFF không log là deliberate absence, không được bỏ independent validation. Lượt này chỉ lập kế hoạch, chưa sửa tooling/Core, tạo candidate hoặc chạy solver; single-trace approval trước không cấp quyền cho cặp mới.
