@@ -113,13 +113,13 @@ Nếu cả hai có nghiệm, có thể báo chênh lệch native wall/CPU và co
 - [x] GREEN dedicated suite với real constructor chặn;`uv sync --locked --extra solver`, ruff check, format src/tests+benchmarks, mypy. Full suite có native solves ngoài scope chuẩn bị thì không chạy. Freeze code sau kiểm chứng; source đổi sau candidate phải candidate mới, không edit metadata cũ.
 - [x] Chỉ chạy pair-prepare bằng installed interpreter với constructor guard để tạo common snapshot/model/identity, pair root mới và candidatehash; ghi legacy drift cùng operational policy. Dừng ở PREPARED_NOT_AUTHORIZED/BLOCKED, không acquire run lease, tạo approval hoặc chạy bất kỳ member nào.
 
-## Task 2 — Một cặp được duyệt riêng, chưa được phép thực hiện
+## Task 2 — Một cặp đã được duyệt và hoàn tất
 
 **Files tương lai:** pair tooling Task1, fresh run artifacts và `docs/tight10-logging-pair-report.md`; không Core changes.
 
-- [ ] Chỉ sau user approval exact pair hash/root/run-IDs/order/snapshot, ghi authorization và kiểm gate/lease/headroom/disk/power trướcOFF. Chạy một fresh child budget60s; persist outcome/receipt/context.
-- [ ] Nếu terminal outcome hợp lệ và fresh gates/AC đủ, chạyON một lần rồi persist, reap, release lease theo protocol. Nếu có blocker/failure theo policy, giữ statePARTIAL/BLOCKED và pending, no automatic retry hoặc sửa artifacts.
-- [ ] Kiểm lại hashes/identity/parameters, validate schedules/score nếu có; report cả hai member kể cảUNKNOWN/NOT_STARTED và giới hạn n=1. Chỉ đề xuất một bước tiếp theo từ evidence; không tự tuning, đổi defaults hoặc chạy thêm cặp.
+- [x] Chỉ sau user approval exact pair hash/root/run-IDs/order/snapshot, ghi authorization và kiểm gate/lease/headroom/disk/power trướcOFF. Chạy một fresh child budget60s; persist outcome/receipt/context.
+- [x] Nếu terminal outcome hợp lệ và fresh gates/AC đủ, chạyON một lần rồi persist, reap, release lease theo protocol. Nếu có blocker/failure theo policy, giữ statePARTIAL/BLOCKED và pending, no automatic retry hoặc sửa artifacts.
+- [x] Kiểm lại hashes/identity/parameters, validate schedules/score nếu có; report cả hai member kể cảUNKNOWN/NOT_STARTED và giới hạn n=1. Chỉ đề xuất một bước tiếp theo từ evidence; không tự tuning, đổi defaults hoặc chạy thêm cặp.
 
 ## Kiểm chứng lượt chỉ lập kế hoạch
 
@@ -129,4 +129,8 @@ Self-review: hai profiles chỉ khác logging bundle, order cố định vàmatc
 
 ## Trạng thái triển khai Task 1
 
-Task 1 hoàn tất với 64 fake-only tests và build-only candidate; xem [preparation report](../../tight10-logging-pair-preparation-report.md). Task 2 vẫn unchecked và chưa được duyệt. Candidate SHA256: `568c69099aae15a2688a4f23f02b6cf1885f8a55e3b6a4c943d3b742f4059da0`. Không có native execution trong lượt triển khai Task 1.
+Task 1 hoàn tất với 64 fake-only tests và build-only candidate; xem [preparation report](../../tight10-logging-pair-preparation-report.md). Tại thời điểm kết thúc Task 1, Task 2 còn unchecked và chưa được duyệt; trạng thái sau approval được ghi ở mục Task 2 bên dưới. Candidate SHA256: `568c69099aae15a2688a4f23f02b6cf1885f8a55e3b6a4c943d3b742f4059da0`. Không có native execution trong lượt triển khai Task 1.
+
+## Trạng thái triển khai Task 2
+
+Đã có exact user approval, chạy một parent OFF→ON / hai native calls, không retry; cả hai COMPLETE / feasibility OPTIMAL, hard-valid 260 assignments và score (12,77,4). Xem [pair report](../../tight10-logging-pair-report.md). Owner IDLE; candidate, source và guards nguyên vẹn. Không chạy thêm; giữ giới hạn n=1/mode.

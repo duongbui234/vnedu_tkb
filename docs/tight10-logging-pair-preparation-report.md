@@ -84,3 +84,7 @@ TDD: original 34 tests giữ GREEN; batch pair tests RED vì API/profile chưa c
 - Một cặp n=1/mode, order cố định, workload/thermal/cache chưa kiểm soát chỉ cho mô tả thăm dò; không P95/median/SLA/causal claim. Ba repeats của campaign cũ giữ riêng, không bổ sung hoặc gộp với hai treatments mới.
 
 Task 1 dừng tại PREPARED_NOT_AUTHORIZED. Bước kế tiếp là review candidate/hash/drift và điều kiện Task 2; chưa chạy tự động.
+
+## Trạng thái sau preparation
+
+Sau báo cáo prepare-only này, user đã duyệt exact candidate/hash/drift để chạy Task 2 một lần. Kết quả và giới hạn được ghi riêng trong [logging pair report](tight10-logging-pair-report.md); snapshot và các số liệu prepare ở trên giữ nguyên lịch sử.
