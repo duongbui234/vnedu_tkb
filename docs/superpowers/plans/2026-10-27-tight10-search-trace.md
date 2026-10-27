@@ -103,17 +103,17 @@ Nếu có nghiệm: dùng public hard validator/scorer và so raw/weighted/tier 
 - Owner/PID/reap/headroom thất bại phải giữ evidence và không kill nhầm process/retry.
 - FeasibilityOPTIMAL,UNKNOWN,score recomputation và harness errors phải được báo riêng, không giả optimality/TTF.
 
-## Task 1 — Triển khai prepare/instrumentation và tests không search, CHƯA THỰC HIỆN
+## Task 1 — Triển khai prepare/instrumentation và tests không search, ĐÃ PREPARE KHÔNG SEARCH
 
 **Files tương lai:** Create `benchmarks/trace_tight10.py`, `benchmarks/tests/test_trace_tight10.py`; chỉ docs bổ sung nếu cần. Đọc/tái dùng runner helpers và installed `_run_stage`, không sửa chúng.
 
 **Interfaces:** `capture_identity() -> dict[str,JsonValue]` chạy trong installed interpreter; `compare_identity(expected: dict[str,JsonValue], actual: dict[str,JsonValue]) -> tuple[str,...]` trả differing field paths; `trace_feasibility(prepared: PreparedProblem,built: BuiltModel,compiled: CompiledSoft,options: SolveOptions,log_path: Path) -> dict[str,JsonValue]` gọi một stage chỉ khi parent/child run authorization gates đã PASS. CLI hai mode public tường minh `prepare` và `run`, không default execution; private `_child` chỉ là entry của supervised child theo lease/authorization protocol trên. Prepare không gọi trace_feasibility. Unknown flags/schema fields/version bị từ chối.
 
-- [ ] Viết failing tests với constructor thật bị chặn,inject FakeSolver/FakeStage: `test_prepare_never_constructs_solver`; `test_runtime_or_model_drift_blocks`; `test_legacy_memtotal_drift_needs_explicit_new_baseline`; `test_approved_snapshot_new_drift_blocks`; `test_only_one_feasibility_call_and_parameters_unchanged`; `test_callback_error_and_truncated_log_remain_incomplete`; `test_zero_branches_is_not_presolve_proof`; `test_missing_approval_or_owner_prevents_spawn`; `test_direct_child_requires_matching_parent_lease_and_authorization`; `test_unknown_and_feasibility_optimal_have_no_quality_proof`; `test_no_schedule_on_independent_mismatch`. Test stage flags/gaps/options,exclusive output và callback patch restoration cả khi exception.
-- [ ] Chạy `uv run --extra solver pytest benchmarks/tests/test_trace_tight10.py -q` để quan sát RED; chưa có module/tests ở lượt hiện tại. Các tests mới phải hoàn toàn fake/no-search,không gọi native tiny solve để làm smoke logging.
-- [ ] Implement minimum single-target driver theo protocol trên. Strict manifests dùng schema_version1.0 và key validation; serialize bằng helper hiện có,không thêm frameworks hoặc benchmark matrix. Tests gate/reap/cancel mô phỏng supervisor boundary; reuse semantics hiện có,không reimplement signaling.
-- [ ] Chạy lại tests mới GREEN, `uv sync --locked --extra solver`,ruff check,format src/tests+benchmarks,mypy; không full pytest có solve nếu scope vẫn cấm search.
-- [ ] Chạy **chỉ prepare không search** bằng target installed interpreter để tạo candidate mới,verify hashes/build-only và ghi exact legacy/current identity. Giữ constructor thật bị chặn trong prepare. Output phải tự mô tả PREPARED_NOT_AUTHORIZED hoặc BLOCKED có reason; không in READY_FOR_SEARCH chỉ vì tests green. Giao candidate hash/drift và dừng,chưa thực hiện Task2.
+- [x] Viết failing tests với constructor thật bị chặn,inject FakeSolver/FakeStage: `test_prepare_never_constructs_solver`; `test_runtime_or_model_drift_blocks`; `test_legacy_memtotal_drift_needs_explicit_new_baseline`; `test_approved_snapshot_new_drift_blocks`; `test_only_one_feasibility_call_and_parameters_unchanged`; `test_callback_error_and_truncated_log_remain_incomplete`; `test_zero_branches_is_not_presolve_proof`; `test_missing_approval_or_owner_prevents_spawn`; `test_direct_child_requires_matching_parent_lease_and_authorization`; `test_unknown_and_feasibility_optimal_have_no_quality_proof`; `test_no_schedule_on_independent_mismatch`. Test stage flags/gaps/options,exclusive output và callback patch restoration cả khi exception.
+- [x] Chạy `uv run --extra solver pytest benchmarks/tests/test_trace_tight10.py -q` để quan sát RED; chưa có module/tests ở lượt hiện tại. Các tests mới phải hoàn toàn fake/no-search,không gọi native tiny solve để làm smoke logging.
+- [x] Implement minimum single-target driver theo protocol trên. Strict manifests dùng schema_version1.0 và key validation; serialize bằng helper hiện có,không thêm frameworks hoặc benchmark matrix. Tests gate/reap/cancel mô phỏng supervisor boundary; reuse semantics hiện có,không reimplement signaling.
+- [x] Chạy lại tests mới GREEN, `uv sync --locked --extra solver`,ruff check,format src/tests+benchmarks,mypy; không full pytest có solve nếu scope vẫn cấm search.
+- [x] Chạy **chỉ prepare không search** bằng target installed interpreter để tạo candidate mới,verify hashes/build-only và ghi exact legacy/current identity. Giữ constructor thật bị chặn trong prepare. Output phải tự mô tả PREPARED_NOT_AUTHORIZED hoặc BLOCKED có reason; không in READY_FOR_SEARCH chỉ vì tests green. Giao candidate hash/drift và dừng,chưa thực hiện Task2.
 
 ## Task 2 — Một trace đã được duyệt, CHƯA ĐƯỢC PHÉP CHẠY
 
@@ -130,3 +130,9 @@ Nếu có nghiệm: dùng public hard validator/scorer và so raw/weighted/tier 
 Self-review: hai task tách no-search preparation khỏi separately authorized execution; giữ budget/guards,định nghĩa logging changes,strict identity và ownership/output. Lệnh checks thực chạy sẽ ghi bổ sung sau khi hoàn tất tài liệu. Không có số đo/benchmark mới hoặc claim gatePASS/Windows support.
 
 Kiểm tra tài liệu thực chạy: `uv sync --locked --extra solver` PASS/lock không đổi; `uv run ruff check .` PASS; `uv run ruff format --check src tests` PASS44files; `uv run mypy` PASS27source files; link/scope/plan self-review và `git diff --check` PASS. Không chạy pytest vì suite có solve,không chạy model build/driver/preflight/runtime gate hoặc native logging smoke. Các đoạn API lấy từ pinned local source/pyi,không thay thế kiểm chứng live trace; các task vẫn unchecked.
+
+## Ghi nhận thực hiện Task1
+
+Task1 đã triển khai prepare/instrumentation và34fake-only tests; guarded no-search regression121PASS,ruff/format/mypyPASS. Installed-wheel prepare tạo candidate `802f1f06ab5565d5b09c994fe1cb8c7044c8469096a2e130ce1be53ab9d77006`,statusPREPARED_NOT_AUTHORIZED;legacy gateBLOCKED_MACHINE_DRIFT chỉ fieldMemTotal−4KiB. Không authorization/search/Task2. [Báo cáo Task1 và candidate](../../tight10-trace-preparation-report.md). Các câu “chỉ lập kế hoạch” phía trên mô tả lượt viết kế hoạch trước đó;không thay quyền chạy Task2.
+
+Fresh reviewTask1 có1P2log close/read error; đã sửa bằng2regressionsRED→GREEN,guarded121testsPASS. Candidatev1 giữ lịch sử nhưng stale driver; finalcandidatev2 ở `tight10-trace-prepare-v2/` giữ PREPARED_NOT_AUTHORIZED,không authorization/Task2.
