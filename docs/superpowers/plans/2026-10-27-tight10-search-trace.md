@@ -115,13 +115,13 @@ Nếu có nghiệm: dùng public hard validator/scorer và so raw/weighted/tier 
 - [x] Chạy lại tests mới GREEN, `uv sync --locked --extra solver`,ruff check,format src/tests+benchmarks,mypy; không full pytest có solve nếu scope vẫn cấm search.
 - [x] Chạy **chỉ prepare không search** bằng target installed interpreter để tạo candidate mới,verify hashes/build-only và ghi exact legacy/current identity. Giữ constructor thật bị chặn trong prepare. Output phải tự mô tả PREPARED_NOT_AUTHORIZED hoặc BLOCKED có reason; không in READY_FOR_SEARCH chỉ vì tests green. Giao candidate hash/drift và dừng,chưa thực hiện Task2.
 
-## Task 2 — Một trace đã được duyệt, CHƯA ĐƯỢC PHÉP CHẠY
+## Task 2 — Một trace đã được duyệt, ĐÃ THỰC HIỆN MỘT ATTEMPT ĐƯỢC DUYỆT
 
 **Files tương lai:** Tooling Task1 và fresh trace evidence; report `docs/tight10-search-trace-report.md`. Không sửa Core/historical artifacts.
 
-- [ ] Chỉ sau yêu cầu rõ cho **một run** trên approved candidate hash,ghi authorization scope. Chạy gate/lease/headroom/installed identity rechecks rồi một supervised child; không auto warmup,repeat hoặc gọi lại sau bất kỳ failure.
-- [ ] Giữ native logs,response và harness metadata,validate mọi assignments/score nếu có; diễn giải phase boundaries/counters với missing-data limits đã nêu. Không cần profiler hoặc second run để hoàn tất báo cáo nếu trace thiếu.
-- [ ] Báo trạng thái observed presolve/search/UNDETERMINED cùng raw evidence,logging overhead/comparability limits và đúng một đề xuất tiếp sau. Không tự tuning,budget increase hoặc kết luận root cause từ một trace.
+- [x] Chỉ sau yêu cầu rõ cho **một run** trên approved candidate hash,ghi authorization scope. Chạy gate/lease/headroom/installed identity rechecks rồi một supervised child; không auto warmup,repeat hoặc gọi lại sau bất kỳ failure.
+- [x] Giữ native logs,response và harness metadata,validate mọi assignments/score nếu có; diễn giải phase boundaries/counters với missing-data limits đã nêu. Không cần profiler hoặc second run để hoàn tất báo cáo nếu trace thiếu.
+- [x] Báo trạng thái observed presolve/search/UNDETERMINED cùng raw evidence,logging overhead/comparability limits và đúng một đề xuất tiếp sau. Không tự tuning,budget increase hoặc kết luận root cause từ một trace.
 
 ## Kiểm chứng lượt chỉ lập kế hoạch
 
@@ -136,3 +136,7 @@ Kiểm tra tài liệu thực chạy: `uv sync --locked --extra solver` PASS/loc
 Task1 đã triển khai prepare/instrumentation và34fake-only tests; guarded no-search regression121PASS,ruff/format/mypyPASS. Installed-wheel prepare tạo candidate `802f1f06ab5565d5b09c994fe1cb8c7044c8469096a2e130ce1be53ab9d77006`,statusPREPARED_NOT_AUTHORIZED;legacy gateBLOCKED_MACHINE_DRIFT chỉ fieldMemTotal−4KiB. Không authorization/search/Task2. [Báo cáo Task1 và candidate](../../tight10-trace-preparation-report.md). Các câu “chỉ lập kế hoạch” phía trên mô tả lượt viết kế hoạch trước đó;không thay quyền chạy Task2.
 
 Fresh reviewTask1 có1P2log close/read error; đã sửa bằng2regressionsRED→GREEN,guarded121testsPASS. Candidatev1 giữ lịch sử nhưng stale driver; finalcandidatev2 ở `tight10-trace-prepare-v2/` giữ PREPARED_NOT_AUTHORIZED,không authorization/Task2.
+
+## Ghi nhận Task2 — một trace đã được user duyệt
+
+User duyệt riêng candidatev2 hash802f1f06ab5565d5b09c994fe1cb8c7044c8469096a2e130ce1be53ab9d77006,run-ID/root vàMemTotal−4KiB. Đã chạy đúng1native feasibility attempt,khôngretry:search marker0.15s,rawOPTIMAL ở55.924939301s,260hard-valid assignments,score(12,77,4),không qualityproof. HarnessCOMPLETE/measurementOK,ownerIDLE,17artifact hashes và107protected hashes khớp. Legacy gate vẫnMACHINE_DRIFT. [Báo cáo Task2/giới hạn/đề xuất](../../tight10-search-trace-report.md). Các câu Task2chưađượcphépchạy ở phần lịch sử ghi nhận Task1 không thay approval riêng của lượt này.

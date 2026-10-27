@@ -78,3 +78,7 @@ Fresh reviewer rà driver/tests/plan/candidate và tự chạy32tests trước l
 Candidatev1 tại `tight10-trace-prepare-v1/`,hash `ca4817b0bc09447fc67cd4239002f49d7f2652a726290ed547f6d7f4dfde7a78`,được giữ nguyên. Nó freeze driver cũ nên **không còn khớp source hiện tại**,không dùng để duyệt execution. Không sửa status/hash trongv1 để giả còn hợp lệ; chỉ preparev2 mới phản ánh driver đã sửa. Candidatev2 cũng chưa được cấp quyền chạy; approval chỉ có thể được xem xét cho đúng hash/run-ID/output root của nó.
 
 Kiểm chứng cuối: candidatev2/driver SHA khớp,không authorization/START/attempt trong cảv1/v2;107historical input/source/evidence hashes vẫn nguyên. Scope tracked chỉ new tooling/tests và docs,không Core/frozen runner/generator/lock. Thay đổi được giữ trên nhánh/worktree hiện tại,chưa merge/push.
+
+## Cập nhật Task2 sau approval riêng
+
+Sau Task1,user đã duyệt đúng candidatev2/run-ID/root và drift−4KiB. Một feasibility trace đã được thực hiện,không retry;rawOPTIMAL/260hard-valid assignments,score(12,77,4),khôngqualityproof. [Báo cáo trace và giới hạn](tight10-search-trace-report.md). Nội dung PREPARED_NOT_AUTHORIZED/Task2chưachạy phía trên là snapshot Task1;candidate JSON cũ không được sửa,approval nằm ởfile riêng.
