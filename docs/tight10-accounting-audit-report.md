@@ -79,3 +79,7 @@ Lệnh thực chạy: `python3 .superpowers/sdd/tight10-accounting-audit/audit.p
 ## Đúng một bước tiếp theo — chưa thực hiện
 
 **Chỉ lập kế hoạch đo CPU user+system riêng quanh native feasibility solve và lưu native work counters tại kết thúc/deadline, trên cùng mẫu/options/guards.** Mục đích là bỏ confound accounting toàn child trong một diagnostic tương lai; không hứa tái hiện UNKNOWN hoặc chứng minh causality từ một mẫu. Kế hoạch cần chỉ rõ boundary đo, overhead/instrumentation, fake tests, source/candidate hash mới và approval riêng trước native run; không tự thêm retries, đổi budgets hoặc chạy để tìm mẫu UNKNOWN. Lượt audit này chưa lập kế hoạch, triển khai instrumentation hoặc thực hiện phép đo đó.
+
+## Kế hoạch tiếp sau audit
+
+Đã lập [kế hoạch native feasibility CPU](superpowers/plans/2026-10-27-tight10-native-cpu.md): rusage/self quanh bound native call, final response counters, fixed logging OFF và candidate/approval mới. Lượt lập kế hoạch chỉ docs; chưa instrumentation/prepare/candidate hoặc native run thêm.
