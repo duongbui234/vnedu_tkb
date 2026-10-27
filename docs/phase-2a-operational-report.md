@@ -271,3 +271,7 @@ Evidence mới: `benchmarks/artifacts/phase2a/task4-linux-tooling-v1/verificatio
 ## Task4 Linux — primary campaign hoàn tất
 
 **VERIFIED — COMPLETE108/108, pending0, ownerIDLE.** Runner ghi `failed=63` theo qualification gate, không phải63correctness failures; không có verdict correctnessFAIL hoặc historical safety stop trong receipts đã kiểm.108primary+2setup/pilot receipts/hash/order/budgets đã được đối chiếu, raw outcomes giữ nguyên. Audit hiện tại có `MACHINE_DRIFT` do MemTotal lệch4KiB; không bypass gate hoặc chạy lại. [Báo cáo per-case coverage và giới hạn](phase-2a-primary-linux-report.md). Chưa Task5/2B/2C; WindowsBLOCKED.
+
+## Task 5 Linux — tổng hợp campaign đã hoàn tất
+
+Task5 Linux đã tổng hợp108primary từ campaign `linux-pilot-20261027-v1`, giữ nguyên raw evidence và không chạy lại solver campaign. Pilot performance **NOT_MET**:27TIGHT UNKNOWN/không có lịch và36BASE/MIXED20–40lớp có lịch hard-valid nhưng chưa zero.54/54lịch hard/score recheck khớp;27UNSAT đúng; không correctnessFAIL quan sát được,27UNKNOWN giữ NOT_ASSESSED. Windows **BLOCKED**, chưa2B/2C/repair. [Báo cáo, thống kê theo fingerprint và giới hạn](phase-2a-task5-linux-report.md). Các mục chưa Task5 ở trên là snapshot lịch sử.

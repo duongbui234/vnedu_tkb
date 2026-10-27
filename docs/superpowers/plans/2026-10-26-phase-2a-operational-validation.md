@@ -255,3 +255,9 @@ Review độc lập Task 1 hoàn tất: Ship within Task 1 scope, không Critica
 ## Ghi nhận Task 2 Linux — 2026-10-26
 
 Người dùng duyệt thực hiện phần Linux. Hai clean venv dùng cùng wheel/lock, installed-package path/source check,232 Core tests,13 CLI smoke cases, registry pending-rule/no-solver guard và verify36datasets đều PASS. Windows **BLOCKED**, Task2 overall **PARTIAL**; không bắt đầu Task3-5, không benchmark hoặc2B/2C. Xem [báo cáo preflight](../../phase-2a-operational-report.md). Chỉ report/kế hoạch thay đổi; chưa commit/merge/push Task2.
+
+## Ghi nhận Task 5 Linux — 2026-10-27
+
+Task5 **phần Linux** đã triển khai aggregator read-only riêng tại `benchmarks/aggregate_linux.py` để giữ source identity của runner đã freeze. Đã tổng hợp108primary, kiểm110receipts và recheck hard/score trên kết quả lưu; không chạy lại campaign search. [Báo cáo](../../phase-2a-task5-linux-report.md): performanceNOT_MET (27NO_SCHEDULE +36ZERO_TARGET_NOT_MET); correctness không FAIL quan sát được nhưng coverageINCOMPLETE do27UNKNOWN. Denominator108được giữ đủ; statistics chỉ trong từng dataset/fingerprint, không P95/SLA từ3repeats. Đã đề xuất điều tra TIGHT10, chưa thực hiện tuning/2B/2C/repair. WindowsBLOCKED nên Task5/toàn campaign **hai OS** cònPARTIAL; checkboxes mục Task5 phía trên không phải tuyên bố nghiệm thu hai OS.
+
+Nghiệm thu Task5 **Linux-only**: [x] regression aggregator hỗn hợp/null/fingerprint; [x] đối chiếu gates và phân rã63not-qualified; [x] báo riêng Z/C/UNSAT và proof; [x] đề xuất điều tra TIGHT10, chưa thực thi. Full suite439PASS, lint/format/mypyPASS; fresh review không findings. Đây không đánh dấu Windows hoặc toàn Phase2 đã đạt.
