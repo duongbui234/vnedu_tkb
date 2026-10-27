@@ -184,3 +184,7 @@ Kiểm chứng cuối và review được ghi ở phần bổ sung bên dưới 
 Reviewer fresh-context kết luận **Ship trong phạm vi Task5 Linux**, không Critical/Important/Minor findings. Reviewer chạy riêng23aggregator tests PASS/31.61s; tự đối chiếu115hashes trong summary,108outcome rows và36dòng Markdown timing/RSS với evidence. Không chạy solver campaign, không sửa file. Reviewer không chạy độc lập full suite/lint/mypy hoặc kiểm Windows/current execution eligibility; các kiểm tra full-suite/tooling do tác giả chạy và kết quả ghi ở trên. Không có deferred minors hoặc fix pass sau review.
 
 Thay đổi được giữ riêng trên nhánh `feature/phase2a-task5-linux-summary` tại worktree `.worktrees/phase2a-task5` để review/tích hợp; chưa merge main hoặc push. Các rulings: module aggregator riêng giữ frozen runner hash; lịch sử được kiểm bằng frozen evidence thay vì live execution gate; full regression dùng tiny solves được AGENTS yêu cầu, không lặp search campaign. Chi phí/giới hạn tương ứng: phải giữ local paths/source snapshot; không xác nhận được máy hiện tại chạy mới; regression runtime không là benchmark sản phẩm.
+
+### Kế hoạch chẩn đoán tiếp sau Task5
+
+Đã lập [kế hoạch TIGHT10 tĩnh](superpowers/plans/2026-10-27-tight10-static-diagnosis.md) cho `c10-tight-s101`. Đối chiếu planning baseline cho thấy witness hard-valid/score(0,78,0),260/260placements khớp domain;3lượt lịch sử UNKNOWN ở feasibility. Chưa build model/search/profiling hoặc sửa Core; chưa xác định nguyên nhân gốc. Các bước build-only/bounds check trong kế hoạch cần yêu cầu thực hiện riêng.
