@@ -103,3 +103,7 @@ Review độc lập cuối lượt đã đối chiếu candidate/driver hashes, 
 Ruling giữ nguyên: không chạy full pytest vì có native solves ngoài hai calls đã duyệt; các native integration paths khác không được chạy lại. Không sửa code/Core/legacy gates/budget/guards, không thêm repeat hoặc dataset. Windows vẫn BLOCKED.
 
 Bước tiếp theo được đề xuất: tổng hợp static witness, single trace và cặp logging để phân biệt điều đã chứng minh với giả thuyết còn mở về UNKNOWN; chưa tự thực hiện điều tra hoặc phép đo thêm.
+
+## Tổng hợp tiếp sau pair
+
+Đã có [báo cáo tổng hợp static/single/pair](tight10-evidence-synthesis.md), phân biệt kết luận với giả thuyết còn mở về UNKNOWN. Đề xuất hiện tại duy nhất là audit read-only process accounting/context từ receipts đã lưu; chưa thực hiện audit hoặc native measurement thêm.
