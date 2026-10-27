@@ -1,6 +1,6 @@
-# TIGHT10 Task 1 — build-only witness, hard occupancy và compiler bounds
+# TIGHT10 — witness, hard model và compiled auxiliaries
 
-**Task 1: PASS trong phạm vi các phép kiểm dưới đây. Không có search/profiling hoặc solver status mới. Chưa xác nhận witness thỏa mọi compiled equality; nguyên nhân UNKNOWN còn mở. Task 2 đã tổng hợp kết luận ở phần cuối báo cáo; Windows BLOCKED.**
+**Cập nhật mới nhất: witness mở rộng thỏa 4,700variable domains và toàn1,255constraints của đúng model `c10-tight-s101`; score khớp độc lập(0,78,0). Không có search/profiling hoặc solver status mới; nguyên nhân UNKNOWN còn mở, Windows BLOCKED. Task1/Task2 phía dưới là lịch sử; kết quả kiểm auxiliary ở phần cuối.**
 
 ## Phạm vi và identity
 
@@ -145,3 +145,69 @@ Các lệnh thực chạy: Git branch/status/log; read-only Python hash/count as
 Windows vẫnBLOCKED, machine drift4KiB/execution eligibility chưa được xác nhận. Không bypass gate hoặc thực hiện search/profiling; mọi yêu cầu search trace sau này phải được tách riêng theo policy của kế hoạch. Hiện chưa có kết luận root cause hoặc hiệu năng mới.
 
 Kiểm chứng cuối Task2: links/scope và `git diff --check` PASS, chỉ report này thay đổi. Fresh reviewer không actionable findings; xác nhận kết luận nhánh thứ ba, đúng một đề xuất chưa thực thi và các giới hạn/provenance được giữ rõ. Reviewer chỉ đọc diff/plan/report/saved evidence, không chạy scripts/tests/build/solver hoặc tự lặp hash/tooling checks. Không deferred findings; chưa merge/push.
+
+## Kiểm chứng phần mở rộng auxiliary của witness — build-only
+
+Người dùng đã yêu cầu thực hiện phép kiểm được Task2 đề xuất; lượt này chỉ kiểm model mẫu và cập nhật báo cáo, không sửa Core/budget hoặc triển khai search trace. Nhánh `feature/phase2a-task5-linux-summary`, baseline `f5e9b9da39d907b21062888a90b15eb6dd7834e2`; giữ cùng input/witness/source/options và fingerprint `126305e097cb33eb0fc9803061b9817c70127c4a1bfd2085cb006a2c2428b0ee`.
+
+### Phương pháp kiểm riêng cho model này
+
+Probe one-off mới đặt ở scratch, không thêm module/API/evaluator sản phẩm. Chặn `cp_model.CpSolver` trước import helpers/build; số constructor calls bằng0, không import solver entry modules `tkb_core.solver.cp_sat`/`objectives` hoặc gọi solve/presolve/profiling. Không có timer, hints, equality cố định witness hoặc constraint/bound mới để làm kiểm tra pass.
+
+1. Đối chiếu15hashes từ Task1 execution manifest, manifest đó và26raw/65tracked source/test/tooling/config files: **107protected files** đều khớp trước/sau. Core/generator/lock khớp frozen sources,3receipts giữ UNKNOWN. Tái chạy independent hard validator/scorer trên witness; kết quảhard-valid và(0,78,0) khớp baseline.
+2. Dựng hard model và compile một lần; model stats khớp snapshot Task1,structural validation rỗng,objective rỗng. Gán4,386placement Booleans theo260witness mappings; mapping indices/start/room/full footprint khớp Task1,260Booleans bằng1.
+3. Với254LinMax, chỉ chấp nhận target một biến auxiliary,coefficient1/offset0 và hai operands `[0, Boolean-load−limit]`; load dùng placement indices với coefficients1/2 vàoffset≤0. Tính target bằng max của hai operands từ **actual proto expressions**. Không dùng score độc lập để chọn giá trị auxiliary.
+4. Với60Linear, chỉ chấp nhận equality domain[0,0],một raw variable chưa gán với coefficient±1 và các biến còn lại đã biết. Tính raw từ equality. Đây là phép thế số trên dạng đã xác nhận, không vòng tìm kiếm hoặc interpreter tổng quát; dạng/reification/reference/domain khác làm probe dừng bằng assert.
+5. Sau khi có đủ4,700giá trị, duyệt lại **toàn bộ actual constraints** và variable domains bằng valuation cố định. Flatten actual compiled raw/weighted/tier expressions qua `FlatIntExpr` để tính giá trị và so với independent scorer. Snapshot proto và domains trước/sau valuation phải giữ nguyên.
+
+### Kết quả
+
+| Phép kiểm | Kết quả |
+|---|---|
+| Auxiliary values tính được | 314 =254max targets+60raw values |
+| Max equalities trong proto | 254/254 target bằngmax(operands) |
+| Raw equalities trong proto | 60/60 linear sums thuộc[0,0] |
+| Variable domains | 4,700/4,700 giá trị nằm trong declared domains |
+| Hard constraints kiểm lại | 260/260ExactlyOne và681/681AtMostOne thỏa |
+| Constraints tổng | **1,255/1,255 thỏa**, không enforcement literals hoặc unsupported types |
+| Rule score | 60/60raw và60/60weighted expressions khớp independent score |
+| Tier score | Cả3tiers khớp **(0,78,0)** |
+| Model/domains | Không đổi khi gán valuation trong dictionary Python |
+| Search/profiling/status mới | Không có; không tạo hoặc ghi đè ScheduleResult |
+
+**Kết luận có phạm vi:** có một valuation đầy đủ mở rộng từ witness, thỏa mọi variable domain và constraint của model cụ thể sau compile/clear_objective đã kiểm. Vì vậy, trên đúng model/witness/fingerprint này, compiled auxiliary equations và domains **không loại witness**. Khoảng trống “chưa kiểm mọi compiled equality” của Task1/Task2 đã được đóng cho mẫu này; các phần trước và artifacts cũ giữ đúng lịch sử kiểm tra.
+
+Điều này không chứng minh compiler đúng cho mọi input/lịch hoặc witness tối ưu, không tạo solver OPTIMAL/FEASIBLE claim và không thay ba historical UNKNOWN. Chưa có trace để phân biệt presolve, branching, symmetry hoặc môi trường; việc có witness thỏa model không giải thích vì sao các lượt tìm kiếm chưa thấy nghiệm trong60s.
+
+### Self-checks và evidence
+
+Đã quan sát RED khi probe chưa tồn tại, sau đó5scratch `unittest` self-checks PASS: arithmetic với offsets/coefficients,unknown/negative references,max targets/raw equalities bị đổi sai,domain endpoints và unsupported domain/equality forms. Không có Core/tests sản phẩm được thêm/sửa. Replay saved JSON không import Core/OR-Tools kiểm lại4,700domains/1,255constraints/60rule scores/3tiers; hai phép thử đổi sai một max auxiliary và một raw auxiliary đều bị checker từ chối.107protected file hashes vẫn khớp.
+
+Evidence local tại `.worktrees/phase2a-task5/benchmarks/artifacts/phase2a/tight10-auxiliary-v1/`:
+
+- `summary.json`: SHA256 `56feb4152f5d37ac8b4b327b0259cd680211dc1ac7be2138c3cd70a7f52ec400`; result nội bộ `SATISFIED_BY_EXTENDED_WITNESS`,không là SolveStatus.
+- `probe.py`: SHA256 `ab2e29c558b5e52363d8c5109911f2f03ac25896688c4f658eed9dd53c3eef14`; có5self-checks trong `test_probe.py`,replay `verify_saved.py`,stdout/stderr và execution manifest.
+- `variables.json`, `constraints.json`, `auxiliary-derivations.json`: đầy đủvaluation,actual expressions/coefficients/domains và kết quả từng constraint. `rule-scores.json`, `tier-scores.json`, `independent-score.json`: actual expression arithmetic và independent comparison.
+- `model-proto.txt`: SHA256 `f8c390bc03b2ac6d1d176461c142d59bd0b869c189b0b230efd6f6f04b858083`; `protected-hashes.json` giữ107snapshot hashes. Evidence mới không ghi đè Task1/Task5/raw campaign và không commit/upload dữ liệu generated.
+
+| Lệnh thực chạy | Kết quả |
+|---|---|
+| `uv sync --locked --extra solver` | PASS,lock không đổi |
+| `uv run --extra solver python .superpowers/sdd/tight10-auxiliary-witness/test_probe.py` | 5tests PASS sau RED import probe chưa có |
+| `uv run --extra solver python .superpowers/sdd/tight10-auxiliary-witness/probe.py` | Exit0,asserts PASS,solver guard calls0 |
+| `uv run --extra solver python .superpowers/sdd/tight10-auxiliary-witness/verify_saved.py` | Replay/mutation checks và107hashes PASS |
+| `uv run ruff check .` | PASS |
+| `uv run ruff format --check src tests` | PASS44files |
+| `uv run mypy` | PASS27Core source files |
+
+Không chạy full pytest vì suite có solve;439PASS của Task5 vẫn là lịch sử. Không đo benchmark, sửa Core/config/dependencies, thay60s/workers1/seed42/guards hoặc mở2B/2C/repair. Windows BLOCKED và current execution eligibility/machine drift4KiB chưa được giải quyết bằng static check.
+
+**Đúng một bước tiếp theo được đề xuất, chưa thực hiện:** lập kế hoạch thu search trace tối thiểu cho `c10-tight-s101` để phân biệt presolve với branching, giữ nguyên60s/workers1/seed42 và guards; xác định instrumentation/output/measurement method và cách xử lý execution identity gate trước khi xin thực hiện. Lượt này chưa lập/chạy campaign trace, profiling hoặc tuning.
+
+### Kiểm chứng cuối phép kiểm auxiliary
+
+15entries của execution manifest khớp hashes; summary,report links và report-only tracked diff đã được đối chiếu bằng asserts, `git diff --check` PASS. Ruff/format/mypy được chạy lại và vẫnPASS. Không cần sửa probe hoặc Core sau kiểm chứng.
+
+Fresh reviewer không actionable findings. Reviewer tự replay saved data và hai mutation checks, kiểm107protected hashes và script copies; đặc biệt deserialize **saved model-proto.txt** dưới guard `CpSolver` rồi đối chiếu từng variable definition và constraint payload với JSON (4,700variables/1,255constraints), xác nhận không objective và guard calls0. Reviewer đọc arithmetic/derivation/independent scoring/immutability; không chạy lại probe, build model, solver/search/profiling hoặc full suite. Không có deferred findings.
+
+Phạm vi còn lại: đây là một satisfying witness extension cho đúng model đã lưu, không là chứng minh tối ưu/correctness tổng quát hoặc lời giải thích UNKNOWN. Báo cáo được giữ trên nhánh hiện tại; chưa merge/push hoặc thực hiện đề xuất trace.
