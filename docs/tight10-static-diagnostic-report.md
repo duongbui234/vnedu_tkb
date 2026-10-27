@@ -1,6 +1,6 @@
 # TIGHT10 Task 1 — build-only witness, hard occupancy và compiler bounds
 
-**Task 1: PASS trong phạm vi các phép kiểm dưới đây. Không có search/profiling hoặc solver status mới. Chưa xác nhận witness thỏa mọi compiled equality; nguyên nhân UNKNOWN còn mở. Task 2 chưa thực hiện, Windows BLOCKED.**
+**Task 1: PASS trong phạm vi các phép kiểm dưới đây. Không có search/profiling hoặc solver status mới. Chưa xác nhận witness thỏa mọi compiled equality; nguyên nhân UNKNOWN còn mở. Task 2 đã tổng hợp kết luận ở phần cuối báo cáo; Windows BLOCKED.**
 
 ## Phạm vi và identity
 
@@ -107,3 +107,41 @@ Chỉ ghi kết quả các phép kiểm Task1; Task2 chốt hướng điều tra
 Fresh reviewer kết luận không actionable findings trong Task1. Reviewer đọc probe và connected builder/compiler/helper paths; tự kiểm hashes,26raw/65tracked snapshots, counts, per-rule/tier bounds,3historical statuses và model stats. Reviewer không rerun probe/build, tests hoặc search/profiling; kết quả guard/log là evidence trong workflow local, không phải phép chứng minh độc lập về mọi hoạt động quá khứ. Không có Critical/Important/Minor cần sửa hoặc deferred findings.
 
 Hai rulings về phạm vi: dùng asserts/build-only thay full pytest vì lệnh cấm search của người dùng; chỉ kiểm actual hard Boolean constraints và auxiliary bounds, không thêm generic proto evaluator. Hệ quả: không có regression suite mới hoặc xác nhận toàn bộ auxiliary equalities. Giữ nhánh/worktree để review; chưa merge/push và chưa thực hiện Task2.
+
+## Task 2 — Tổng hợp evidence và chốt một bước điều tra tiếp theo
+
+**Đã thực hiện phần tổng hợp Task2 trên nhánh `feature/phase2a-task5-linux-summary`, baseline `790d4b9`.** Các câu “Task2 chưa thực hiện” ở phần Task1 phía trên và trong artifacts là snapshot lịch sử tại thời điểm Task1; raw evidence được giữ nguyên.
+
+### Kết luận theo ba nhánh của kế hoạch
+
+**Chọn nhánh: static checks pass trong phạm vi Task1, nhưng nguyên nhân UNKNOWN còn mở.** Không phát hiện identity/witness mismatch hoặc hard-model/bound mismatch trong các phép kiểm đã có; không suy rằng toàn bộ compiler hoặc solver đã được chứng minh đúng.
+
+| Bằng chứng đã có | Kết luận được phép |
+|---|---|
+| Identity/hashes và260witness mappings khớp | Không thấy stale witness hoặc mất placement trên đúng input này |
+| Witness thỏa260ExactlyOne/681AtMostOne của actual hard proto | Witness thỏa hard Boolean model đã kiểm, gồm full resource/token occupancy |
+| 60raw/weighted bounds và3tier bounds chứa giá trị(0,78,0) | Không thấy bound được kiểm loại witness; chưa đánh giá các auxiliary equalities |
+| Structural validation rỗng, objective rỗng sau compile | Model có cấu trúc hợp lệ;254LinMax+60Linear vẫn hiện diện trong feasibility |
+| Ba raw UNKNOWN ở feasibility, mọi quality tier NOT_RUN | Chưa tìm được nghiệm trong các lần lịch sử; không chứng minh vô nghiệm hoặc chỉ ra presolve/branching là nguyên nhân |
+
+Task1 chưa cung cấp valuation của314auxiliary variables để đối chiếu254max-equalities và60raw equalities. Vì vậy chưa thể kết luận witness có phần mở rộng thỏa **toàn model sau compile**, cũng chưa đủ căn cứ chuyển nguyên nhân sang search difficulty, symmetry hay môi trường. Số314constraints thêm vào không tự chứng minh chúng làm solver chậm.
+
+### Đúng một bước tiếp theo được đề xuất — chưa thực hiện
+
+**Kiểm chứng tĩnh phần mở rộng auxiliary của witness trên đúng314constraints sau compile của `c10-tight-s101`.** Đây là one-off probe dành riêng cho model mẫu này, không là generic CP-SAT proto evaluator, API hoặc module sản phẩm.
+
+Phạm vi của bước đề xuất: giữ input/fingerprint/source/options như Task1; dựng model build-only mới dưới guard cấm `CpSolver`; gán4,386placement Booleans theo260witness mappings, tính các auxiliary values từ đúng expressions được emit trong proto rồi kiểm variable domains và toàn254max-relations/60raw equalities. Đối chiếu60per-rule raw/weighted values và3tier values với independent score `(0,78,0)`. Chỉ xử lý các expression forms thực sự được xác nhận trên model này; gặp dạng khác thì dừng với reason, không mở rộng thành interpreter tổng quát. Không ghi giá trị ngược vào model hoặc ép penalty về0 để làm kiểm tra pass.
+
+Đầu ra mong muốn: evidence lưu mapping auxiliary values và từng phép so với constraint/domain/per-rule score, kèm báo cáo PASS/mismatch/không đủ dữ liệu trên đúng fingerprint. Nếu mismatch: chỉ nêu constraint/rule/variable gây sai và giá trị dự kiến/thực tính, chưa sửa Core; mọi fix sau đó cần testcase tái hiện. Nếu tất cảpass: chỉ xác nhận có witness mở rộng thỏa model đã kiểm, không suy optimality, tốc độ hoặc nguyên nhân UNKNOWN. Đây là tiêu chí đọc kết quả của **cùng một** bước, không phải authorization cho bước sửa hoặc search sau đó.
+
+**Lý do chọn:** đóng khoảng trống hữu hạn còn lại giữa witness hard-valid và model có compiled auxiliaries trước khi đề nghị phép đo search. Chưa đề xuất hint, gỡ soft/locks, nới budget, đổi workers/seeds hoặc benchmark matrix. Bước kiểm chứng mới chưa được thực hiện trong Task2.
+
+### Kiểm chứng và ranh giới của lượt Task2
+
+Đã đọc lại plan/report và saved JSON; script standard-library read-only có asserts kiểm15hashes trong execution manifest,26raw files/65tracked protected files không đổi, các counts260/683/60 và ba historical UNKNOWN. Không import Core/OR-Tools, rerun probe, dựng model, compile, validator/scorer hoặc tạo phép đo/status mới trong bước đối chiếu này.
+
+Các lệnh thực chạy: Git branch/status/log; read-only Python hash/count assertions PASS; `uv sync --locked --extra solver` PASS/lock không đổi; `uv run ruff check .` PASS; `uv run ruff format --check src tests` PASS44files; `uv run mypy` PASS27source files. Không chạy pytest vì suite có solve và yêu cầu hiện tại cấm search; kết quả439PASS của Task5 vẫn chỉ là lịch sử. Chỉ bổ sung báo cáo này; không sửa Core/tests/config/dependency/budget, không chỉnh artifacts hoặc mở2B/2C. Không cập nhật checkbox plan vì Task2 chỉ định thay đổi duy nhất report; phần này ghi nhận hoàn tất Task2.
+
+Windows vẫnBLOCKED, machine drift4KiB/execution eligibility chưa được xác nhận. Không bypass gate hoặc thực hiện search/profiling; mọi yêu cầu search trace sau này phải được tách riêng theo policy của kế hoạch. Hiện chưa có kết luận root cause hoặc hiệu năng mới.
+
+Kiểm chứng cuối Task2: links/scope và `git diff --check` PASS, chỉ report này thay đổi. Fresh reviewer không actionable findings; xác nhận kết luận nhánh thứ ba, đúng một đề xuất chưa thực thi và các giới hạn/provenance được giữ rõ. Reviewer chỉ đọc diff/plan/report/saved evidence, không chạy scripts/tests/build/solver hoặc tự lặp hash/tooling checks. Không deferred findings; chưa merge/push.
