@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import shutil
 import sys
 import time
+from collections.abc import Callable
 from contextlib import ExitStack, nullcontext
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, Self
@@ -24,6 +26,8 @@ from tkb_core.domain.models import DomainModel
 from tkb_core.solver.options import SolveOptions
 
 if TYPE_CHECKING:
+    from ortools.sat.python.cp_model import CpSolverStatus
+
     from tkb_core.constraints.soft import CompiledSoft
     from tkb_core.preprocessing.feasibility import PreparedProblem
     from tkb_core.solver.model_builder import BuiltModel
@@ -43,6 +47,19 @@ LOGGING = {
     "first_feasible_reason": "NOT_INSTRUMENTED",
 }
 LIMITS = runner.RunLimits(watchdog_seconds=150.0, max_resident_bytes=1024**3)
+
+_NATIVE_COUNTER_NAMES = (
+    "wall_time",
+    "user_time",
+    "deterministic_time",
+    "num_branches",
+    "num_conflicts",
+    "num_booleans",
+    "num_binary_propagations",
+    "num_integer_propagations",
+    "num_restarts",
+    "num_lp_iterations",
+)
 
 
 class Identity(DomainModel):
@@ -344,6 +361,138 @@ def write_log_chunk(handle: Any, chunk: str) -> None:
     handle.flush()
 
 
+def _native_cpu_sample() -> dict[str, JsonValue]:
+    return {
+        "policy_version": "native_cpu_v1",
+        "cpu_scope": "RUSAGE_SELF_all_child_threads",
+        "cpu_units": "CPU_seconds",
+        "wall_units": "elapsed_seconds",
+        "measurement_status": "NOT_ENTERED",
+        "reason": "NOT_REACHED_NATIVE_CALL",
+        "call_entered": False,
+        "call_returned": False,
+        "native_return_code": None,
+        "native_exception": None,
+        "wall_start_ns": None,
+        "wall_end_ns": None,
+        "cpu_start": None,
+        "cpu_end": None,
+        "user_seconds": None,
+        "system_seconds": None,
+        "cpu_seconds": None,
+        "wall_elapsed_seconds": None,
+        "cpu_wall_ratio": None,
+        "ratio_reason": "NOT_MEASURED",
+    }
+
+
+def measure_native_call(
+    call: Callable[[], CpSolverStatus],
+    sample: dict[str, JsonValue],
+) -> CpSolverStatus:
+    """Measure the native-call boundary; preserve raw outcome even if post clocks fail."""
+    import resource
+
+    def wall_read():
+        value = time.monotonic_ns()
+        if type(value) is not int or value < 0:
+            raise ValueError("INVALID_WALL_CLOCK")
+        return value
+
+    def cpu_read():
+        value = resource.getrusage(resource.RUSAGE_SELF)
+        raw = {"user_seconds": value.ru_utime, "system_seconds": value.ru_stime}
+        # Invalid clock values cannot be emitted as NaN/Infinity in JSON evidence.
+        clean = {
+            k: v if type(v) in (int, float) and math.isfinite(v) and v >= 0 else None
+            for k, v in raw.items()
+        }
+        return clean
+
+    def valid_cpu(value):
+        return value is not None and all(v is not None for v in value.values())
+
+    sample.update(_native_cpu_sample())
+    try:
+        sample["wall_start_ns"] = wall_read()
+        sample["cpu_start"] = cpu_read()
+        if type(sample["wall_start_ns"]) is not int or not valid_cpu(sample["cpu_start"]):
+            raise ValueError("INVALID_PRE_CLOCK")
+    except (OSError, ValueError, TypeError) as exc:
+        sample.update(
+            measurement_status="BLOCKED",
+            reason="CPU_CLOCK_PRE:" + type(exc).__name__,
+            ratio_reason="CLOCK_READ_FAILED",
+        )
+        raise RuntimeError("CPU_CLOCK_PRE_READ_FAILED") from exc
+    sample["call_entered"] = True
+    native_error = None
+    returned = False
+    raw = None
+    post_errors = []
+    try:
+        raw = call()
+        returned = True
+    except BaseException as exc:
+        native_error = exc
+        raise
+    finally:
+        try:
+            sample["cpu_end"] = cpu_read()
+        except (OSError, ValueError, TypeError) as exc:
+            post_errors.append("CPU_CLOCK_POST:" + type(exc).__name__)
+        try:
+            sample["wall_end_ns"] = wall_read()
+        except (OSError, ValueError, TypeError) as exc:
+            post_errors.append("WALL_CLOCK_POST:" + type(exc).__name__)
+        sample["call_returned"] = returned
+        sample["native_return_code"] = int(raw) if returned else None
+        sample["native_exception"] = (
+            type(native_error).__name__ + ":" + str(native_error)
+            if native_error is not None
+            else None
+        )
+        begin, end = sample["cpu_start"], sample["cpu_end"]
+        wall_start, wall_end = sample["wall_start_ns"], sample["wall_end_ns"]
+        valid = (
+            not post_errors
+            and valid_cpu(begin)
+            and valid_cpu(end)
+            and type(wall_end) is int
+            and wall_end > wall_start
+        )
+        if valid:
+            user = end["user_seconds"] - begin["user_seconds"]
+            system = end["system_seconds"] - begin["system_seconds"]
+            wall = (wall_end - wall_start) / 1_000_000_000
+            valid = (
+                user >= 0
+                and system >= 0
+                and all(math.isfinite(v) for v in (user, system, user + system, wall))
+            )
+        if valid:
+            cpu_ratio = (user + system) / wall
+            valid = math.isfinite(cpu_ratio)
+        if valid:
+            sample.update(
+                measurement_status="OK",
+                reason=None,
+                user_seconds=user,
+                system_seconds=system,
+                cpu_seconds=user + system,
+                wall_elapsed_seconds=wall,
+                cpu_wall_ratio=cpu_ratio,
+                ratio_reason=None,
+            )
+        else:
+            sample.update(
+                measurement_status="BLOCKED",
+                reason=";".join(post_errors) or "INVALID_CLOCK_DELTA",
+                ratio_reason="INVALID_OR_MISSING_CLOCKS",
+            )
+    return raw
+
+
 def trace_feasibility(
     prepared: PreparedProblem,
     built: BuiltModel,
@@ -352,6 +501,7 @@ def trace_feasibility(
     log_path: Path,
     *,
     logging_mode: Literal["logging_off", "logging_on"] = "logging_on",
+    measure_cpu: bool = False,
 ) -> dict[str, JsonValue]:
     """Instrument one stage; the run/child entry points must authorize before calling."""
     from ortools.sat.python import cp_model
@@ -368,6 +518,9 @@ def trace_feasibility(
         raise ValueError("TRACE_POLICY_OR_MODEL_DRIFT")
     if logging_mode not in ("logging_off", "logging_on"):
         raise ValueError("LOGGING_POLICY_DRIFT")
+    if measure_cpu and logging_mode != "logging_off":
+        raise ValueError("CPU_LOGGING_POLICY_DRIFT")
+    cpu_sample = _native_cpu_sample() if measure_cpu else None
     logging_on = logging_mode == "logging_on"
     constructor, calls, solves, captured = cp_model.CpSolver, 0, 0, None
     log_errors = []
@@ -437,6 +590,8 @@ def trace_feasibility(
                         or callback_state["solution_callback"]
                     ):
                         raise ValueError("SOLVE_CALLBACK_DRIFT")
+                    if measure_cpu:
+                        return measure_native_call(lambda: native_solve(model), cpu_sample)
                     return native_solve(model)
 
                 stack.enter_context(patch.object(solver, "solve", side_effect=checked_solve))
@@ -459,21 +614,7 @@ def trace_feasibility(
         text = ""
         error = (error + ";" if error else "") + type(exc).__name__ + ":" + str(exc)
         log_errors.append("LOG_READ_ERROR")
-    counters = {
-        name: None
-        for name in (
-            "wall_time",
-            "user_time",
-            "deterministic_time",
-            "num_branches",
-            "num_conflicts",
-            "num_booleans",
-            "num_binary_propagations",
-            "num_integer_propagations",
-            "num_restarts",
-            "num_lp_iterations",
-        )
-    }
+    counters = {name: None for name in _NATIVE_COUNTER_NAMES}
     response_reason = "NO_RESPONSE"
     response_text = response_stats = None
     if captured is not None:
@@ -503,6 +644,13 @@ def trace_feasibility(
         "schema_version": "1.0",
         "logging_mode": logging_mode,
         "stage_complete": stage_complete,
+        "native_solve_measurement": cpu_sample,
+        "native_solve_measurement_reason": None if measure_cpu else "NOT_REQUESTED",
+        "native_call_count": int(cpu_sample["call_entered"]) if cpu_sample is not None else None,
+        "native_call_count_reason": None if measure_cpu else "NOT_REQUESTED",
+        "configured_wall_budget_seconds": 60.0,
+        "termination_cause": None,
+        "termination_cause_reason": "NOT_EXPOSED",
         "trace_complete": bool(complete) if logging_on else None,
         "trace_capture_status": ("COMPLETE" if complete else "FAILED")
         if logging_on
@@ -1115,11 +1263,408 @@ def _run_pair_parent(root: Path, authorization: Path) -> dict[str, JsonValue]:
     return result
 
 
+CPU_POLICY = {
+    "version": "native_cpu_v1",
+    "cpu_clock": "resource.getrusage",
+    "cpu_scope": "RUSAGE_SELF_all_child_threads",
+    "cpu_fields": ["ru_utime", "ru_stime"],
+    "wall_clock": "time.monotonic_ns",
+    "boundary": "bound_native_solve_after_guards_before_decode",
+    "clock_order": ["wall_start", "cpu_start", "native_call", "cpu_end", "wall_end"],
+    "max_native_calls": 1,
+    "counters": "FINAL_RESPONSE_ONLY",
+    "missing_values": "NULL_WITH_REASON",
+}
+CPU_ADMISSION = PAIR_POLICY | {
+    "minimum_headroom_bytes": 3 * 1024**3,
+    "minimum_disk_free_bytes": 256 * 1024**2,
+}
+
+
+class CpuCandidate(DomainModel):
+    """One CPU measurement snapshot, separate from every previous execution approval."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    kind: Literal["tight10_native_cpu"] = "tight10_native_cpu"
+    status: Literal["PREPARED_NOT_AUTHORIZED"] = "PREPARED_NOT_AUTHORIZED"
+    run_id: runner.CampaignId
+    output_root: Path
+    common_identity: dict[str, JsonValue]
+    logging_profile: dict[str, JsonValue]
+    measurement_policy: dict[str, JsonValue]
+    operational_policy: dict[str, JsonValue]
+    legacy_plan_sha256: runner.SHA = PLAN_SHA
+    legacy_gate: Literal["PASS", "BLOCKED_MACHINE_DRIFT"]
+    legacy_differences: dict[str, dict[str, JsonValue]]
+
+    @model_validator(mode="after")
+    def fixed(self) -> Self:
+        if (
+            not self.output_root.is_absolute()
+            or self.output_root != self.output_root.resolve()
+            or self.legacy_plan_sha256 != PLAN_SHA
+            or (self.legacy_gate == "PASS") != (not self.legacy_differences)
+            or "logging" in self.common_identity
+            or compare_identity(self.logging_profile, PAIR_PROFILES["logging_off"])
+            or compare_identity(self.measurement_policy, CPU_POLICY)
+            or compare_identity(self.operational_policy, CPU_ADMISSION)
+        ):
+            raise ValueError("CPU_SCOPE_OR_POLICY_DRIFT")
+        full = Identity.model_validate(self.common_identity | {"logging": LOGGING})
+        if compare_identity(
+            full.model_dump(mode="json", exclude={"logging"}), self.common_identity
+        ):
+            raise ValueError("COMMON_IDENTITY_INCOMPLETE")
+        return self
+
+
+class CpuAuthorization(DomainModel):
+    """User-supplied approval of the exact new CPU candidate/root/run."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    approved: Literal[True]
+    action: Literal["RUN_ONE_NATIVE_CPU_FEASIBILITY"]
+    baseline_sha256: runner.SHA
+    run_id: runner.CampaignId
+    output_root: Path
+
+
+def prepare_cpu(root: Path, run_id: str) -> dict[str, JsonValue]:
+    """Build-only snapshot with constructor guard, no lease or execution approval."""
+    from ortools.sat.python import cp_model
+
+    if root.exists() or root.is_symlink():
+        raise FileExistsError(root)
+    root = root.resolve()
+    plan, _ = _target()
+    protected = [LEGACY, plan.bundle_dir, plan.preflight_dir]
+    protected.extend(p for p in (ROOT / "benchmarks/artifacts/phase2a").glob("*") if p.is_dir())
+    if any(root.is_relative_to(p.resolve()) for p in protected):
+        raise ValueError("OUTPUT_INSIDE_FROZEN_EVIDENCE")
+    root.mkdir(parents=True)
+    try:
+        with patch.object(
+            cp_model, "CpSolver", side_effect=AssertionError("SEARCH_FORBIDDEN")
+        ) as guard:
+            full = Identity.model_validate(capture_identity())
+            gate, differences = legacy_comparison(full.model_dump(mode="json"))
+            guard.assert_not_called()
+        candidate = CpuCandidate(
+            run_id=run_id,
+            output_root=root,
+            common_identity=full.model_dump(mode="json", exclude={"logging"}),
+            logging_profile=PAIR_PROFILES["logging_off"],
+            measurement_policy=CPU_POLICY,
+            operational_policy=CPU_ADMISSION,
+            legacy_gate=gate,
+            legacy_differences=differences,
+        )
+        runner._write_json(root / "cpu-candidate.json", candidate, exclusive=True)
+        result = {
+            "schema_version": "1.0",
+            "status": candidate.status,
+            "candidate_sha256": runner._sha(root / "cpu-candidate.json"),
+            "legacy_gate": gate,
+            "legacy_differences": differences,
+            "search_executed": False,
+            "authorization_created": False,
+            "context": runner._operational_context(),
+            "native_constructor_calls": guard.call_count,
+        }
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        result = {
+            "schema_version": "1.0",
+            "status": "BLOCKED",
+            "reason": str(exc),
+            "search_executed": False,
+            "authorization_created": False,
+        }
+    runner._write_json(root / "preparation-result.json", result, exclusive=True)
+    return result
+
+
+def _cpu_start(candidate: CpuCandidate, digest: str, pid: int) -> dict[str, JsonValue]:
+    return {
+        "baseline_sha256": digest,
+        "run_id": candidate.run_id,
+        "parent_pid": pid,
+        "kind": candidate.kind,
+        "logging_mode": "logging_off",
+        "measurement_policy_version": "native_cpu_v1",
+    }
+
+
+def check_cpu_authorization(
+    root: Path, authorization: Path, *, child: bool = False
+) -> CpuCandidate:
+    """Recheck exact CPU snapshot and, in child, matching parent lease and START."""
+    root = root.resolve()
+    candidate = CpuCandidate.model_validate_json((root / "cpu-candidate.json").read_text())
+    approval = CpuAuthorization.model_validate_json(authorization.read_text())
+    digest = runner._sha(root / "cpu-candidate.json")
+    if (
+        approval.baseline_sha256 != digest
+        or approval.run_id != candidate.run_id
+        or approval.output_root != root
+        or candidate.output_root != root
+    ):
+        raise ValueError("AUTHORIZATION_SCOPE_MISMATCH")
+    if child:
+        lease = runner._json_object((runner._OWNER_ROOT / "active.json").read_text())
+        if (
+            lease.get("state") != "RUNNING"
+            or lease.get("pid") != os.getppid()
+            or lease.get("campaign_root") != str(root)
+            or lease.get("campaign_id") != candidate.run_id
+            or runner._json_object((root / "START.json").read_text())
+            != _cpu_start(candidate, digest, os.getppid())
+            or (root / "CHILD-START.json").exists()
+        ):
+            raise ValueError("CPU_PARENT_LEASE_OR_REENTRY_MISMATCH")
+    elif (root / "START.json").exists() or (root / "attempt").exists():
+        raise ValueError("ALREADY_STARTED")
+    current = Identity.model_validate(capture_identity()).model_dump(
+        mode="json", exclude={"logging"}
+    )
+    changed = compare_identity(candidate.common_identity, current)
+    if changed:
+        raise ValueError("IDENTITY_DRIFT:" + ",".join(changed))
+    return candidate
+
+
+def _cpu_child(root: Path, authorization: Path) -> dict[str, JsonValue]:
+    from ortools.sat.python import cp_model
+
+    candidate = check_cpu_authorization(root, authorization, child=True)
+    with patch.object(cp_model, "CpSolver", side_effect=AssertionError("SEARCH_FORBIDDEN")):
+        prepared, built, compiled = _build_target()
+    check_cpu_authorization(root, authorization, child=True)
+    admission = _pair_admission(root)
+    runner._write_json(
+        root / "attempt/child-identity.json",
+        {
+            "common_identity": candidate.common_identity,
+            "logging_profile": candidate.logging_profile,
+            "measurement_policy": candidate.measurement_policy,
+            "admission": admission,
+        },
+        exclusive=True,
+    )
+    _check_pair_admission(admission)
+    runner._write_json(
+        root / "CHILD-START.json",
+        _cpu_start(candidate, runner._sha(root / "cpu-candidate.json"), os.getppid())
+        | {"pid": os.getpid()},
+        exclusive=True,
+    )
+    result = trace_feasibility(
+        prepared,
+        built,
+        compiled,
+        SolveOptions(),
+        root / "attempt/trace.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    runner._write_json(root / "attempt/trace-result.json", result, exclusive=True)
+    for name, key in (
+        ("parameters.txt", "parameters"),
+        ("response.txt", "response"),
+        ("response-stats.txt", "response_stats"),
+    ):
+        if result[key] is not None:
+            with (root / "attempt" / name).open("x", encoding="utf-8") as out:
+                out.write(result[key])
+    runner._write_json(
+        root / "attempt/independent-checks.json",
+        {key: result[key] for key in ("correctness", "valid_schedule", "score", "quality_proved")},
+        exclusive=True,
+    )
+    if result["valid_schedule"]:
+        runner._write_json(
+            root / "attempt/assignments.json",
+            {"assignments": result["assignments"]},
+            exclusive=True,
+        )
+    return {"status": "CPU_CHILD_TERMINAL"}
+
+
+def _run_cpu_parent(root: Path, authorization: Path) -> dict[str, JsonValue]:
+    """One supervised CPU attempt; a fresh exact approval is required before entry."""
+    root = root.resolve()
+    candidate = check_cpu_authorization(root, authorization)
+    digest = runner._sha(root / "cpu-candidate.json")
+    result = _cpu_start(candidate, digest, os.getpid()) | {
+        "schema_version": "1.0",
+        "status": "BLOCKED",
+        "harness_status": "NOT_STARTED",
+        "reason": None,
+        "comparability": "LIMITED",
+        "execution": None,
+        "native_solve_measurement": None,
+        "native_call_count": None,
+        "native_call_count_reason": "NOT_OBSERVABLE",
+        "native_capture_reason": "NOT_STARTED",
+        "counters": {name: None for name in _NATIVE_COUNTER_NAMES},
+        "counter_missing_reasons": {name: "NOT_STARTED" for name in _NATIVE_COUNTER_NAMES},
+        "response": None,
+        "response_reason": "NOT_STARTED",
+        "raw_solver_status": None,
+        "score": None,
+        "limitations": [
+            "N1_UNCONTROLLED_WORKLOAD_FREQUENCY_THERMAL",
+            "ALL_CHILD_THREADS_IN_NATIVE_INTERVAL",
+        ],
+    }
+    with runner._campaign_owner(runner._OWNER_ROOT, root, candidate.run_id) as lease:
+        check_cpu_authorization(root, authorization)
+        frozen = root / "cpu-authorization.json"
+        if authorization.resolve() != frozen:
+            with frozen.open("xb") as out:
+                out.write(authorization.read_bytes())
+        check_cpu_authorization(root, frozen)
+        runner._write_json(
+            root / "START.json", _cpu_start(candidate, digest, os.getpid()), exclusive=True
+        )
+        try:
+            admission = _pair_admission(root)
+            result["admission"] = admission
+            result["pre_context"] = admission["context"]
+            runner._write_json(
+                root / "identity-before-run.json",
+                {
+                    "common_identity": candidate.common_identity,
+                    "logging_profile": candidate.logging_profile,
+                    "measurement_policy": candidate.measurement_policy,
+                    "admission": admission,
+                },
+                exclusive=True,
+            )
+            _check_pair_admission(admission)
+            lease["state"] = "NEEDS_REVIEW"
+            execution = runner.supervise_linux(
+                (
+                    str(Path(sys.executable).absolute()),
+                    "-I",
+                    str(Path(__file__).resolve()),
+                    "_cpu-child",
+                    "--root",
+                    str(root),
+                    "--authorization",
+                    str(frozen),
+                ),
+                root / "attempt",
+                LIMITS,
+            )
+            result["execution"] = execution.model_dump(mode="json")
+            runner._write_json(root / "execution.json", execution, exclusive=True)
+            reaped = (
+                execution.raw_wait_status is not None
+                and execution.measurement_reason != "REAP_UNCONFIRMED"
+            )
+            result["post_context"] = runner._operational_context()
+            result["power_changed_or_unknown"] = (
+                not ac_online(result["post_context"])
+                or result["pre_context"]["power"] != result["post_context"]["power"]
+            )
+            path = root / "attempt/trace-result.json"
+            stage = runner._json_object(path.read_text()) if path.exists() else {}
+            result.update(stage)
+            result.update(_cpu_start(candidate, digest, os.getpid()))
+            if stage:
+                result["native_capture_reason"] = None
+            else:
+                result["native_capture_reason"] = "CHILD_TERMINATED_BEFORE_FINAL_CAPTURE"
+                result["counter_missing_reasons"] = {
+                    name: "CHILD_TERMINATED_BEFORE_FINAL_CAPTURE" for name in _NATIVE_COUNTER_NAMES
+                }
+                result["response_reason"] = "CHILD_TERMINATED_BEFORE_FINAL_CAPTURE"
+            harness = (
+                "MEASUREMENT_BLOCKED"
+                if execution.measurement_status != "OK" or not reaped
+                else "WATCHDOG_TIMEOUT"
+                if execution.stop_reason == "WATCHDOG"
+                else "RESOURCE_STOP"
+                if execution.stop_reason == "RESOURCE_LIMIT"
+                else "CRASH"
+                if execution.signal is not None
+                else "CHILD_ERROR"
+                if execution.exit_code != 0 or execution.stop_reason is not None
+                else "COMPLETE"
+            )
+            measurement = stage.get("native_solve_measurement") or {}
+            good = (
+                harness == "COMPLETE"
+                and stage.get("stage_complete") is True
+                and stage.get("raw_solver_status") in ("UNKNOWN", "FEASIBLE", "OPTIMAL")
+                and stage.get("correctness") != "FAIL"
+                and stage.get("error") is None
+                and stage.get("response_reason") is None
+                and stage.get("response") is not None
+                and stage.get("parameters") is not None
+                and stage.get("trace_capture_status") == "DISABLED"
+                and stage.get("logging_mode") == "logging_off"
+                and stage.get("callback_state")
+                == {"log_callback": None, "solution_callback": False, "best_bound_callback": False}
+                and measurement.get("measurement_status") == "OK"
+                and measurement.get("call_returned") is True
+                and measurement.get("call_entered") is True
+                and stage.get("native_call_count") == 1
+                and stage.get("constructor_calls") == stage.get("solve_calls") == 1
+                and (
+                    stage.get("raw_solver_status") == "UNKNOWN"
+                    or (stage.get("correctness") == "PASS" and stage.get("valid_schedule") is True)
+                )
+            )
+            result["harness_status"] = (
+                harness if harness != "COMPLETE" or good else "NATIVE_MEASUREMENT_BLOCKED"
+            )
+            result["status"] = "TERMINAL" if good else "BLOCKED"
+            result["reason"] = None if good else "CPU_ATTEMPT_INCOMPLETE_NO_RETRY"
+            runner._write_json(root / "terminal.json", result, exclusive=True)
+            if reaped:
+                lease["state"] = "RUNNING"
+        except (OSError, ValueError, TypeError, KeyError) as exc:
+            result["reason"] = str(exc)
+        runner._write_json(root / "cpu-result.json", result, exclusive=True)
+        inventory = {
+            str(p.relative_to(root)): runner._sha(p) for p in root.rglob("*") if p.is_file()
+        }
+        runner._write_json(
+            root / "manifest.json",
+            {
+                "schema_version": "1.0",
+                "baseline_sha256": digest,
+                "run_id": candidate.run_id,
+                "parent_pid": os.getpid(),
+                "files": inventory,
+                "missing_logs": {
+                    "attempt/trace.log": "LOGGING_DISABLED"
+                    if result["execution"] is not None
+                    else "NOT_STARTED"
+                },
+            },
+            exclusive=True,
+        )
+    return result
+
+
 def main(argv: list[str] | None = None) -> int:
     """Explicit prepare/run modes; prepare cannot authorize or execute search."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "phase", choices=("prepare", "run", "_child", "prepare-pair", "run-pair", "_pair-child")
+        "phase",
+        choices=(
+            "prepare",
+            "run",
+            "_child",
+            "prepare-pair",
+            "run-pair",
+            "_pair-child",
+            "prepare-cpu",
+            "run-cpu",
+            "_cpu-child",
+        ),
     )
     parser.add_argument("--root", required=True, type=Path)
     parser.add_argument("--run-id")
@@ -1127,7 +1672,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--member-index", type=int, choices=(0, 1))
     parser.add_argument("--authorization", type=Path)
     args = parser.parse_args(argv)
-    if args.phase == "prepare-pair":
+    if args.phase in ("prepare-cpu", "run-cpu", "_cpu-child"):
+        if args.pair_id is not None or args.member_index is not None:
+            parser.error("CPU mode forbids pair arguments")
+        if args.phase == "prepare-cpu":
+            if args.run_id is None or args.authorization is not None:
+                parser.error("prepare-cpu requires --run-id and forbids approval")
+        elif args.run_id is not None or args.authorization is None:
+            parser.error("CPU execution requires --authorization and forbids --run-id")
+    elif args.phase == "prepare-pair":
         if args.pair_id is None or any(
             v is not None for v in (args.run_id, args.authorization, args.member_index)
         ):
@@ -1144,7 +1697,13 @@ def main(argv: list[str] | None = None) -> int:
     elif args.phase != "prepare" and (args.authorization is None or args.run_id is not None):
         parser.error("run/_child require --authorization and forbid --run-id")
     try:
-        if args.phase == "prepare-pair":
+        if args.phase == "prepare-cpu":
+            result = prepare_cpu(args.root, args.run_id)
+        elif args.phase == "run-cpu":
+            result = _run_cpu_parent(args.root.resolve(), args.authorization)
+        elif args.phase == "_cpu-child":
+            result = _cpu_child(args.root.resolve(), args.authorization)
+        elif args.phase == "prepare-pair":
             result = prepare_pair(args.root, args.pair_id)
         elif args.phase == "run-pair":
             result = _run_pair_parent(args.root.resolve(), args.authorization)

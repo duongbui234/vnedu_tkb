@@ -985,3 +985,552 @@ def test_unstarted_off_log_reason_is_not_logging_disabled(pair_harness, monkeypa
     assert trace._run_pair_parent(root, approval)["status"] == "BLOCKED"
     manifest = json.loads((root / "manifest.json").read_text())
     assert manifest["missing_logs"]["runs/01-off/attempt/trace.log"] == "NOT_STARTED"
+
+
+@pytest.fixture
+def cpu_clocks(monkeypatch):
+    import resource
+
+    wall = Mock(side_effect=[10_000_000_000, 12_000_000_000])
+    usage = Mock(
+        side_effect=[
+            SimpleNamespace(ru_utime=10.0, ru_stime=2.0),
+            SimpleNamespace(ru_utime=13.0, ru_stime=3.0),
+        ]
+    )
+    monkeypatch.setattr(trace.time, "monotonic_ns", wall)
+    monkeypatch.setattr(resource, "getrusage", usage)
+    return wall, usage
+
+
+def test_native_cpu_user_system_delta_and_units(cpu_clocks):
+    import resource
+
+    sample = {}
+    raw = trace.measure_native_call(lambda: cp_model.UNKNOWN, sample)
+    assert raw is cp_model.UNKNOWN
+    assert sample["measurement_status"] == "OK" and sample["reason"] is None
+    assert sample["user_seconds"] == 3.0 and sample["system_seconds"] == 1.0
+    assert sample["cpu_seconds"] == 4.0 and sample["wall_elapsed_seconds"] == 2.0
+    assert sample["cpu_wall_ratio"] == 2.0 and sample["ratio_reason"] is None
+    assert sample["call_entered"] is sample["call_returned"] is True
+    assert sample["native_return_code"] == 0 and sample["native_exception"] is None
+    assert sample["cpu_start"] == {"user_seconds": 10.0, "system_seconds": 2.0}
+    assert all(call.args == (resource.RUSAGE_SELF,) for call in cpu_clocks[1].call_args_list)
+
+
+@pytest.mark.parametrize(
+    "end_cpu,wall_end,expected",
+    [
+        ((10.0, 2.0), 12_000_000_000, "OK"),
+        ((9.0, 3.0), 12_000_000_000, "BLOCKED"),
+        ((float("nan"), 3.0), 12_000_000_000, "BLOCKED"),
+        ((float("inf"), 3.0), 12_000_000_000, "BLOCKED"),
+        ((None, 3.0), 12_000_000_000, "BLOCKED"),
+        ((13.0, 3.0), 10_000_000_000, "BLOCKED"),
+    ],
+)
+def test_cpu_zero_missing_negative_nonfinite_and_wall_zero(cpu_clocks, end_cpu, wall_end, expected):
+    wall, usage = cpu_clocks
+    wall.side_effect = [10_000_000_000, wall_end]
+    usage.side_effect = [
+        SimpleNamespace(ru_utime=10.0, ru_stime=2.0),
+        SimpleNamespace(ru_utime=end_cpu[0], ru_stime=end_cpu[1]),
+    ]
+    sample = {}
+    assert trace.measure_native_call(lambda: cp_model.UNKNOWN, sample) is cp_model.UNKNOWN
+    assert sample["measurement_status"] == expected
+    if expected == "OK":
+        assert sample["cpu_seconds"] == 0 and sample["cpu_wall_ratio"] == 0
+    else:
+        assert sample["cpu_seconds"] is sample["cpu_wall_ratio"] is None
+        assert sample["reason"] and sample["ratio_reason"]
+    json.dumps(sample, allow_nan=False)
+
+
+@pytest.mark.parametrize("clock", ["wall", "cpu"])
+def test_cpu_pre_clock_failure_never_enters_native(cpu_clocks, clock):
+    cpu_clocks[0 if clock == "wall" else 1].side_effect = OSError("PRE_CLOCK")
+    call = Mock(side_effect=AssertionError("NATIVE_MUST_NOT_ENTER"))
+    sample = {}
+    with pytest.raises(RuntimeError, match="CPU_CLOCK_PRE"):
+        trace.measure_native_call(call, sample)
+    assert not sample["call_entered"] and sample["native_return_code"] is None
+    assert sample["measurement_status"] == "BLOCKED" and sample["cpu_seconds"] is None
+    assert call.call_count == 0
+
+
+@pytest.mark.parametrize("clock", ["wall", "cpu"])
+def test_cpu_post_clock_failure_keeps_raw_return_and_response(
+    stage_inputs, tmp_path, monkeypatch, cpu_clocks, clock
+):
+    monkeypatch.setattr(FakeSolver, "status_code", 4)
+    target = cpu_clocks[0 if clock == "wall" else 1]
+    first = 10_000_000_000 if clock == "wall" else SimpleNamespace(ru_utime=10.0, ru_stime=2.0)
+    target.side_effect = [first, OSError("POST_CLOCK")]
+    result = trace.trace_feasibility(
+        *stage_inputs,
+        SolveOptions(),
+        tmp_path / "unused.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    sample = result["native_solve_measurement"]
+    assert sample["measurement_status"] == "BLOCKED" and sample["call_returned"]
+    assert sample["native_return_code"] == 4 and result["raw_solver_status"] == "OPTIMAL"
+    assert result["response"] and result["stage_complete"] and result["native_call_count"] == 1
+    assert result["valid_schedule"] and result["correctness"] == "PASS"
+    assert FakeSolver.instances[-1].calls == 1
+
+
+def test_native_exception_preserves_original_and_end_attempt(cpu_clocks):
+    original = ValueError("ORIGINAL_NATIVE_ERROR")
+    cpu_clocks[1].side_effect = [
+        SimpleNamespace(ru_utime=10.0, ru_stime=2.0),
+        OSError("POST_ERROR"),
+    ]
+    sample = {}
+    with pytest.raises(ValueError) as caught:
+        trace.measure_native_call(Mock(side_effect=original), sample)
+    assert caught.value is original and sample["call_entered"] and not sample["call_returned"]
+    assert sample["native_exception"] == "ValueError:ORIGINAL_NATIVE_ERROR"
+    assert sample["measurement_status"] == "BLOCKED" and sample["wall_end_ns"] == 12_000_000_000
+
+
+def test_native_cpu_boundary_excludes_setup_decode_validation(stage_inputs, tmp_path, monkeypatch):
+    import resource
+
+    from tkb_core.validation import independent_validator, score_evaluator
+
+    events = []
+    original_validate = independent_validator.validate_schedule
+    original_score = score_evaluator.evaluate_score
+
+    def validate(*a):
+        events.append("validate")
+        return original_validate(*a)
+
+    def score(*a):
+        events.append("score")
+        return original_score(*a)
+
+    def wall():
+        events.append("wall")
+        return 1_000_000_000 if events.count("wall") == 1 else 3_000_000_000
+
+    def cpu(who):
+        events.append("cpu")
+        return SimpleNamespace(ru_utime=float(events.count("cpu")), ru_stime=0.0)
+
+    class Ordered(FakeSolver):
+        status_code = 4
+
+        def __init__(self):
+            events.append("constructor")
+            super().__init__()
+
+        def solve(self, model):
+            events.append("native")
+            return super().solve(model)
+
+    monkeypatch.setattr(cp_model, "CpSolver", Ordered)
+    monkeypatch.setattr(
+        trace, "model_hash", lambda built: events.append("guard") or trace.MODEL_SHA
+    )
+    monkeypatch.setattr(trace.time, "monotonic_ns", wall)
+    monkeypatch.setattr(resource, "getrusage", cpu)
+    monkeypatch.setattr(independent_validator, "validate_schedule", validate)
+    monkeypatch.setattr(score_evaluator, "evaluate_score", score)
+    result = trace.trace_feasibility(
+        *stage_inputs,
+        SolveOptions(),
+        tmp_path / "off.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    assert result["native_solve_measurement"]["measurement_status"] == "OK"
+    start = events.index("wall")
+    assert events[start:] == ["wall", "cpu", "native", "cpu", "wall", "validate", "score"]
+    assert "constructor" in events[:start] and events[start - 1] == "guard"
+
+
+def test_native_one_call_even_if_stage_requests_second(
+    stage_inputs, tmp_path, monkeypatch, cpu_clocks
+):
+    from tkb_core.solver import objectives
+
+    def twice(prepared, built, compiled, options, priority, budget):
+        solver = cp_model.CpSolver()
+        solver.parameters.max_time_in_seconds = budget
+        solver.parameters.num_search_workers = options.num_workers
+        solver.parameters.random_seed = options.seed
+        solver.parameters.relative_gap_limit = solver.parameters.absolute_gap_limit = 0.0
+        solver.solve(built.model)
+        solver.solve(built.model)
+
+    monkeypatch.setattr(objectives, "_run_stage", twice)
+    result = trace.trace_feasibility(
+        *stage_inputs,
+        SolveOptions(),
+        tmp_path / "off.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    assert FakeSolver.instances[-1].calls == 1 and result["native_call_count"] == 1
+    assert "PARAMETER_OR_MODEL_DRIFT" in result["error"]
+
+
+def test_cpu_unknown_keeps_final_counters_without_schedule(stage_inputs, tmp_path, cpu_clocks):
+    result = trace.trace_feasibility(
+        *stage_inputs,
+        SolveOptions(),
+        tmp_path / "off.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    assert result["raw_solver_status"] == "UNKNOWN" and result["stage_complete"]
+    assert result["native_solve_measurement"]["measurement_status"] == "OK"
+    assert result["counters"]["num_branches"] == 3 and result["score"] is None
+    assert (
+        result["termination_cause"] is None and result["termination_cause_reason"] == "NOT_EXPOSED"
+    )
+    assert result["configured_wall_budget_seconds"] == 60.0
+
+
+def test_cpu_early_solution_does_not_wait_for_deadline_and_validates_score(
+    stage_inputs, tmp_path, monkeypatch, cpu_clocks
+):
+    monkeypatch.setattr(FakeSolver, "status_code", 4)
+    result = trace.trace_feasibility(
+        *stage_inputs,
+        SolveOptions(),
+        tmp_path / "off.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    assert result["valid_schedule"] and result["score"]["tiers"] == [0, 0, 0]
+    assert result["native_solve_measurement"]["wall_elapsed_seconds"] == 2.0
+    assert result["counters"]["wall_time"] == 0.02 and not (tmp_path / "off.log").exists()
+
+
+def test_cpu_missing_counter_and_no_response_reasons(
+    stage_inputs, tmp_path, monkeypatch, cpu_clocks
+):
+    class NoResponse(FakeSolver):
+        @property
+        def response_proto(self):
+            raise RuntimeError("NO_RESPONSE")
+
+        @response_proto.setter
+        def response_proto(self, value):
+            pass
+
+    monkeypatch.setattr(cp_model, "CpSolver", NoResponse)
+    result = trace.trace_feasibility(
+        *stage_inputs,
+        SolveOptions(),
+        tmp_path / "off.log",
+        logging_mode="logging_off",
+        measure_cpu=True,
+    )
+    assert result["response"] is None and result["response_reason"] == "NO_RESPONSE"
+    assert result["counter_missing_reasons"]["num_branches"] == "NO_RESPONSE"
+    assert result["counters"]["num_branches"] is None
+    assert result["native_solve_measurement"]["measurement_status"] == "OK"
+
+
+@pytest.fixture
+def cpu_root(prepared_root, tmp_path):
+    root = tmp_path / "cpu"
+    result = trace.prepare_cpu(root, "unit-cpu")
+    assert result["status"] == "PREPARED_NOT_AUTHORIZED"
+    return root
+
+
+def cpu_approval(root):
+    path = root / "user-approval.json"
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "approved": True,
+                "action": "RUN_ONE_NATIVE_CPU_FEASIBILITY",
+                "baseline_sha256": trace.runner._sha(root / "cpu-candidate.json"),
+                "run_id": "unit-cpu",
+                "output_root": str(root),
+            }
+        )
+    )
+    return path
+
+
+@pytest.mark.parametrize(
+    "field", ["model", "policy", "profile", "source", "options", "version", "unknown", "path"]
+)
+def test_cpu_policy_or_identity_drift_blocks(cpu_root, monkeypatch, field):
+    approval = cpu_approval(cpu_root)
+    if field == "source":
+        changed = copy.deepcopy(identity())
+        changed["driver_sha256"] = "c" * 64
+        monkeypatch.setattr(trace, "capture_identity", lambda: changed)
+        with pytest.raises(ValueError, match="DRIFT"):
+            trace.check_cpu_authorization(cpu_root, approval)
+        return
+    path = cpu_root / "cpu-candidate.json"
+    data = json.loads(path.read_text())
+    if field == "model":
+        data["common_identity"]["model_sha256"] = "0" * 64
+    elif field == "policy":
+        data["measurement_policy"]["max_native_calls"] = 2
+    elif field == "profile":
+        data["logging_profile"]["log_search_progress"] = True
+    elif field == "options":
+        data["common_identity"]["options"]["time_limit_seconds"] = 61.0
+    elif field == "version":
+        data["schema_version"] = "2.0"
+    elif field == "unknown":
+        data["extra"] = True
+    elif field == "path":
+        data["output_root"] = str(cpu_root / "../escape")
+    path.write_text(json.dumps(data))
+    with pytest.raises(ValueError):
+        trace.check_cpu_authorization(cpu_root, approval)
+
+
+def test_single_and_pair_approval_cannot_authorize_cpu(cpu_root, prepared_root, pair_root):
+    for approval in (authorize(prepared_root), pair_approval(pair_root)):
+        with pytest.raises(ValueError):
+            trace.check_cpu_authorization(cpu_root, approval)
+
+
+def test_cpu_prepare_cannot_construct_solver_or_authorize(cpu_root, monkeypatch, capsys, tmp_path):
+    assert cp_model.CpSolver.call_count == 0
+    assert sorted(p.name for p in cpu_root.iterdir()) == [
+        "cpu-candidate.json",
+        "preparation-result.json",
+    ]
+    result = json.loads((cpu_root / "preparation-result.json").read_text())
+    assert result["candidate_sha256"] == trace.runner._sha(cpu_root / "cpu-candidate.json")
+    assert not result["authorization_created"] and not result["search_executed"]
+    with pytest.raises(FileExistsError):
+        trace.prepare_cpu(cpu_root, "unit-cpu")
+    assert (
+        trace.main(["prepare-cpu", "--root", str(tmp_path / "cpu-cli"), "--run-id", "unit-cpu"])
+        == 0
+    )
+    assert json.loads(capsys.readouterr().out)["status"] == "PREPARED_NOT_AUTHORIZED"
+
+
+@pytest.fixture
+def cpu_harness(cpu_root, stage_inputs, cpu_clocks, monkeypatch):
+    owner = cpu_root / "test-owner"
+    monkeypatch.setattr(trace.runner, "_OWNER_ROOT", owner)
+    monkeypatch.setattr(trace.runner, "_operational_context", context)
+    monkeypatch.setattr(
+        trace.runner,
+        "check_headroom",
+        lambda cap: trace.runner.HeadroomCheck(
+            status="PASS",
+            target_bytes=cap,
+            required_bytes=3 * 1024**3,
+            available_bytes=4 * 1024**3,
+            host_available_bytes=4 * 1024**3,
+        ),
+    )
+    monkeypatch.setattr(trace.shutil, "disk_usage", lambda p: SimpleNamespace(free=1024**3))
+    calls = []
+    controls = {}
+
+    def supervise(argv, run_dir, limits):
+        calls.append(argv)
+        run_dir.mkdir()
+        if not controls.get("kill"):
+            result = trace.trace_feasibility(
+                *stage_inputs,
+                SolveOptions(),
+                run_dir / "off.log",
+                logging_mode="logging_off",
+                measure_cpu=True,
+            )
+            result.update(controls.get("result", {}))
+            (run_dir / "trace-result.json").write_text(json.dumps(result))
+        record = trace.runner.ExecutionRecord(
+            argv=argv,
+            run_dir=run_dir,
+            stdout_path=run_dir / "stdout.json",
+            stderr_path=run_dir / "stderr.txt",
+            pid=123,
+            raw_wait_status=0,
+            exit_code=0,
+            cpu_seconds=4.5,
+            native_peak_rss_kib=100,
+            peak_resident_bytes=102400,
+            measurement_status="OK",
+            measurement_reason=None,
+        )
+        if controls.get("kill"):
+            record = record.model_copy(
+                update={
+                    "signal": 9,
+                    "exit_code": None,
+                    "raw_wait_status": 9,
+                    "stop_reason": "WATCHDOG",
+                }
+            )
+        if controls.get("reap"):
+            record = record.model_copy(
+                update={"measurement_status": "BLOCKED", "measurement_reason": "REAP_UNCONFIRMED"}
+            )
+        return record
+
+    monkeypatch.setattr(trace.runner, "supervise_linux", supervise)
+    return cpu_root, cpu_approval(cpu_root), calls, controls, owner
+
+
+def test_cpu_supervisor_kill_does_not_invent_native_cpu_or_count(cpu_harness):
+    root, approval, calls, controls, owner = cpu_harness
+    controls["kill"] = True
+    result = trace._run_cpu_parent(root, approval)
+    assert len(calls) == 1 and result["harness_status"] == "WATCHDOG_TIMEOUT"
+    assert result["native_solve_measurement"] is None and result["native_call_count"] is None
+    assert result["native_call_count_reason"] == "NOT_OBSERVABLE"
+    assert result["native_capture_reason"] == "CHILD_TERMINATED_BEFORE_FINAL_CAPTURE"
+    assert result["counters"]["num_branches"] is None
+    assert (
+        result["counter_missing_reasons"]["num_branches"] == "CHILD_TERMINATED_BEFORE_FINAL_CAPTURE"
+    )
+    assert result["response"] is None
+    assert result["response_reason"] == "CHILD_TERMINATED_BEFORE_FINAL_CAPTURE"
+    assert result["execution"]["cpu_seconds"] == 4.5
+    assert json.loads((owner / "active.json").read_text())["state"] == "IDLE"
+
+
+@pytest.mark.parametrize("block", ["none", "ac", "headroom", "owner", "reap", "timing"])
+def test_cpu_owner_ac_headroom_reentry_and_reap(cpu_harness, monkeypatch, block):
+    root, approval, calls, controls, owner = cpu_harness
+    if block == "ac":
+        monkeypatch.setattr(trace.runner, "_operational_context", lambda: context(False))
+    elif block == "headroom":
+        monkeypatch.setattr(trace.shutil, "disk_usage", lambda p: SimpleNamespace(free=0))
+    elif block == "owner":
+        owner.mkdir()
+        (owner / "active.json").write_text(json.dumps({"state": "NEEDS_REVIEW"}))
+    elif block == "reap":
+        controls["reap"] = True
+    elif block == "timing":
+        controls["result"] = {
+            "native_solve_measurement": {"measurement_status": "BLOCKED", "call_returned": True}
+        }
+    if block == "owner":
+        with pytest.raises(ValueError, match="STALE"):
+            trace._run_cpu_parent(root, approval)
+        assert not calls
+        return
+    result = trace._run_cpu_parent(root, approval)
+    assert len(calls) == (0 if block in ("ac", "headroom") else 1)
+    if block == "none":
+        assert result["status"] == "TERMINAL" and result["harness_status"] == "COMPLETE"
+        assert result["raw_solver_status"] == "UNKNOWN" and result["score"] is None
+        assert result["native_call_count"] == 1
+    else:
+        assert result["status"] == "BLOCKED"
+    expected = "NEEDS_REVIEW" if block == "reap" else "IDLE"
+    assert json.loads((owner / "active.json").read_text())["state"] == expected
+    with pytest.raises(ValueError, match="ALREADY_STARTED"):
+        trace._run_cpu_parent(root, approval)
+    assert (root / "manifest.json").exists()
+
+
+def test_cpu_direct_child_cannot_build_without_parent(cpu_root, monkeypatch):
+    monkeypatch.setattr(
+        trace, "_build_target", Mock(side_effect=AssertionError("UNAUTHORIZED_BUILD"))
+    )
+    with pytest.raises((OSError, ValueError)):
+        trace._cpu_child(cpu_root, cpu_approval(cpu_root))
+    assert cp_model.CpSolver.call_count == 0
+
+
+@pytest.mark.parametrize("where", ["pre", "post"])
+@pytest.mark.parametrize("invalid", [float("nan"), float("inf"), None, -1])
+def test_cpu_invalid_wall_snapshot_remains_json_serializable(cpu_clocks, where, invalid):
+    cpu_clocks[0].side_effect = (
+        [invalid, 12_000_000_000] if where == "pre" else [10_000_000_000, invalid]
+    )
+    sample = {}
+    call = Mock(return_value=cp_model.UNKNOWN)
+    if where == "pre":
+        with pytest.raises(RuntimeError, match="CPU_CLOCK_PRE"):
+            trace.measure_native_call(call, sample)
+        assert call.call_count == 0
+    else:
+        assert trace.measure_native_call(call, sample) is cp_model.UNKNOWN
+    assert sample["measurement_status"] == "BLOCKED"
+    json.dumps(sample, allow_nan=False)
+
+
+def test_cpu_ratio_overflow_is_blocked_without_losing_native_return(cpu_clocks):
+    cpu_clocks[0].side_effect = [1, 2]
+    cpu_clocks[1].side_effect = [
+        SimpleNamespace(ru_utime=0.0, ru_stime=0.0),
+        SimpleNamespace(ru_utime=1e308, ru_stime=0.0),
+    ]
+    sample = {}
+    assert trace.measure_native_call(lambda: cp_model.UNKNOWN, sample) is cp_model.UNKNOWN
+    assert sample["measurement_status"] == "BLOCKED" and sample["cpu_wall_ratio"] is None
+    json.dumps(sample, allow_nan=False)
+
+
+def test_cpu_child_success_and_reentry_are_guarded(cpu_root, stage_inputs, cpu_clocks, monkeypatch):
+    approval = cpu_approval(cpu_root)
+    owner = cpu_root / "owner"
+    owner.mkdir()
+    monkeypatch.setattr(trace.runner, "_OWNER_ROOT", owner)
+    monkeypatch.setattr(trace.os, "getppid", lambda: 321)
+    monkeypatch.setattr(trace, "_build_target", lambda: stage_inputs)
+    monkeypatch.setattr(trace.runner, "_operational_context", context)
+    monkeypatch.setattr(
+        trace.runner,
+        "check_headroom",
+        lambda cap: trace.runner.HeadroomCheck(
+            status="PASS",
+            target_bytes=cap,
+            required_bytes=3 * 1024**3,
+            available_bytes=4 * 1024**3,
+            host_available_bytes=4 * 1024**3,
+        ),
+    )
+    monkeypatch.setattr(trace.shutil, "disk_usage", lambda p: SimpleNamespace(free=1024**3))
+    (owner / "active.json").write_text(
+        json.dumps(
+            {
+                "state": "RUNNING",
+                "pid": 321,
+                "campaign_root": str(cpu_root),
+                "campaign_id": "unit-cpu",
+            }
+        )
+    )
+    start = {
+        "baseline_sha256": trace.runner._sha(cpu_root / "cpu-candidate.json"),
+        "run_id": "unit-cpu",
+        "parent_pid": 321,
+        "kind": "tight10_native_cpu",
+        "logging_mode": "logging_off",
+        "measurement_policy_version": "native_cpu_v1",
+    }
+    (cpu_root / "START.json").write_text(json.dumps(start))
+    (cpu_root / "attempt").mkdir()
+    assert trace._cpu_child(cpu_root, approval)["status"] == "CPU_CHILD_TERMINAL"
+    receipt = json.loads((cpu_root / "CHILD-START.json").read_text())
+    assert all(receipt[key] == value for key, value in start.items())
+    assert receipt["pid"] == trace.os.getpid()
+    result = json.loads((cpu_root / "attempt/trace-result.json").read_text())
+    assert (
+        result["native_solve_measurement"]["measurement_status"] == "OK"
+        and result["native_call_count"] == 1
+    )
+    assert not (cpu_root / "attempt/trace.log").exists()
+    assert (cpu_root / "attempt/independent-checks.json").exists()
+    with pytest.raises(ValueError, match="REENTRY"):
+        trace._cpu_child(cpu_root, approval)
+    assert len(FakeSolver.instances) == 1
