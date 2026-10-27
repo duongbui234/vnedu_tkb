@@ -65,3 +65,7 @@ Riêng matched pair ON−OFF = **+2.801758664s** native wall. Không gọi đây
 - Không chạy pytest trong lượt docs-only; full suite có native solves trái yêu cầu. Kết quả64 fake tests của Task2 là lịch sử, không ghi thành test mới của lượt này.
 
 Lệnh thực chạy: `uv sync --locked --extra solver` PASS; `uv run ruff check .` PASS; `uv run ruff format --check src tests benchmarks` PASS (54 files); `uv run mypy` PASS (27 Core source files); `git diff --check` PASS. Standard-library asserts về manifest/hash/status/nulls và links/scope PASS. Không chạy full pytest hoặc thêm fake tests vì chỉ thay tài liệu và user cấm native solve thêm.
+
+## Audit accounting tiếp sau tổng hợp
+
+Đã thực hiện audit read-only được đề xuất ở trên; xem [CPU/wall và context audit](tight10-accounting-audit-report.md). Ba UNKNOWN có accounting OK và pre-context từ journal đúng provenance; post-context lịch sử vẫn thiếu. Ratio toàn child≈1,030 không xác định native CPU/progress hay nguyên nhân UNKNOWN. Đề xuất hiện tại duy nhất nằm cuối audit report; không chạy solver thêm. Các mốc “chưa thực hiện” phía trên là lịch sử tại thời điểm tổng hợp.
