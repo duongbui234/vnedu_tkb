@@ -62,3 +62,7 @@ Installed capture/build-only guard asserts constructor0. Không chạy full pyte
 Full-plan implementation request đã cho phép triển khai tooling; [plan, mục Candidate/approval](superpowers/plans/2026-10-27-tight10-native-cpu.md) vẫn yêu cầu “User cần chấp thuận actual snapshot/drift/power/workload limitations được Task 1 công bố” và Task2 “Sau exact user approval mới”. Actual hash/snapshot chỉ có sau prepare này.
 
 Cần xác nhận candidate SHA256 trên, exact run-ID/output root, snapshot MemTotal khớp legacy, fixed OFF/CPU policy và giới hạn workload/power, cho **một attempt/tối đa một native feasibility call**. Không ký approval thay user hoặc dùng old hash. Sau approval, parent/child phải PASS fresh gates; drift mới block không tự rebaseline. Task2 chưa thực hiện; nếu chưa có approval thì dừng ở PREPARED_NOT_AUTHORIZED, không tuyên bố full kế hoạch đã hoàn tất.
+
+## Trạng thái sau preparation
+
+User sau đó đã duyệt exact candidate/snapshot và Task2 đã chạy đúng một attempt; xem [native CPU execution report](tight10-native-cpu-report.md). Trạng thái “chưa chạy/chưa authorization” ở trên là lịch sử của lượt prepare; candidate bytes/snapshot không đổi.

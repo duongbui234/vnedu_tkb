@@ -88,13 +88,13 @@ Lưu pre/post workload/power ở parent và child pre-admission bằng helper hi
 - [x] Run `uv sync --locked --extra solver`, dedicated fake suite, `uv run ruff check .`, `uv run ruff format --check src tests benchmarks`, `uv run mypy`, `git diff --check`; Expected PASS. Full pytest có native solves ngoài prepare scope thì không chạy, ghi limitation. Freeze source after fixes/review; code change sau candidate→new candidate.
 - [x] Only after Task 1 authorized: installed interpreter `-I` invokes prepare-cpu under native constructor guard; check frozen hashes/witness/model build-only, current snapshot/legacy diff. Write candidate exclusive, actual SHA256, policy/fields/limitations vào preparation report; Expected PREPARED_NOT_AUTHORIZED/BLOCKED, no authorization/lease/START/attempt/native calls. Kiểm candidate hash/current driver/source/membership/protected evidence bằng asserts rồi dừng, không chạy Task2.
 
-## Task 2 — Một CPU measurement attempt với approval mới; chưa được phép
+## Task 2 — Một CPU measurement attempt đã được duyệt và hoàn tất
 
 **Files:** existing Task1 tooling, fresh authorized run artifacts và `docs/tight10-native-cpu-report.md`; không source/Core changes trong execution.
 
-- [ ] Sau exact user approval mới, ghi original scope và CpuAuthorization; kiểm hash/root/ID/policy/runtime/model/owner/headroom/disk/AC mới. Expected all new gates PASS; legacy vẫn ghi riêng BLOCKED nếu MemTotal drift. Blocker thì giữ reason và dừng, không sửa gate hoặc retry.
-- [ ] Invoke run-cpu **một lần**, installed fresh child, one native feasibility call maximum, giữ budget/guards. Expected terminal hoặc blocked/partial có preserved evidence; không tự chạy lại để có UNKNOWN, không extend deadline, không quality stages.
-- [ ] Audit raw start/end CPU arithmetic, clock boundary/policies, full applied parameters/callbacks, response/work counters, independent hard/score nếu có lịch, whole-child wait4/RSS riêng, context/provenance/nulls và manifest/reap. Report CPU-boundary measurement vs whole-child accounting; compare từng historical identity riêng, không pool n/SLA/causal logging hoặc frequency claims. Dừng và chỉ đề xuất một bước từ evidence, không tự thực hiện thêm.
+- [x] Sau exact user approval mới, ghi original scope và CpuAuthorization; kiểm hash/root/ID/policy/runtime/model/owner/headroom/disk/AC mới. Expected all new gates PASS; legacy vẫn ghi riêng BLOCKED nếu MemTotal drift. Blocker thì giữ reason và dừng, không sửa gate hoặc retry.
+- [x] Invoke run-cpu **một lần**, installed fresh child, one native feasibility call maximum, giữ budget/guards. Expected terminal hoặc blocked/partial có preserved evidence; không tự chạy lại để có UNKNOWN, không extend deadline, không quality stages.
+- [x] Audit raw start/end CPU arithmetic, clock boundary/policies, full applied parameters/callbacks, response/work counters, independent hard/score nếu có lịch, whole-child wait4/RSS riêng, context/provenance/nulls và manifest/reap. Report CPU-boundary measurement vs whole-child accounting; compare từng historical identity riêng, không pool n/SLA/causal logging hoặc frequency claims. Dừng và chỉ đề xuất một bước từ evidence, không tự thực hiện thêm.
 
 ## Self-review và kiểm chứng lượt lập kế hoạch
 
@@ -104,4 +104,8 @@ Lượt này chỉ đọc AGENTS/Core First, audit report và connected driver/g
 
 ## Trạng thái triển khai
 
-Task1 full instrumentation/109fake tests/build-only prepare hoàn tất; xem [preparation report](../../tight10-native-cpu-preparation-report.md). Candidate SHA256 `5585a43eee2ac961591f320b56e743347efe449a976fbed78c7ad620631c2499`, legacy PASS, MemTotal40745240KiB. Task2 pending exact candidate/snapshot approval, chưa native call. Yêu cầu full-plan được thực hiện tới final gate, không tự cấp approval của snapshot chưa tồn tại trước prepare.
+Task1 full instrumentation/109fake tests/build-only prepare hoàn tất; xem [preparation report](../../tight10-native-cpu-preparation-report.md). Candidate SHA256 `5585a43eee2ac961591f320b56e743347efe449a976fbed78c7ad620631c2499`, legacy PASS, MemTotal40745240KiB. Tại cuối Task1, Task2 còn pending exact candidate/snapshot approval; sau đó user đã duyệt và kết quả được ghi bên dưới. Yêu cầu full-plan được thực hiện tới final gate, không tự cấp approval của snapshot chưa tồn tại trước prepare.
+
+## Trạng thái Task 2
+
+Đã chạy đúng một attempt/native call theo exact approval: COMPLETE/measurementOK/feasibilityOPTIMAL, native-boundary CPU46.008923s/wall46.036537386s,260hard-valid assignments/score(12,77,4). Xem [execution report](../../tight10-native-cpu-report.md). Owner IDLE, no retry, source/budget/guards giữ nguyên.
