@@ -211,3 +211,7 @@ Không chạy full pytest vì suite có solve;439PASS của Task5 vẫn là lị
 Fresh reviewer không actionable findings. Reviewer tự replay saved data và hai mutation checks, kiểm107protected hashes và script copies; đặc biệt deserialize **saved model-proto.txt** dưới guard `CpSolver` rồi đối chiếu từng variable definition và constraint payload với JSON (4,700variables/1,255constraints), xác nhận không objective và guard calls0. Reviewer đọc arithmetic/derivation/independent scoring/immutability; không chạy lại probe, build model, solver/search/profiling hoặc full suite. Không có deferred findings.
 
 Phạm vi còn lại: đây là một satisfying witness extension cho đúng model đã lưu, không là chứng minh tối ưu/correctness tổng quát hoặc lời giải thích UNKNOWN. Báo cáo được giữ trên nhánh hiện tại; chưa merge/push hoặc thực hiện đề xuất trace.
+
+### Kế hoạch trace tiếp sau kiểm auxiliary
+
+Đã lập [kế hoạch search trace tối thiểu](superpowers/plans/2026-10-27-tight10-search-trace.md) trên nhánh hiện tại. Task1 của kế hoạch mới chỉ prepare/instrumentation/tests không search; Task2 một supervised feasibility trace cần duyệt riêng candidate baseline hash. Logging thay đổi riêng,giữ60s/workers1/seed42 và guards; legacy machine gate không được bypass vì MemTotal vẫn lệch4KiB. Lượt lập kế hoạch chưa tạo driver hoặc chạy prepare/build/solver/search/profiling.
