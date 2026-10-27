@@ -2,6 +2,8 @@
 
 **Task 5 Linux: đã tổng hợp evidence lịch sử. Pilot performance: NOT_MET. Correctness: không có FAIL quan sát được; coverage INCOMPLETE vì 27 lượt UNKNOWN không có lịch để kiểm. Windows BLOCKED; chưa nghiệm thu hai OS hoặc production.**
 
+> **Chú thích lịch sử:** Các mô tả “chưa có trace”, “chưa build” và các đề xuất chưa thực hiện bên dưới phản ánh thời điểm ghi từng phần của báo cáo. Chẩn đoán về sau được tổng hợp riêng tại [bản tổng hợp evidence TIGHT10](tight10-evidence-synthesis.md); không thay đổi campaign 108 primary, failed=63, ba repeats/fingerprint, các thống kê hoặc Windows BLOCKED trong báo cáo này.
+
 ## Phạm vi và provenance
 
 - Chỉ đọc campaign `linux-pilot-20261027-v1`: 108 primary = 36 datasets × 3 repeats, cộng 2 receipts warmup/pilot được kiểm nhưng loại khỏi thống kê primary. Không chạy lại solver campaign, đổi input, seed, workers, budget hoặc guard.
