@@ -204,7 +204,8 @@ class FakeSolver:
     def solve(self, model):
         self.calls += 1
         for message in self.messages:
-            self.log_callback(message)
+            if self.log_callback is not None:
+                self.log_callback(message)
         return self.status_code
 
     def response_stats(self):
@@ -494,3 +495,493 @@ def test_log_close_or_read_failure_retains_incomplete_response(
     assert "UNIT_LOG_" in result["error"]
     assert not result["valid_schedule"] and result["assignments"] == []
     assert cp_model.CpSolver is FakeSolver
+
+
+@pytest.fixture
+def pair_root(prepared_root, tmp_path):
+    root = tmp_path / "pair"
+    result = trace.prepare_pair(root, "unit-pair")
+    assert result["status"] == "PREPARED_NOT_AUTHORIZED"
+    return root
+
+
+def pair_approval(root):
+    path = root / "user-pair-approval.json"
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "approved": True,
+                "action": "RUN_ONE_LOGGING_PAIR",
+                "baseline_sha256": trace.runner._sha(root / "pair-candidate.json"),
+                "pair_id": "unit-pair",
+                "output_root": str(root.resolve()),
+                "run_ids": ["unit-pair-off", "unit-pair-on"],
+                "order": ["logging_off", "logging_on"],
+            }
+        )
+    )
+    return path
+
+
+def test_pair_exact_members_and_off_on_order(pair_root):
+    data = json.loads((pair_root / "pair-candidate.json").read_text())
+    assert data["order"] == ["logging_off", "logging_on"]
+    assert data["run_ids"] == ["unit-pair-off", "unit-pair-on"]
+    assert data["run_paths"] == ["runs/01-off", "runs/02-on"]
+    for field, value in [
+        ("order", ["logging_on", "logging_off"]),
+        ("run_ids", ["unit-pair-off", "unit-pair-on", "extra"]),
+        ("run_paths", ["../escape", "runs/02-on"]),
+        ("schema_version", "2.0"),
+        ("unknown", True),
+        ("pair_id", "a" * 61),
+    ]:
+        changed = copy.deepcopy(data)
+        changed[field] = value
+        with pytest.raises(ValueError):
+            trace.PairCandidate.model_validate(changed)
+
+
+def test_common_identity_and_model_equal_profile_difference_only(pair_root, stage_inputs, tmp_path):
+    data = json.loads((pair_root / "pair-candidate.json").read_text())
+    assert "logging" not in data["common_identity"]
+    assert data["common_identity"]["model_sha256"] == trace.MODEL_SHA
+    off = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), tmp_path / "off.log", logging_mode="logging_off"
+    )
+    on = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), tmp_path / "on.log", logging_mode="logging_on"
+    )
+    params = []
+    for solver in FakeSolver.instances[-2:]:
+        p = solver.parameters
+        p.log_search_progress = False
+        params.append(str(p))
+    assert params[0] == params[1]
+    assert off["solve_calls"] == on["solve_calls"] == 1
+    changed = copy.deepcopy(data)
+    changed["profiles"]["logging_off"]["log_to_stdout"] = True
+    with pytest.raises(ValueError):
+        trace.PairCandidate.model_validate(changed)
+
+
+def test_off_has_no_callback_or_log_but_validates_schedule(stage_inputs, tmp_path, monkeypatch):
+    monkeypatch.setattr(FakeSolver, "status_code", 4)
+    path = tmp_path / "off.log"
+    result = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), path, logging_mode="logging_off"
+    )
+    assert result["stage_complete"] and result["trace_complete"] is None
+    assert result["trace_capture_status"] == "DISABLED"
+    assert result["missing_log_reason"] == "LOGGING_DISABLED" and not path.exists()
+    assert FakeSolver.instances[-1].log_callback is None
+    assert result["correctness"] == "PASS" and result["valid_schedule"]
+    assert result["score"]["tiers"] == [0, 0, 0]
+    assert not result["quality_proved"] and result["optimal_prefix"] == []
+    from tkb_core.validation import independent_validator
+
+    monkeypatch.setattr(
+        independent_validator, "validate_schedule", lambda *a: SimpleNamespace(valid=False)
+    )
+    bad = trace.trace_feasibility(*stage_inputs, SolveOptions(), path, logging_mode="logging_off")
+    assert bad["correctness"] == "FAIL" and bad["score"] is None
+
+
+def test_off_unknown_is_complete_measurement_not_infeasible(stage_inputs, tmp_path):
+    result = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), tmp_path / "off.log", logging_mode="logging_off"
+    )
+    assert result["raw_solver_status"] == "UNKNOWN" and result["stage_complete"]
+    assert result["correctness"] == "NOT_ASSESSED" and result["score"] is None
+    assert result["response"] and result["counters"]["num_branches"] == 3
+    assert result["phase"] == "SEARCH_ENTERED"
+    assert result["elapsed_to_search_marker_seconds"] is None
+    assert result["search_marker_reason"] == "LOGGING_DISABLED"
+
+
+def test_on_close_read_error_preserves_response(stage_inputs, tmp_path, monkeypatch):
+    path = tmp_path / "on.log"
+    old = type(path).read_text
+
+    def read(p, *a, **kw):
+        if p == path:
+            raise OSError("UNIT_READ")
+        return old(p, *a, **kw)
+
+    monkeypatch.setattr(type(path), "read_text", read)
+    result = trace.trace_feasibility(*stage_inputs, SolveOptions(), path, logging_mode="logging_on")
+    assert result["stage_complete"] and result["trace_capture_status"] == "FAILED"
+    assert not result["trace_complete"] and result["response"]
+    assert not result["valid_schedule"]
+
+
+def test_single_authorization_cannot_authorize_pair(pair_root, prepared_root):
+    with pytest.raises(ValueError):
+        trace.check_pair_authorization(pair_root, authorize(prepared_root))
+
+
+def test_pair_scope_and_started_member_cannot_be_reused(pair_root):
+    approval = pair_approval(pair_root)
+    assert trace.check_pair_authorization(pair_root, approval).pair_id == "unit-pair"
+    data = json.loads(approval.read_text())
+    for field, value in [
+        ("output_root", str(pair_root / "elsewhere")),
+        ("run_ids", ["other-off", "other-on"]),
+        ("order", ["logging_on", "logging_off"]),
+        ("baseline_sha256", "0" * 64),
+    ]:
+        changed = data | {field: value}
+        approval.write_text(json.dumps(changed))
+        with pytest.raises(ValueError):
+            trace.check_pair_authorization(pair_root, approval)
+    approval.write_text(json.dumps(data))
+    (pair_root / "runs/01-off").mkdir(parents=True)
+    with pytest.raises(ValueError, match="ALREADY_STARTED"):
+        trace.check_pair_authorization(pair_root, approval)
+
+
+@pytest.mark.parametrize("field", ["machine", "driver_sha256", "options", "logging"])
+def test_common_or_profile_drift_blocks(pair_root, monkeypatch, field):
+    approval = pair_approval(pair_root)
+    changed = copy.deepcopy(identity())
+    changed[field] = {"unexpected": True} if field != "driver_sha256" else "c" * 64
+    monkeypatch.setattr(trace, "capture_identity", lambda: changed)
+    with pytest.raises(ValueError):
+        trace.check_pair_authorization(pair_root, approval)
+
+
+def context(ac=True):
+    return {
+        "timestamp_utc": "2026-10-27T00:00:00+00:00",
+        "load_average": None,
+        "load_status": "UNKNOWN",
+        "power": {"AC": {"type": "Mains", "online": "1"}} if ac else {"status": "UNKNOWN"},
+        "workload_control": "UNCONTROLLED",
+        "competing_workload": "UNKNOWN",
+    }
+
+
+@pytest.fixture
+def pair_harness(pair_root, stage_inputs, monkeypatch):
+    owner = pair_root / "test-owner"
+    monkeypatch.setattr(trace.runner, "_OWNER_ROOT", owner)
+    monkeypatch.setattr(trace.runner, "_operational_context", context)
+    monkeypatch.setattr(
+        trace.runner,
+        "check_headroom",
+        lambda cap: trace.runner.HeadroomCheck(
+            status="PASS",
+            target_bytes=cap,
+            required_bytes=3 * 1024**3,
+            available_bytes=4 * 1024**3,
+            host_available_bytes=4 * 1024**3,
+        ),
+    )
+    monkeypatch.setattr(trace.shutil, "disk_usage", lambda p: SimpleNamespace(free=1024**3))
+    calls = []
+    outcomes = []
+
+    def supervise(argv, run_dir, limits):
+        assert json.loads((owner / "active.json").read_text())["state"] == "RUNNING"
+        assert limits.watchdog_seconds == 150 and limits.max_resident_bytes == 1024**3
+        mode = "logging_off" if len(calls) == 0 else "logging_on"
+        calls.append((argv, run_dir))
+        run_dir.mkdir()
+        result = trace.trace_feasibility(
+            *stage_inputs, SolveOptions(), run_dir / "trace.log", logging_mode=mode
+        )
+        overrides = outcomes.pop(0) if outcomes else {}
+        result.update(overrides.get("result", {}))
+        (run_dir / "trace-result.json").write_text(json.dumps(result))
+        return trace.runner.ExecutionRecord(
+            argv=argv,
+            run_dir=run_dir,
+            stdout_path=run_dir / "stdout.json",
+            stderr_path=run_dir / "stderr.txt",
+            pid=123,
+            raw_wait_status=0,
+            exit_code=0,
+            measurement_status="OK",
+            measurement_reason=None,
+            cpu_seconds=0.01,
+            native_peak_rss_kib=100,
+            peak_resident_bytes=102400,
+        ).model_copy(update=overrides.get("execution", {}))
+
+    monkeypatch.setattr(trace.runner, "supervise_linux", supervise)
+    return pair_root, pair_approval(pair_root), calls, outcomes, owner
+
+
+def test_ac_unknown_blocks_next_member_without_retry(pair_harness, monkeypatch):
+    root, approval, calls, _, owner = pair_harness
+    contexts = iter([context(), context(), context(False)])
+    monkeypatch.setattr(trace.runner, "_operational_context", lambda: next(contexts))
+    result = trace._run_pair_parent(root, approval)
+    assert result["status"] == "PARTIAL" and len(calls) == 1
+    assert result["members"][1]["status"] == "NOT_STARTED"
+    assert "POWER" in result["reason"]
+    assert json.loads((owner / "active.json").read_text())["state"] == "IDLE"
+    with pytest.raises(ValueError, match="ALREADY_STARTED"):
+        trace._run_pair_parent(root, approval)
+
+
+@pytest.mark.parametrize("failure", [None, "crash", "mismatch", "capture", "infeasible", "reap"])
+def test_unknown_continues_but_crash_or_mismatch_stops_pair(pair_harness, failure):
+    root, approval, calls, outcomes, owner = pair_harness
+    if failure == "crash":
+        outcomes.append({"execution": {"signal": 9}})
+    elif failure == "mismatch":
+        outcomes.append({"result": {"correctness": "FAIL"}})
+    elif failure == "capture":
+        outcomes.append({"result": {"stage_complete": False}})
+    elif failure == "infeasible":
+        outcomes.append({"result": {"raw_solver_status": "INFEASIBLE", "correctness": "FAIL"}})
+    elif failure == "reap":
+        outcomes.append(
+            {
+                "execution": {
+                    "measurement_status": "BLOCKED",
+                    "measurement_reason": "REAP_UNCONFIRMED",
+                }
+            }
+        )
+    result = trace._run_pair_parent(root, approval)
+    assert len(calls) == (1 if failure else 2)
+    assert result["status"] == ("PARTIAL" if failure else "TERMINAL")
+    assert result["members"][0]["raw_solver_status"] == (
+        "INFEASIBLE" if failure == "infeasible" else "UNKNOWN"
+    )
+    assert result["members"][0]["score"] is None
+    assert result["members"][1]["status"] == ("NOT_STARTED" if failure else "COMPLETE")
+    state = json.loads((owner / "active.json").read_text())["state"]
+    assert state == ("NEEDS_REVIEW" if failure == "reap" else "IDLE")
+    assert (root / "manifest.json").exists()
+    assert not (root / "runs/01-off/attempt/trace.log").exists()
+
+
+def test_power_change_and_missing_metrics_keep_limitations(pair_harness, monkeypatch):
+    root, approval, calls, _, _ = pair_harness
+    contexts = iter([context(), context(False), context(), context()])
+    monkeypatch.setattr(trace.runner, "_operational_context", lambda: next(contexts))
+    result = trace._run_pair_parent(root, approval)
+    assert len(calls) == 2 and result["comparability"] == "LIMITED"
+    assert result["members"][0]["post_context"]["power"] == {"status": "UNKNOWN"}
+    assert result["members"][0]["pre_context"]["load_average"] is None
+    assert result["members"][0]["first_feasible_elapsed_seconds"] is None
+    assert "ORDER_WORKLOAD_THERMAL_UNCONTROLLED_N1" in result["limitations"]
+
+
+def test_prepare_pair_never_constructs_native_solver_or_approval(pair_root):
+    assert cp_model.CpSolver.call_count == 0
+    assert sorted(p.name for p in pair_root.iterdir()) == [
+        "pair-candidate.json",
+        "preparation-result.json",
+    ]
+    result = json.loads((pair_root / "preparation-result.json").read_text())
+    assert result["search_executed"] is result["authorization_created"] is False
+    assert result["candidate_sha256"] == trace.runner._sha(pair_root / "pair-candidate.json")
+    with pytest.raises(FileExistsError):
+        trace.prepare_pair(pair_root, "unit-pair")
+
+
+def test_pair_direct_child_requires_lease_before_build(pair_root, monkeypatch):
+    approval = pair_approval(pair_root)
+    monkeypatch.setattr(trace, "_build_target", Mock(side_effect=AssertionError("BUILD_FORBIDDEN")))
+    with pytest.raises((OSError, ValueError)):
+        trace._pair_child(pair_root, approval, 0)
+    assert cp_model.CpSolver.call_count == 0
+
+
+def test_prepare_pair_cli_never_dispatches_solver(tmp_path, prepared_root, monkeypatch, capsys):
+    root = tmp_path / "cli-pair"
+    monkeypatch.setattr(
+        trace.runner, "supervise_linux", Mock(side_effect=AssertionError("SPAWN_FORBIDDEN"))
+    )
+    assert trace.main(["prepare-pair", "--root", str(root), "--pair-id", "unit-pair"]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["status"] == "PREPARED_NOT_AUTHORIZED"
+    assert not output["search_executed"] and not output["authorization_created"]
+    assert cp_model.CpSolver.call_count == 0
+
+
+def test_pair_child_profile_and_no_reentry(pair_root, stage_inputs, monkeypatch):
+    approval = pair_approval(pair_root)
+    owner = pair_root / "owner"
+    owner.mkdir()
+    monkeypatch.setattr(trace.runner, "_OWNER_ROOT", owner)
+    monkeypatch.setattr(trace.os, "getppid", lambda: 321)
+    monkeypatch.setattr(trace, "_build_target", lambda: stage_inputs)
+    monkeypatch.setattr(trace.runner, "_operational_context", context)
+    monkeypatch.setattr(trace.shutil, "disk_usage", lambda p: SimpleNamespace(free=1024**3))
+    monkeypatch.setattr(
+        trace.runner,
+        "check_headroom",
+        lambda cap: trace.runner.HeadroomCheck(
+            status="PASS",
+            target_bytes=cap,
+            required_bytes=3 * 1024**3,
+            available_bytes=4 * 1024**3,
+            host_available_bytes=4 * 1024**3,
+        ),
+    )
+    (owner / "active.json").write_text(
+        json.dumps(
+            {
+                "state": "RUNNING",
+                "pid": 321,
+                "campaign_root": str(pair_root),
+                "campaign_id": "unit-pair",
+            }
+        )
+    )
+    base = {
+        "baseline_sha256": trace.runner._sha(pair_root / "pair-candidate.json"),
+        "pair_id": "unit-pair",
+        "parent_pid": 321,
+    }
+    (pair_root / "PAIR-START.json").write_text(json.dumps(base))
+    member = pair_root / "runs/01-off"
+    (member / "attempt").mkdir(parents=True)
+    (member / "START.json").write_text(
+        json.dumps(base | {"index": 0, "mode": "logging_off", "run_id": "unit-pair-off"})
+    )
+    result = trace._pair_child(pair_root, approval, 0)
+    assert result["status"] == "CHILD_TERMINAL"
+    saved = json.loads((member / "attempt/trace-result.json").read_text())
+    assert saved["stage_complete"] and saved["logging_mode"] == "logging_off"
+    assert saved["solve_calls"] == 1 and not (member / "attempt/trace.log").exists()
+    assert (member / "attempt/independent-checks.json").exists()
+    with pytest.raises(ValueError, match="STARTED"):
+        trace._pair_child(pair_root, approval, 0)
+    assert len(FakeSolver.instances) == 1
+
+
+def test_off_missing_counters_are_null_with_reason(stage_inputs, tmp_path, monkeypatch):
+    class MissingMetric(FakeSolver):
+        def __init__(self):
+            super().__init__()
+            self.deterministic_time = None
+
+    monkeypatch.setattr(cp_model, "CpSolver", MissingMetric)
+    result = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), tmp_path / "off.log", logging_mode="logging_off"
+    )
+    assert result["counters"]["deterministic_time"] is None
+    assert result["counter_missing_reasons"]["deterministic_time"] == "FIELD_NOT_AVAILABLE"
+    assert not (tmp_path / "off.log").exists()
+
+
+def test_pair_headroom_blocks_without_starting_native_member(pair_harness, monkeypatch):
+    root, approval, calls, _, _ = pair_harness
+    monkeypatch.setattr(
+        trace.runner,
+        "check_headroom",
+        lambda cap: trace.runner.HeadroomCheck(
+            status="BLOCKED",
+            target_bytes=cap,
+            required_bytes=3 * 1024**3,
+            available_bytes=0,
+            host_available_bytes=0,
+            reason="LOW_MEMORY",
+        ),
+    )
+    result = trace._run_pair_parent(root, approval)
+    assert result["status"] == "BLOCKED" and not calls
+    assert all(row["status"] == "NOT_STARTED" for row in result["members"])
+    assert not (root / "runs").exists()
+
+
+def test_pair_terminal_and_manifest_bind_approved_candidate(pair_harness):
+    root, approval, _, _, _ = pair_harness
+    result = trace._run_pair_parent(root, approval)
+    digest = trace.runner._sha(root / "pair-candidate.json")
+    for index, subdir in enumerate(("01-off", "02-on")):
+        terminal = json.loads((root / f"runs/{subdir}/terminal.json").read_text())
+        assert terminal["baseline_sha256"] == digest
+        assert terminal["pair_id"] == "unit-pair" and terminal["index"] == index
+        assert terminal["parent_pid"] == trace.os.getpid()
+        assert result["members"][index]["baseline_sha256"] == digest
+    manifest = json.loads((root / "manifest.json").read_text())
+    assert manifest["baseline_sha256"] == digest and manifest["pair_id"] == "unit-pair"
+
+
+def test_on_rejects_off_terminal_from_another_candidate(pair_root, monkeypatch):
+    approval = pair_approval(pair_root)
+    owner = pair_root / "owner"
+    owner.mkdir()
+    monkeypatch.setattr(trace.runner, "_OWNER_ROOT", owner)
+    monkeypatch.setattr(trace.os, "getppid", lambda: 321)
+    (owner / "active.json").write_text(
+        json.dumps(
+            {
+                "state": "RUNNING",
+                "pid": 321,
+                "campaign_root": str(pair_root),
+                "campaign_id": "unit-pair",
+            }
+        )
+    )
+    base = {
+        "baseline_sha256": trace.runner._sha(pair_root / "pair-candidate.json"),
+        "pair_id": "unit-pair",
+        "parent_pid": 321,
+    }
+    (pair_root / "PAIR-START.json").write_text(json.dumps(base))
+    off = pair_root / "runs/01-off"
+    on = pair_root / "runs/02-on"
+    off.mkdir(parents=True)
+    on.mkdir()
+    (on / "START.json").write_text(
+        json.dumps(base | {"index": 1, "mode": "logging_on", "run_id": "unit-pair-on"})
+    )
+    (off / "terminal.json").write_text(
+        json.dumps(
+            base
+            | {
+                "status": "COMPLETE",
+                "index": 0,
+                "mode": "logging_off",
+                "run_id": "unit-pair-off",
+                "baseline_sha256": "0" * 64,
+            }
+        )
+    )
+    with pytest.raises(ValueError, match="PREVIOUS_MEMBER"):
+        trace.check_pair_authorization(pair_root, approval, child=True, index=1)
+    assert cp_model.CpSolver.call_count == 0
+
+
+@pytest.mark.parametrize("mode", ["logging_off", "logging_on"])
+def test_applied_callback_state_is_captured_and_drift_blocks(
+    stage_inputs, tmp_path, monkeypatch, mode
+):
+    good = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), tmp_path / "good.log", logging_mode=mode
+    )
+    assert good["callback_state"] == {
+        "log_callback": None if mode == "logging_off" else "raw_utf8_flush",
+        "best_bound_callback": False,
+        "solution_callback": False,
+    }
+
+    class UnexpectedBound(FakeSolver):
+        def __init__(self):
+            super().__init__()
+            self.best_bound_callback = lambda bound: None
+
+    monkeypatch.setattr(cp_model, "CpSolver", UnexpectedBound)
+    bad = trace.trace_feasibility(
+        *stage_inputs, SolveOptions(), tmp_path / "bad.log", logging_mode=mode
+    )
+    assert "CALLBACK" in bad["error"] and not bad["stage_complete"]
+    assert FakeSolver.instances[-1].calls == 0
+    assert bad["callback_state"]["best_bound_callback"] is True
+
+
+def test_unstarted_off_log_reason_is_not_logging_disabled(pair_harness, monkeypatch):
+    root, approval, _, _, _ = pair_harness
+    monkeypatch.setattr(trace.runner, "_operational_context", lambda: context(False))
+    assert trace._run_pair_parent(root, approval)["status"] == "BLOCKED"
+    manifest = json.loads((root / "manifest.json").read_text())
+    assert manifest["missing_logs"]["runs/01-off/attempt/trace.log"] == "NOT_STARTED"
