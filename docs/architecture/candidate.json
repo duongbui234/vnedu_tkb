@@ -1,0 +1,462 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "vnEdu TKB · Kiến trúc Scheduling Core hiện tại",
+    "locale": "vi",
+    "quality_profile": "showcase",
+    "output": "docs/architecture/scheduling-core.html",
+    "repository": {
+      "url": "https://github.com/duongbui234/vnedu_tkb.git",
+      "revision": "9fa179191e35914578e094f7864470c1b4991528",
+      "link_mode": "web"
+    }
+  },
+  "components": [
+    {
+      "id": "benchmark",
+      "type": "external",
+      "label": "Công cụ benchmark",
+      "sublabel": "Generator + Linux campaign",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "benchmarks/generate_synthetic.py",
+          "line": 853,
+          "end_line": 890
+        },
+        {
+          "path": "benchmarks/run_benchmarks.py",
+          "line": 570,
+          "end_line": 618
+        },
+        {
+          "path": "benchmarks/run_benchmarks.py",
+          "line": 1690,
+          "end_line": 1812
+        }
+      ]
+    },
+    {
+      "id": "policy",
+      "type": "backend",
+      "label": "Registry S01–S04",
+      "sublabel": "Tham số, scope, priority, weight",
+      "pos": [
+        430,
+        40
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/constraints/registry.py",
+          "line": 22,
+          "end_line": 55
+        },
+        {
+          "path": "src/tkb_core/contracts/input.py",
+          "line": 97,
+          "end_line": 115
+        }
+      ]
+    },
+    {
+      "id": "cli",
+      "type": "external",
+      "label": "CLI · tkb-core",
+      "sublabel": "Đọc JSON / xuất stdout và file",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/cli.py",
+          "line": 59,
+          "end_line": 105
+        },
+        {
+          "path": "src/tkb_core/cli.py",
+          "line": 164,
+          "end_line": 225
+        },
+        {
+          "path": "src/tkb_core/cli.py",
+          "line": 226,
+          "end_line": 255
+        }
+      ]
+    },
+    {
+      "id": "contracts",
+      "type": "backend",
+      "label": "Contracts + Domain",
+      "sublabel": "Pydantic · input 1.0 / 1.1",
+      "pos": [
+        430,
+        240
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/contracts/input.py",
+          "line": 39,
+          "end_line": 115
+        },
+        {
+          "path": "src/tkb_core/domain/models.py",
+          "line": 16,
+          "end_line": 40
+        },
+        {
+          "path": "pyproject.toml",
+          "line": 5,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "prepare",
+      "type": "backend",
+      "label": "Normalize + Precheck",
+      "sublabel": "Occurrences → Placement domains",
+      "pos": [
+        820,
+        240
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/preprocessing/normalize.py",
+          "line": 31,
+          "end_line": 105
+        },
+        {
+          "path": "src/tkb_core/preprocessing/feasibility.py",
+          "line": 37,
+          "end_line": 55
+        },
+        {
+          "path": "src/tkb_core/preprocessing/feasibility.py",
+          "line": 138,
+          "end_line": 202
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "type": "backend",
+      "label": "Điều phối solve()",
+      "sublabel": "Chuẩn bị, chọn nhánh, tạo result",
+      "pos": [
+        820,
+        470
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/solver/cp_sat.py",
+          "line": 47,
+          "end_line": 113
+        },
+        {
+          "path": "src/tkb_core/solver/cp_sat.py",
+          "line": 142,
+          "end_line": 177
+        },
+        {
+          "path": "src/tkb_core/solver/cp_sat.py",
+          "line": 179,
+          "end_line": 221
+        }
+      ]
+    },
+    {
+      "id": "verification",
+      "type": "backend",
+      "label": "Kiểm định độc lập",
+      "sublabel": "Hard validator + score evaluator",
+      "pos": [
+        430,
+        470
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/validation/independent_validator.py",
+          "line": 1,
+          "end_line": 64
+        },
+        {
+          "path": "src/tkb_core/validation/score_evaluator.py",
+          "line": 106,
+          "end_line": 151
+        },
+        {
+          "path": "src/tkb_core/solver/objectives.py",
+          "line": 174,
+          "end_line": 190
+        }
+      ]
+    },
+    {
+      "id": "result",
+      "type": "backend",
+      "label": "ScheduleResult",
+      "sublabel": "Status, assignments, proof, hash",
+      "pos": [
+        40,
+        470
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/contracts/output.py",
+          "line": 64,
+          "end_line": 117
+        },
+        {
+          "path": "src/tkb_core/solver/cp_sat.py",
+          "line": 47,
+          "end_line": 88
+        }
+      ],
+      "tag": "output 1.1 / 1.2"
+    },
+    {
+      "id": "tests",
+      "type": "external",
+      "label": "Kiểm thử",
+      "sublabel": "Unit · integration · oracle",
+      "pos": [
+        40,
+        710
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "tests/properties/test_quality_oracle.py",
+          "line": 1,
+          "end_line": 44
+        },
+        {
+          "path": "README.md",
+          "line": 12,
+          "end_line": 21
+        }
+      ]
+    },
+    {
+      "id": "quality",
+      "type": "backend",
+      "label": "Tối ưu theo P1 → P3",
+      "sublabel": "Chỉ khóa tier khi có proof",
+      "pos": [
+        430,
+        710
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/solver/objectives.py",
+          "line": 104,
+          "end_line": 149
+        },
+        {
+          "path": "src/tkb_core/solver/objectives.py",
+          "line": 174,
+          "end_line": 218
+        }
+      ]
+    },
+    {
+      "id": "engine",
+      "type": "backend",
+      "label": "Model + OR-Tools CP-SAT",
+      "sublabel": "ExactlyOne · AtMostOne · soft",
+      "pos": [
+        820,
+        710
+      ],
+      "size": [
+        230,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/tkb_core/solver/model_builder.py",
+          "line": 19,
+          "end_line": 31
+        },
+        {
+          "path": "src/tkb_core/constraints/hard.py",
+          "line": 10,
+          "end_line": 31
+        },
+        {
+          "path": "src/tkb_core/constraints/soft.py",
+          "line": 49,
+          "end_line": 78
+        }
+      ],
+      "tag": "extra solver"
+    }
+  ],
+  "connections": [
+    {
+      "id": "benchmark-cli",
+      "from": "benchmark",
+      "to": "cli",
+      "label": "process solve"
+    },
+    {
+      "id": "cli-contracts",
+      "from": "cli",
+      "to": "contracts",
+      "label": "JSON → model"
+    },
+    {
+      "id": "contracts-policy",
+      "from": "contracts",
+      "to": "policy",
+      "label": "parse_parameters"
+    },
+    {
+      "id": "contracts-prepare",
+      "from": "contracts",
+      "to": "prepare",
+      "label": "ScheduleInput"
+    },
+    {
+      "id": "prepare-pipeline",
+      "from": "prepare",
+      "to": "pipeline",
+      "label": "PreparedProblem"
+    },
+    {
+      "id": "pipeline-verification",
+      "from": "pipeline",
+      "to": "verification",
+      "label": "assignments"
+    },
+    {
+      "id": "verification-result",
+      "from": "verification",
+      "to": "result",
+      "label": "valid gate"
+    },
+    {
+      "id": "result-cli",
+      "from": "result",
+      "to": "cli",
+      "label": "serialize"
+    },
+    {
+      "id": "pipeline-engine",
+      "from": "pipeline",
+      "to": "engine",
+      "label": "build / solve"
+    },
+    {
+      "id": "pipeline-quality",
+      "from": "pipeline",
+      "to": "quality",
+      "label": "1.1 + soft bật"
+    },
+    {
+      "id": "quality-engine",
+      "from": "quality",
+      "to": "engine",
+      "label": "solve từng tier"
+    },
+    {
+      "id": "quality-verification",
+      "from": "quality",
+      "to": "verification",
+      "label": "kiểm mỗi nghiệm"
+    },
+    {
+      "id": "tests-result",
+      "from": "tests",
+      "to": "result",
+      "label": "assert"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Luồng dữ liệu và quyền điều phối",
+      "items": [
+        "Mũi tên biểu diễn truyền dữ liệu hoặc phụ thuộc có nhãn; không phải mọi cạnh đều là lời gọi hàm trực tiếp.",
+        "CLI đọc input → ScheduleInput → normalize/prepare → solve → kiểm định → ScheduleResult → CLI xuất JSON. solve() sở hữu điều phối và tạo result.",
+        "Chỉ CLI đọc/ghi file lịch; core nhận và trả object trong bộ nhớ. validate-input dừng sau kiểm tra hợp đồng. validate-schedule và evaluate-score có thể gọi trực tiếp, không cần CP-SAT."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Bốn lớp kết luận riêng biệt",
+      "items": [
+        "Contract: schema, ID và tham chiếu hợp lệ; từ chối trường lạ và version ngoài hỗ trợ. Không chứng minh xếp được lịch.",
+        "Precheck: dựng miền hợp lệ, kiểm tra sức chứa và khóa tiết; vượt resource limit trả UNKNOWN, không kết luận vô nghiệm. Qua precheck vẫn chưa bảo đảm có nghiệm.",
+        "Solver: phân biệt OPTIMAL, FEASIBLE, INFEASIBLE, UNKNOWN, MODEL_INVALID. Không có nghiệm thì không xuất assignments hợp lệ.",
+        "Validation: Python tính lại hard constraints từ raw assignments; score evaluator tính lại penalty mà không dùng biểu thức CP-SAT. valid_schedule chỉ bật sau kiểm định."
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Hai nhánh solver và phụ thuộc",
+      "items": [
+        "Python ≥3.12; runtime Pydantic 2.14.1. OR-Tools 9.15.6755 là extra solver, import trễ khi thực sự giải; contracts và validator không cần extra này.",
+        "Input 1.0 → output 1.1: hard feasibility. Input 1.1 / policy 0.1 → output 1.2: có quality report; nhánh tối ưu chỉ chạy khi có soft rule bật.",
+        "S01 tránh slot; S02 giới hạn tải/buổi; S03 giới hạn tải/ngày; S04 khung tiết mong muốn. Penalty nhân weight trong từng priority.",
+        "Tìm nghiệm hard trước, rồi tối ưu từng tier P1–P3; chỉ thêm equality giữ optimum đã chứng minh. Hết thời gian giữ incumbent đã kiểm định. Bài toán rỗng được kiểm định mà không gọi solver."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Công cụ ngoài core và giới hạn phạm vi",
+      "items": [
+        "benchmarks/generate_synthetic.py tạo bundle synthetic, witness và manifest; run_benchmarks.py chạy CLI process riêng, giám sát Linux, kiểm tra output và lưu receipt/journal. Không chạy campaign trong tác vụ tài liệu này.",
+        "tests/ kiểm tra unit, CLI, packaging, solver và oracle vét cạn cho bài nhỏ; benchmarks/tests/ kiểm tra generator và harness riêng.",
+        "Hiện hỗ trợ tiết đơn/đôi, availability, phòng và locked assignments. Chưa có repair tối thiểu thay đổi, spacing/gaps, custom hard hoặc soft ngoài S01–S04.",
+        "Electron/React, SQLite và vnEdu adapter là hướng tương lai, không phải thành phần runtime hiện có. research/ và reverse-engineering/ nằm ngoài package; không phân tích dữ liệu cá nhân.",
+        "Sơ đồ cấp module và luồng xử lý, neo theo commit nguồn trong liên kết mỗi nút; không phải sơ đồ triển khai hay số liệu hiệu năng. Nội dung tiếng Việt; giao diện Viewer dùng tiếng Anh dự phòng."
+      ]
+    }
+  ]
+}

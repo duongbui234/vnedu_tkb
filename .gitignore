@@ -22,3 +22,9 @@ dist/
 
 # Generated synthetic bundles and operational-validation outputs.
 /benchmarks/artifacts/
+
+# Local generated receipts for the architecture diagram.
+/docs/architecture/scheduling-core.delivery.json
+/docs/architecture/scheduling-core.finalize.json
+/docs/architecture/scheduling-core.finalize-summary.json
+/docs/architecture/scheduling-core.browser-check.json
