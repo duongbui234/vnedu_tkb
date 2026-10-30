@@ -4,6 +4,13 @@
 
 Nguồn: [kế hoạch operational validation, Task 2](superpowers/plans/2026-10-26-phase-2a-operational-validation.md), [Linux preflight và provenance](phase-2a-operational-report.md), [Linux Task 5](phase-2a-task5-linux-report.md). Các ô trống là công việc sau khi máy/scope được xác nhận và user cho phép; không là kết quả PASS sẵn có.
 
+Bộ chuẩn bị bàn giao: [hai mẫu intake/transfer](phase-2a-windows-preflight-handoff-templates.md),
+[runbook PowerShell](phase-2a-windows-task2-runbook.md),
+[inventory sender frozen](windows-task2-payload-inventory.json) và
+[báo cáo preparation](phase-2a-windows-task2-preparation-report.md).
+Inventory/probes/fake tests chỉ là preparation; chưa có payload được copy,
+approval Windows Task2 hoặc evidence native mới.
+
 ## 1. Thông tin máy Windows cần cung cấp trước
 
 | Thông tin | Người vận hành điền / evidence cần thu |

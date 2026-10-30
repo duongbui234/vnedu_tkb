@@ -1,0 +1,2904 @@
+{
+  "schema_version": "1.0",
+  "protocol": "phase2a-operational-v1",
+  "status": "PREPARED_NOT_AUTHORIZED",
+  "windows_status": "BLOCKED",
+  "reason": "INVENTORY_ONLY; NO_PAYLOAD_CREATED_OR_TRANSFERRED; NO_WINDOWS_EXECUTION",
+  "core_commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+  "core_tree": "1efd459b2514f448dcf4ac297989de09eb76a3a1",
+  "expected_wheel_sha256": "1686079c62af5b796fb87ade66e54858bb453cf579d1b9b6bc48c8d8b96dbbb9",
+  "expected_lock_sha256": "e7cf88d7082db5bceb43bc2694c488f2b4b64525f2963cf1a6a7f9bd93faa084",
+  "expected_bundle_manifest_sha256": "a278a02dd9e10fedc7c5fcf44ef81d038d7712eba929d881a0f6193fc97cc93d",
+  "dataset_count": 36,
+  "file_count": 235,
+  "total_bytes": 14304063,
+  "files": [
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "docs/phase-2a-operational-report.md"
+      },
+      "destination": "docs/phase-2a-operational-report.md",
+      "role": "HANDOFF_DOC",
+      "size_bytes": 32221,
+      "sender_sha256": "087b14770790c23f35174a57020b30917a6e45dd53592548ea6db3d6446f6f92",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "docs/phase-2a-windows-preflight-handoff-checklist.md"
+      },
+      "destination": "docs/phase-2a-windows-preflight-handoff-checklist.md",
+      "role": "HANDOFF_DOC",
+      "size_bytes": 13690,
+      "sender_sha256": "c8cf5c00c8d2f2ff96a2f13447e9d0ecabe8c80f875bfe96bff81fde7bf07638",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "docs/phase-2a-windows-preflight-handoff-templates.md"
+      },
+      "destination": "docs/phase-2a-windows-preflight-handoff-templates.md",
+      "role": "HANDOFF_DOC",
+      "size_bytes": 9289,
+      "sender_sha256": "907e872093954ded6d179719be65ee13c3582c3351079b778a149da42c42864f",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "docs/phase-2a-windows-task2-preparation-report.md"
+      },
+      "destination": "docs/phase-2a-windows-task2-preparation-report.md",
+      "role": "HANDOFF_DOC",
+      "size_bytes": 6854,
+      "sender_sha256": "34fbaeaed149d4246dfbb8f1b51de98fdd229ae75d281fc5ac1c2f5468377af0",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "docs/phase-2a-windows-task2-runbook.md"
+      },
+      "destination": "docs/phase-2a-windows-task2-runbook.md",
+      "role": "HANDOFF_DOC",
+      "size_bytes": 16867,
+      "sender_sha256": "f8ec9cc83bf513f8d780269d01358701d6fb56245a63bb1c92ceb2dd55796134",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/installation-probe.py"
+      },
+      "destination": "linux-reference/installation-probe.py",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 3169,
+      "sender_sha256": "261d372b50d870647263a4f5b3c4c4242232a71c54f7e99dff6614c3027177cd",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/no-solver-guard.py"
+      },
+      "destination": "linux-reference/no-solver-guard.py",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 569,
+      "sender_sha256": "1ed71a833ec844e0e19f6e8fc311816534c2a27dd8b9274e35b06ecca94ee8cf",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/preflight-manifest.json"
+      },
+      "destination": "linux-reference/preflight-manifest.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 6421,
+      "sender_sha256": "93fa1dcdc9bd79dc199020a9df4eb62545e34278792032f98e16e0cbe3b4158d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/registry-probe.py"
+      },
+      "destination": "linux-reference/registry-probe.py",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 2263,
+      "sender_sha256": "fac3ac56d8969c8e5ab7b37f0690c41391e70e32e50af103c936c9cbe30c3ecd",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/requirements-no-solver.txt"
+      },
+      "destination": "linux-reference/requirements-no-solver.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 9339,
+      "sender_sha256": "ba2bc11354de804411e3189d66cd3694e12d402222c97b6cd229151f06c8c408",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/requirements-solver.txt"
+      },
+      "destination": "linux-reference/requirements-solver.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 22751,
+      "sender_sha256": "3809f2b088d2e19bbb25c27e7472fb40ed91731d729b5d415032e26a861913bb",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke-checks.py"
+      },
+      "destination": "linux-reference/smoke-checks.py",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 4406,
+      "sender_sha256": "f63d75d02be3ef2e7f27c53a829111eb34fb750072bbc02fc2e288efe139a650",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/evaluate-score.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/evaluate-score.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/evaluate-score.stdout.json"
+      },
+      "destination": "linux-reference/smoke/evaluate-score.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 748,
+      "sender_sha256": "5da62e41319728db7b87b4d437b16028729dde4d7d836bc168d81742103f6f52",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/input.json"
+      },
+      "destination": "linux-reference/smoke/input.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 2490,
+      "sender_sha256": "a9373fa50a09ff96be389f74de60da5d114b618ba83496c9f4cf631752a72814",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/invalid-locks.json"
+      },
+      "destination": "linux-reference/smoke/invalid-locks.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 1651,
+      "sender_sha256": "5604e246690de9b9f2e8612dc2eb8b3222a19256e45731da5367d5699fa4e135",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/invalid-locks.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/invalid-locks.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/invalid-locks.stdout.json"
+      },
+      "destination": "linux-reference/smoke/invalid-locks.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 860,
+      "sender_sha256": "4f8ebcf87a4fdd85306ee38d888218eec5720eadeca3b96c24d8e4e2af57cfa2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/known-hard.json"
+      },
+      "destination": "linux-reference/smoke/known-hard.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 1664,
+      "sender_sha256": "aa74681a51bfc28b9638b81ac6b1e1bdc0b6f364e82738d06909e3aa6cc12901",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/known-hard.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/known-hard.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/known-hard.stdout.json"
+      },
+      "destination": "linux-reference/smoke/known-hard.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 815,
+      "sender_sha256": "8e33b22270402f569da612292f804333002f34fdec3b365d1284de9c27f0d615",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/malformed-evaluate-score.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/malformed-evaluate-score.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/malformed-evaluate-score.stdout.json"
+      },
+      "destination": "linux-reference/smoke/malformed-evaluate-score.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 246,
+      "sender_sha256": "c649b117b43a54bb19b059938883e58e9a23c63cfc476100ba7cc2e113134222",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/malformed-result.json"
+      },
+      "destination": "linux-reference/smoke/malformed-result.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 1,
+      "sender_sha256": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/malformed-validate-schedule.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/malformed-validate-schedule.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/malformed-validate-schedule.stdout.json"
+      },
+      "destination": "linux-reference/smoke/malformed-validate-schedule.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 153,
+      "sender_sha256": "b6b9c1bace8130354ceea61232a4422927c959b208a90d9af192ab0b1d81026c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/no-solver-evaluate-score.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/no-solver-evaluate-score.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/no-solver-evaluate-score.stdout.json"
+      },
+      "destination": "linux-reference/smoke/no-solver-evaluate-score.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 748,
+      "sender_sha256": "5da62e41319728db7b87b4d437b16028729dde4d7d836bc168d81742103f6f52",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/no-solver-validate-schedule.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/no-solver-validate-schedule.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/no-solver-validate-schedule.stdout.json"
+      },
+      "destination": "linux-reference/smoke/no-solver-validate-schedule.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 1012,
+      "sender_sha256": "0c57cc5c7b0c07e738fbd4b8cb2642db848c8ce75a6487b87a7ffa7b34488e62",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/result.json"
+      },
+      "destination": "linux-reference/smoke/result.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 2279,
+      "sender_sha256": "1de218ae66562b0c777914d70cf7354f4384544d633db7080b3c4945dc44c92b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/solve.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/solve.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/solve.stdout.json"
+      },
+      "destination": "linux-reference/smoke/solve.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 2279,
+      "sender_sha256": "1de218ae66562b0c777914d70cf7354f4384544d633db7080b3c4945dc44c92b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/stale-evaluate-score.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/stale-evaluate-score.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/stale-evaluate-score.stdout.json"
+      },
+      "destination": "linux-reference/smoke/stale-evaluate-score.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 243,
+      "sender_sha256": "43ab04cca2951d47f04f6bc54fc6dd55f795ee95117707b8dc2abdf662a9fa37",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/stale-result.json"
+      },
+      "destination": "linux-reference/smoke/stale-result.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 2471,
+      "sender_sha256": "1f23745761e36187eed5e573023ff2152d62bdd35071f3184a64a42be8b26e68",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/stale-validate-schedule.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/stale-validate-schedule.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/stale-validate-schedule.stdout.json"
+      },
+      "destination": "linux-reference/smoke/stale-validate-schedule.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 150,
+      "sender_sha256": "2bafff50670819b79a313cd9be57b8fabdd1009de5c1cecf3d744d067b6d9dd4",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/unknown-hard.json"
+      },
+      "destination": "linux-reference/smoke/unknown-hard.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 1645,
+      "sender_sha256": "3d81d3999e91f90c1089f885fc35d96d67e73cc7772424c382f9a1a19074020b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/unknown-hard.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/unknown-hard.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/unknown-hard.stdout.json"
+      },
+      "destination": "linux-reference/smoke/unknown-hard.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 815,
+      "sender_sha256": "789eae76411840aded5368a83ad0070150590955c1205b9f75f05804b35d9955",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/validate-input.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/validate-input.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/validate-input.stdout.json"
+      },
+      "destination": "linux-reference/smoke/validate-input.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 249,
+      "sender_sha256": "1038273f800ed8dfc4b6329e7a59f312ba2cb14a77a8f3f7a4ce84ddc13cc165",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/validate-schedule.stderr.txt"
+      },
+      "destination": "linux-reference/smoke/validate-schedule.stderr.txt",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 0,
+      "sender_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/smoke/validate-schedule.stdout.json"
+      },
+      "destination": "linux-reference/smoke/validate-schedule.stdout.json",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 1012,
+      "sender_sha256": "0c57cc5c7b0c07e738fbd4b8cb2642db848c8ce75a6487b87a7ffa7b34488e62",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/verify-installed-bundle.py"
+      },
+      "destination": "linux-reference/verify-installed-bundle.py",
+      "role": "LINUX_REFERENCE",
+      "size_bytes": 2083,
+      "sender_sha256": "dc11fc4458ede18f7013a06f7e68715cc90ced944396dd2876594d2fee678e62",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "benchmarks/tests/test_windows_handoff.py"
+      },
+      "destination": "preparation-reference/test_windows_handoff.py",
+      "role": "LINUX_FAKE_TEST_SOURCE_REFERENCE_ONLY",
+      "size_bytes": 14430,
+      "sender_sha256": "8a82ac32bb6aea2b15a7196742be172b831ce208fe04f0d5be2090b7b39189c6",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": ".gitignore"
+      },
+      "destination": "source/.gitignore",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 417,
+      "sender_sha256": "787864be1bf07ca97474f0e40988c416df5cb8824a2612c888452993d26471ae",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": ".python-version"
+      },
+      "destination": "source/.python-version",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 5,
+      "sender_sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "AGENTS.md"
+      },
+      "destination": "source/AGENTS.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1495,
+      "sender_sha256": "246cc83a60729c319b1533392e0ae95b7985268a0036bd7b200884ec9830fdb9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "README.md"
+      },
+      "destination": "source/README.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 4059,
+      "sender_sha256": "c089c058dfe522fb98f6c70e7a4d9257bf80498ce201415c965a124098361950",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76177,
+      "sender_sha256": "2249bffbb803ce205df6f631bcf083332bc6af4d571098d129754138e0b85292",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17684,
+      "sender_sha256": "092f96b657f40e9a9fd108a3508e55e4117b3dd11be00143ba59c0494fbcc436",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52329,
+      "sender_sha256": "d8b10325abaa2e377d889947e9a9c1b8c18c8e1541b56d2f985984be36980a7f",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76177,
+      "sender_sha256": "3303caf17dffbefda8ec8291544b44093ec8cdd96943aaa3cf3e3ab8beda540b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17684,
+      "sender_sha256": "24b5c43e5b0557efcdc23a8d1185c1377b5d1306b14735e894049bba6c9c6fac",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52329,
+      "sender_sha256": "1372d0486acf8f41ebf4f24271a53a0ea74f770162ae2a2fc179afe8ef66ce7d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76177,
+      "sender_sha256": "4e73b5c3f5e1d9d889855dd0f596ddfb8e26eda9fbd7493ce2eb54ea5ccf5608",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17684,
+      "sender_sha256": "b633a80f50436a0ee0d8c916d89f6853f42cacb95552bc3350313efb104b8fd4",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-base-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-base-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52329,
+      "sender_sha256": "43cae9985d72c4a44b717c85178b650ea0376930cb7aae346e83a5dcf7b2db31",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 100522,
+      "sender_sha256": "9fe1929a54983319a13378c62941781b5e06c3ca4ca5926656a43dc327125194",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17689,
+      "sender_sha256": "18c2d68d77279c11c644009dc69e3785b72fd25c2c3e6a48443c702f6b202035",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52416,
+      "sender_sha256": "d447c2d29e3d7985d7ebcd68d6985acbaaab66a2c44e0181588a430af116cc85",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 100522,
+      "sender_sha256": "830d5e00eaadd2537f262b87bd6b2531df7b710146ba73ac57b5c65b22be914d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17689,
+      "sender_sha256": "3bc2b8718be24b97c8f1c8fb1d9102ae2ddfd47fa942c2923ba065d2bff3895a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52416,
+      "sender_sha256": "bc6315cf2db54b4b05e239e82792917cf5c4e2d86ff6d495a4fe39967f8f836b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 100522,
+      "sender_sha256": "dedff19cedf54ee566dfb0574d8a6ad947761a2f3c5915f33f25beffca186558",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17689,
+      "sender_sha256": "eb0bbfdb41976f50053773537ea47e855b00821b8b2dc0ca2b3ed9e11c16024d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-mixed-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52416,
+      "sender_sha256": "7c12d72b00ce35fe64e2d5369de1c504c14b976a944847db8f152be17ccd1678",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 96510,
+      "sender_sha256": "7d023d04f762aac06a237f48c7e05e462e54de62c928be7ecd91d3c3a36c8735",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17670,
+      "sender_sha256": "901cc5860091d7499733a3e3d0a1a6864bc2dbbe228772f95adac66b0266a804",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52416,
+      "sender_sha256": "f9b5274529c9d1bd4d4c301b2626336bd0128b38b57901b90627ca4be1121a57",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 96510,
+      "sender_sha256": "148745d968ee92de14b01907280f7b743f40ce5e54b3aadea4daef123c2df07d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17670,
+      "sender_sha256": "22055648012c923fd7b757362973866ff16a391e4d0a4cfe6ddd527e29d06a04",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52416,
+      "sender_sha256": "f481ca5a2e2940148838beb5ac65d4a263c441114b96da3068c0f91662db9429",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 96510,
+      "sender_sha256": "819df43b126ae9f15dc2d3610eb220efc0aee4e1661448492d936127abdac94d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 17670,
+      "sender_sha256": "8011c535a8ec34ca322edae51825b3bb7fc6fd0347f8c09f618517ee9a1a3dd1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-tight-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52416,
+      "sender_sha256": "71c45f3ab39ed0805235f3d348a136eb34df7ead22c0ce0d256843b935ab24e2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76819,
+      "sender_sha256": "fc5354a4fd68f1e72d485b26737b22bbf58ac8c06ece64fd442303396fb646ab",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 2361,
+      "sender_sha256": "6af86824944ecd4c4ce2ed54448880f07c81a5e1903df2126a5f92fb36e81684",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76177,
+      "sender_sha256": "2249bffbb803ce205df6f631bcf083332bc6af4d571098d129754138e0b85292",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s101/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52327,
+      "sender_sha256": "da9937df862f84151413bcc3f1d8b94dd74b72d46bee7f68b26e96ad0d3340ff",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76819,
+      "sender_sha256": "e798360463cbb6185996851964c6d45f96b8647405797439635d4382bdb8e4c4",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 2361,
+      "sender_sha256": "1ed84264a201b45c4e2d7aae2b04b5c32dffd00cb421c2e8bff69376ab24022a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76177,
+      "sender_sha256": "3303caf17dffbefda8ec8291544b44093ec8cdd96943aaa3cf3e3ab8beda540b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s102/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52327,
+      "sender_sha256": "cd7b28bd6c086cc182ee82d7dc22a8ab85a7202965078ae52a78a8bae51ff2b4",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76819,
+      "sender_sha256": "3b91c1eafc1c1f2c9dd756b854b287f7c680ef05b6e7158d518d4399b337136c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 2361,
+      "sender_sha256": "1008e3764f85cf20485f73f52d6f523405175d441f7bb8d8a82cce1fd25e4104",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 76177,
+      "sender_sha256": "4e73b5c3f5e1d9d889855dd0f596ddfb8e26eda9fbd7493ce2eb54ea5ccf5608",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c10-unsat_capacity-s103/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 52327,
+      "sender_sha256": "a4d99a3c9f5cc8e512a4fc6c6b4dc2e13e662bc6d05c32fd4561286e483d7f97",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 138892,
+      "sender_sha256": "988d5a2cc71bf44081880c8f0020b090af0a8da2e267d09ce16c19c1ed065ab0",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33705,
+      "sender_sha256": "86f256e8e8a7f3af0edc595f4ef491e0606af5c85e2f65c731c3e517013720ad",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104331,
+      "sender_sha256": "ec6999dd08b6ca58e0bbd683898e63f5e84b8c7a3ce37a9cd8a53879ba48942c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 138892,
+      "sender_sha256": "6c12f8856eea3a80d731e676f6aa226e30fe7e57a7a4e91f21210a7af1a799aa",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33705,
+      "sender_sha256": "c49b6022a49b23f595741c26cce5bbac78b5c8b948c136e1734b2ac79e8369c9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104331,
+      "sender_sha256": "75e9a87b73450a06ab4d6aeb2c91a36a1e35ba4516be2779cf5f2e9481a96ef1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 138892,
+      "sender_sha256": "ac75e7ff7e7f582a8954fa2ce05d9036ab17fb0f86f26c668208c7b658652cb2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33705,
+      "sender_sha256": "0a32425704279d023f4a485012831868b91ea99946759d7cd84d642ca286cf7d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-base-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-base-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104330,
+      "sender_sha256": "761f55fef33981a4a830250ad45a305e5b697dfd623ed8105f4cc13a152d0548",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 187595,
+      "sender_sha256": "7fc9d069e8a69374506d045dc23ea5a2902d52346cd040b9e888a3a25404425d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33711,
+      "sender_sha256": "ebb3e9bfb204fdda878f3143533cb5f29dc994a6064eb33126aac005237d917e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104504,
+      "sender_sha256": "b6008608fafdf4ec188861c9102f3675917e5a1e561b8560d277a8486c729fd4",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 187595,
+      "sender_sha256": "bbacda136a5b7dc29806c5f8525e105e6d79dc052ebbf89f1084e710a70802e6",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33711,
+      "sender_sha256": "04413d1f7f7266ed576823a41e0bc1032c4c5fb88de791fc844bb2723c60c1b6",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104505,
+      "sender_sha256": "c9a3a52231dcc53cdce273f9cb8d84e3edeea00d0b03feb857074a5a872a5e1f",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 187595,
+      "sender_sha256": "edd49bbfb52033d188c79ecc06b19d479dc90cc8d7f52c0e16a44975110274d6",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33711,
+      "sender_sha256": "0fe79998971967df77f08b91965d42bba0785b94e0765d6c8a692f7a963e35d9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-mixed-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104504,
+      "sender_sha256": "5617c80d93588d5d6b1a831b1fd5ecefcd9581223f24e696fa5c7d94fedcf53f",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 179571,
+      "sender_sha256": "26719602c8f5072781e4c2bd89536e7daf8c2613b5e4e1c80961370d7ad03ee1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33694,
+      "sender_sha256": "403ed9e4ca26d8524900b915a0286d2390a82c8be5a39fd7bcd7ae48f25afc2e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104504,
+      "sender_sha256": "1644c282a7b1d6795082d1bd8ec25e666e48ac9ef05ee790f4b1cd9689d5225a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 179571,
+      "sender_sha256": "2eda09ab04e187681caaeef4b048342f6f92b07b98c9e741939143e7a89a8480",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33694,
+      "sender_sha256": "21b37dcfc7c07f5f580b02ad5311963f6da1b09867205715ebb9118c7f1243e3",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104505,
+      "sender_sha256": "94f1787909e1505c7856f4bc7595b48543458564fb08578e647fbb858b0961b2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 179571,
+      "sender_sha256": "c1abb8fb07de7c14a85b6ad0b202514b718a80d375b96367615660b081daef51",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 33694,
+      "sender_sha256": "344f78adb04ff3b51b3de89c4cadd9dcb27960b2d7a5dbb97317ffefa8e3c78b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-tight-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104504,
+      "sender_sha256": "02f7d6f58acbd9d020f2d60eac470b223592bbd8e336f7987c91e3b4cc3ddba2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 139534,
+      "sender_sha256": "2ae1d73bf329466077057093e795ef62983b878d44f8efa3eb6ba529aaad90e0",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 3082,
+      "sender_sha256": "66dedd1c85a7af82be9e20a12eb563112083ecd6328a675a0e2859f9845f5649",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 138892,
+      "sender_sha256": "988d5a2cc71bf44081880c8f0020b090af0a8da2e267d09ce16c19c1ed065ab0",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s101/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104329,
+      "sender_sha256": "8e20b30b24465b55178cd16a1648981e68d4dff494a1574514205f722a1f22c9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 139534,
+      "sender_sha256": "6dbdef52feaf43b85b2be8b875f34e1b0a379c7048dbd9dd5c2171487f887786",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 3082,
+      "sender_sha256": "b19f1250220daffebefa997d9b43eae719af0019bb88f7e24cc26283c6b62552",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 138892,
+      "sender_sha256": "6c12f8856eea3a80d731e676f6aa226e30fe7e57a7a4e91f21210a7af1a799aa",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s102/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104329,
+      "sender_sha256": "8f5ca8fb9717712cb5c58041c93d331dd6b881def2621955f5f803f3bcf5f6b2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 139534,
+      "sender_sha256": "b95b32aa78b49ead404ce7f509f9b785a2b959e96db297726f3035ca5d0b36c9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 3082,
+      "sender_sha256": "920d62e19c98c3ae23160b1fbb66a56a600f97098ab3b0a4a16e66db2410184b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 138892,
+      "sender_sha256": "ac75e7ff7e7f582a8954fa2ce05d9036ab17fb0f86f26c668208c7b658652cb2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c20-unsat_capacity-s103/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 104328,
+      "sender_sha256": "a1f620bc4ed65761bf0307ec8c8abf400503d61fe93b00d52ae347482c7f6c5e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264322,
+      "sender_sha256": "8031848f7f646fa318b02e8375a5f9ab21cb57a2879b5fb7ef8632b8b98f91a1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65748,
+      "sender_sha256": "5f5453740c311fe9c4f5111f162b45aaf6a816db02b1a3a4e18336358e5d2415",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208331,
+      "sender_sha256": "c2cf599738bc0717f7c6ac08eca77f1867cbe98b439cf97d7741459790624f2b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264322,
+      "sender_sha256": "1d037c110dd398d6e52bae8f0e8a05458062f3e590e70de897c7e24ec8d56ea7",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65748,
+      "sender_sha256": "058f8ec532fadec1f912226d408baac1d678e0ca6f25abb85774a38acbdbbccf",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208330,
+      "sender_sha256": "ca8448f50c330e51bf0a3232f65a88c1d438dbaab46b211cdf0cb4dc339b5709",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264322,
+      "sender_sha256": "4d98fd51cf2bbde2c49254c80120b3b29e65041bd2214d3d7e0859ec8775647a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65748,
+      "sender_sha256": "736938a9b35b00f47b56192fbc81039613f9a0bc9ef8b67ed2200e1a81f5509a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-base-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-base-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208331,
+      "sender_sha256": "4ae327e32b661204c7c6e85c94e54dae3db41262113f02c771e021cd77397c53",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 361741,
+      "sender_sha256": "956d1999d4bc3cdeb57b27ff3b99852b5fc3abc603577402eecd8b80b0bfac9e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65756,
+      "sender_sha256": "ae70c655f6a7b303ea9888b5f374551f7e35ca0e060f83de30bff6cfa78a92b2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208685,
+      "sender_sha256": "184ffcc6d760b2754890b6adf4718cd8c4892913d753cb1ebf0a65431c1368d3",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 361741,
+      "sender_sha256": "7be98d5c437fe65a2cf0af0a49755af07ca89bff5f18b2309f71e7a5a15ec4e1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65756,
+      "sender_sha256": "9116d070fd7ab0e017a417c95f87825385273daf99ecca74f3ba7dd749e24e83",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208684,
+      "sender_sha256": "80539613f4499f98b0562b778ab30cf4a0c833ba5b1766a92e50b61b1a4b9a41",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 361741,
+      "sender_sha256": "a4e8a376e8116e02faa7a39ff1851be7104f6eba758c8eecc37f7c4e191830b5",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65756,
+      "sender_sha256": "11ce01dfc1da56b6fdb11597e5223c7e49d333ac81938bd1ecfa463b0de17ab1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-mixed-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208685,
+      "sender_sha256": "2c034b0be0e27b7dd5102b96770f03a408db51bee71b00a7efcf796758ab0bcf",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 345693,
+      "sender_sha256": "f648d9b52f7c9a590ef8b03c835c691b91d15576ff284a1c0864d543fc40571b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65739,
+      "sender_sha256": "80cf72d5dd1babe9733246b89dbbe4111389a2a7f336412ee19d8f4577a443ca",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s101/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s101/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208685,
+      "sender_sha256": "2b2370c54df6219fa607e14b47d19546bf29b01b8b67a415146f4aef3d1abad3",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 345693,
+      "sender_sha256": "fa5bd92d0eddcc8eda8c5627c5ee8125d786253cc27ca67932b50fcbbfe456ee",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65739,
+      "sender_sha256": "70bb0771838967c29c91eac1fa499332fea8ab02db0a65a7a7b129587fad46b6",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s102/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s102/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208684,
+      "sender_sha256": "398aa427ef96b189127ce09b3bf60e3447c209a1e129609eb2fa9fd1cb45f91d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 345693,
+      "sender_sha256": "4ae3bb561ceae8c86174f5a122444f35004ad044a1a7a5dc22e4a0eb5b8531c1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 65739,
+      "sender_sha256": "3aeeeebc4fd0c1baf2f07a9efb15c23fc034d5a586cf68e8564187e50b0a7e1c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s103/witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-tight-s103/witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208685,
+      "sender_sha256": "005512fc5cfcc16dfefbe1d164010e05dac04cdb500d195986574ad3e66bdde3",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264964,
+      "sender_sha256": "f12228349351e50cfcfac3d6d20bf440180b89dddcafb60c43a75ca2dcd00095",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 4524,
+      "sender_sha256": "ca72b5cf5165d9c2f5885248a9206bb8d8c2bf2564a8bc5d46236de7382f2c8c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264322,
+      "sender_sha256": "8031848f7f646fa318b02e8375a5f9ab21cb57a2879b5fb7ef8632b8b98f91a1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s101/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208329,
+      "sender_sha256": "9cc68c0bcaaf6855c323760891361c0e7109d331dc840a4fb7caa315bbb88458",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264964,
+      "sender_sha256": "c1662385bb82bb8ad6df35f2038648bb830675d1ccefaed7f030c479842831a3",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 4524,
+      "sender_sha256": "aaf06124fb3abde198d87b5dff2c800f83913c42b6a9f663276d23d737ba4551",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264322,
+      "sender_sha256": "1d037c110dd398d6e52bae8f0e8a05458062f3e590e70de897c7e24ec8d56ea7",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s102/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208328,
+      "sender_sha256": "b1dd1df08a77fc57fbcb57248a2f7f83bfd5f3dbd8ae295e7229218ebfed82f5",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264964,
+      "sender_sha256": "c08412d0df114f8770f6ff51658e485e3b05454fc252ed85c061f2117077cba2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 4524,
+      "sender_sha256": "f803f52689326bc308190dad3d4cb4bb1540bb7c8d3af9a426a21b7b09a14563",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/provenance-input.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/provenance-input.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 264322,
+      "sender_sha256": "4d98fd51cf2bbde2c49254c80120b3b29e65041bd2214d3d7e0859ec8775647a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/provenance-witness.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/c40-unsat_capacity-s103/provenance-witness.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 208329,
+      "sender_sha256": "9c95ee3e9998f82e5fb733173c1f63d31198382156c732bb37635cb48d291e45",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/task1-v1/manifest.json"
+      },
+      "destination": "source/benchmarks/artifacts/phase2a/task1-v1/manifest.json",
+      "role": "FROZEN_BUNDLE",
+      "size_bytes": 5444,
+      "sender_sha256": "a278a02dd9e10fedc7c5fcf44ef81d038d7712eba929d881a0f6193fc97cc93d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "benchmarks/generate_synthetic.py"
+      },
+      "destination": "source/benchmarks/generate_synthetic.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 40605,
+      "sender_sha256": "8144a3fc0270a7f83812913e9040b74d233b1bd702856ff63f026d2079f56c93",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "docs/assumptions.md"
+      },
+      "destination": "source/docs/assumptions.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 5427,
+      "sender_sha256": "7060240a0dfe8e81dac5860c60f97934c873c41d2a31b58794551c09bba01254",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "docs/constraint-catalog.md"
+      },
+      "destination": "source/docs/constraint-catalog.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 4340,
+      "sender_sha256": "42f76d808e71d45034c0ffc6444671368e2c384043a98264979fbd895965f6a5",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "docs/domain-model.md"
+      },
+      "destination": "source/docs/domain-model.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 7216,
+      "sender_sha256": "3cc1e659381e4eb73af3204bf5a8c9af3018e86bb76ca54fb49b3567752de0db",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "docs/phase-1-report.md"
+      },
+      "destination": "source/docs/phase-1-report.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6639,
+      "sender_sha256": "ee3aace4854285bfd36a9665371ba6b7e40c640cb9208203cc6c4a0e496817e9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "docs/phase-2a-report.md"
+      },
+      "destination": "source/docs/phase-2a-report.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 10580,
+      "sender_sha256": "2578b346c3ac0923deb8d359e5989bb428e40c26e3a14c9b766ffb33b35a48a0",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "docs/solver-design.md"
+      },
+      "destination": "source/docs/solver-design.md",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 5413,
+      "sender_sha256": "3db855957cdab542098d9f561e96146dd340ad0daa25609e9920f24f13dbc179",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "pyproject.toml"
+      },
+      "destination": "source/pyproject.toml",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1244,
+      "sender_sha256": "2a1a1fbe9170729ca112b59acc9760387ad2d0d862f672bae5c2173fb0e0d133",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/__init__.py"
+      },
+      "destination": "source/src/tkb_core/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 90,
+      "sender_sha256": "5233729a83f7cd390e33f87af49b0c2d87dc03f77812c3d228011c2c15770e81",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/cli.py"
+      },
+      "destination": "source/src/tkb_core/cli.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 11747,
+      "sender_sha256": "e6d8fc0de33d386dc4b4f8d84b9cfb17b7f25f71fd4cbc7e702e5ce9ff5f8a50",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/constraints/__init__.py"
+      },
+      "destination": "source/src/tkb_core/constraints/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 80,
+      "sender_sha256": "b7e1a827fc9303d3505235713315d5f6bc15a816cef3951a2710b908cfd960a1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/constraints/hard.py"
+      },
+      "destination": "source/src/tkb_core/constraints/hard.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1340,
+      "sender_sha256": "23906d4c1e69d4636b6bf774174e0b2e552805030d8175f5785ea9fa53780129",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/constraints/registry.py"
+      },
+      "destination": "source/src/tkb_core/constraints/registry.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 4640,
+      "sender_sha256": "33342c8c98d60a70eeac0776e0bf197eef2941e094cbef4bbceddb1c3bf1da61",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/constraints/soft.py"
+      },
+      "destination": "source/src/tkb_core/constraints/soft.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 7096,
+      "sender_sha256": "123959d7f0539eb5137b9d811c6d59e8a476ae96ab14a42f8c9475553802bd61",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/contracts/__init__.py"
+      },
+      "destination": "source/src/tkb_core/contracts/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 56,
+      "sender_sha256": "da9055c2dcd38b4e2c15438ec117cd28ca916b8d0eea542ebf64a3d214947d2b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/contracts/capabilities.py"
+      },
+      "destination": "source/src/tkb_core/contracts/capabilities.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1963,
+      "sender_sha256": "c271500f7e1d734fdc3725336203beb61eab129090b82f753ae8fc7e5a3bb9cc",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/contracts/input.py"
+      },
+      "destination": "source/src/tkb_core/contracts/input.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 7794,
+      "sender_sha256": "e47c660571f08c14411cb0af996681cd188775f84cf70cc71fdfe726a60b5183",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/contracts/output.py"
+      },
+      "destination": "source/src/tkb_core/contracts/output.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6022,
+      "sender_sha256": "5856121d6940246f6476a12aebef55c80a21b8c64905ffbfa78468e642fa36fe",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/contracts/score.py"
+      },
+      "destination": "source/src/tkb_core/contracts/score.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 5170,
+      "sender_sha256": "821bbbf774cde7e4eb3b1bae49b2e1989c8efc4861073b98456169305693200d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/domain/__init__.py"
+      },
+      "destination": "source/src/tkb_core/domain/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 82,
+      "sender_sha256": "3435f61a776d8f3bf59f7fab3e9e0f1495cd4cb9db79143f1b5814cac1b16304",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/domain/enums.py"
+      },
+      "destination": "source/src/tkb_core/domain/enums.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 378,
+      "sender_sha256": "7092eb847f8ecc048bbc4abeee4db72dfd19a88282fb5e7f4226d9ca0de17f5c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/domain/errors.py"
+      },
+      "destination": "source/src/tkb_core/domain/errors.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 883,
+      "sender_sha256": "191905f307d6d4ac0d968a3035c2f03b82acb2f2a79dff1a7f6836c8f8d49c64",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/domain/models.py"
+      },
+      "destination": "source/src/tkb_core/domain/models.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6613,
+      "sender_sha256": "c94437380214e7fef1650c2fb3689c2bc3648e22d2d04914fb0fd595d5a9c692",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/domain/rule_parameters.py"
+      },
+      "destination": "source/src/tkb_core/domain/rule_parameters.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1046,
+      "sender_sha256": "5318f18b863f0cc8874ab8898c143699af735958706ee16d6603ff214afda41c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/preprocessing/__init__.py"
+      },
+      "destination": "source/src/tkb_core/preprocessing/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 80,
+      "sender_sha256": "fcbe007576ddcf65cf4dac5544367df6d5ed29f633a81e56438f6d26cd8397bb",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/preprocessing/feasibility.py"
+      },
+      "destination": "source/src/tkb_core/preprocessing/feasibility.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 8969,
+      "sender_sha256": "79f00be4efade4ca71c1fd6cdc535cba30bbefacb4c52f69bfe996b896ad588b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/preprocessing/normalize.py"
+      },
+      "destination": "source/src/tkb_core/preprocessing/normalize.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 4651,
+      "sender_sha256": "c49c338424b60076180c6774135491e31540bd78df8bc25aba7e728f61675838",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/solver/__init__.py"
+      },
+      "destination": "source/src/tkb_core/solver/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 74,
+      "sender_sha256": "9ddf9edff6b783bcac52a989755dabfc5177d871d8da2dac335af16f2b614510",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/solver/cp_sat.py"
+      },
+      "destination": "source/src/tkb_core/solver/cp_sat.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 9539,
+      "sender_sha256": "87a3c22ea033e4171fd311bff72d87f8734384772059e3c011d2253b339e93a5",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/solver/model_builder.py"
+      },
+      "destination": "source/src/tkb_core/solver/model_builder.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1076,
+      "sender_sha256": "59fd78388c61d4435fae69d8b4d433d241f0c426efdb3b7fd5ef967254864e75",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/solver/objectives.py"
+      },
+      "destination": "source/src/tkb_core/solver/objectives.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 8894,
+      "sender_sha256": "70465ade845a52c8abb39abfe6deadd954e6c81c04b46b9dd99daf1dfd77e2c4",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/solver/options.py"
+      },
+      "destination": "source/src/tkb_core/solver/options.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 689,
+      "sender_sha256": "b2b4f6b1314ff618988d62d845cd0eabab3a75bf27b6e83909e2c5afb8f4f231",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/validation/__init__.py"
+      },
+      "destination": "source/src/tkb_core/validation/__init__.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 68,
+      "sender_sha256": "3fe9215f806f28fd1c82f0d368bc3a02b4868b7474dea9c2775202cac317e67d",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/validation/independent_validator.py"
+      },
+      "destination": "source/src/tkb_core/validation/independent_validator.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 12234,
+      "sender_sha256": "5deb8af9df08e7a5ca5e8f93b2162eeb64305f1ae576cb9375a35056b97de352",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "src/tkb_core/validation/score_evaluator.py"
+      },
+      "destination": "source/src/tkb_core/validation/score_evaluator.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6641,
+      "sender_sha256": "790f7dbcd7861cd52f315aee386d73f97905d69bce170a7acc7cc1a1650849a7",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/conftest.py"
+      },
+      "destination": "source/tests/conftest.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1343,
+      "sender_sha256": "2cd1830a078bab2e0e69c64fcf3a73b3db7fc0a92581e7440fa2ee15af32399e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/double_blocked.json"
+      },
+      "destination": "source/tests/fixtures/double_blocked.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1368,
+      "sender_sha256": "982ccd62118d0f124f18403e0d3ac18951b4bd0b87eaf981f5a15580810d345e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/empty_requirements.json"
+      },
+      "destination": "source/tests/fixtures/empty_requirements.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 226,
+      "sender_sha256": "bf80bb3ce84d2b5de7c511b6884be96212ad07cba1d6789ab5e2f156c82f17a7",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/feasible_double.json"
+      },
+      "destination": "source/tests/fixtures/feasible_double.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1434,
+      "sender_sha256": "17969710c870d45b79dbb75c46e9e4bd9a6fb77c290d9f1a987bb8ed619ac284",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/feasible_small.json"
+      },
+      "destination": "source/tests/fixtures/feasible_small.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1017,
+      "sender_sha256": "89cfe8a3f20a0cabb5d85cc3a9d1f744ead67c0a6f855676c6edd2ce515ee2d1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/infeasible_teacher.json"
+      },
+      "destination": "source/tests/fixtures/infeasible_teacher.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1388,
+      "sender_sha256": "e4ed7f22ddd051d4fc35fac69c4a68be84667413d15f899a28ef4d5dabddaff6",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/locked_lessons.json"
+      },
+      "destination": "source/tests/fixtures/locked_lessons.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1478,
+      "sender_sha256": "35f1e85e3a80ff9b6958ff9a9ee696b42e08043d8d27684e5d39e790387dc230",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/quality/priority_tradeoff.json"
+      },
+      "destination": "source/tests/fixtures/quality/priority_tradeoff.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1257,
+      "sender_sha256": "bff484aec3155c4c64ac145384b53b16e8a147394fa39d7fafdf6d974a6f613e",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/quality/teacher_preferences.json"
+      },
+      "destination": "source/tests/fixtures/quality/teacher_preferences.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1738,
+      "sender_sha256": "7fde8373cde202ed900df58804753df632ff37f77a005d31cf5d3467932913a1",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/quality/weighted_tradeoff.json"
+      },
+      "destination": "source/tests/fixtures/quality/weighted_tradeoff.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1257,
+      "sender_sha256": "a59fb84e9ddfd74ad1135d1ce3a2111d7d4a5ae7b642c87aca0abdd09a431d7b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/fixtures/room_required.json"
+      },
+      "destination": "source/tests/fixtures/room_required.json",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1708,
+      "sender_sha256": "b0e113cbc87a75a5c46a7db0175ed31edc6238db7035e53ae736517c2cc1b766",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/integration/test_cli.py"
+      },
+      "destination": "source/tests/integration/test_cli.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6490,
+      "sender_sha256": "edcf829826006691ef51f02d0e54f815c17971bf6233473bde890c5589e124b2",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/integration/test_packaging.py"
+      },
+      "destination": "source/tests/integration/test_packaging.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1521,
+      "sender_sha256": "6bc965e51d69aaa6f776f9bf2e301c8e2e061fd06debdf50b7c6e32e90a6ad96",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/integration/test_quality_cli.py"
+      },
+      "destination": "source/tests/integration/test_quality_cli.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 4210,
+      "sender_sha256": "376acf5f3d6d8ca4bc70f8436f588d79a433659176fd04775ac579d888bc029b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/integration/test_quality_solver.py"
+      },
+      "destination": "source/tests/integration/test_quality_solver.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 7939,
+      "sender_sha256": "eba431f5f66365a6735abc4d9107b45019868776f750e715149cac8db72e9a0a",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/integration/test_solver.py"
+      },
+      "destination": "source/tests/integration/test_solver.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 9284,
+      "sender_sha256": "7477c7586e5ba914e9e458782469f0d978e57823d53cb48b01847b2db8cc466f",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/properties/test_quality_oracle.py"
+      },
+      "destination": "source/tests/properties/test_quality_oracle.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6573,
+      "sender_sha256": "02fae07dbd424b095f5eb6bdedf87777a1c5280fcb404faf29bf71e80632720b",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/properties/test_small_oracle.py"
+      },
+      "destination": "source/tests/properties/test_small_oracle.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 2834,
+      "sender_sha256": "1c41f2094004f13b0e39a0db37d48a01f2a94cc361d3bc4062b34523d4b13e5f",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_contracts.py"
+      },
+      "destination": "source/tests/unit/test_contracts.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 10270,
+      "sender_sha256": "c53a2409cba355205b7548b6836c151404f5ce73f212b046e154c23475ff1ada",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_preprocessing.py"
+      },
+      "destination": "source/tests/unit/test_preprocessing.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 5646,
+      "sender_sha256": "a2518399a12b17b3c050dc9aef8398ca1df953df44679c1e2ef9a1b8372157ce",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_quality_contracts.py"
+      },
+      "destination": "source/tests/unit/test_quality_contracts.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6200,
+      "sender_sha256": "00a71ae0b97192965894f2a5b86e51ab64360b97d68d3053793a3c481b1609d0",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_quality_results.py"
+      },
+      "destination": "source/tests/unit/test_quality_results.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 3034,
+      "sender_sha256": "698b54204cb4b97306d4a8a98f442bc125b3efa5c1ef621288c853a5ac9a6c04",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_quality_stages.py"
+      },
+      "destination": "source/tests/unit/test_quality_stages.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 7724,
+      "sender_sha256": "ffa4701b2100614eb6677d5aebb6a17e45f1346ab84b0bd0f39163e0e642e415",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_results.py"
+      },
+      "destination": "source/tests/unit/test_results.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 1018,
+      "sender_sha256": "82adc0bfdfa77422b10eaafea55059dc75603ecd5c6466e1756693b8ffbbc03c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_score_evaluator.py"
+      },
+      "destination": "source/tests/unit/test_score_evaluator.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 3816,
+      "sender_sha256": "b573da16d51686130685d1c1c18a776eede3bca44a7d2e230d36d83ebf53b256",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_soft_compilers.py"
+      },
+      "destination": "source/tests/unit/test_soft_compilers.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 3347,
+      "sender_sha256": "fc801b3adef20f64e36e00d5546e5f717b2a24c79a9d0574fbb88eb950225b7c",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "tests/unit/test_validator.py"
+      },
+      "destination": "source/tests/unit/test_validator.py",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 6146,
+      "sender_sha256": "609873ec8345b3acc817181803236e5233c8edbfd34bd92c17a7577082551806",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "git_blob",
+        "commit": "4cfa643148b967ad7baf674fe6439699afbe51e2",
+        "path": "uv.lock"
+      },
+      "destination": "source/uv.lock",
+      "role": "FROZEN_SOURCE",
+      "size_bytes": 159975,
+      "sender_sha256": "e7cf88d7082db5bceb43bc2694c488f2b4b64525f2963cf1a6a7f9bd93faa084",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "benchmarks/windows_payload.py"
+      },
+      "destination": "tools/windows_payload.py",
+      "role": "WINDOWS_TOOLING",
+      "size_bytes": 10745,
+      "sender_sha256": "7fdebb234737fa71defc58d52551e0f29b78521bd388052b952e142f288cfa06",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": "benchmarks/windows_preflight.py"
+      },
+      "destination": "tools/windows_preflight.py",
+      "role": "WINDOWS_TOOLING",
+      "size_bytes": 23451,
+      "sender_sha256": "052cb30b386568db31f9b10c7147e9505a8222e3ac6213872a452a6fd70a2b33",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    },
+    {
+      "origin": {
+        "kind": "local_file",
+        "path": ".worktrees/phase2a-generator/benchmarks/artifacts/phase2a/preflight-linux-v1/distribution/vnedu_tkb_core-0.2.0-py3-none-any.whl"
+      },
+      "destination": "wheel/vnedu_tkb_core-0.2.0-py3-none-any.whl",
+      "role": "CORE_WHEEL",
+      "size_bytes": 40108,
+      "sender_sha256": "1686079c62af5b796fb87ade66e54858bb453cf579d1b9b6bc48c8d8b96dbbb9",
+      "receiver_sha256": null,
+      "receiver_reason": "NOT_TRANSFERRED"
+    }
+  ]
+}

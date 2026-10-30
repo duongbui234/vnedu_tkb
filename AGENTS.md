@@ -23,6 +23,11 @@
 After completing each task:
 - Analyze the current project state.
 - Suggest exactly one logical next action.
+- Make the suggestion a complete, meaningful task with a reviewable outcome;
+  group related reading, implementation, verification and reporting within the
+  authorized scope. Do not suggest a sequence of tiny tasks such as editing one
+  field, staging a file, then reviewing it in separate turns when they can be
+  handled together. Keep necessary approval boundaries explicit.
 - Provide a ready-to-send Vietnamese prompt.
 - Prioritize unfinished work, bugs, tests, and dependencies.
 - Do not execute the suggested action automatically.
