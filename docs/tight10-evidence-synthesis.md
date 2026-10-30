@@ -4,6 +4,8 @@
 
 Bản tổng hợp ban đầu từ baseline `7ced3bd`; cập nhật native CPU trên `feature/phase2a-task5-linux-summary`, baseline `c9e7405`. Lượt này chỉ đọc saved artifacts và sửa đúng file tổng hợp này. Không chạy solver/search/profiling, prepare/build/compile, scorer/validator hoặc đổi Core/budget/guards. Windows **BLOCKED**; không mở Phase 2B/2C.
 
+Điều tra Windows sau đó (S03 bounds, 5s/60s ABBA, deterministic time): [windows-tight-s03-investigation-report.md](windows-tight-s03-investigation-report.md).
+
 ## Evidence và phạm vi đối chiếu
 
 Nguồn: [static witness và auxiliary](tight10-static-diagnostic-report.md), [single trace](tight10-search-trace-report.md), [logging pair](tight10-logging-pair-report.md), [CPU/wall accounting audit](tight10-accounting-audit-report.md) và [native CPU execution](tight10-native-cpu-report.md). Các đề xuất audit/measurement cũ đã được thực hiện theo approval riêng; không phải authorization chạy lại.
