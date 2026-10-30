@@ -5,8 +5,12 @@ Implementation độc lập, không sao chép FET/STKB; không có API, SQLite h
 
 Định hướng tiếp theo nằm ở [đặc tả Phase 2 đề xuất](superpowers/specs/2026-10-26-phase-2-quality-design.md).
 S01–S04 đã được triển khai trong Phase 2A; kết quả kiểm tra nằm ở [báo cáo](phase-2a-report.md).
-Tuyến input 1.1 compile soft expressions chính xác, chạy feasibility rồi từng active tier,
-freeze chỉ OPTIMAL, dừng ở tier chưa proof và giữ incumbent đã kiểm chứng.
+Tuyến input 1.1 compile soft expressions chính xác, chạy feasibility trên bản clone model
+chỉ có hard constraints (clone trước compile_soft nên lỗi range vẫn báo trước mọi solve),
+rồi một verification solve cố định placements của incumbent để đối chiếu expression với
+evaluator, rồi từng active tier với hint là incumbent tốt nhất (hint không phải lock);
+freeze chỉ OPTIMAL, dừng ở tier chưa proof và giữ incumbent đã kiểm chứng. Nếu hết budget
+trước verification, incumbent hard-only được trả FEASIBLE với score từ evaluator độc lập.
 Mỗi candidate giữ lại được hard checker và independent score evaluator kiểm lại;
 raw/weighted/tier khác expression solver → MODEL_INVALID/INTERNAL_SCORE_MISMATCH.
 Cả budget CP-SAT dùng chung, wall time evaluator/preprocessing không tính vào giới hạn đó.

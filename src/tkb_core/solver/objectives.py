@@ -47,12 +47,16 @@ def _run_stage(
     options: SolveOptions,
     priority: int | None,
     budget: float,
+    *,
+    model: cp_model.CpModel | None = None,
+    fix_hint: bool = False,
 ) -> StageOutcome:
+    target = built.model if model is None else model
     if priority is None:
-        built.model.clear_objective()  # type: ignore[no-untyped-call]
+        target.clear_objective()  # type: ignore[no-untyped-call]
     else:
-        built.model.minimize(compiled.tiers[priority])
-    if built.model.validate():
+        target.minimize(compiled.tiers[priority])
+    if target.validate():
         return StageOutcome(SolveStatus.MODEL_INVALID)
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = budget
@@ -60,7 +64,9 @@ def _run_stage(
     solver.parameters.random_seed = options.seed
     solver.parameters.relative_gap_limit = 0.0
     solver.parameters.absolute_gap_limit = 0.0
-    status_code = int(solver.solve(built.model))
+    if fix_hint:
+        solver.parameters.fix_variables_to_their_hinted_value = True
+    status_code = int(solver.solve(target))
     status = {
         0: SolveStatus.UNKNOWN,
         1: SolveStatus.MODEL_INVALID,
@@ -85,6 +91,8 @@ def _run_stage(
                         teacher_ids=req.teacher_ids,
                     )
                 )
+    # Soft expressions exist only in the model that compile_soft extended.
+    expressions = target is built.model
     return StageOutcome(
         status,
         tuple(assignments),
@@ -94,17 +102,47 @@ def _run_stage(
                 int(solver.value(r.weighted_expression)),
             )
             for r in compiled.rules
-        },
-        {p: int(solver.value(e)) for p, e in compiled.tiers.items()},
+        }
+        if expressions
+        else {},
+        {p: int(solver.value(e)) for p, e in compiled.tiers.items()} if expressions else {},
         solver.wall_time,
         float(solver.best_objective_bound) if priority is not None else None,
     )
 
 
+def _hint(
+    prepared: PreparedProblem, built: BuiltModel, assignments: tuple[ScheduleAssignment, ...]
+) -> None:
+    """Replace hints with one complete placement choice; a hint never locks a tier."""
+    chosen = {a.occurrence_id: (a.slot_id, a.room_id) for a in assignments}
+    built.model.clear_hints()  # type: ignore[no-untyped-call]
+    for o in prepared.normalized.occurrences:
+        for p, v in zip(prepared.domains[o.id], built.variables[o.id], strict=True):
+            built.model.add_hint(v, (p.start_slot_id, p.room_id) == chosen[o.id])
+
+
+def _values_match(candidate: ScoreReport, compiled: CompiledSoft, outcome: StageOutcome) -> bool:
+    """Compare independent rule/tier scores with model expression values."""
+    assert candidate.tiers is not None
+    rules = {r.rule_id: (r.raw_penalty, r.weighted_penalty) for r in candidate.rules}
+    tiers = {p: candidate.tiers[p - 1] for p in compiled.tiers}
+    return rules == outcome.rule_values and tiers == outcome.tier_values
+
+
 def run_quality(
-    prepared: PreparedProblem, built: BuiltModel, compiled: CompiledSoft, options: SolveOptions
+    prepared: PreparedProblem,
+    built: BuiltModel,
+    compiled: CompiledSoft,
+    options: SolveOptions,
+    feasibility_model: cp_model.CpModel,
 ) -> QualityOutcome:
-    """Stop at the first unproved active tier; never discard a verified prior schedule."""
+    """Hard-only feasibility, expression check, then tiers hinted by the verified incumbent.
+
+    ``feasibility_model`` must be ``built.model.clone()`` taken before ``compile_soft``, so
+    placement variable indices match and soft auxiliaries are absent. Stop at the first
+    unproved active tier; never discard a verified prior schedule.
+    """
     problem = prepared.normalized.problem
     assignments: tuple[ScheduleAssignment, ...] = ()
     validation = None
@@ -143,57 +181,86 @@ def run_quality(
             else (),
         )
 
-    for priority in (None, *compiled.tiers):
+    def measure(
+        priority: int | None, model: cp_model.CpModel | None = None, fix_hint: bool = False
+    ) -> StageOutcome | None:
+        nonlocal elapsed, solver_wall, executed
         remaining = options.time_limit_seconds - elapsed
         if remaining <= 0:
-            return finish(SolveStatus.FEASIBLE if score is not None else SolveStatus.UNKNOWN)
+            return None
         start = perf_counter()
-        outcome = _run_stage(prepared, built, compiled, options, priority, remaining)
+        outcome = _run_stage(
+            prepared, built, compiled, options, priority, remaining, model=model, fix_hint=fix_hint
+        )
         elapsed += max(0.0, perf_counter() - start)
         executed = True
         if outcome.wall_time is not None:
             solver_wall += outcome.wall_time
+        return outcome
+
+    first = measure(None, model=feasibility_model)
+    if first is None:
+        return finish(SolveStatus.UNKNOWN)
+    feasibility = StageRun(raw_status=first.status, wall_time=first.wall_time)
+    if first.status == SolveStatus.INFEASIBLE:
+        return finish(SolveStatus.INFEASIBLE, "INFEASIBLE")
+    if first.status == SolveStatus.MODEL_INVALID:
+        return finish(first.status, "MODEL_INVALID")
+    if first.status not in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL):
+        return finish(SolveStatus.UNKNOWN)
+    hard = validate_schedule(problem, first.assignments)
+    candidate = evaluate_score(problem, first.assignments)
+    if not hard.valid or candidate.status != "OK":
+        return finish(SolveStatus.MODEL_INVALID, "INTERNAL_VALIDATION_FAILED")
+    assignments, validation, score = first.assignments, hard, candidate
+    # Every hard-valid schedule extends to the soft model: fixing its placements checks that
+    # and yields the expression values the independent evaluator must match.
+    _hint(prepared, built, assignments)
+    check = measure(None, fix_hint=True)
+    if check is None:
+        return finish(SolveStatus.FEASIBLE)
+    if check.status == SolveStatus.INFEASIBLE:
+        return finish(SolveStatus.MODEL_INVALID, "INTERNAL_STAGE_INCONSISTENCY")
+    if check.status == SolveStatus.MODEL_INVALID:
+        return finish(check.status, "MODEL_INVALID")
+    if check.status not in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL):
+        return finish(SolveStatus.FEASIBLE)
+    if check.assignments != assignments or not _values_match(candidate, compiled, check):
+        return finish(SolveStatus.MODEL_INVALID, "INTERNAL_SCORE_MISMATCH")
+    for priority in compiled.tiers:
+        _hint(prepared, built, assignments)
+        outcome = measure(priority)
+        if outcome is None:
+            return finish(SolveStatus.FEASIBLE)
         status = outcome.status
-        record = StageRun(
+        tiers[priority] = StageRun(
             priority=priority,
             raw_status=status,
             wall_time=outcome.wall_time,
-            best_bound=outcome.best_bound if priority is not None else None,
+            best_bound=outcome.best_bound,
         )
-        if priority is None:
-            feasibility = record
-        else:
-            tiers[priority] = record
         if status == SolveStatus.INFEASIBLE:
-            return finish(
-                SolveStatus.INFEASIBLE if score is None else SolveStatus.MODEL_INVALID,
-                "INTERNAL_STAGE_INCONSISTENCY" if score is not None else "INFEASIBLE",
-            )
+            return finish(SolveStatus.MODEL_INVALID, "INTERNAL_STAGE_INCONSISTENCY")
         if status == SolveStatus.MODEL_INVALID:
             return finish(status, "MODEL_INVALID")
         if status not in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL):
-            return finish(SolveStatus.FEASIBLE if score is not None else SolveStatus.UNKNOWN)
+            return finish(SolveStatus.FEASIBLE)
         hard = validate_schedule(problem, outcome.assignments)
         candidate = evaluate_score(problem, outcome.assignments)
         if not hard.valid or candidate.status != "OK":
             return finish(SolveStatus.MODEL_INVALID, "INTERNAL_VALIDATION_FAILED")
-        expected_rules = {r.rule_id: (r.raw_penalty, r.weighted_penalty) for r in candidate.rules}
-        assert candidate.tiers is not None
-        expected_tiers = {p: candidate.tiers[p - 1] for p in compiled.tiers}
-        if expected_rules != outcome.rule_values or expected_tiers != outcome.tier_values:
+        if not _values_match(candidate, compiled, outcome):
             return finish(SolveStatus.MODEL_INVALID, "INTERNAL_SCORE_MISMATCH")
+        assert candidate.tiers is not None and score.tiers is not None
         if any(candidate.tiers[p - 1] != tiers[p].incumbent_value for p in prefix):
             return finish(SolveStatus.MODEL_INVALID, "INTERNAL_STAGE_INCONSISTENCY")
-        if score is None or score.tiers is None or candidate.tiers < score.tiers:
-            assignments = outcome.assignments
-            validation = hard
-            score = candidate
-        if priority is None:
-            continue
+        if candidate.tiers < score.tiers:
+            assignments, validation, score = outcome.assignments, hard, candidate
+        assert score.tiers is not None
         # OPTIMAL is a proof only for this tier under already-proved prefix equalities.
         optimum = outcome.tier_values[priority]
         if status == SolveStatus.OPTIMAL:
-            if score is None or score.tiers is None or score.tiers[priority - 1] != optimum:
+            if score.tiers[priority - 1] != optimum:
                 return finish(SolveStatus.MODEL_INVALID, "INTERNAL_STAGE_INCONSISTENCY")
             prefix.append(priority)
             tiers[priority] = StageRun(
@@ -206,7 +273,6 @@ def run_quality(
             )
             built.model.add(compiled.tiers[priority] == optimum)
         else:
-            assert score is not None and score.tiers is not None
             tiers[priority] = StageRun(
                 priority=priority,
                 raw_status=status,

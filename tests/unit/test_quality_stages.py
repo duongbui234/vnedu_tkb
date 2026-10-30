@@ -45,6 +45,7 @@ def test_stage_proof_and_fallback(
     ]
     p = prepare(ScheduleInput.model_validate(quality_case))
     built = build_model(p)
+    hard = built.model.clone()
     compiled = compile_soft(p, built)
     aa = tuple(
         ScheduleAssignment(
@@ -55,7 +56,15 @@ def test_stage_proof_and_fallback(
     calls = []
 
     def fake(
-        prepared: Any, built: Any, compiled: Any, options: Any, priority: Any, budget: float
+        prepared: Any,
+        built: Any,
+        compiled: Any,
+        options: Any,
+        priority: Any,
+        budget: float,
+        *,
+        model: Any = None,
+        fix_hint: bool = False,
     ) -> StageOutcome:
         calls.append(budget)
         status = "OPTIMAL" if priority is None else later
@@ -68,12 +77,12 @@ def test_stage_proof_and_fallback(
             best_bound=None if priority is None else 0.0,
         )
 
-    ticks = iter((0.0, 3.0, 3.0, 5.0))
+    ticks = iter((0.0, 3.0, 3.0, 4.0, 4.0, 6.0))
     monkeypatch.setattr("tkb_core.solver.objectives.perf_counter", lambda: next(ticks))
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", fake)
-    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0))
+    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0), hard)
     assert out.status == expected
-    assert calls == [10.0, 7.0]
+    assert calls == [10.0, 7.0, 6.0]
     if expected != "MODEL_INVALID":
         assert out.assignments == aa
         assert out.score == _evaluate_validated(p.normalized.problem, aa)
@@ -83,19 +92,21 @@ def test_stage_proof_and_fallback(
 
 
 @pytest.mark.parametrize(
-    "scenario,expected,code",
+    "scenario,limit,expected,code,stages",
     [
-        ("mismatch", "MODEL_INVALID", "INTERNAL_SCORE_MISMATCH"),
-        ("no_first", "UNKNOWN", None),
-        ("budget", "FEASIBLE", None),
+        ("mismatch", 10.0, "MODEL_INVALID", "INTERNAL_SCORE_MISMATCH", 2),
+        ("no_first", 10.0, "UNKNOWN", None, 1),
+        ("budget", 3.0, "FEASIBLE", None, 1),
     ],
 )
 def test_mismatch_and_budget(
     quality_case: dict[str, Any],
     monkeypatch: pytest.MonkeyPatch,
     scenario: str,
+    limit: float,
     expected: str,
     code: str | None,
+    stages: int,
 ) -> None:
     for module in (
         "preprocessing.normalize",
@@ -114,6 +125,7 @@ def test_mismatch_and_budget(
     ]
     p = prepare(ScheduleInput.model_validate(quality_case))
     built = build_model(p)
+    hard = built.model.clone()
     compiled = compile_soft(p, built)
     aa = tuple(
         ScheduleAssignment(
@@ -123,7 +135,7 @@ def test_mismatch_and_budget(
     )
     calls = []
 
-    def fake(*args: Any) -> StageOutcome:
+    def fake(*args: Any, **kwargs: Any) -> StageOutcome:
         calls.append(args[-1])
         if scenario == "no_first":
             return StageOutcome(SolveStatus.UNKNOWN, wall_time=1.0)
@@ -135,11 +147,11 @@ def test_mismatch_and_budget(
             wall_time=1.0,
         )
 
-    ticks = iter((0.0, 3.0))
+    ticks = iter((0.0, 3.0, 3.0, 4.0))
     monkeypatch.setattr("tkb_core.solver.objectives.perf_counter", lambda: next(ticks))
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", fake)
-    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=3.0))
-    assert out.status == expected and len(calls) == 1
+    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=limit), hard)
+    assert out.status == expected and len(calls) == stages
     assert out.diagnostics[0].code == code if code else not out.diagnostics
     if scenario == "budget":
         assert out.quality.tier_runs[0].raw_status == "NOT_RUN" and out.assignments
@@ -174,11 +186,20 @@ def test_unproved_second_tier_stops_before_third(
     ]
     p = prepare(ScheduleInput.model_validate(quality_case))
     built = build_model(p)
+    hard = built.model.clone()
     compiled = compile_soft(p, built)
     calls = []
 
     def fake(
-        prepared: Any, built: Any, compiled: Any, options: Any, priority: Any, budget: float
+        prepared: Any,
+        built: Any,
+        compiled: Any,
+        options: Any,
+        priority: Any,
+        budget: float,
+        *,
+        model: Any = None,
+        fix_hint: bool = False,
     ) -> StageOutcome:
         calls.append(priority)
         session = "AM" if priority is None or (status == "PREFIX" and priority == 2) else "PM"
@@ -203,11 +224,11 @@ def test_unproved_second_tier_stops_before_third(
         )
 
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", fake)
-    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=5.0))
+    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=5.0), hard)
     if status == "PREFIX":
         assert out.status == "MODEL_INVALID" and not out.assignments
         assert out.diagnostics[0].code == "INTERNAL_STAGE_INCONSISTENCY"
         return
-    assert calls == [None, 1, 2] and out.status == "FEASIBLE"
+    assert calls == [None, None, 1, 2] and out.status == "FEASIBLE"
     assert out.quality.optimal_prefix == (1,) and out.score.tiers == (0, 1, 0)
     assert out.quality.tier_runs[2].raw_status == "NOT_RUN"

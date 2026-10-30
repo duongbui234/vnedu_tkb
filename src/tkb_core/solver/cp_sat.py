@@ -160,8 +160,11 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
             from tkb_core.constraints.soft import compile_soft
             from tkb_core.solver.objectives import run_quality
 
+            # Clone before compiling preferences: feasibility runs on hard constraints only,
+            # while range errors are still raised before any solver call.
+            hard_model = built.model.clone()
             compiled = compile_soft(prepared, built)
-            outcome = run_quality(prepared, built, compiled, applied)
+            outcome = run_quality(prepared, built, compiled, applied, hard_model)
             executed = outcome.solver_executed
             solver_wall = outcome.solver_wall_time
             quality = outcome.quality
