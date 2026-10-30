@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from ortools.sat.python import cp_model
 
 from tkb_core.constraints.registry import parse_parameters
+from tkb_core.constraints.s03_bounds import S03BoundsDecision, derive_s03_bounds
 from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import ConstraintConfigV11
 from tkb_core.domain.rule_parameters import (
@@ -46,6 +47,33 @@ def _range(value: int, maximum: int = MAX_INTEGER) -> None:
         )
 
 
+def _add_s03_bounds(
+    model: cp_model.CpModel,
+    decision: S03BoundsDecision,
+    excesses: dict[tuple[str, int, str], cp_model.IntVar],
+    old_uppers: dict[tuple[str, int, str], int],
+    raw: cp_model.IntVar,
+    raw_bound: int,
+) -> None:
+    """Stage every redundant interval of one rule, then append all of them or none."""
+    if decision.bounds is None:
+        return
+    intervals = {(b.teacher_id, b.day, ""): b.excess for b in decision.bounds.days}
+    targets = [(v, intervals.get(k), old_uppers[k]) for k, v in excesses.items()]
+    targets.append((raw, decision.bounds.raw, raw_bound))
+    staged = []
+    for var, interval, old_upper in targets:
+        if interval is None:
+            return
+        lower, upper = max(0, interval.lower), min(old_upper, interval.upper)
+        if lower > upper:
+            return
+        if lower > 0 or upper < old_upper:
+            staged.append((var, lower, upper))
+    for var, lower, upper in staged:
+        model.add_linear_constraint(var, lower, upper)
+
+
 def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
     """Add exact expressions for enabled preferences without pruning hard domains."""
     problem = prepared.normalized.problem
@@ -65,6 +93,7 @@ def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
         buckets: dict[tuple[str, int, str], list[tuple[cp_model.IntVar, int]]] = defaultdict(list)
         bucket_bounds: dict[tuple[str, int, str], int] = defaultdict(int)
         raw_bound = 0
+        excesses: dict[tuple[str, int, str], cp_model.IntVar] = {}
         for occurrence in prepared.normalized.occurrences:
             req = reqs[occurrence.requirement_id]
             teacher = req.teacher_ids[0]
@@ -150,10 +179,21 @@ def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
                     excess, [0, sum(n * v for v, n in terms) - params.limit]
                 )
                 costs.append(excess)
+                excesses[bucket] = excess
         # Bound the aggregate before weighting: unselected placement alternatives must
         # not inflate CP-SAT's syntactic objective domain and overflow it.
         raw = built.model.new_int_var(0, raw_bound, f"raw_{rule.id}")
         built.model.add(raw == sum(costs))
+        if isinstance(params, MaxDayParameters):
+            # Redundant S03 bounds hold for every hard-valid selection; old domains stay.
+            _add_s03_bounds(
+                built.model,
+                derive_s03_bounds(prepared, frozenset(teachers), params.limit),
+                excesses,
+                {k: max(0, n - params.limit) for k, n in bucket_bounds.items()},
+                raw,
+                raw_bound,
+            )
         rules.append(
             CompiledRule(rule.id, rule.priority, raw, raw * rule.weight, raw_bound, weighted_bound)
         )

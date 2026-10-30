@@ -35,6 +35,24 @@ tạo AtMostOne; không tạo tất cả tổ hợp bị cấm rồi mới loạ
 tiếp của calendar; không dùng một biến cho mỗi phút và không chỉ so start slot.
 Validator timed dùng interval sweep riêng; hai cách tính không chung footprint helper.
 
+## Bound dư thừa S03
+
+`constraints/s03_bounds.py` (không import OR-Tools, không export public) tính từ prepared
+domains cho mỗi giáo viên t trong scope và mỗi ngày d của calendar: D = tổng duration;
+U = số slot ID phân biệt trong union footprints ngày d (không nhân theo phòng); F = tổng
+duration các occurrence có khóa `slot_id` ngày d (khóa chỉ phòng góp 0);
+L = max(0, F, D − (ΣU − U)). Khi đó L ≤ tải ngày ≤ U trên mọi lịch hard-valid; raw dùng
+thêm identity Σmax(0, x−k) = D − Σmin(x, k), và scope nhiều giáo viên cộng bound từng người.
+
+Compiler giữ nguyên biến, domain, AddMaxEquality, `raw == sum(excess)`, metadata upper bounds
+và range guards; sau khi stage toàn rule mới append `lower ≤ var ≤ upper` trên excess/raw S03
+khi chặt hơn domain cũ. Dữ liệu không chứng minh được (nhiều GV, duration ngoài 1/2,
+footprint/lock-domain sai, thiếu tham chiếu, bound mâu thuẫn, ngoài int64) hoặc giao rỗng →
+bỏ toàn bộ bước siết của rule, không đổi status/lỗi. Đây là bảo toàn tập lịch/score, không
+hứa tốc độ, incumbent hay status dưới budget. Regression: `tests/unit/test_s03_bounds.py`,
+oracle vét cạn 12 fixtures `tests/properties/test_s03_bounds_oracle.py`, 6 cặp native nhỏ
+`tests/integration/test_s03_bounds_native.py`.
+
 ## Run config và trạng thái
 
 SolveOptions: time_limit_seconds=60, num_workers=1 (1..64), seed=42 (0..2^31-1),
