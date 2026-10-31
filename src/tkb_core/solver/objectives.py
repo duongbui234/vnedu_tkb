@@ -90,7 +90,10 @@ def _run_stage(
     solver = cp_model.CpSolver()
     for name, value in _stage_parameters(options, budget, fix_hint=fix_hint, search=search).items():
         setattr(solver.parameters, name, value)
+    # Monotonic: CP-SAT's own wall_time follows the system clock and jumps with it.
+    started = perf_counter()
     status_code = int(solver.solve(target))
+    wall_time = perf_counter() - started
     status = {
         0: SolveStatus.UNKNOWN,
         1: SolveStatus.MODEL_INVALID,
@@ -99,7 +102,7 @@ def _run_stage(
         4: SolveStatus.OPTIMAL,
     }[status_code]
     if status not in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL):
-        return StageOutcome(status, wall_time=solver.wall_time)
+        return StageOutcome(status, wall_time=wall_time)
     reqs = {r.id: r for r in prepared.normalized.problem.teaching_requirements}
     assignments = []
     for o in prepared.normalized.occurrences:
@@ -130,7 +133,7 @@ def _run_stage(
         if expressions
         else {},
         {p: int(solver.value(e)) for p, e in compiled.tiers.items()} if expressions else {},
-        solver.wall_time,
+        wall_time,
         float(solver.best_objective_bound) if priority is not None else None,
     )
 

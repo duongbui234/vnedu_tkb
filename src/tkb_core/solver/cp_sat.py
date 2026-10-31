@@ -177,8 +177,10 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         solver.parameters.num_search_workers = applied.num_workers
         solver.parameters.random_seed = applied.seed
         executed = True
+        # Monotonic: CP-SAT's own wall_time follows the system clock and jumps with it.
+        solve_started = perf_counter()
         raw_status = solver.solve(built.model)
-        solver_wall = solver.wall_time
+        solver_wall = perf_counter() - solve_started
         status = map_status(int(raw_status))
         feasibility_run = StageRun(raw_status=status, wall_time=solver_wall)
         if status not in (SolveStatus.OPTIMAL, SolveStatus.FEASIBLE):

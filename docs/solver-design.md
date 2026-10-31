@@ -103,6 +103,10 @@ validate, assignments rỗng và valid_schedule=false. Không có partial publis
 
 Output mới schema 1.1; input/hash vẫn 1.0. RunMetadata 1.1 thêm execution/seed/workers/
 budget và solver_wall_time; wall_time đo toàn lời gọi core, chưa gồm CLI ghi file.
+solver_wall_time, feasibility_run/tier_runs[].wall_time đo bằng đồng hồ monotonic quanh từng
+lời gọi CP-SAT, không lấy wall_time của CP-SAT (vốn theo giờ hệ thống, nhảy khi giờ bị chỉnh).
+Bản thân giới hạn max_time_in_seconds của CP-SAT vẫn có thể dừng sớm nếu giờ hệ thống nhảy
+trong lúc giải; đó là hành vi OR-Tools, nên giữ giờ ổn định khi đánh giá.
 time_limit chỉ giới hạn CP-SAT, không hứa giới hạn toàn preprocessing/validation.
 objective/best_bound null vì Phase 1 không có mục tiêu chất lượng.
 
