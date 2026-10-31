@@ -77,6 +77,8 @@ Mỗi thư mục có `report.md` (hoặc `design.md`/`analysis.md`) và manifest
 | tier-b1-impl-v1 | `e031765395e192b397097eeb5cf35fde1c6e7c733e3abce2db1fa1788b5866fd` |
 | tier-b1-eval-v1 | `6800016f16e257e7d659c1211c70affb7b62271d25e9d8ceecc1759fb54f8416` |
 | tier-b1-robustness-v1 | `abf4b945e4c30401d72a1a413264423ce1e4a78871afad8fe1f40abb3a9be1c5` |
+| independent-validation-v1 | `35d82dd6cb6ce180e9d59f9f82e7105a6295dedcde6740a6dbbbde897f71ade9` |
+| tight-s103-diagnosis-v1 | `ee8b0b529a28b39d82e6d3566aba12d2c95810c7ae58c7f1228ed4e922205a11` |
 
 Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2. Mục 8 dựa trên hồ sơ `tier-b1-impl-design-v1` (manifest `0af5a87d8ff302c9a9b3a7bbd1e38546094bd13f2762dced4733306ff9e8f6a9`).
 
@@ -148,5 +150,43 @@ Giới hạn:
 - Giảm budget chỉ mô phỏng thô một máy chậm và giả định mọi phần wall chậm đều; chưa đo trên máy chậm thật.
 - Một ca, n=2/arm mỗi budget, một máy Windows.
 - Base và mixed không chạy lại ở budget nhỏ.
+
+Không tuyên bố tăng tốc.
+
+### 8.2. Kiểm chứng trên các ca chưa dùng để chọn S, và chẩn đoán tight-s103
+
+S = 12 và quy tắc sticky được chọn từ ba ca `c10-*-s101`. Lượt `independent-validation-v1` kiểm trên sáu ca c10 seed 102 và 103, sinh bằng `benchmarks/generate_synthetic.py` tại `4709f1a` (hồ sơ `independent-validation-design-v1`, manifest `f68532088cdfc1debebef5d7970df635122a4efdaaf6d5d6db0b0145f2c44000`). Bundle sinh lại cho c10 s101 trùng từng byte input và witness với bộ dataset đã dùng trước đây.
+
+Thiết lập: ABBA CLI 60s/seed 42/workers 1, BASE = `ffae995`, NEW = `4709f1a`. Venv NEW cài non-editable với `--reinstall-package`. Identity strict 28/28 cho cả hai venv; structural gate PASS cho 6 ca.
+
+| Ca | BASE ×2 | NEW ×2 | Score của witness |
+|---|---|---|---|
+| tight-s102 | FEASIBLE [5,78,3] | OPTIMAL [0,80,0], prefix [1,2,3] | [0,80,0] |
+| tight-s103 | FEASIBLE [8,81,2] | FEASIBLE [2,83,1], tier 1 hết budget | [0,83,0] |
+| base-s102 | OPTIMAL [0,0,0] | OPTIMAL [0,0,0], cùng lịch | [0,0,0] |
+| base-s103 | FEASIBLE [0,0,111], tier 3 hết budget | FEASIBLE [0,0,111], cùng lịch | [0,0,0] |
+| mixed-s102 | OPTIMAL [0,0,0] | OPTIMAL [0,0,0], cùng lịch | [0,0,0] |
+| mixed-s103 | OPTIMAL [0,0,0] | OPTIMAL [0,0,0], cùng lịch | [0,0,0] |
+
+no-solver-v1: 24/24 lịch SCHEDULE_VALID, score khớp toàn phần, 0 forbidden import. Mỗi arm cho cùng lịch ở cả hai lần chạy.
+
+Theo tiêu chí định trước, cả sáu ca đều không kém `ffae995`: NEW ≤lex BASE ở mọi run, và ở mọi ca BASE OPTIMAL thì NEW cũng OPTIMAL. Riêng base-s103 hết budget ở tier 3 với cả hai Core và cho cùng lịch, nên đây là giới hạn budget có từ trước, không do S hay sticky gây ra.
+
+Lượt `tight-s103-diagnosis-v1` (hồ sơ `tight-s103-diagnosis-design-v1`, manifest `b3000e18d49a2090ad184818b100c5a6e2e790f1b6c77eeb5529f1d6f282db42`) chạy `4709f1a` có bật log từng pha, n=1. Ở 60s, driver tái hiện đúng lịch CLI.
+
+| Lượt | Lát tuần tự tier 1 | Interleave tier 1 | Kết quả |
+|---|---|---|---|
+| s103, 60s | 22.6s, 11 → 9 | 35.3s budget, về 2, không proof | FEASIBLE [2,83,1] |
+| s103, bỏ lát, 60s | – | 57.8s (40.6 det), về 2, không proof | FEASIBLE [2,82,0] |
+| s103, 180s (chỉ để đo) | 22.6s, 11 → 9 | 37.5s (24.7 det), về 0 | OPTIMAL [0,83,0], cả lần solve 64.7s |
+| s102, 60s | 23.3s, đứng ở 10 | 6.8s (4.7 det), về 0 | OPTIMAL [0,80,0] |
+
+Trên tight-s103, tier 1 cần khoảng 60.1s trong khi budget còn lại khoảng 59.5s; cả lần solve cần khoảng 65s trên máy này. Bỏ lát tuần tự cũng không proof được trong 60s. Ở 60s, kết quả FEASIBLE [2,83,1] vẫn tốt hơn `ffae995` ở tier 1. Đây được ghi như một giới hạn đã biết; không đổi code hay budget mặc định.
+
+Giới hạn:
+- Chỉ c10, seed 102/103; n=2/arm cho ABBA và n=1 cho chẩn đoán; một máy Windows.
+- Tight không có known optimum; score của witness chỉ là một lịch đã biết.
+- CLI không ghi pha; số đo từng pha chỉ có ở lượt chẩn đoán.
+- c20 và c40 chưa được đánh giá.
 
 Không tuyên bố tăng tốc.
