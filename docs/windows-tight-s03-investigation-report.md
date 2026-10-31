@@ -2,6 +2,8 @@
 
 **Kết luận:** S03 bounds đã vào Core (`63506ca`) với regression đầy đủ, nhưng trên Windows ca `c10-tight-s101` policy gốc vẫn UNKNOWN ở 5s và 60s, có hay không có bounds. Model feasibility trên Windows trùng byte với model Linux, nhưng search trajectory khác: ở deterministic time 60 Windows chưa có lịch, trong khi bốn success Linux cần 46.39. Không có evidence bug Core hoặc model loại nghiệm. Task2 frozen Linux vẫn DEFERRED_NOT_ACCEPTED.
 
+**Cập nhật hard-feasibility stage (`ec9ced1`):** khi feasibility chạy trên model chỉ có hard constraints, Core trả lịch hard-valid ở 5s cả 2/2 lần, còn Core `63506ca` vẫn UNKNOWN 2/2 (mục 7). Score [13,79,5] chưa có tier nào được chứng minh tối ưu. Không tuyên bố tăng tốc.
+
 Báo cáo docs-only, tổng hợp evidence đã lưu ngoài repository dưới `C:\tkb-checkout-check\`. Lượt viết báo cáo không chạy solver, pytest hoặc build model. Tổng hợp Linux trước đó: [tight10-evidence-synthesis.md](tight10-evidence-synthesis.md).
 
 ## 1. Triển khai S03 bounds trong Core
@@ -35,6 +37,7 @@ Theo tiêu chí định trước: không có bằng chứng S03 bounds giúp tì
 | Policy gốc | S01–S04 | không / product | CLI | Windows | 5s, 60s | 4+4 | UNKNOWN ×8 |
 | Policy gốc | S01–S04 | không | driver, deterministic 60 | Windows | — | 1 | UNKNOWN |
 | Policy gốc | S01–S04 | không | campaign / diagnostic | Linux | 60s | 3 / 4 | UNKNOWN ×3 / OPTIMAL ×4 (46.0–55.9s) |
+| Policy gốc, feasibility hard-only (`ec9ced1`) | S01–S04 | product | CLI | Windows | 5s | 2 | OPTIMAL 0.231s ×2 (hard-only model) |
 
 ## 4. Counters: Windows deterministic 60 vs Linux success
 
@@ -68,5 +71,30 @@ Mỗi thư mục có `report.md` (hoặc `design.md`/`analysis.md`) và manifest
 | windows-tight-s03-bounds-eval60-v1 | `d4e33b51e84201f7da5cc11dbe94d7a523a41c34562e90bff1d80057f77ecef8` |
 | windows-tight-unknown-analysis-v1 | `baf396b684fe52fc0d235f1f1290c0ed391ac1d5088b198d8fc99549960fa9e4` |
 | windows-tight-dettime-v1 | `dd9afa1875754ac920fd4e038e5cca89b3c79527f8d811d57d478148c92fa4e7` |
+| windows-tight-hardfeas-eval-v1 | `d8bd3b99a8fe22f0c56bd54d44a9804c32b6c6d42643ba64d61601dd83557f00` |
 
-Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`.
+Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2.
+
+## 7. Hard-feasibility stage (`ec9ced1`) trên c10-tight-s101
+
+Commit `ec9ced1` chạy feasibility trên bản clone model chỉ có hard constraints. Sau đó Core chạy một verification solve, cố định placements của incumbent để đối chiếu expression với evaluator. Cuối cùng là các tier, mỗi tier được hint bằng incumbent tốt nhất (xem [solver-design.md](solver-design.md)).
+
+Thiết lập: ABBA CLI 5s/seed 42/workers 1, BASE = Core `63506ca` (venv eval-v1, read-only), HF = Core `ec9ced1` (venv mới, non-editable).
+
+Gates:
+- Identity BASE: 28 file khớp từng byte.
+- Identity HF: 27/28 file khớp từng byte với bản export. Riêng `solver/objectives.py` trong worktree là LF trong khi bản export là CRLF; file này khớp nguyên byte với blob của commit. Bỏ qua line ending thì 28/28 khớp. Lệch này được duyệt trước khi solve.
+- Structural gate: PASS.
+
+| Run | Status | Feasibility | Tier 1 | Tier 2/3 | Score | Prefix |
+|---|---|---|---|---|---|---|
+| BASE-1 | UNKNOWN | UNKNOWN 5.008s | NOT_RUN | NOT_RUN | null | [] |
+| HF-1 | FEASIBLE | OPTIMAL 0.231s | FEASIBLE 13, bound 0 | NOT_RUN | [13,79,5] | [] |
+| HF-2 | FEASIBLE | OPTIMAL 0.231s | FEASIBLE 13, bound 0 | NOT_RUN | [13,79,5] | [] |
+| BASE-2 | UNKNOWN | UNKNOWN 5.005s | NOT_RUN | NOT_RUN | null | [] |
+
+Hai lịch HF giống hệt nhau, 260 assignments. no-solver-v1 xác nhận SCHEDULE_VALID ×2 và score [13,79,5] ×2, full score object khớp result, 0 forbidden import.
+
+Theo tiêu chí định trước: trên mẫu này ở 5s, Core `ec9ced1` trả lịch hard-valid còn `63506ca` thì không. Kết quả tương thích với giả thuyết rằng bước feasibility hard-only giúp tìm lịch, nhưng không phải bằng chứng nhân quả và không tổng quát ra input hoặc budget khác.
+
+Về chất lượng: score [13,79,5] là score của một lịch hard-valid, không phải tối ưu. Witness có score (0,78,0) nên tốt hơn ở tier 1 và tier 2. Tier 1 hết budget ở incumbent 13 với bound 0, còn tier 2/3 không chạy. n=2/arm, một ca TIGHT, một máy Windows. Không tuyên bố tăng tốc, không đo CPU/RAM/deterministic time.
