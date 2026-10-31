@@ -23,6 +23,8 @@ là tổng hai native solve; status/bound là của pha được chọn. Điểm
 time nên tất định theo seed, còn lời giải cuối vẫn có thể phụ thuộc thời điểm cắt wall.
 `interleave_search` là Experimental trong OR-Tools 9.15; feasibility, verification và nhiều
 worker giữ tham số cũ. Giá trị 12 chọn từ ba ca tổng hợp; không hứa tốc độ hay chất lượng.
+Lát tuần tự tính theo deterministic time nên không co lại trên máy chậm: trên c10-tight-s101,
+budget 52s (≈ máy chậm 15%) vẫn OPTIMAL, budget 50s cắt pha interleave của tier 1 (FEASIBLE).
 Phần dưới ghi lại tuyến input 1.0/Phase 1 giữ tương thích.
 
 ## Pipeline

@@ -76,6 +76,7 @@ Mỗi thư mục có `report.md` (hoặc `design.md`/`analysis.md`) và manifest
 | tier-b1-sticky-sim-v1 | `36ca5d4f2a7b54a8272053c8fbdc54445b5ce41617fb129b7ac0f25a6a20162b` |
 | tier-b1-impl-v1 | `e031765395e192b397097eeb5cf35fde1c6e7c733e3abce2db1fa1788b5866fd` |
 | tier-b1-eval-v1 | `6800016f16e257e7d659c1211c70affb7b62271d25e9d8ceecc1759fb54f8416` |
+| tier-b1-robustness-v1 | `abf4b945e4c30401d72a1a413264423ce1e4a78871afad8fe1f40abb3a9be1c5` |
 
 Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2. Mục 8 dựa trên hồ sơ `tier-b1-impl-design-v1` (manifest `0af5a87d8ff302c9a9b3a7bbd1e38546094bd13f2762dced4733306ff9e8f6a9`).
 
@@ -122,7 +123,30 @@ no-solver-v1: 12/12 lịch SCHEDULE_VALID, score khớp toàn phần, 0 forbidde
 Theo tiêu chí định trước, không case nào kém `ffae995`, và tight đạt OPTIMAL. Giới hạn:
 - n=2/arm, ba ca tổng hợp, một máy Windows.
 - Giá trị 12 được chọn từ chính ba ca này.
-- Trên tight, sau tier 1 còn khoảng 9s budget; một máy chậm hơn khoảng 18% có thể không kịp proof tier 2/3.
+- Trên tight, sau tier 1 còn khoảng 9s budget. Độ bền khi máy chậm hơn được đo ở mục 8.1.
 - `interleave_search` là Experimental trong OR-Tools 9.15.
+
+Không tuyên bố tăng tốc.
+
+### 8.1. Độ bền của S = 12 trên tight khi máy chậm hơn
+
+Lát tuần tự dừng ở 12 deterministic seconds, nên trên máy chậm nó chiếm nhiều wall hơn mà không ngắn lại. Lượt `tier-b1-robustness-v1` mô phỏng máy chậm đều f lần bằng cách giảm budget xuống 60/f (hồ sơ `tier-b1-robustness-design-v1`, manifest `616f908fd587facd8c05ecc9f24bab493ca86b157aab12fd5cdd428b022f5313`).
+
+Thiết lập: ABBA CLI trên c10-tight-s101, seed 42, workers 1; BASE = `ffae995`, NEW = `1bc3bfc`; identity strict 28/28 cho cả hai venv.
+
+| Budget | f tương đương | BASE ×2 | NEW ×2 |
+|---|---|---|---|
+| 55s | 1.09 | FEASIBLE [13,79,5] | OPTIMAL [0,78,0], prefix [1,2,3] |
+| 52s | 1.15 | FEASIBLE [13,79,5] | OPTIMAL [0,78,0], prefix [1,2,3]; solver wall 51.3s |
+| 50s | 1.20 | FEASIBLE [13,79,5] | FEASIBLE [4,79,2], prefix []; pha interleave của tier 1 bị cắt |
+
+no-solver-v1: 12/12 lịch SCHEDULE_VALID, score khớp, 0 forbidden import. Mỗi arm cho cùng lịch ở cả hai lần chạy.
+
+Ngưỡng nằm trong (50, 52]s, tương ứng máy chậm hơn khoảng 15%. Chậm hơn mức đó, tight trả FEASIBLE: vẫn tốt hơn `ffae995` ở tier 1, nhưng không còn proof.
+
+Giới hạn:
+- Giảm budget chỉ mô phỏng thô một máy chậm và giả định mọi phần wall chậm đều; chưa đo trên máy chậm thật.
+- Một ca, n=2/arm mỗi budget, một máy Windows.
+- Base và mixed không chạy lại ở budget nhỏ.
 
 Không tuyên bố tăng tốc.
