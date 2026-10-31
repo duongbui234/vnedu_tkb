@@ -75,6 +75,13 @@ max_slots=10,000, max_occurrences=10,000, max_placements=100,000,
 max_occupancy_terms=1,000,000. Tất cả cấu hình được; guards là giới hạn vận hành,
 không phải giới hạn nghiệp vụ. Chạm guard → UNKNOWN + RESOURCE_LIMIT, không cắt miền.
 
+`num_workers > 1` là tùy chọn opt-in; mặc định vẫn là 1. Khi đó mỗi stage là một solve nhiều
+worker với tham số cũ (không lát tuần tự, không interleave), và kết quả không tất định theo seed.
+Đo trên một máy i7-12700H (14 core / 20 luồng), 60s, n=2: 8 worker không kém 1 worker trên bốn
+ca c10 và proof được tight-s103, base-s103 trong vài giây; 4 worker lại mất proof tier 2 trên
+tight-s101 (FEASIBLE thay vì OPTIMAL). Nhiều worker hơn không bảo đảm tốt hơn; kết quả phụ thuộc
+máy. Số liệu ở report điều tra Windows TIGHT, mục 8.3. Không hứa tốc độ.
+
 | Trạng thái | Ý nghĩa |
 |---|---|
 | INPUT_INVALID | Contract/options/timeline/metadata/explicit lock conflict lỗi |

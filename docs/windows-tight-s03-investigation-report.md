@@ -79,6 +79,7 @@ Mỗi thư mục có `report.md` (hoặc `design.md`/`analysis.md`) và manifest
 | tier-b1-robustness-v1 | `abf4b945e4c30401d72a1a413264423ce1e4a78871afad8fe1f40abb3a9be1c5` |
 | independent-validation-v1 | `35d82dd6cb6ce180e9d59f9f82e7105a6295dedcde6740a6dbbbde897f71ade9` |
 | tight-s103-diagnosis-v1 | `ee8b0b529a28b39d82e6d3566aba12d2c95810c7ae58c7f1228ed4e922205a11` |
+| multiworker-v1 | `df6ffffb3e482ada9bffdade5027b2b1020008d0c71925d1d59768a31d654d7c` |
 
 Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2. Mục 8 dựa trên hồ sơ `tier-b1-impl-design-v1` (manifest `0af5a87d8ff302c9a9b3a7bbd1e38546094bd13f2762dced4733306ff9e8f6a9`).
 
@@ -188,5 +189,32 @@ Giới hạn:
 - Tight không có known optimum; score của witness chỉ là một lịch đã biết.
 - CLI không ghi pha; số đo từng pha chỉ có ở lượt chẩn đoán.
 - c20 và c40 chưa được đánh giá.
+
+Không tuyên bố tăng tốc.
+
+### 8.3. Nhiều worker (`num_workers > 1`, opt-in)
+
+Lượt `multiworker-v1` (hồ sơ `multiworker-design-v1`, manifest `b88cb1915718bcdfcb2383b4c8747c52f15cd0a31b4f9d1f3103ba9287ceadea`) chạy main `6cf934a` qua CLI, 60s, seed 42, trên một máy i7-12700H (14 core / 20 luồng). Mỗi ca chạy số worker theo thứ tự 1, 4, 8, 8, 4, 1. CPU được đo trong process (user + kernel, gồm mọi luồng worker). Identity strict 28/28.
+
+| Ca | 1 worker ×2 | 4 worker ×2 | 8 worker ×2 |
+|---|---|---|---|
+| tight-s101 | OPTIMAL [0,78,0]; khoảng 53s; khoảng 54 CPU-s | FEASIBLE [0,78,0]: tier 2 không proof trong 60s; khoảng 238 CPU-s | OPTIMAL [0,78,0]; 1.5–2.2s; 6.5–12.4 CPU-s |
+| tight-s103 | FEASIBLE [2,83,1]; 60s | FEASIBLE [0,83,0]: tier 2 không proof; khoảng 238 CPU-s | OPTIMAL [0,83,0]; 3.6–4.2s; 23–28 CPU-s |
+| base-s103 | FEASIBLE [0,0,111]; 60s | OPTIMAL [0,0,0]; khoảng 7s | OPTIMAL [0,0,0]; khoảng 7s |
+| mixed-s101 | OPTIMAL [0,0,0]; 9.4s | OPTIMAL [0,0,0]; 1.9s | OPTIMAL [0,0,0]; 2.0s |
+
+no-solver-v1: 24/24 lịch SCHEDULE_VALID, score khớp toàn phần, 0 forbidden import. Ở mỗi ca, hai lần chạy cùng số worker cho cùng status và cùng tiers. Lịch của nhiều worker trên tight khác nhau giữa hai lần chạy, vì đường này không tất định.
+
+Theo tiêu chí định trước:
+- **8 worker:** không kém 1 worker ở cả bốn ca, và proof được tight-s103 và tier 3 của base-s103.
+- **4 worker:** kém 1 worker trên tight-s101, vì mất proof tier 2 ở cả hai lần chạy.
+
+Vì vậy `num_workers > 1` chỉ được ghi như tùy chọn opt-in, có cảnh báo; mặc định giữ 1.
+
+Giới hạn:
+- Bốn ca c10, n=2 mỗi số worker, một máy CPU hybrid.
+- Chưa rõ vì sao 4 worker kẹt ở tier 2.
+- Không đo RAM.
+- CPU-giây chỉ là quan sát trên máy này.
 
 Không tuyên bố tăng tốc.
