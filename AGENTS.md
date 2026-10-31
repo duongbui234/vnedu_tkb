@@ -31,6 +31,14 @@ After completing each task:
 - Provide a ready-to-send Vietnamese prompt.
 - Prioritize unfinished work, bugs, tests, and dependencies.
 - Do not execute the suggested action automatically.
+- Bundle low-risk work into one approval: drafting scripts, gates, solver or
+  driver runs inside the evidence directory, no-solver checks and the report
+  against predefined interpretation tables belong to a single suggested prompt,
+  not separate "design" and "run" rounds. Keep hard limits (watchdog, deadline,
+  no retry, stop on a failed gate) in that prompt.
+- Ask separately only for: product code changes, commits, merges, pushes, and
+  deleting branches or tags. Group "docs + checks + commit + local merge" into
+  one approval and "push + branch/worktree cleanup" into another.
 
 End every response with:
 

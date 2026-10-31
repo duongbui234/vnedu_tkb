@@ -81,6 +81,10 @@ worker với tham số cũ (không lát tuần tự, không interleave), và k�
 ca c10 và proof được tight-s103, base-s103 trong vài giây; 4 worker lại mất proof tier 2 trên
 tight-s101 (FEASIBLE thay vì OPTIMAL). Nhiều worker hơn không bảo đảm tốt hơn; kết quả phụ thuộc
 máy. Số liệu ở report điều tra Windows TIGHT, mục 8.3. Không hứa tốc độ.
+Ở cỡ c20 (520 occurrence), 1 worker trong 60s chỉ là mức tối thiểu: c20-tight chưa có lịch,
+c20-base kém Core ffae995 khi máy ở trạng thái nhanh (lát 12 det dừng trước khi tìm tuần tự
+vượt được hint). Với bài cỡ này nên cân nhắc `num_workers = 8` (opt-in), không dùng 4. Mọi so
+sánh dựa trên wall phải kèm tham chiếu tốc độ máy (report điều tra, mục 8.4).
 
 | Trạng thái | Ý nghĩa |
 |---|---|

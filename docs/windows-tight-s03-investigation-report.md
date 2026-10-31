@@ -80,6 +80,15 @@ Mỗi thư mục có `report.md` (hoặc `design.md`/`analysis.md`) và manifest
 | independent-validation-v1 | `35d82dd6cb6ce180e9d59f9f82e7105a6295dedcde6740a6dbbbde897f71ade9` |
 | tight-s103-diagnosis-v1 | `ee8b0b529a28b39d82e6d3566aba12d2c95810c7ae58c7f1228ed4e922205a11` |
 | multiworker-v1 | `df6ffffb3e482ada9bffdade5027b2b1020008d0c71925d1d59768a31d654d7c` |
+| c20-eval-v1 | `ca88553b0edb6be0089cb903073620e812c1226a79d2abc97311d61fc809e6ea` |
+| c20-mixed-diagnosis-v1 | `a3d50703a55e91b1418c499378a6d688adaea39e6ca7e27b1e1c6d80640a7bf1` |
+| c20-mixed-probe-v1 | `58370dddefea01bd9d3a7c0b51f788e8d1d615efb585483f2dbe95b8898adcec` |
+| machine-speed-v1 | `7e759f2f96e4660d73c55ccd24ac000a0eaf2f7e55ec71ba7283743422f23757` |
+| machine-speed-v2 | `8efd1fa50be3d5cbe5746aa15cdc834d935cdda7e492daed8a75005f0429c5d4` |
+| c20-reeval-v1 | `5a92b0598c31b181deb07c4e10473f71c5df1c60e223c4408df5b0f54cbae797` |
+| c20-base-diagnosis-v1 | `258985130decddcc721c8a695a39f3cd5c1d2177dd2ffc47780d89b9daedd3e4` |
+| l5-fullhint-v1 | `12335af2879d075d0077ab249dd0177a351da99542a9fd5bdbc6b8b68fa9a4f1` |
+| tier-search-direction-design-v1 | `5201453d569eca8cd063e6977b465d10a1627cfc2da5b059481ff0ec8ce29d49` |
 
 Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2. Mục 8 dựa trên hồ sơ `tier-b1-impl-design-v1` (manifest `0af5a87d8ff302c9a9b3a7bbd1e38546094bd13f2762dced4733306ff9e8f6a9`).
 
@@ -216,5 +225,50 @@ Giới hạn:
 - Chưa rõ vì sao 4 worker kẹt ở tier 2.
 - Không đo RAM.
 - CPU-giây chỉ là quan sát trên máy này.
+
+Không tuyên bố tăng tốc.
+
+### 8.4. Cỡ c20, tốc độ máy và giới hạn của mặc định 1 worker
+
+**Tốc độ máy thay đổi theo thời gian** (`machine-speed-v1`, `machine-speed-v2`). Tốc độ tier 1 của c10-base, đo bằng deterministic time mỗi giây (det/s), có ít nhất ba mức trên cùng máy i7-12700H:
+- khoảng 0.20 sau nhiều giờ tải nặng;
+- khoảng 0.43 trong các lượt đánh giá trước;
+- khoảng 0.57 sau khi khởi động lại.
+
+Bước feasibility ngắn không phát hiện được sự khác biệt này. Ghim P-core chỉ đổi khoảng 4%. Vì vậy:
+- mọi đánh giá dựa trên wall chạy tham chiếu c10-base (1 worker, không log, det/s của tier 1) ở đầu và cuối lượt;
+- chỉ so wall khi hai lần tham chiếu lệch ≤ 10%, và khi so giữa hai lượt thì tham chiếu của hai lượt cũng lệch ≤ 10%;
+- mức chuẩn ghi nhận: 0.51–0.63.
+
+Kết luận "511a9c0 kém ffae995 trên c20-mixed" của `c20-eval-v1` hóa ra phụ thuộc trạng thái máy, và không còn đúng ở lượt chuẩn.
+
+**Lượt chuẩn `c20-reeval-v1`** (ABBA, 60s, seed 42, 1 worker; tham chiếu 0.565–0.581):
+
+| Ca | ffae995 ×2 | 511a9c0 ×2 |
+|---|---|---|
+| c20-mixed-s101 | FEASIBLE [0,0,54] / [0,0,56] | OPTIMAL [0,0,0] |
+| c20-tight-s101 | UNKNOWN (không có lịch) | UNKNOWN (không có lịch) |
+| c20-base-s101 | FEASIBLE [6,9,213] | FEASIBLE [212,225,240] |
+| c10-base-s101 | OPTIMAL [0,0,0] | OPTIMAL [0,0,0], cùng lịch |
+
+**Chẩn đoán c20-base** (`c20-base-diagnosis-v1`, lượt chuẩn):
+- Tìm tuần tự cần khoảng 35s chỉ để hoàn thiện hint placement, và khoảng 25 det (ước lượng) mới có lời giải tốt hơn hint. Tier 1 cần 78.6 det để proof.
+- Lát 12 det của 511a9c0 kết thúc trước khi hint được hoàn thiện; pha interleave phải làm lại việc đó và không cải thiện trong 60s.
+- Hint đầy đủ (`l5-fullhint-v1`) có lời giải đầu tiên sau 2.5s, nhưng vẫn chỉ ra [211,225,241]. Vì vậy chưa được triển khai.
+
+**8 worker** (`c20-eval-v1`, run W8) giải c20-base và c20-mixed về [0,0,0] trong vài giây.
+
+**Giới hạn của mặc định 1 worker:**
+- ở cỡ c20, 60s chỉ là mức tối thiểu;
+- c20-base kém ffae995 khi máy nhanh;
+- c20-tight chưa có lịch.
+
+Khuyến nghị dùng `num_workers = 8` (opt-in) cho bài cỡ này, không dùng 4. Thiết kế lại lát tuần tự đang được thí nghiệm (`tier-search-direction-design-v1`).
+
+Giới hạn của các số liệu trên:
+- một seed c20 mỗi profile;
+- n=1–2;
+- một máy Windows;
+- thời điểm lời giải trong tìm tuần tự được ước lượng từ wall.
 
 Không tuyên bố tăng tốc.
