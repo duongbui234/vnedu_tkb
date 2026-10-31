@@ -72,8 +72,12 @@ Mỗi thư mục có `report.md` (hoặc `design.md`/`analysis.md`) và manifest
 | windows-tight-unknown-analysis-v1 | `baf396b684fe52fc0d235f1f1290c0ed391ac1d5088b198d8fc99549960fa9e4` |
 | windows-tight-dettime-v1 | `dd9afa1875754ac920fd4e038e5cca89b3c79527f8d811d57d478148c92fa4e7` |
 | windows-tight-hardfeas-eval-v1 | `d8bd3b99a8fe22f0c56bd54d44a9804c32b6c6d42643ba64d61601dd83557f00` |
+| tier-search-experiments-v3 | `4af9e8f5ce0b01a7229f4235d5063954465cb088013e38c5eba02559e823ed75` |
+| tier-b1-sticky-sim-v1 | `36ca5d4f2a7b54a8272053c8fbdc54445b5ce41617fb129b7ac0f25a6a20162b` |
+| tier-b1-impl-v1 | `e031765395e192b397097eeb5cf35fde1c6e7c733e3abce2db1fa1788b5866fd` |
+| tier-b1-eval-v1 | `6800016f16e257e7d659c1211c70affb7b62271d25e9d8ceecc1759fb54f8416` |
 
-Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2.
+Hồ sơ thiết kế tương ứng: `windows-s03-core-bounds-design-v1`, `windows-tight-s03-bounds-eval-design-v1`, `windows-tight-s03-bounds-eval60-design-v1`, `windows-tight-dettime-design-v1`. Lượt hardfeas-eval-v1 dùng lại harness, gates và bảng diễn giải của eval-v2. Mục 8 dựa trên hồ sơ `tier-b1-impl-design-v1` (manifest `0af5a87d8ff302c9a9b3a7bbd1e38546094bd13f2762dced4733306ff9e8f6a9`).
 
 ## 7. Hard-feasibility stage (`ec9ced1`) trên c10-tight-s101
 
@@ -98,3 +102,27 @@ Hai lịch HF giống hệt nhau, 260 assignments. no-solver-v1 xác nhận SCHE
 Theo tiêu chí định trước: trên mẫu này ở 5s, Core `ec9ced1` trả lịch hard-valid còn `63506ca` thì không. Kết quả tương thích với giả thuyết rằng bước feasibility hard-only giúp tìm lịch, nhưng không phải bằng chứng nhân quả và không tổng quát ra input hoặc budget khác.
 
 Về chất lượng: score [13,79,5] là score của một lịch hard-valid, không phải tối ưu. Witness có score (0,78,0) nên tốt hơn ở tier 1 và tier 2. Tier 1 hết budget ở incumbent 13 với bound 0, còn tier 2/3 không chạy. n=2/arm, một ca TIGHT, một máy Windows. Không tuyên bố tăng tốc, không đo CPU/RAM/deterministic time.
+
+## 8. Tier search hai pha, sticky (`d050eb0`) trên tight, mixed và base
+
+Ở 60s với 1 worker, Core `ffae995` dừng tier 1 của c10-tight-s101 ở 13: search tuần tự không cải thiện được incumbent đã hint. Nếu luôn bật `interleave_search` cho stage tier thì tight được cứu, nhưng tier 3 của base bị bỏ đói (thử nghiệm trên branch `feat/tier-interleave-search`, không merge).
+
+Commit `d050eb0` cho mỗi stage tier tìm tuần tự tối đa 12 deterministic seconds trước. Nếu chưa proof, stage chuyển sang interleave với phần budget còn lại. Từ đó các tier sau interleave ngay (xem [solver-design.md](solver-design.md)). Giá trị 12 lấy từ deterministic time mà search tuần tự cần trên base (tối đa 10.854) và mixed (tối đa 1.647), cùng phần budget còn lại cho tight (tier-search-experiments-v3).
+
+Thiết lập: ABBA CLI 60s/seed 42/workers 1 trên tight, mixed và base. BASE = `ffae995`, NEW = `d050eb0`. Venv NEW cài non-editable với `--reinstall-package`; identity strict 28/28 cho cả hai venv; structural gate PASS.
+
+| Case | BASE ×2 | NEW ×2 |
+|---|---|---|
+| tight | FEASIBLE [13,79,5], prefix [] | OPTIMAL [0,78,0], prefix [1,2,3]; tier 1 ≈ 50.5s (hai pha), tier 2/3 < 0.6s |
+| mixed | OPTIMAL [0,0,0] | OPTIMAL [0,0,0], cùng lịch với BASE |
+| base | OPTIMAL [0,0,0] | OPTIMAL [0,0,0], cùng lịch với BASE |
+
+no-solver-v1: 12/12 lịch SCHEDULE_VALID, score khớp toàn phần, 0 forbidden import. Mỗi arm cho cùng lịch ở cả hai lần chạy.
+
+Theo tiêu chí định trước, không case nào kém `ffae995`, và tight đạt OPTIMAL. Giới hạn:
+- n=2/arm, ba ca tổng hợp, một máy Windows.
+- Giá trị 12 được chọn từ chính ba ca này.
+- Trên tight, sau tier 1 còn khoảng 9s budget; một máy chậm hơn khoảng 18% có thể không kịp proof tier 2/3.
+- `interleave_search` là Experimental trong OR-Tools 9.15.
+
+Không tuyên bố tăng tốc.
