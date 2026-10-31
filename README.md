@@ -28,6 +28,8 @@ là cấu hình thử nghiệm, không phải cam kết hiệu năng.
 
 Source distribution dùng allowlist; không chứa nghiên cứu, file STKB hay collection
 Postman. Integration test kiểm tra nội dung cả sdist và wheel.
+`[tool.uv] cache-keys` gồm `pyproject.toml`, `README.md` và `src/**/*.py`, nên cài
+non-editable lại từ cùng thư mục sẽ build lại khi source đổi, không dùng wheel cũ.
 
 Contract là schema nội bộ synthetic, **không phải schema API vnEdu**. `validate-input` chỉ
 xác nhận cấu trúc/tham chiếu, không chứng minh lịch có thể xếp được. Mọi fixture dùng ID giả.

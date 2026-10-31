@@ -38,6 +38,11 @@ include = [
     "/docs/phase-2a-report.md",
 ]
 
+[tool.uv]
+# Rebuild the project when its sources change, not only pyproject.toml; otherwise a
+# non-editable install from the same path can reuse a wheel built from older code.
+cache-keys = [{ file = "pyproject.toml" }, { file = "README.md" }, { file = "src/**/*.py" }]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
