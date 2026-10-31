@@ -52,6 +52,7 @@ def _stub(
         *,
         model: Any = None,
         fix_hint: bool = False,
+        search: str = "default",
     ) -> StageOutcome:
         hint = built.model.proto.solution_hint
         calls.append(
@@ -59,6 +60,7 @@ def _stub(
                 "priority": priority,
                 "model": model,
                 "fix_hint": fix_hint,
+                "search": search,
                 "hint": sorted(zip(list(hint.vars), list(hint.values), strict=True)),
             }
         )
@@ -101,6 +103,7 @@ def test_feasibility_uses_hard_clone_without_soft_auxiliaries(
         (None, False, True),
         (1, False, False),
     ]
+    assert [c["search"] for c in calls] == ["default", "default", "slice"]
     names = [v.name for v in hard.proto.variables]
     assert not any(n.startswith(("excess_", "raw_")) for n in names)
     assert len(names) == sum(len(v) for v in built.variables.values())

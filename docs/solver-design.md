@@ -14,6 +14,15 @@ trước verification, incumbent hard-only được trả FEASIBLE với score t
 Mỗi candidate giữ lại được hard checker và independent score evaluator kiểm lại;
 raw/weighted/tier khác expression solver → MODEL_INVALID/INTERNAL_SCORE_MISMATCH.
 Cả budget CP-SAT dùng chung, wall time evaluator/preprocessing không tính vào giới hạn đó.
+Khi `num_workers == 1`, mỗi stage tier trước hết search tuần tự tối đa 12 deterministic
+seconds (`max_deterministic_time`, hằng nội bộ, không phải field của SolveOptions). Chưa proof
+thì stage chạy tiếp `interleave_search` (vẫn một luồng, có LNS) với phần budget còn lại, hint
+là incumbent tốt nhất của lát tuần tự; kết quả lấy lời giải tốt hơn trong hai pha. Một khi đã
+cần interleave, các tier sau bỏ lát tuần tự và interleave ngay (sticky). `tier_runs[].wall_time`
+là tổng hai native solve; status/bound là của pha được chọn. Điểm chuyển theo deterministic
+time nên tất định theo seed, còn lời giải cuối vẫn có thể phụ thuộc thời điểm cắt wall.
+`interleave_search` là Experimental trong OR-Tools 9.15; feasibility, verification và nhiều
+worker giữ tham số cũ. Giá trị 12 chọn từ ba ca tổng hợp; không hứa tốc độ hay chất lượng.
 Phần dưới ghi lại tuyến input 1.0/Phase 1 giữ tương thích.
 
 ## Pipeline

@@ -65,8 +65,9 @@ def test_stage_proof_and_fallback(
         *,
         model: Any = None,
         fix_hint: bool = False,
+        search: str = "default",
     ) -> StageOutcome:
-        calls.append(budget)
+        calls.append((budget, search))
         status = "OPTIMAL" if priority is None else later
         return StageOutcome(
             status=SolveStatus(status),
@@ -77,12 +78,15 @@ def test_stage_proof_and_fallback(
             best_bound=None if priority is None else 0.0,
         )
 
-    ticks = iter((0.0, 3.0, 3.0, 4.0, 4.0, 6.0))
+    # Tier 1 ticks: measure start, slice start, slice end, measure end.
+    ticks = iter((0.0, 3.0, 3.0, 4.0, 4.0, 4.0, 5.0, 6.0))
     monkeypatch.setattr("tkb_core.solver.objectives.perf_counter", lambda: next(ticks))
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", fake)
     out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0), hard)
     assert out.status == expected
-    assert calls == [10.0, 7.0, 6.0]
+    # An unproved slice continues interleaved on what is left of the stage budget.
+    interleaved = [(5.0, "interleave")] if later in ("FEASIBLE", "UNKNOWN") else []
+    assert calls == [(10.0, "default"), (7.0, "default"), (6.0, "slice"), *interleaved]
     if expected != "MODEL_INVALID":
         assert out.assignments == aa
         assert out.score == _evaluate_validated(p.normalized.problem, aa)
@@ -200,6 +204,7 @@ def test_unproved_second_tier_stops_before_third(
         *,
         model: Any = None,
         fix_hint: bool = False,
+        search: str = "default",
     ) -> StageOutcome:
         calls.append(priority)
         session = "AM" if priority is None or (status == "PREFIX" and priority == 2) else "PM"
@@ -229,6 +234,7 @@ def test_unproved_second_tier_stops_before_third(
         assert out.status == "MODEL_INVALID" and not out.assignments
         assert out.diagnostics[0].code == "INTERNAL_STAGE_INCONSISTENCY"
         return
-    assert calls == [None, None, 1, 2] and out.status == "FEASIBLE"
+    # Tier 2 is unproved after its slice and again after interleaving; tier 3 never runs.
+    assert calls == [None, None, 1, 2, 2] and out.status == "FEASIBLE"
     assert out.quality.optimal_prefix == (1,) and out.score.tiers == (0, 1, 0)
     assert out.quality.tier_runs[2].raw_status == "NOT_RUN"

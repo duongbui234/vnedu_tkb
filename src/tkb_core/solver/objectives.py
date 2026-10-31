@@ -1,7 +1,8 @@
 """Budgeted lexicographic solves; each cached incumbent is independently verified."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from time import perf_counter
+from typing import Literal
 
 from ortools.sat.python import cp_model
 
@@ -27,6 +28,12 @@ class StageOutcome:
     best_bound: float | None = None
 
 
+TierSearch = Literal["default", "slice", "interleave"]
+# Sequential single-worker search proves every tier of the synthetic base/mixed benchmarks within
+# this many deterministic seconds; it is not a SolveOptions field (see docs/solver-design.md).
+_TIER_SLICE_DETERMINISTIC_SECONDS = 12.0
+
+
 @dataclass(frozen=True)
 class QualityOutcome:
     status: SolveStatus
@@ -40,6 +47,27 @@ class QualityOutcome:
     diagnostics: tuple[Diagnostic, ...] = ()
 
 
+def _stage_parameters(
+    options: SolveOptions, budget: float, *, fix_hint: bool, search: TierSearch
+) -> dict[str, float | int | bool]:
+    """CP-SAT settings of one native solve; ``search`` only matters for single-worker tiers."""
+    settings: dict[str, float | int | bool] = {
+        "max_time_in_seconds": budget,
+        "num_search_workers": options.num_workers,
+        "random_seed": options.seed,
+        "relative_gap_limit": 0.0,
+        "absolute_gap_limit": 0.0,
+    }
+    if fix_hint:
+        settings["fix_variables_to_their_hinted_value"] = True
+    if search == "slice":
+        settings["max_deterministic_time"] = _TIER_SLICE_DETERMINISTIC_SECONDS
+    elif search == "interleave":
+        # Experimental in OR-Tools 9.15: one thread, but LNS can improve a hinted incumbent.
+        settings["interleave_search"] = True
+    return settings
+
+
 def _run_stage(
     prepared: PreparedProblem,
     built: BuiltModel,
@@ -50,6 +78,7 @@ def _run_stage(
     *,
     model: cp_model.CpModel | None = None,
     fix_hint: bool = False,
+    search: TierSearch = "default",
 ) -> StageOutcome:
     target = built.model if model is None else model
     if priority is None:
@@ -59,13 +88,8 @@ def _run_stage(
     if target.validate():
         return StageOutcome(SolveStatus.MODEL_INVALID)
     solver = cp_model.CpSolver()
-    solver.parameters.max_time_in_seconds = budget
-    solver.parameters.num_search_workers = options.num_workers
-    solver.parameters.random_seed = options.seed
-    solver.parameters.relative_gap_limit = 0.0
-    solver.parameters.absolute_gap_limit = 0.0
-    if fix_hint:
-        solver.parameters.fix_variables_to_their_hinted_value = True
+    for name, value in _stage_parameters(options, budget, fix_hint=fix_hint, search=search).items():
+        setattr(solver.parameters, name, value)
     status_code = int(solver.solve(target))
     status = {
         0: SolveStatus.UNKNOWN,
@@ -111,6 +135,47 @@ def _run_stage(
     )
 
 
+def _solve_tier(
+    prepared: PreparedProblem,
+    built: BuiltModel,
+    compiled: CompiledSoft,
+    options: SolveOptions,
+    priority: int,
+    budget: float,
+    *,
+    sticky: bool,
+) -> tuple[StageOutcome, bool]:
+    """One tier stage; returns its outcome and whether interleaved search was needed.
+
+    A single worker first searches sequentially for a fixed deterministic slice, which keeps
+    tiers that sequential search proves unchanged. Unproved, the stage continues interleaved
+    on the remaining budget from the slice incumbent; once that was needed (``sticky``), later
+    tiers interleave at once. The wall time covers both native solves.
+    """
+    if options.num_workers != 1:
+        return _run_stage(prepared, built, compiled, options, priority, budget), False
+    if sticky:
+        return (
+            _run_stage(prepared, built, compiled, options, priority, budget, search="interleave"),
+            True,
+        )
+    start = perf_counter()
+    first = _run_stage(prepared, built, compiled, options, priority, budget, search="slice")
+    left = budget - (perf_counter() - start)
+    if first.status not in (SolveStatus.FEASIBLE, SolveStatus.UNKNOWN) or left <= 0:
+        return first, False
+    if first.status == SolveStatus.FEASIBLE:
+        _hint(prepared, built, first.assignments)
+    second = _run_stage(prepared, built, compiled, options, priority, left, search="interleave")
+    chosen = first
+    if second.status in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL) and (
+        first.status != SolveStatus.FEASIBLE
+        or second.tier_values[priority] <= first.tier_values[priority]
+    ):
+        chosen = second
+    return replace(chosen, wall_time=(first.wall_time or 0.0) + (second.wall_time or 0.0)), True
+
+
 def _hint(
     prepared: PreparedProblem, built: BuiltModel, assignments: tuple[ScheduleAssignment, ...]
 ) -> None:
@@ -153,6 +218,7 @@ def run_quality(
     elapsed = 0.0
     solver_wall = 0.0
     executed = False
+    sticky = False
 
     def finish(status: SolveStatus, code: str | None = None) -> QualityOutcome:
         success = status in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL) and score is not None
@@ -184,14 +250,20 @@ def run_quality(
     def measure(
         priority: int | None, model: cp_model.CpModel | None = None, fix_hint: bool = False
     ) -> StageOutcome | None:
-        nonlocal elapsed, solver_wall, executed
+        nonlocal elapsed, solver_wall, executed, sticky
         remaining = options.time_limit_seconds - elapsed
         if remaining <= 0:
             return None
         start = perf_counter()
-        outcome = _run_stage(
-            prepared, built, compiled, options, priority, remaining, model=model, fix_hint=fix_hint
-        )
+        if priority is None:
+            outcome = _run_stage(
+                prepared, built, compiled, options, None, remaining, model=model, fix_hint=fix_hint
+            )
+        else:
+            outcome, needed = _solve_tier(
+                prepared, built, compiled, options, priority, remaining, sticky=sticky
+            )
+            sticky = sticky or needed
         elapsed += max(0.0, perf_counter() - start)
         executed = True
         if outcome.wall_time is not None:
