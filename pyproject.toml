@@ -14,7 +14,7 @@ dependencies = ["pydantic==2.14.1"]
 solver = ["ortools==9.15.6755"]
 
 [dependency-groups]
-dev = ["pytest==9.1.1", "ruff==0.17.2", "mypy==2.4.0"]
+dev = ["pytest==9.1.1", "ruff==0.17.2", "mypy==2.4.0", "hatchling==1.32.4"]
 
 [project.scripts]
 tkb-core = "tkb_core.cli:main"
