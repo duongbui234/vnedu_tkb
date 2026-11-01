@@ -45,3 +45,41 @@ def quality_case() -> dict[str, Any]:
         ],
         "constraint_config": {"policy_version": "0.1", "hard": [], "soft": []},
     }
+
+
+@pytest.fixture
+def ordering_case(quality_case: dict[str, Any]) -> dict[str, Any]:
+    """Three interchangeable synthetic singles and all four resource-only preferences."""
+    quality_case["time_slots"] = quality_case["time_slots"][:4]
+    quality_case["teaching_requirements"][0].update(periods_per_cycle=3, block_durations=[1, 1, 1])
+    quality_case["constraint_config"]["soft"] = [
+        {
+            "id": "avoid",
+            "code": "TEACHER_AVOID_SLOTS",
+            "parameters": {"slot_ids": ["1-AM-1"]},
+            "priority": 1,
+            "weight": 1,
+        },
+        {
+            "id": "session",
+            "code": "TEACHER_MAX_PERIODS_PER_SESSION",
+            "parameters": {"limit": 2, "session_ids": ["AM"]},
+            "priority": 1,
+            "weight": 1,
+        },
+        {
+            "id": "day",
+            "code": "TEACHER_MAX_PERIODS_PER_DAY",
+            "parameters": {"limit": 2},
+            "priority": 2,
+            "weight": 1,
+        },
+        {
+            "id": "window",
+            "code": "TEACHER_PREFERRED_PERIOD_WINDOW",
+            "parameters": {"first_period": 2, "last_period": 3, "session_ids": ["AM"]},
+            "priority": 3,
+            "weight": 1,
+        },
+    ]
+    return quality_case

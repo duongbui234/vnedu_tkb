@@ -25,6 +25,25 @@ time nên tất định theo seed, còn lời giải cuối vẫn có thể ph�
 worker giữ tham số cũ. Giá trị 12 chọn từ ba ca tổng hợp; không hứa tốc độ hay chất lượng.
 Lát tuần tự tính theo deterministic time nên không co lại trên máy chậm: trên c10-tight-s101,
 budget 52s (≈ máy chậm 15%) vẫn OPTIMAL, budget 50s cắt pha interleave của tier 1 (FEASIBLE).
+
+Trước hard clone, tuyến quality có active soft rules đặt thứ tự placement rank giữa
+các occurrence không khóa cùng requirement/duration và giống hệt ordered domain
+`(start_slot_id, slot_ids, room_id, tokens)`. Với `rank = Σ index*x`, thêm các hàng
+`rank(o_i) <= rank(o_{i+1})` theo ordinal số, không tạo biến mới. Đây là chọn đại diện
+cho hoán vị nhãn; profile tài nguyên và mọi score khả đạt vẫn có đại diện. Lịch output
+có thể đổi thứ tự ordinal của các occurrence không khóa. Validator vẫn chấp nhận lịch
+hard-valid không canonical, vì thứ tự này không phải quy tắc nghiệp vụ.
+
+Mọi occurrence có khóa (kể cả chỉ phòng) bị loại khỏi group; không đổi hoặc sắp lại
+incumbent đã có. Domain khác thứ tự/footprint/phòng/tokens, khác duration/requirement,
+domain có0/1 placement hoặc rank activity vượt int64 thì bỏ optimization. Group chỉ
+được áp cho input1.1/S01–S04 và không enabled custom hard rule. Callers trực tiếp dùng
+`build_model` mặc định tắt; Phase1 và quality không active giữ model cũ. Nếu có repair,
+previous schedule hoặc preference theo occurrence ID sau này, phải chứng minh lại
+tính hoán vị trước khi bật. Hints/verification/proof/budget/search parameters không đổi.
+Regression oracle/native nhỏ chứng minh bảo toàn projections và score, không chứng minh
+tăng tốc hoặc cải thiện chất lượng dưới budget trên c10 hay bất kỳ campaign nào.
+
 Phần dưới ghi lại tuyến input 1.0/Phase 1 giữ tương thích.
 
 ## Pipeline

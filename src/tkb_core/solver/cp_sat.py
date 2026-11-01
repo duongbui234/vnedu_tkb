@@ -155,7 +155,9 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         )
     try:
         solver_version = version("ortools")
-        built = build_model(prepared)
+        built = build_model(
+            prepared, order_interchangeable=bool(quality_input and active_priorities)
+        )
         if quality_input and active_priorities:
             from tkb_core.constraints.soft import compile_soft
             from tkb_core.solver.objectives import run_quality

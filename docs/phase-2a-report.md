@@ -1,5 +1,53 @@
 # Phase 2A — Báo cáo triển khai và kiểm chứng
 
+## Chốt mốc kỹ thuật ngày 2026-11-01
+
+Phạm vi nghiệm thu là **Phase 2A synthetic**, gồm S01–S04 soft, independent hard
+validator/score evaluator, lexicographic P1–P3, CLI, packaging và regression.
+Các báo cáo theo ngày/commit bên dưới là lịch sử; không dùng trạng thái chưa merge
+hoặc số tests cũ để mô tả snapshot chốt mốc hiện tại.
+
+Thay đổi cuối cùng là quality-only ordering của các occurrence hoàn toàn hoán đổi
+được, trước hard clone; loại mọi occurrence có khóa, giữ identity/domain và không
+thêm biến. Xem [báo cáo implementation](tier1-occurrence-ordering-report.md).
+Search/timing đã có trên main a0aff81 được giữ nguyên. Không thêm rule, hints,
+schema/options, dependency hoặc logic evaluator mới trong lượt chốt mốc.
+
+| Điều kiện ra Phase 2A | Căn cứ nghiệm thu |
+|---|---|
+| S01–S04 đúng penalty/unit/scope và strict contracts | Tests quality contracts, score evaluator, soft compilers; bảng nghiệm thu lịch sử bên dưới |
+| Oracle bài nhỏ và cải thiện so baseline hard-valid | Exhaustive quality oracle, priority/weighted tradeoff, fixed baseline improvement |
+| Hard/locks/identity không bị ordering phá | Unit guards, exhaustive projection oracle và native tiny regression; mọi loại khóa kể cả room-only bị loại khỏi nhóm |
+| Deadline/status/proof/incumbent/stage pipeline | Stage regression; ordering nằm trước hard clone, không thay objectives/search/timing |
+| CLI/package và evaluator không cần solver | Packaging/quality CLI regression; hai non-editable venv và tám no-solver checks đã audit |
+| Kiểm tra bắt buộc và tích hợp local | Kết quả thực chạy và commit/merge trong evidence `C:/tkb-checkout-check/phase2a-closeout-v1/` |
+
+Lượt chốt mốc đã chạy lại đủ năm lệnh: `uv sync --locked --extra solver` PASS;
+`uv run --extra solver pytest` **351 passed**; `uv run ruff check .` PASS;
+`uv run ruff format --check src tests` PASS (57 files);
+`uv run mypy` PASS (28 source files). Core trước/sau khớp **28/28 từng byte**
+với snapshot ORDER đã eval; đây là identity với snapshot, không phải raw Git blob.
+`objectives.py`, `pyproject.toml`, `uv.lock`, `research/` và `reverse-engineering/`
+được hash trước/sau và không đổi. Logs/receipts nằm trong evidence chốt mốc.
+
+Evidence Windows đã có: `tier1-ordering-impl-v1` (351 tests, review độc lập không
+có finding); `tier1-ordering-eval-v1` (đúng bốn CLI solve ABBA và tám no-solver
+checks); `tier1-ordering-eval-audit-v1` (17/17 PASS,
+ACCEPTED_WITH_STATED_LIMITATIONS), đều dưới `C:/tkb-checkout-check/`.
+Lượt chốt mốc đối chiếu lại hashes Core với snapshot ORDER đã eval trước khi dùng
+lại evidence; không chạy thêm campaign, không đánh giá thêm ứng viên.
+
+Trong eval c10-tight-s101, BASE trả `[13,79,5]`, ORDER trả `[13,78,5]`, mỗi arm
+hai lần; cả bốn lịch hard-valid. Tier1 vẫn 13, prefix rỗng, Tier2/3 NOT_RUN.
+Điểm Tier2 thấp hơn là điểm incumbent, không phải bằng chứng Tier2 đã được tối ưu.
+Không có kết luận tăng tốc, tối ưu toàn cục hoặc SLA từ mẫu này.
+
+**Ranh giới:** hoàn tất mốc kỹ thuật 2A không đồng nghĩa hoàn tất Phase 2 hoặc
+nghiệm thu production. 2B hard variants, 2C phân phối môn/gaps, repair và adapters
+chưa thuộc lượt này. Policy trường thật chưa được hiệu chỉnh. Task2 frozen Linux
+giữ **DEFERRED_NOT_ACCEPTED**. Chỉ commit/merge local sau các checks đạt theo
+ủy quyền mới của người dùng; không push, không xóa branch/worktree/evidence.
+
 Ngày 2026-10-26. Nhánh `feature/phase2a-quality`, base `7f58f710a9901fe2c0457573feaad272e713d7a1`.
 
 ## Kết quả và phạm vi
