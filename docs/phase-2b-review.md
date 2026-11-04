@@ -26,6 +26,9 @@ fingerprint được so; một result 1.3 (hoặc 1.2) có fingerprint 1.0 và a
   1.1/0.2 chỉ nhận 1.3; input 1.0 nhận result legacy 1.0/1.1 (giữ tương thích Phase 0/1) và từ chối
   1.2/1.3 bằng `RESULT_VERSION`. Regression trong `tests/integration/test_hard_variants_cli.py`:
   4 ca (1.2/1.3 × hai lệnh) RED trước sửa, GREEN sau sửa; thêm ca input 1.0 + result 1.1 vẫn exit 0.
+- **Đã kiểm trên bản cài đặt:** wheel từ `d7de450` (SHA256 `48e31487…2453`), venv không OR-Tools:
+  input 1.0 + result 1.3 giả mạo → `RESULT_VERSION` exit 2 cho cả hai lệnh; result 1.1 thật vẫn
+  exit 0. Chi tiết ở [báo cáo 2B](phase-2b-report.md#kiểm-installed-wheel-từ-d7de450).
 
 ## Quan sát (không phải lỗi so với đặc tả)
 

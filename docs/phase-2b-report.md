@@ -58,6 +58,43 @@ chủ ý); thêm fixture `hard_case` trong `tests/conftest.py`.
 Mỗi nhóm test mới được chạy RED trước khi sửa product code, trừ CLI (sửa trước rồi xác nhận RED bằng
 cách tạm stash `cli.py`: 4 failed; khôi phục: 4 passed).
 
+## Kiểm installed wheel từ `d7de450`
+
+Bổ sung sau commit `d7de450` (gồm bản sửa F1 của [rà soát](phase-2b-review.md)). Chỉ Linux, mỗi
+lệnh chạy một lần (n=1), input synthetic; không phải benchmark và không đo hiệu năng.
+
+- Wheel `vnedu_tkb_core-0.2.0-py3-none-any.whl`, SHA256
+  `48e31487dae5d7f0378cf04316b567b89bb6dffb5765e325c37adceabeda2453`, build bằng `uv build --wheel`
+  từ tree sạch tại `d7de450`. **Wheel không được commit**; nó chỉ nằm trong scratchpad của phiên cloud.
+- Wheel `3bde3b95…` (từ `1e07961`) **đã bị thay thế** vì `cli.py` đổi ở `d7de450`; không dùng nó
+  hay receipt của nó cho source hiện tại.
+- Python 3.12.3; OR-Tools 9.15.6755. Dependencies cài từ `uv export --frozen` (lock không đổi) vào
+  hai venv sạch: `venv-solver` (có OR-Tools) và `venv-core` (không OR-Tools); wheel cài `--no-deps`.
+- 29/29 file `tkb_core/*.py` đã cài khớp byte với `src/` tại HEAD ở cả hai venv.
+
+| Lệnh (venv) | Exit | Kết quả |
+|---|---|---|
+| solver: `solve hard_soft.json --time-limit 10 --workers 1 --seed 42 --output result.json` | 0 | 1.3 OPTIMAL, policy 0.2, LEXICOGRAPHIC_OPTIMAL `[2,0,0]` |
+| solver: `validate-schedule hard_soft.json result.json` | 0 | 1.3 SCHEDULE_VALID |
+| solver / core: `evaluate-score hard_soft.json result.json` | 0 / 0 | OK `[2,0,0]` |
+| core: `validate-schedule hard_soft.json result.json` | 0 | SCHEDULE_VALID |
+| core: `evaluate-score hard_soft.json forged.json` | 2 | INVALID_SCHEDULE |
+| solver: `validate-schedule hard_soft.json forged.json` | 2 | INPUT_INVALID / INVALID_SCHEDULE |
+| core API `validate_schedule(forged)` | – | `HARD_DAY_LIMIT` |
+| solver: `solve infeasible.json` | 3 | 1.3 INFEASIBLE, 0 assignments |
+| solver: `solve policy01_hard.json` | 2 | 1.2 UNSUPPORTED_FEATURE / CUSTOM_HARD_RULE |
+| core: `solve hard_soft.json` | 2 | SOLVER_NOT_INSTALLED |
+| solver: `solve legacy10.json --output legacy_result.json` | 0 | output 1.1 |
+| core: `validate-schedule legacy10.json legacy_result.json` | 0 | 1.1 SCHEDULE_VALID |
+| core: `validate-schedule legacy10.json legacy_forged13.json` | 2 | RESULT_VERSION (F1 đã sửa) |
+| core: `evaluate-score legacy10.json legacy_forged13.json` | 2 | RESULT_VERSION (F1 đã sửa) |
+
+Input: `hard_soft.json` (hard S03 limit 2 + hard S01 `1-AM-1` + soft tránh ngày 2); `infeasible.json`
+(S03 limit 1); `policy01_hard.json` (cùng rule, policy 0.1); `legacy10.json` =
+`tests/fixtures/feasible_small.json`; `forged.json` dời lịch hợp lệ để vượt tải ngày 1;
+`legacy_forged13.json` gắn nhãn 1.3/0.2 cho result 1.1 của input 1.0. Chưa kiểm sdist,
+Windows/cross-OS, pilot/campaign.
+
 ## Sai khác so với kế hoạch
 
 - Plan Task 2 muốn giữ 0.2 hard UNSUPPORTED đến Task 6. Toàn bộ Task 1–8 nằm trong một working
@@ -76,4 +113,5 @@ cách tạm stash `cli.py`: 4 failed; khôi phục: 4 passed).
 - INFEASIBLE không chỉ ra rule nguyên nhân (không IIS/relax).
 - Hạn chế Phase 2A giữ nguyên: acceptance v2 DRAFT, zero NOT_MET, primary 0/108, Windows chưa
   nghiệm thu. Raw evidence `benchmarks/artifacts/` không có trong clone cloud và không được tạo.
-- Wheel/installed preflight chưa chạy cho source mới; receipt wheel cũ không áp dụng.
+- Installed wheel chỉ được kiểm trên Linux, n=1, input synthetic (mục trên); chưa có Windows,
+  sdist hoặc campaign. Receipt wheel Phase 2A và wheel `3bde3b95…` không áp dụng cho `d7de450`.
