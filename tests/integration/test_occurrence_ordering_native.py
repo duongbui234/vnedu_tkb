@@ -87,6 +87,7 @@ def test_public_quality_orders_before_clone_and_keeps_stage_semantics(
     assert calls == [
         (None, True, False),
         (None, False, True),
+        (1, False, False),  # Zero is impossible here; fall back on the original model.
         (1, False, False),
         (2, False, False),
         (3, False, False),

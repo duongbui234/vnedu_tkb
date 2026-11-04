@@ -1,4 +1,4 @@
-"""Explicit Linux campaign controls and one-child supervision, outside Scheduling Core."""
+"""Explicit campaign controls and native child accounting, outside Scheduling Core."""
 
 from __future__ import annotations
 
@@ -66,14 +66,15 @@ class ExecutionRecord(DomainModel):
     launch_to_exit_seconds: NonNegativeFloat | None = None
     cpu_seconds: NonNegativeFloat | None = None
     native_peak_rss_kib: NonNegativeInt | None = None
+    native_peak_working_set_bytes: NonNegativeInt | None = None
     peak_resident_bytes: NonNegativeInt | None = None
     sampled_peak_bytes: NonNegativeInt | None = None
     sample_count: NonNegativeInt = 0
     measurement_status: Literal["OK", "BLOCKED", "NOT_STARTED"] = "NOT_STARTED"
     measurement_reason: StrictStr | None = "NOT_SPAWNED"
-    native_field: Literal["ru_maxrss"] = "ru_maxrss"
-    native_unit: Literal["KiB"] = "KiB"
-    measurement_method: Literal["linux_wait4"] = "linux_wait4"
+    native_field: Literal["ru_maxrss", "PeakWorkingSetSize"] = "ru_maxrss"
+    native_unit: Literal["KiB", "bytes"] = "KiB"
+    measurement_method: Literal["linux_wait4", "windows_process_handle"] = "linux_wait4"
 
     @model_validator(mode="after")
     def consistent(self) -> Self:
@@ -88,6 +89,7 @@ class ExecutionRecord(DomainModel):
                 self.cpu_seconds,
                 self.peak_resident_bytes,
                 self.native_peak_rss_kib,
+                self.native_peak_working_set_bytes,
             )
         ):
             raise ValueError("Unstarted execution cannot carry child measurements")
@@ -96,10 +98,8 @@ class ExecutionRecord(DomainModel):
                 v is None
                 for v in (
                     self.pid,
-                    self.raw_wait_status,
                     self.exit_code,
                     self.cpu_seconds,
-                    self.native_peak_rss_kib,
                     self.peak_resident_bytes,
                 )
             ):
@@ -114,6 +114,25 @@ class ExecutionRecord(DomainModel):
             raise ValueError("Inconsistent peak units")
         if self.signal is not None and self.exit_code != -self.signal:
             raise ValueError("Signal/exit mismatch")
+        if self.measurement_method == "linux_wait4":
+            if (self.native_field, self.native_unit) != ("ru_maxrss", "KiB") or (
+                self.native_peak_working_set_bytes is not None
+            ):
+                raise ValueError("Linux accounting requires KiB evidence only")
+            required = (self.raw_wait_status, self.native_peak_rss_kib)
+        else:
+            if (self.native_field, self.native_unit) != ("PeakWorkingSetSize", "bytes") or any(
+                value is not None
+                for value in (self.raw_wait_status, self.native_peak_rss_kib, self.signal)
+            ):
+                raise ValueError("Windows accounting requires byte evidence only")
+            if self.native_peak_working_set_bytes is not None and (
+                self.peak_resident_bytes != self.native_peak_working_set_bytes
+            ):
+                raise ValueError("Inconsistent Windows peak units")
+            required = (self.native_peak_working_set_bytes,)
+        if self.measurement_status == "OK" and any(value is None for value in required):
+            raise ValueError("Successful measurement requires native accounting evidence")
         return self
 
 
@@ -504,12 +523,13 @@ def _runtime_identity(
 
     import tkb_core
 
-    if sys.platform != "linux":
+    if sys.platform not in ("linux", "win32"):
         raise ValueError("PLATFORM_UNSUPPORTED")
-    if not _linux_available():
+    if sys.platform == "linux" and not _linux_available():
         raise ValueError("API_MISSING")
     manifest = _json_object((preflight_dir / "preflight-manifest.json").read_text())
-    if manifest["preflight_schema_version"] != "1.0" or manifest["linux_status"] != "PASS":
+    status_field = "windows_status" if sys.platform == "win32" else "linux_status"
+    if manifest["preflight_schema_version"] != "1.0" or manifest[status_field] != "PASS":
         raise ValueError("PREFLIGHT_INVALID")
     env_path = preflight_dir / "environment-solver.json"
     if _sha(env_path) != manifest["files"]["environment-solver.json"]:
@@ -589,8 +609,9 @@ def run_cli_once(
     argv: tuple[str, ...] = (
         str(python),
         "-I",
-        "-m",
-        "tkb_core.cli",
+        str(ROOT / "benchmarks/native_trace.py"),
+        "--trace",
+        str(run_dir / "native-calls.jsonl"),
         "solve",
         str(input_path),
         "--output",
@@ -654,7 +675,7 @@ def run_cli_once(
             "--max-occupancy-terms",
             str(options.max_occupancy_terms),
         )
-        e = supervise_linux(argv, run_dir, limits)
+        e = supervise(argv, run_dir, limits)
         started = time.monotonic()
         try:
             if _sha(input_path) != input_sha256:
@@ -678,6 +699,15 @@ def run_cli_once(
     with (run_dir / "run.json").open("x", encoding="utf-8") as handle:
         handle.write(record.model_dump_json(indent=2) + "\n")
     return record
+
+
+def supervise(argv: tuple[str, ...], run_dir: Path, limits: RunLimits) -> ExecutionRecord:
+    """Dispatch only at the native-accounting boundary; never emulate another OS."""
+    if sys.platform == "win32":
+        from benchmarks.windows_runtime import supervise_windows
+
+        return supervise_windows(argv, run_dir, limits)
+    return supervise_linux(argv, run_dir, limits)
 
 
 # Campaign metadata stays outside Core and never imports the generator into this controller.
@@ -788,7 +818,9 @@ class CampaignPlan(DomainModel):
     """Frozen primary order and separate pilot/warmup membership."""
 
     schema_version: Literal["1.0"] = "1.0"
-    policy: Literal["phase2a-linux-primary-v1"] = "phase2a-linux-primary-v1"
+    policy: Literal["phase2a-linux-primary-v1", "phase2a-native-primary-v1"] = (
+        "phase2a-linux-primary-v1"
+    )
     campaign_id: CampaignId
     machine_id: CampaignId
     bundle_dir: Path
@@ -895,6 +927,8 @@ def _source_ids() -> dict[str, str]:
         "controller": _sha(Path(__file__)),
         "generator": _sha(ROOT / "benchmarks/generate_synthetic.py"),
         "lock": _sha(ROOT / "uv.lock"),
+        "windows_runtime": _sha(ROOT / "benchmarks/windows_runtime.py"),
+        "native_trace": _sha(ROOT / "benchmarks/native_trace.py"),
     }
 
 
@@ -1002,6 +1036,9 @@ def build_campaign_plan(bundle_dir: Path, campaign_id: str, machine_id: str) -> 
         rng.shuffle(ids)
         primary.extend(row(i, "primary", repeat) for i in ids)
     return CampaignPlan(
+        policy="phase2a-native-primary-v1"
+        if sys.platform == "win32"
+        else "phase2a-linux-primary-v1",
         campaign_id=campaign_id,
         machine_id=machine_id,
         bundle_dir=root,
@@ -1027,6 +1064,21 @@ def check_headroom(memory_target_bytes: int) -> HeadroomCheck:
     host = None
     scopes: list[dict[str, JsonValue]] = []
     try:
+        if sys.platform == "win32":
+            from benchmarks.windows_runtime import memory_status
+
+            memory = memory_status()
+            host = memory["ullAvailPhys"]
+            available = min(host, memory["ullAvailPageFile"])
+            return HeadroomCheck(
+                status="PASS" if available >= required else "BLOCKED",
+                target_bytes=memory_target_bytes,
+                required_bytes=required,
+                available_bytes=available,
+                host_available_bytes=host,
+                scopes=({"method": "GlobalMemoryStatusEx", **memory},),
+                reason=None if available >= required else "INSUFFICIENT_HEADROOM",
+            )
         if sys.platform != "linux":
             raise ValueError("Linux required")
         mem = next(
@@ -1139,14 +1191,23 @@ def _write_json(
 def _campaign_owner(
     owner_root: Path, campaign_root: Path, campaign_id: str
 ) -> Iterator[dict[str, JsonValue]]:
-    import fcntl
-
     owner_root.mkdir(parents=True, exist_ok=True)
     marker = owner_root / "active.json"
     with (owner_root / "campaign.lock").open("a+b") as handle:
         try:
-            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
+            if sys.platform == "win32":
+                import msvcrt
+
+                if handle.seek(0, 2) == 0:
+                    handle.write(b"\0")
+                    handle.flush()
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+
+                fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError as exc:
             raise ValueError("CAMPAIGN_ALREADY_ACTIVE") from exc
         try:
             if marker.exists():
@@ -1177,7 +1238,11 @@ def _campaign_owner(
             finally:
                 _write_json(marker, lease)
         finally:
-            fcntl.flock(handle, fcntl.LOCK_UN)
+            if sys.platform == "win32":
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                fcntl.flock(handle, fcntl.LOCK_UN)
 
 
 def check_case(run_dir: Path, dataset_manifest: Path) -> CaseVerdict:
@@ -1310,6 +1375,10 @@ def check_case(run_dir: Path, dataset_manifest: Path) -> CaseVerdict:
 def _machine_identity() -> dict[str, JsonValue]:
     import platform
 
+    if sys.platform == "win32":
+        from benchmarks.windows_runtime import machine_identity
+
+        return machine_identity()
     return {
         "platform": sys.platform,
         "release": platform.release(),
@@ -1356,7 +1425,7 @@ def _verify_frozen_bundle(bundle: Path, output: Path) -> None:
         "m=importlib.util.module_from_spec(s);sys.modules[s.name]=m;"
         's.loader.exec_module(m);m.verify_bundle(Path(sys.argv[2]));print("BUNDLE_VERIFIED")'
     )
-    execution = supervise_linux(
+    execution = supervise(
         (
             sys.executable,
             "-I",
@@ -1440,7 +1509,7 @@ def _prepare_campaign(
             "machine": machine,
             "git_head": git("rev-parse", "HEAD"),
             "git_status": git("status", "--porcelain"),
-            "windows_status": "BLOCKED",
+            "windows_status": "PREFLIGHT_PASS" if sys.platform == "win32" else "BLOCKED",
             "pythonhashseed": os.environ.get("PYTHONHASHSEED"),
             "omp_num_threads": os.environ.get("OMP_NUM_THREADS"),
             "mkl_num_threads": os.environ.get("MKL_NUM_THREADS"),
@@ -1507,7 +1576,7 @@ def _operational_context() -> dict[str, JsonValue]:
 
     try:
         load: JsonValue = list(os.getloadavg())
-    except OSError:
+    except (OSError, AttributeError):
         load = None
     power: dict[str, JsonValue] = {}
     try:
@@ -1583,7 +1652,9 @@ def _receipt(root: Path, case: PlannedCase, digest: str) -> tuple[RunRecord, Cas
     if (
         not isinstance(files, dict)
         or not required <= set(files)
-        or set(files) - required - {"result.json", "stdout.json", "stderr.txt"}
+        or set(files)
+        - required
+        - {"result.json", "stdout.json", "stderr.txt", "native-calls.jsonl"}
     ):
         raise ValueError("TERMINAL_MEMBERSHIP")
     for name, sha in files.items():
@@ -1617,7 +1688,13 @@ def _qualified(record: RunRecord, verdict: CaseVerdict, case: PlannedCase) -> bo
 
 
 def _stop_status(record: RunRecord, verdict: CaseVerdict, case: PlannedCase) -> str | None:
-    if record.execution.pid is not None and record.execution.raw_wait_status is None:
+    if record.execution.pid is not None and (
+        record.execution.exit_code is None
+        or (
+            record.execution.measurement_method == "linux_wait4"
+            and record.execution.raw_wait_status is None
+        )
+    ):
         return "NEEDS_REVIEW"
     if record.execution.measurement_reason == "REAP_UNCONFIRMED":
         return "NEEDS_REVIEW"
@@ -1828,7 +1905,14 @@ def execute_campaign(
                         run_sha256=_sha(base / "run.json"),
                     )
             _write_json(base / "case-verdict.json", verdict, exclusive=True)
-            names = ("run.json", "case-verdict.json", "stdout.json", "stderr.txt", "result.json")
+            names = (
+                "run.json",
+                "case-verdict.json",
+                "stdout.json",
+                "stderr.txt",
+                "result.json",
+                "native-calls.jsonl",
+            )
             files: dict[str, JsonValue] = {
                 name: _sha(base / name) for name in names if (base / name).is_file()
             }
@@ -1883,7 +1967,11 @@ def main(argv: list[str] | None = None) -> int:
             )
             print(
                 json.dumps(
-                    {"status": "PREPARED", "windows_status": "BLOCKED", "primary_planned": 108}
+                    {
+                        "status": "PREPARED",
+                        "windows_status": "PREPARED" if sys.platform == "win32" else "BLOCKED",
+                        "primary_planned": 108,
+                    }
                 )
             )
             return 0

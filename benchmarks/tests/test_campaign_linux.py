@@ -500,6 +500,7 @@ def campaign(unit_bundle: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
             plan.pilot.dataset_manifest if case.phase == "warmup" else case.dataset_manifest,
             **defaults,
         )
+        (kw["run_dir"] / "native-calls.jsonl").write_text("synthetic trace fixture\n")
         return record
 
     monkeypatch.setattr(runner, "run_cli_once", fake_run)
@@ -534,6 +535,17 @@ def test_campaign_persists_rows_in_plan_order(campaign: Any) -> None:
     assert all(
         (path.parent / "primary" / c.run_id / "terminal.json").is_file() for c in plan.primary
     )
+
+
+def test_campaign_seals_trace_and_rejects_tampering(campaign: Any) -> None:
+    path, pref, plan, _, _ = campaign
+    ready(campaign)
+    base = path.parent / "pilot" / plan.pilot.run_id
+    receipt = json.loads((base / "terminal.json").read_text())
+    assert receipt["files"]["native-calls.jsonl"] == runner._sha(base / "native-calls.jsonl")
+    (base / "native-calls.jsonl").write_text("changed trace\n")
+    with pytest.raises(ValueError, match="TERMINAL_EVIDENCE_DRIFT"):
+        runner._receipt(path.parent, plan.pilot, runner._sha(path))
 
 
 def test_resume_skips_failed_terminal_runs(campaign: Any, monkeypatch: pytest.MonkeyPatch) -> None:

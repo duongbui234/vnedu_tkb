@@ -1,5 +1,47 @@
 # Phase 2A — Báo cáo triển khai và kiểm chứng
 
+## Chốt phạm vi kỹ thuật ngày 2026-11-05
+
+Theo lựa chọn rõ của người dùng, **mốc kỹ thuật synthetic Phase 2A được chốt,
+các hạn chế vận hành được bàn giao riêng**. Snapshot nguồn/wheel hiện tại khớp
+evidence 361 Core tests,726 tests tổng /8 skipped và installed preflight đã PASS.
+Không chạy lại solver/campaign, không thay gate hoặc đổi verdict cũ. Pilot zero
+vẫn NOT_MET, primary0/108; Windows/cross-OS và chất lượng giáo vụ chưa nghiệm thu.
+Candidate còn uncommitted. Xem [biên bản chốt và gói bàn giao](phase-2a-technical-closeout.md).
+Đề xuất nghiệm thu v2 vẫn DRAFT; quyết định này không áp dụng D1–D3 hoặc mở Phase2B.
+
+## Cập nhật incumbent/trace ngày 2026-11-04
+
+Đã sửa chọn incumbent theo toàn vector khi hòa tier và thêm trace native ở harness;
+361 Core tests,726 tests tổng /8 skipped, preflight và audit độc lập PASS. Pilot
+duy nhất `[0,5,120]`, vẫn **NOT_MET**; primary **0/108**, không retry. Trace cho
+thấy joint-zero UNKNOWN sau16,92s và P2 FEASIBLE sau13,70/17,89s; lỗi tie không được
+kích hoạt trong pilot. Xem [báo cáo và trace](phase-2a-incumbent-trace-report.md).
+
+## Cập nhật joint-zero ngày 2026-11-04
+
+Lượt sửa tiếp probe đồng thời các tier còn lại đã qua356 Core tests,717 tests tổng
+/8 skipped và preflight mới. Pilot duy nhất vẫn `[0,6,110]`, **NOT_MET**; primary
+**0/108**, không retry. Xem [báo cáo joint-zero](phase-2a-joint-zero-report.md).
+Chưa nghiệm thu Linux hoặc Windows; candidate còn uncommitted.
+
+## Cập nhật Linux ngày 2026-11-04
+
+Candidate zero-target probe đã qua 355 Core tests, 716 tests tổng / 8 skipped,
+preflight mới và kiểm lịch/điểm độc lập. Pilot duy nhất đạt `[0,6,110]`, vẫn
+**NOT_MET** so `[0,0,0]`; controller STOPPED, primary **0/108**, không retry.
+Candidate chưa commit/chưa đủ điều kiện nghiệm thu; Windows native NOT_RUN.
+Xem [báo cáo closeout và giới hạn](phase-2a-linux-closeout-report.md).
+
+## Cập nhật vận hành ngày 2026-11-03
+
+Mốc kỹ thuật synthetic bên dưới vẫn đã đạt. Lượt hoàn tất kiểm chứng vận hành
+trên Core hiện tại đã làm mới preflight Linux, bổ sung tooling Windows và chạy
+pilot: lịch hard-valid nhưng score `[0,7,116]`, **performance NOT_MET** so target
+zero. Primary **0/108**, dừng theo protocol; Windows native chờ người dùng chạy.
+Chưa nghiệm thu vận hành hai OS hoặc production. Xem
+[báo cáo hiện tại và gói bàn giao](phase-2a-current-operational-report.md).
+
 ## Chốt mốc kỹ thuật ngày 2026-11-01
 
 Phạm vi nghiệm thu là **Phase 2A synthetic**, gồm S01–S04 soft, independent hard

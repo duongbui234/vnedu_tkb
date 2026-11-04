@@ -85,7 +85,7 @@ def test_stage_proof_and_fallback(
     out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0), hard)
     assert out.status == expected
     # An unproved slice continues interleaved on what is left of the stage budget.
-    interleaved = [(5.0, "interleave")] if later in ("FEASIBLE", "UNKNOWN") else []
+    interleaved = [(5.0, "interleave")] if later in ("FEASIBLE", "UNKNOWN", "INFEASIBLE") else []
     assert calls == [(10.0, "default"), (7.0, "default"), (6.0, "slice"), *interleaved]
     if expected != "MODEL_INVALID":
         assert out.assignments == aa
