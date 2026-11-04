@@ -3,6 +3,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 
+from tkb_core.constraints.hard_variants import placement_filter
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import AvailableResource, Room, TimeSlot
@@ -53,6 +54,7 @@ def prepare(problem: ScheduleInput, options: SolveOptions | None = None) -> Prep
     total_placements = total_terms = 0
     occurrence_rooms: dict[str, list[Room | None]] = {}
     empty_domains: list[str] = []
+    allowed = placement_filter(problem)
     for occurrence in normalized.occurrences:
         req = requirements[occurrence.requirement_id]
         learner, teacher = classes[req.class_ids[0]], teachers[req.teacher_ids[0]]
@@ -115,12 +117,15 @@ def prepare(problem: ScheduleInput, options: SolveOptions | None = None) -> Prep
             valid = valid and _available(learner, valid_slots) and _available(teacher, valid_slots)
             if normalized.timed and occurrence.duration == 2 and len(valid_slots) == 2:
                 valid = valid and valid_slots[0].end_minute == valid_slots[1].start_minute
+            if valid and allowed is not None:
+                # Policy 0.2 placement-local hard variants (S01/S04); never a preference.
+                valid = allowed(teacher.id, valid_slots)
             if not valid:
                 if lock and lock.slot_id is not None:
                     raise CoreError(
                         "INPUT_INVALID",
                         "LOCK_CONFLICT",
-                        "Locked block violates calendar or availability",
+                        "Locked block violates calendar, availability or a hard rule",
                         slot_ids=(start.id,),
                         occurrence_ids=(occurrence.id,),
                     )

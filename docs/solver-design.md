@@ -14,17 +14,36 @@ trước verification, incumbent hard-only được trả FEASIBLE với score t
 Mỗi candidate giữ lại được hard checker và independent score evaluator kiểm lại;
 raw/weighted/tier khác expression solver → MODEL_INVALID/INTERNAL_SCORE_MISMATCH.
 Cả budget CP-SAT dùng chung, wall time evaluator/preprocessing không tính vào giới hạn đó.
-Khi `num_workers == 1`, mỗi stage tier trước hết search tuần tự tối đa 12 deterministic
-seconds (`max_deterministic_time`, hằng nội bộ, không phải field của SolveOptions). Chưa proof
-thì stage chạy tiếp `interleave_search` (vẫn một luồng, có LNS) với phần budget còn lại, hint
-là incumbent tốt nhất của lát tuần tự; kết quả lấy lời giải tốt hơn trong hai pha. Một khi đã
-cần interleave, các tier sau bỏ lát tuần tự và interleave ngay (sticky). `tier_runs[].wall_time`
+Khi `num_workers == 1`, stage tier chưa sticky thử đồng thời mức phạt 0 của mọi
+tier còn lại (`p >= priority`) trên clone tạm thời. Nhờ đó restriction của tier
+thấp cũng tham gia propagation, tránh chỉ tìm một incumbent tốt riêng tier hiện tại.
+search tuần tự tối đa 12 deterministic seconds (`max_deterministic_time`, hằng nội bộ,
+không phải field của SolveOptions). Các penalty S01–S04 không âm nên native OPTIMAL
+tại 0 chứng minh optimum của tier gốc. Các equality tạm không thêm vào model gốc;
+INFEASIBLE của probe chỉ loại tổ hợp suffix-zero, không chứng minh tier hiện tại
+không thể đạt 0 hay hard infeasibility. Prefix đã chứng minh, kể cả có giá trị dương,
+vẫn giữ nguyên. Nếu probe INFEASIBLE và hết budget fallback, trạng thái điều phối
+tier là chưa giải xong nhưng `tier_runs[].raw_status` vẫn INFEASIBLE của probe,
+kèm diagnostic `ZERO_TARGET_PROBE_INFEASIBLE` nói rõ phạm vi restricted; top-level
+vẫn FEASIBLE với incumbent đã kiểm, không claim vô nghiệm cho tier gốc. Nếu fallback
+đã chạy mà cả hai pha không có incumbent mới, raw metadata lấy từ response fallback.
+Không thêm field public schema; `StageOutcome.raw_status` chỉ là override nội bộ.
+Chưa proof
+thì stage chạy tiếp trên model gốc bằng `interleave_search` (vẫn một luồng, có LNS)
+với phần budget còn lại, hint
+là incumbent tốt nhất của lát tuần tự; kết quả lấy lời giải tốt hơn trong hai pha. Khi
+cả hai có cùng điểm tier hiện tại, so toàn vector active tiers theo priority để giữ
+incumbent tốt hơn ở các tier thấp; chỉ khi toàn vector bằng nhau mới ưu tiên pha sau.
+Status/bound luôn của native response được chọn, không ghép proof của response khác.
+Một khi đã cần interleave, các tier sau bỏ lát tuần tự và interleave ngay (sticky).
+`tier_runs[].wall_time`
 là tổng hai native solve; status/bound là của pha được chọn. Điểm chuyển theo deterministic
 time nên tất định theo seed, còn lời giải cuối vẫn có thể phụ thuộc thời điểm cắt wall.
 `interleave_search` là Experimental trong OR-Tools 9.15; feasibility, verification và nhiều
-worker giữ tham số cũ. Giá trị 12 chọn từ ba ca tổng hợp; không hứa tốc độ hay chất lượng.
-Lát tuần tự tính theo deterministic time nên không co lại trên máy chậm: trên c10-tight-s101,
-budget 52s (≈ máy chậm 15%) vẫn OPTIMAL, budget 50s cắt pha interleave của tier 1 (FEASIBLE).
+worker giữ tham số cũ. Giữ cap 12 của tuyến cũ; không hứa tốc độ hay chất lượng.
+Fallback MODEL_INVALID/INFEASIBLE không bị che bởi UNKNOWN của probe. Probe cũng tiêu
+chung ngân sách monotonic; không có budget thêm. Số đo trước thay đổi zero-target
+không được dùng để chứng nhận hiệu năng của wheel mới.
 
 Trước hard clone, tuyến quality có active soft rules đặt thứ tự placement rank giữa
 các occurrence không khóa cùng requirement/duration và giống hệt ordered domain
@@ -37,7 +56,7 @@ hard-valid không canonical, vì thứ tự này không phải quy tắc nghiệ
 Mọi occurrence có khóa (kể cả chỉ phòng) bị loại khỏi group; không đổi hoặc sắp lại
 incumbent đã có. Domain khác thứ tự/footprint/phòng/tokens, khác duration/requirement,
 domain có0/1 placement hoặc rank activity vượt int64 thì bỏ optimization. Group chỉ
-được áp cho input1.1/S01–S04 và không enabled custom hard rule. Callers trực tiếp dùng
+được áp cho input1.1/S01–S04 và không enabled custom hard rule ngoài hard variants S01–S04 của policy 0.2 (Phase 2B; oracle vét cạn 60 seeds so optimum có/không ordering). Callers trực tiếp dùng
 `build_model` mặc định tắt; Phase1 và quality không active giữ model cũ. Nếu có repair,
 previous schedule hoặc preference theo occurrence ID sau này, phải chứng minh lại
 tính hoán vị trước khi bật. Hints/verification/proof/budget/search parameters không đổi.
@@ -86,6 +105,18 @@ bỏ toàn bộ bước siết của rule, không đổi status/lỗi. Đây là
 hứa tốc độ, incumbent hay status dưới budget. Regression: `tests/unit/test_s03_bounds.py`,
 oracle vét cạn 12 fixtures `tests/properties/test_s03_bounds_oracle.py`, 6 cặp native nhỏ
 `tests/integration/test_s03_bounds_native.py`.
+
+## Hard variants Phase 2B (policy 0.2)
+
+S01/S04 hard là điều kiện theo từng placement: `prepare` loại placement vi phạm sau calendar/
+availability và trước room loop/prechecks (`constraints/hard_variants.py`, không import OR-Tools).
+Domain rỗng → INFEASIBLE/EMPTY_DOMAIN; slot lock trái hard → INPUT_INVALID/LOCK_CONFLICT.
+S02/S03 hard là `Σ duration·x ≤ limit` theo GV/ngày[/buổi] của start slot, thêm trong
+`build_model` ngay sau occupancy (`constraints/hard.add_load_limits`), tức **trước** khi
+`solve` clone hard model; feasibility, tiers, zero-probe và hints cùng thấy các ràng buộc này.
+Limit/tổng hệ số ngoài int64 → INPUT_INVALID/HARD_RULE_RANGE trước solve. Không có precheck
+tổng hợp mới cho S02/S03; CP-SAT chứng minh INFEASIBLE. Bound dư thừa S03 lấy từ domains nên
+vẫn đúng (tập lịch hard-valid chỉ nhỏ đi). Validator kiểm lại bằng code riêng; không có IIS.
 
 ## Run config và trạng thái
 

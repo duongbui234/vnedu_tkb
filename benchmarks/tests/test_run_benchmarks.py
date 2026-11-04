@@ -510,6 +510,21 @@ def run_kwargs(tmp_path: Path, tiny_case: Any, frozen_unit: Path) -> dict[str, A
     )
 
 
+def test_run_cli_captures_native_trace(
+    tmp_path: Path, tiny_case: Any, frozen_unit: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # This test covers wrapper routing; fresh installed-wheel identity is a separate gate.
+    monkeypatch.setattr(runner, "_runtime_identity", lambda **kw: {"unit_test": True})
+    kw = run_kwargs(tmp_path, tiny_case, frozen_unit)
+    record = runner.run_cli_once(**kw)
+    assert record.harness_status == "COMPLETE"
+    rows = [
+        json.loads(line) for line in (kw["run_dir"] / "native-calls.jsonl").read_text().splitlines()
+    ]
+    assert any(r["event"] == "native_end" for r in rows)
+    assert str(runner.ROOT / "benchmarks/native_trace.py") in record.execution.argv
+
+
 @pytest.mark.parametrize(
     "mismatch",
     ["wheel", "lock", "version", "version_missing", "editable", "input", "platform", "api"],

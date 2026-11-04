@@ -26,11 +26,12 @@ class StageOutcome:
     tier_values: dict[int, int] = field(default_factory=dict)
     wall_time: float | None = None
     best_bound: float | None = None
+    # Preserve the native response when restricted-probe infeasibility leaves a tier unresolved.
+    raw_status: SolveStatus | None = None
 
 
 TierSearch = Literal["default", "slice", "interleave"]
-# Sequential single-worker search proves every tier of the synthetic base/mixed benchmarks within
-# this many deterministic seconds; it is not a SolveOptions field (see docs/solver-design.md).
+# Cap the temporary zero-target probe; it is not a public SolveOptions field.
 _TIER_SLICE_DETERMINISTIC_SECONDS = 12.0
 
 
@@ -150,10 +151,10 @@ def _solve_tier(
 ) -> tuple[StageOutcome, bool]:
     """One tier stage; returns its outcome and whether interleaved search was needed.
 
-    A single worker first searches sequentially for a fixed deterministic slice, which keeps
-    tiers that sequential search proves unchanged. Unproved, the stage continues interleaved
-    on the remaining budget from the slice incumbent; once that was needed (``sticky``), later
-    tiers interleave at once. The wall time covers both native solves.
+    A single worker first searches for zero on every remaining tier on a temporary clone.
+    Nonnegative penalties make a native zero optimum a proof for the original tier too.
+    Restricted infeasibility or an unproved slice falls back to the original tier on the
+    remaining budget; later tiers then interleave at once. Wall time covers both solves.
     """
     if options.num_workers != 1:
         return _run_stage(prepared, built, compiled, options, priority, budget), False
@@ -163,17 +164,29 @@ def _solve_tier(
             True,
         )
     start = perf_counter()
-    first = _run_stage(prepared, built, compiled, options, priority, budget, search="slice")
+    probe = BuiltModel(built.model.clone(), built.variables)
+    # Lower-tier zero targets also propagate placement restrictions into this search.
+    for p, expression in compiled.tiers.items():
+        if p >= priority:
+            probe.model.add(expression == 0)
+    first = _run_stage(prepared, probe, compiled, options, priority, budget, search="slice")
     left = budget - (perf_counter() - start)
+    # Infeasibility applies only to the temporary zero target, never the original model.
+    if first.status == SolveStatus.INFEASIBLE:
+        first = replace(first, status=SolveStatus.UNKNOWN, raw_status=first.status)
     if first.status not in (SolveStatus.FEASIBLE, SolveStatus.UNKNOWN) or left <= 0:
         return first, False
     if first.status == SolveStatus.FEASIBLE:
         _hint(prepared, built, first.assignments)
     second = _run_stage(prepared, built, compiled, options, priority, left, search="interleave")
-    chosen = first
-    if second.status in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL) and (
-        first.status != SolveStatus.FEASIBLE
-        or second.tier_values[priority] <= first.tier_values[priority]
+    chosen = first if first.status == SolveStatus.FEASIBLE else second
+    if second.status in (SolveStatus.INFEASIBLE, SolveStatus.MODEL_INVALID) or (
+        second.status in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL)
+        and (
+            first.status != SolveStatus.FEASIBLE
+            or tuple(second.tier_values[p] for p in sorted(compiled.tiers))
+            <= tuple(first.tier_values[p] for p in sorted(compiled.tiers))
+        )
     ):
         chosen = second
     return replace(chosen, wall_time=(first.wall_time or 0.0) + (second.wall_time or 0.0)), True
@@ -223,7 +236,12 @@ def run_quality(
     executed = False
     sticky = False
 
-    def finish(status: SolveStatus, code: str | None = None) -> QualityOutcome:
+    def finish(
+        status: SolveStatus,
+        code: str | None = None,
+        *,
+        message: str = "Quality solving could not be completed",
+    ) -> QualityOutcome:
         success = status in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL) and score is not None
         qstatus = "NOT_EVALUATED"
         if success:
@@ -245,9 +263,7 @@ def run_quality(
             feasibility,
             solver_wall if executed else None,
             executed,
-            (Diagnostic(code=code, message="Quality solving could not be completed"),)
-            if code
-            else (),
+            (Diagnostic(code=code, message=message),) if code else (),
         )
 
     def measure(
@@ -310,7 +326,7 @@ def run_quality(
         status = outcome.status
         tiers[priority] = StageRun(
             priority=priority,
-            raw_status=status,
+            raw_status=outcome.raw_status or status,
             wall_time=outcome.wall_time,
             best_bound=outcome.best_bound,
         )
@@ -319,6 +335,13 @@ def run_quality(
         if status == SolveStatus.MODEL_INVALID:
             return finish(status, "MODEL_INVALID")
         if status not in (SolveStatus.FEASIBLE, SolveStatus.OPTIMAL):
+            if outcome.raw_status == SolveStatus.INFEASIBLE:
+                return finish(
+                    SolveStatus.FEASIBLE,
+                    "ZERO_TARGET_PROBE_INFEASIBLE",
+                    message="Only the temporary zero-target probe is infeasible; no budget "
+                    "remained for the unrestricted tier.",
+                )
             return finish(SolveStatus.FEASIBLE)
         hard = validate_schedule(problem, outcome.assignments)
         candidate = evaluate_score(problem, outcome.assignments)

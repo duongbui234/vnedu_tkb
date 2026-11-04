@@ -1,4 +1,4 @@
-"""Read-only Task 5 aggregation of sealed Linux campaign evidence; never runs a solver."""
+"""Read-only aggregation of sealed native campaign evidence; never runs a solver."""
 
 from __future__ import annotations
 
@@ -204,6 +204,8 @@ def _row(
         "diagnostics": [d.code for d in result.diagnostics] if result else [],
         "measurement_status": execution.measurement_status,
         "measurement_reason": execution.measurement_reason,
+        "measurement_method": execution.measurement_method,
+        "native_memory_unit": execution.native_unit,
         "first_feasible_reason": record.first_feasible_reason,
         "metrics": {
             "launch_to_exit_seconds": execution.launch_to_exit_seconds,
@@ -302,12 +304,14 @@ def aggregate_campaign(root: Path) -> dict[str, Any]:
                 or admission.target_bytes != case.limits.max_resident_bytes
             ):
                 raise ValueError("ADMISSION_NOT_PASSED")
+    machine = plan.environment.get("machine")
+    native_platform = machine.get("platform", "linux") if isinstance(machine, dict) else "linux"
     return {
         "schema_version": "1.0",
-        "scope": "Task5 Linux historical evidence only",
+        "scope": f"Task5 {native_platform} saved evidence only",
         "campaign_id": plan.campaign_id,
         "plan_sha256": digest,
-        "windows_status": "BLOCKED",
+        "windows_status": "EVIDENCE_VERIFIED" if native_platform == "win32" else "BLOCKED",
         "cross_platform_verdict": "BLOCKED",
         "evidence_status": "PASS",
         "receipts_verified": len(terminals),
@@ -321,7 +325,7 @@ def aggregate_campaign(root: Path) -> dict[str, Any]:
             "No cross-fingerprint metrics or score pooling; profile summaries count outcomes.",
             "No time-to-first-feasible instrumentation; null is not zero.",
             "Independent hard/score/metadata checks do not re-prove optimality.",
-            "Historical MemTotal drift (4KiB) remains; this audit does not authorize execution.",
+            "No live execution gate is checked; historical machine drift is not bypassed.",
         ],
         "evidence_sha256": evidence,
         "summary": summary,

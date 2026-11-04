@@ -202,6 +202,6 @@ class SoftConstraintConfigV11(HardConstraintConfigV11):
 class ConstraintConfigV11(DomainModel):
     """Versioned policy manifest with already-resolved effective scopes."""
 
-    policy_version: Literal["0.1"]
+    policy_version: Literal["0.1", "0.2"]
     hard: tuple[HardConstraintConfigV11, ...] = ()
     soft: tuple[SoftConstraintConfigV11, ...] = ()

@@ -40,6 +40,9 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
     solver_wall: float | None = None
     executed = False
     quality_input = isinstance(problem, ScheduleInput) and problem.schema_version == "1.1"
+    policy_version = "0.1"
+    if quality_input and isinstance(problem.constraint_config, ConstraintConfigV11):
+        policy_version = problem.constraint_config.policy_version
     quality = QualityReport(status="NOT_EVALUATED")
     feasibility_run = StageRun()
     active_priorities: tuple[int, ...] = ()
@@ -65,9 +68,17 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
             selected_quality = QualityReport(status="NOT_REQUESTED", score=checked_score)
         metadata_type = SolverRunMetadataV12 if quality_input else SolverRunMetadata
         extra = {"feasibility_run": feasibility_run} if quality_input else {}
+        if selected_quality.policy_version != policy_version:
+            selected_quality = QualityReport.model_validate(
+                {**selected_quality.model_dump(), "policy_version": policy_version}
+            )
         result_extra = {"quality": selected_quality} if quality_input else {}
+        # Policy 0.2 (hard variants) is only described by output 1.3; 0.1 keeps 1.2.
+        schema_version = "1.1"
+        if quality_input:
+            schema_version = "1.3" if policy_version == "0.2" else "1.2"
         return ScheduleResult(
-            schema_version="1.2" if quality_input else "1.1",
+            schema_version=schema_version,
             status=SolveStatus(status),
             input_fingerprint=fingerprint,
             valid_schedule=bool(validation and validation.valid),
@@ -97,6 +108,7 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
         fingerprint = problem.fingerprint()
         quality_input = problem.schema_version == "1.1"
         if isinstance(problem.constraint_config, ConstraintConfigV11):
+            policy_version = problem.constraint_config.policy_version
             active_priorities = tuple(
                 sorted({r.priority for r in problem.constraint_config.soft if r.enabled})
             )

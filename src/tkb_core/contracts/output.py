@@ -1,4 +1,4 @@
-"""Output schemas 1.0/1.1 with guardrails against contradictory schedule claims."""
+"""Output schemas 1.0-1.3 with guardrails against contradictory schedule claims."""
 
 from typing import Annotated, Any, Literal, Self
 
@@ -21,6 +21,10 @@ from tkb_core.domain.models import (
     PositiveInt,
     ScheduleAssignment,
 )
+
+# Quality output version -> the only policy version it may describe; strict pairing keeps
+# a 1.2 reader from misreading policy 0.2 hard-variant semantics.
+QUALITY_POLICY = {"1.2": "0.1", "1.3": "0.2"}
 
 
 class ValidationReport(DomainModel):
@@ -64,7 +68,7 @@ class SolverRunMetadataV12(SolverRunMetadata):
 class ScheduleResult(DomainModel):
     """Versioned result; structural consistency alone is not scheduling correctness."""
 
-    schema_version: Literal["1.0", "1.1", "1.2"]
+    schema_version: Literal["1.0", "1.1", "1.2", "1.3"]
     status: SolveStatus
     input_fingerprint: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")] | None = None
     valid_schedule: StrictBool = False
@@ -86,6 +90,7 @@ class ScheduleResult(DomainModel):
                 "1.0": RunMetadata,
                 "1.1": SolverRunMetadata,
                 "1.2": SolverRunMetadataV12,
+                "1.3": SolverRunMetadataV12,
             }
             metadata_type = metadata_types.get(version) if isinstance(version, str) else None
             if metadata_type is not None:
@@ -94,11 +99,14 @@ class ScheduleResult(DomainModel):
 
     @model_validator(mode="after")
     def check_result(self) -> Self:
-        if self.schema_version != "1.2" and "quality" in self.model_fields_set:
+        quality_output = self.schema_version in QUALITY_POLICY
+        if not quality_output and "quality" in self.model_fields_set:
             raise ValueError("Legacy output cannot contain quality")
-        if self.schema_version == "1.2":
+        if quality_output:
             if not isinstance(self.metadata, SolverRunMetadataV12) or self.quality is None:
                 raise ValueError("Quality output requires versioned metadata/report")
+            if self.quality.policy_version != QUALITY_POLICY[self.schema_version]:
+                raise ValueError("Output schema version does not match policy version")
             if self.valid_schedule and self.quality.status == "NOT_EVALUATED":
                 raise ValueError("Valid quality output requires complete evaluation")
             if self.status == SolveStatus.OPTIMAL and self.quality.status == "SCORED_FEASIBLE":
@@ -122,7 +130,7 @@ class ScheduleResult(DomainModel):
                 raise ValueError("Quality optimal status mismatch")
         elif isinstance(self.metadata, SolverRunMetadataV12):
             raise ValueError("Legacy output cannot contain stage metadata")
-        if self.schema_version != "1.2" and (self.schema_version == "1.1") != isinstance(
+        if not quality_output and (self.schema_version == "1.1") != isinstance(
             self.metadata, SolverRunMetadata
         ):
             raise ValueError("Execution metadata must match output schema version")
@@ -140,6 +148,6 @@ class ScheduleResult(DomainModel):
     @model_serializer(mode="wrap")
     def serialize_version(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
         data = dict(handler(self))
-        if self.schema_version != "1.2":
+        if self.schema_version not in QUALITY_POLICY:
             data.pop("quality", None)
         return data

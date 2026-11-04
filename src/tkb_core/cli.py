@@ -169,7 +169,15 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return emit_error(
                     "INPUT_INVALID", "STALE_RESULT", "Result does not match the current input"
                 )
-            if problem.schema_version == "1.1" and previous.schema_version != "1.2":
+            expected_version = "1.1"
+            if isinstance(problem.constraint_config, ConstraintConfigV11):
+                expected_version = (
+                    "1.3" if problem.constraint_config.policy_version == "0.2" else "1.2"
+                )
+            # Input 1.0 may still be checked against legacy 1.0/1.1 results, never a quality
+            # result; input 1.1 requires exactly the output version its policy produces.
+            accepted = {"1.0", "1.1"} if expected_version == "1.1" else {expected_version}
+            if previous.schema_version not in accepted:
                 return emit_error(
                     "INPUT_INVALID", "RESULT_VERSION", "Result version does not match input"
                 )
@@ -213,7 +221,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(
                 json.dumps(
                     {
-                        "schema_version": "1.2" if problem.schema_version == "1.1" else "1.1",
+                        "schema_version": expected_version,
                         **({"score": score.model_dump(mode="json")} if score is not None else {}),
                         "status": "SCHEDULE_VALID" if report.valid else "SCHEDULE_INVALID",
                         "valid_schedule": report.valid,

@@ -4,11 +4,106 @@ from collections import Counter, defaultdict
 from collections.abc import Sequence
 from itertools import pairwise
 
+from tkb_core.constraints.registry import DEFINITIONS
 from tkb_core.contracts.capabilities import check_capabilities
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.contracts.output import ValidationReport
 from tkb_core.domain.errors import CoreError
-from tkb_core.domain.models import Diagnostic, ScheduleAssignment
+from tkb_core.domain.models import (
+    ConstraintConfigV11,
+    Diagnostic,
+    ScheduleAssignment,
+    TimeSlot,
+)
+from tkb_core.domain.rule_parameters import (
+    AvoidSlotsParameters,
+    MaxDayParameters,
+    MaxSessionParameters,
+    PeriodWindowParameters,
+)
+
+# Placed periods of one occurrence: (teacher ID, covered slots, occurrence ID).
+_Placed = tuple[str, tuple[TimeSlot, ...], str]
+
+
+def _hard_variant_violations(problem: ScheduleInput, placed: Sequence[_Placed]) -> list[Diagnostic]:
+    """Recheck policy 0.2 hard variants from covered periods; shares no compiler code.
+
+    Parameters were already parsed by the contract; this re-parses them through the
+    shared typed models only. Overlap rejection guarantees one rule per family/bucket,
+    so (code, teacher, slots) identifies the violated rule without exposing its ID.
+    """
+    config = problem.constraint_config
+    if not isinstance(config, ConstraintConfigV11) or config.policy_version != "0.2":
+        return []
+    slots = {s.id: s for s in problem.time_slots}
+    found: list[Diagnostic] = []
+    for rule in sorted(config.hard, key=lambda r: r.id):
+        if not rule.enabled:
+            continue
+        scoped = set(rule.scope.teacher_ids) or {t.id for t in problem.teachers}
+        definition = DEFINITIONS[rule.code]
+        params = definition.parameters.model_validate(rule.parameters)
+        mine = [p for p in placed if p[0] in scoped]
+        if isinstance(params, (AvoidSlotsParameters, PeriodWindowParameters)):
+            for teacher, covered, occurrence in mine:
+                if isinstance(params, AvoidSlotsParameters):
+                    targets = [slots[i] for i in params.slot_ids]
+                    bad = [c for c in covered if any(_same_time(c, t) for t in targets)]
+                    code, message = "HARD_AVOID_SLOT", "Teacher period lies in a forbidden slot"
+                else:
+                    bad = [
+                        c
+                        for c in covered
+                        if c.session in params.session_ids
+                        and (c.period < params.first_period or c.period > params.last_period)
+                    ]
+                    code, message = "HARD_PERIOD_WINDOW", "Teacher period is outside its window"
+                if bad:
+                    found.append(
+                        Diagnostic(
+                            code=code,
+                            message=message,
+                            resource_ids=(teacher,),
+                            slot_ids=tuple(c.id for c in bad),
+                            occurrence_ids=(occurrence,),
+                        )
+                    )
+        elif isinstance(params, (MaxSessionParameters, MaxDayParameters)):
+            periods: dict[tuple[str, int, str], list[tuple[str, str]]] = defaultdict(list)
+            for teacher, covered, occurrence in mine:
+                for c in covered:
+                    if isinstance(params, MaxSessionParameters):
+                        if c.session not in params.session_ids:
+                            continue
+                        key = (teacher, c.day, c.session)
+                    else:
+                        key = (teacher, c.day, "")
+                    periods[key].append((c.id, occurrence))
+            for (teacher, _, _), rows in sorted(periods.items()):
+                if len(rows) > params.limit:
+                    found.append(
+                        Diagnostic(
+                            code="HARD_SESSION_LIMIT"
+                            if isinstance(params, MaxSessionParameters)
+                            else "HARD_DAY_LIMIT",
+                            message="Teacher load exceeds a hard limit",
+                            resource_ids=(teacher,),
+                            slot_ids=tuple(sorted({sid for sid, _ in rows})),
+                            occurrence_ids=tuple(sorted({o for _, o in rows})),
+                        )
+                    )
+        else:
+            found.append(Diagnostic(code="UNSUPPORTED_FEATURE", message="Unknown hard rule"))
+    return found
+
+
+def _same_time(covered: TimeSlot, target: TimeSlot) -> bool:
+    """Symbolic slots match by ID; timed slots by half-open minute intersection."""
+    if covered.start_minute is None or target.start_minute is None:
+        return covered.id == target.id
+    assert covered.end_minute is not None and target.end_minute is not None
+    return covered.start_minute < target.end_minute and target.start_minute < covered.end_minute
 
 
 def validate_schedule(
@@ -123,6 +218,7 @@ def validate_schedule(
     observed: Counter[str] = Counter()
     symbolic: dict[tuple[str, str, str], str] = {}
     intervals: dict[tuple[str, str], list[tuple[int, int, str]]] = defaultdict(list)
+    placed: list[_Placed] = []
     for a in assignments:
         if a.occurrence_id in seen:
             add(
@@ -178,6 +274,7 @@ def validate_schedule(
             )
             continue
         covered = [s for s in footprint if s is not None]
+        placed.append((req.teacher_ids[0], tuple(covered), a.occurrence_id))
         if any(not s.can_teach for s in covered):
             add(
                 "FORBIDDEN_SLOT",
@@ -281,4 +378,5 @@ def validate_schedule(
                 )
             if end > farthest_end:
                 farthest_end, farthest_occurrence = end, occurrence_id
+    violations.extend(_hard_variant_violations(problem, placed))
     return ValidationReport(valid=not violations, violations=tuple(violations))

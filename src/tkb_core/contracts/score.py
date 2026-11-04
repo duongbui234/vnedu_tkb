@@ -78,7 +78,7 @@ class StageRun(DomainModel):
 
 
 class QualityReport(DomainModel):
-    policy_version: Literal["0.1"] = "0.1"
+    policy_version: Literal["0.1", "0.2"] = "0.1"
     status: Literal["NOT_REQUESTED", "NOT_EVALUATED", "SCORED_FEASIBLE", "LEXICOGRAPHIC_OPTIMAL"]
     score: ScoreReport | None = None
     optimal_prefix: tuple[Priority, ...] = ()
