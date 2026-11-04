@@ -174,7 +174,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 expected_version = (
                     "1.3" if problem.constraint_config.policy_version == "0.2" else "1.2"
                 )
-            if problem.schema_version == "1.1" and previous.schema_version != expected_version:
+            # Input 1.0 may still be checked against legacy 1.0/1.1 results, never a quality
+            # result; input 1.1 requires exactly the output version its policy produces.
+            accepted = {"1.0", "1.1"} if expected_version == "1.1" else {expected_version}
+            if previous.schema_version not in accepted:
                 return emit_error(
                     "INPUT_INVALID", "RESULT_VERSION", "Result version does not match input"
                 )

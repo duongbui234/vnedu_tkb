@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 from tkb_core.cli import main
 
 HARD = {"id": "h", "code": "TEACHER_MAX_PERIODS_PER_DAY", "parameters": {"limit": 2}}
@@ -96,3 +98,44 @@ raise SystemExit(main(['evaluate-score',sys.argv[1],sys.argv[2]]))
     )
     assert proc.returncode == 0, proc.stderr
     assert json.loads(proc.stdout)["status"] == "OK"
+
+
+def _legacy_result_as(version: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    from tkb_core.contracts.input import ScheduleInput
+    from tkb_core.solver.cp_sat import solve
+
+    fixture = Path(__file__).parents[1] / "fixtures/feasible_small.json"
+    legacy = json.loads(fixture.read_text())
+    result = solve(ScheduleInput.model_validate(legacy)).model_dump(mode="json")
+    assert result["schema_version"] == "1.1"
+    policy = {"1.2": "0.1", "1.3": "0.2"}[version]
+    forged = {
+        **result,
+        "schema_version": version,
+        "metadata": {**result["metadata"], "feasibility_run": {}},
+        "quality": {"policy_version": policy, "status": "NOT_REQUESTED"},
+    }
+    return legacy, forged
+
+
+@pytest.mark.parametrize("command", ["validate-schedule", "evaluate-score"])
+@pytest.mark.parametrize("version", ["1.2", "1.3"])
+def test_legacy_input_rejects_quality_result_versions(
+    tmp_path: Path, capsys: Any, command: str, version: str
+) -> None:
+    legacy, forged = _legacy_result_as(version)
+    p, r = _files(legacy, tmp_path)
+    r.write_text(json.dumps(forged))
+    assert main([command, str(p), str(r)]) == 2
+    assert json.loads(capsys.readouterr().out)["diagnostics"][0]["code"] == "RESULT_VERSION"
+
+
+def test_legacy_input_keeps_accepting_legacy_result(tmp_path: Path, capsys: Any) -> None:
+    from tkb_core.contracts.input import ScheduleInput
+    from tkb_core.solver.cp_sat import solve
+
+    legacy = json.loads((Path(__file__).parents[1] / "fixtures/feasible_small.json").read_text())
+    p, r = _files(legacy, tmp_path)
+    r.write_text(solve(ScheduleInput.model_validate(legacy)).model_dump_json())
+    assert main(["validate-schedule", str(p), str(r)]) == 0
+    assert json.loads(capsys.readouterr().out)["schema_version"] == "1.1"

@@ -61,6 +61,7 @@ penalty lớn, không bị nới khi timeout. Rule cùng family không được 
 | TEACHER_PREFERRED_PERIOD_WINDOW | Loại placement có covered period ngoài [first,last] ở session đã chọn | `HARD_PERIOD_WINDOW` |
 
 S01 hard khác availability: nó cấm cả slot alias giao phút với ô tránh. Lock trái S01/S04 hard
-→ INPUT_INVALID/LOCK_CONFLICT; domain rỗng → INFEASIBLE/EMPTY_DOMAIN. INFEASIBLE nghĩa là vô
+→ INPUT_INVALID/LOCK_CONFLICT; domain rỗng → INFEASIBLE/EMPTY_DOMAIN. Các lock cùng nhau vượt
+hard S02/S03 (mỗi lock tự nó hợp lệ) → INFEASIBLE từ solver, không phải LOCK_CONFLICT. INFEASIBLE nghĩa là vô
 nghiệm với built-ins cộng hard variants đã khai báo, không chỉ ra rule nguyên nhân. Ngưỡng hard
 thực tế (H10) phải được trường xác nhận upstream; Core không tự nâng soft thành hard.
