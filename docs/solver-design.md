@@ -56,7 +56,7 @@ hard-valid không canonical, vì thứ tự này không phải quy tắc nghiệ
 Mọi occurrence có khóa (kể cả chỉ phòng) bị loại khỏi group; không đổi hoặc sắp lại
 incumbent đã có. Domain khác thứ tự/footprint/phòng/tokens, khác duration/requirement,
 domain có0/1 placement hoặc rank activity vượt int64 thì bỏ optimization. Group chỉ
-được áp cho input1.1/S01–S04 và không enabled custom hard rule. Callers trực tiếp dùng
+được áp cho input1.1/S01–S04 và không enabled custom hard rule ngoài hard variants S01–S04 của policy 0.2 (Phase 2B; oracle vét cạn 60 seeds so optimum có/không ordering). Callers trực tiếp dùng
 `build_model` mặc định tắt; Phase1 và quality không active giữ model cũ. Nếu có repair,
 previous schedule hoặc preference theo occurrence ID sau này, phải chứng minh lại
 tính hoán vị trước khi bật. Hints/verification/proof/budget/search parameters không đổi.
@@ -105,6 +105,18 @@ bỏ toàn bộ bước siết của rule, không đổi status/lỗi. Đây là
 hứa tốc độ, incumbent hay status dưới budget. Regression: `tests/unit/test_s03_bounds.py`,
 oracle vét cạn 12 fixtures `tests/properties/test_s03_bounds_oracle.py`, 6 cặp native nhỏ
 `tests/integration/test_s03_bounds_native.py`.
+
+## Hard variants Phase 2B (policy 0.2)
+
+S01/S04 hard là điều kiện theo từng placement: `prepare` loại placement vi phạm sau calendar/
+availability và trước room loop/prechecks (`constraints/hard_variants.py`, không import OR-Tools).
+Domain rỗng → INFEASIBLE/EMPTY_DOMAIN; slot lock trái hard → INPUT_INVALID/LOCK_CONFLICT.
+S02/S03 hard là `Σ duration·x ≤ limit` theo GV/ngày[/buổi] của start slot, thêm trong
+`build_model` ngay sau occupancy (`constraints/hard.add_load_limits`), tức **trước** khi
+`solve` clone hard model; feasibility, tiers, zero-probe và hints cùng thấy các ràng buộc này.
+Limit/tổng hệ số ngoài int64 → INPUT_INVALID/HARD_RULE_RANGE trước solve. Không có precheck
+tổng hợp mới cho S02/S03; CP-SAT chứng minh INFEASIBLE. Bound dư thừa S03 lấy từ domains nên
+vẫn đúng (tập lịch hard-valid chỉ nhỏ đi). Validator kiểm lại bằng code riêng; không có IIS.
 
 ## Run config và trạng thái
 

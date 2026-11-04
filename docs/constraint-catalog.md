@@ -45,5 +45,22 @@ chưa thực hiện; không dùng thuật ngữ FET/STKB làm bằng chứng v�
 
 Mỗi rule có ID, weight>0, priority1–3 explicit; unit theo tiết, double có thể phạt2.
 Soft không loại placements, hard/locks luôn giữ. Input 1.0 vẫn không hỗ trợ custom rules.
-Custom hard variants, S05–S12 và repair chưa có. Không tự chuyển raw STKB hoặc API thành rule.
+S05–S12 và repair chưa có; hard variants S01–S04 chỉ có trên policy 0.2 (mục dưới). Không tự chuyển raw STKB hoặc API thành rule.
 Ngưỡng/trọng số của trường phải được xác nhận upstream; không áp max3 toàn trường.
+
+## Phase 2B — hard variants S01–S04 trên input 1.1/policy 0.2
+
+Chỉ teacher scope; cùng parameters/footprint/bucket như soft. Không weight/priority, không là
+penalty lớn, không bị nới khi timeout. Rule cùng family không được overlap bất kể mode.
+
+| Code (hard) | Compiler | Validator độc lập |
+|---|---|---|
+| TEACHER_AVOID_SLOTS | Loại placement có covered slot trùng ô tránh (symbolic theo ID, timed theo giao phút) trong `prepare` (`constraints/hard_variants.py`) | `HARD_AVOID_SLOT` |
+| TEACHER_MAX_PERIODS_PER_SESSION | `Σ duration·x ≤ limit` theo GV/ngày/buổi đã chọn (`constraints/hard.py`) | `HARD_SESSION_LIMIT` |
+| TEACHER_MAX_PERIODS_PER_DAY | `Σ duration·x ≤ limit` theo GV/ngày | `HARD_DAY_LIMIT` |
+| TEACHER_PREFERRED_PERIOD_WINDOW | Loại placement có covered period ngoài [first,last] ở session đã chọn | `HARD_PERIOD_WINDOW` |
+
+S01 hard khác availability: nó cấm cả slot alias giao phút với ô tránh. Lock trái S01/S04 hard
+→ INPUT_INVALID/LOCK_CONFLICT; domain rỗng → INFEASIBLE/EMPTY_DOMAIN. INFEASIBLE nghĩa là vô
+nghiệm với built-ins cộng hard variants đã khai báo, không chỉ ra rule nguyên nhân. Ngưỡng hard
+thực tế (H10) phải được trường xác nhận upstream; Core không tự nâng soft thành hard.

@@ -1,6 +1,9 @@
 # Phase 2A — bàn giao qua Git cho Claude Code cloud
 
-Ngày 2026-11-05. **Commit đang ở bước chuẩn bị, chưa được tạo hoặc push.**
+Ngày 2026-11-05. **Cập nhật:** commit Phase 2A đã được tạo và push là
+`124b89d318467421dedf421f8d1c9a6b72b6991e` trên `work/phase2a-operational-completion`;
+các đoạn “chưa commit” bên dưới mô tả trạng thái lúc soạn. Phase 2B đã được làm sau đó
+theo [báo cáo 2B](phase-2b-report.md); mọi hạn chế 2A dưới đây giữ nguyên.
 Đọc [review trước commit](phase-2a-commit-review.md) trước khi sửa code: finding
 P2 về raw status đã được sửa theo ủy quyền, checks đạt; commit vẫn đang chờ duyệt.
 

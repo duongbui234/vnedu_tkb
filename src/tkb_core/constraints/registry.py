@@ -6,7 +6,12 @@ from typing import TYPE_CHECKING
 from pydantic import JsonValue
 
 from tkb_core.domain.errors import CoreError
-from tkb_core.domain.models import ConstraintConfigV11, DomainModel
+from tkb_core.domain.models import (
+    ConstraintConfigV11,
+    DomainModel,
+    HardConstraintConfigV11,
+    SoftConstraintConfigV11,
+)
 from tkb_core.domain.rule_parameters import (
     AvoidSlotsParameters,
     MaxDayParameters,
@@ -27,32 +32,63 @@ class RuleDefinition:
     policy_id: str
     parameters: type[DomainModel]
     unit: str = "teaching_periods"
+    # Policy 0.1 modes; unchanged so historical inputs keep their capability verdicts.
     supported_modes: tuple[str, ...] = ()
+    # Policies whose hard mode has a compiler, independent checker and oracle tests.
+    hard_policies: tuple[str, ...] = ()
 
 
 DEFINITIONS = {
     d.code: d
     for d in (
         RuleDefinition(
-            "TEACHER_AVOID_SLOTS", "S01", AvoidSlotsParameters, supported_modes=("soft",)
+            "TEACHER_AVOID_SLOTS",
+            "S01",
+            AvoidSlotsParameters,
+            supported_modes=("soft",),
+            hard_policies=("0.2",),
         ),
         RuleDefinition(
             "TEACHER_MAX_PERIODS_PER_SESSION",
             "S02",
             MaxSessionParameters,
             supported_modes=("soft",),
+            hard_policies=("0.2",),
         ),
         RuleDefinition(
-            "TEACHER_MAX_PERIODS_PER_DAY", "S03", MaxDayParameters, supported_modes=("soft",)
+            "TEACHER_MAX_PERIODS_PER_DAY",
+            "S03",
+            MaxDayParameters,
+            supported_modes=("soft",),
+            hard_policies=("0.2",),
         ),
         RuleDefinition(
             "TEACHER_PREFERRED_PERIOD_WINDOW",
             "S04",
             PeriodWindowParameters,
             supported_modes=("soft",),
+            hard_policies=("0.2",),
         ),
     )
 }
+
+
+def supports_mode(code: str, mode: str, policy_version: str) -> bool:
+    """Whether ``code`` may be enabled in ``mode`` under ``policy_version``."""
+    definition = DEFINITIONS.get(code)
+    if definition is None:
+        return False
+    if mode == "soft":
+        return "soft" in definition.supported_modes and policy_version in ("0.1", "0.2")
+    return mode == "hard" and policy_version in definition.hard_policies
+
+
+def enabled_rules(
+    config: ConstraintConfigV11,
+) -> list[HardConstraintConfigV11 | SoftConstraintConfigV11]:
+    """Enabled soft rules, plus enabled hard rules where the policy defines hard modes."""
+    hard = list(config.hard) if config.policy_version == "0.2" else []
+    return [r for r in (*hard, *config.soft) if r.enabled]
 
 
 def parse_parameters(code: str, parameters: dict[str, JsonValue]) -> RuleParameters | None:
@@ -73,11 +109,15 @@ def parse_parameters(code: str, parameters: dict[str, JsonValue]) -> RuleParamet
 
 
 def validate_rule_config(problem: "ScheduleInput") -> None:
-    """Reject unresolved overlapping preferences instead of adding duplicate costs."""
+    """Reject unresolved overlapping rules of one family, whatever their modes.
+
+    Policy 0.1 checks only preferences (its enabled hard rules are refused later);
+    policy 0.2 includes enabled hard variants, so hard+soft and hard+hard also overlap.
+    """
     config = problem.constraint_config
     if not isinstance(config, ConstraintConfigV11):
         return
-    enabled = [r for r in config.soft if r.enabled]
+    enabled = enabled_rules(config)
     slots = {s.id: s for s in problem.time_slots}
     for i, r in enumerate(enabled):
         if r.code not in DEFINITIONS:

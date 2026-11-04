@@ -1,6 +1,8 @@
 # Phase 2B — hard variants explicit cho S01–S04
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — CHỜ DUYỆT, CHƯA TRIỂN KHAI.**
+Ngày 2026-11-05. Trạng thái: **D1–D7 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT THEO ĐỀ XUẤT; ĐÃ TRIỂN KHAI
+(technical synthetic)** — xem [báo cáo 2B](../../phase-2b-report.md). Đoạn dưới là bản đặc tả
+được duyệt; các ghi chú “chưa triển khai” trong thân bài phản ánh thời điểm soạn.
 Base: `124b89d318467421dedf421f8d1c9a6b72b6991e`, nhánh `work/phase2a-operational-completion`.
 
 Tài liệu này chỉ là đặc tả. Không sửa `src/`, `tests/`, `benchmarks/`, dependency, gate,
@@ -169,7 +171,7 @@ availability, **trước** các precheck cần thiết. Hệ quả có chủ ý:
 
 ### 5.2 Aggregate: S02/S03 ràng buộc tuyến tính
 
-Trong `build_model`, sau occupancy, với mỗi bucket (t,d[,s]) có placement: `Σ duration·x ≤ limit`
+Trong `build_model` (hiện thực ở `constraints/hard.add_load_limits`), sau occupancy, với mỗi bucket (t,d[,s]) có placement: `Σ duration·x ≤ limit`
 (dùng covered periods theo session/day của slot đã chọn; double nằm trọn một session/day).
 Thêm vào `built.model` **trước** khi `cp_sat.solve` clone `hard_model`, để lượt feasibility,
 các tier, zero-probe và hint đều thấy cùng tập hard. Kiểm `limit` và tổng hệ số trong signed
@@ -231,10 +233,10 @@ ngưỡng trường, hiệu năng, Windows/cross-OS hay chất lượng giáo v�
 
 ## 8. Quyết định cần duyệt
 
-- [ ] **D1** — policy `0.2` (schema input 1.1) mở hard; policy 0.1 giữ nguyên. *(Đề xuất: chọn)*
-- [ ] **D2** — output `1.3` cho policy 0.2; 1.2 giữ literal 0.1. *(Đề xuất: chọn)*
-- [ ] **D3** — S01/S04 hard lọc domain trong `prepare`; lock trái hard → LOCK_CONFLICT. *(Đề xuất: chọn; thay thế: ràng buộc `x=0` trong model, giữ domain/precheck như cũ)*
-- [ ] **D4** — overlap cùng family bị cấm bất kể mode (kể cả hard+hard). *(Đề xuất: chọn)*
-- [ ] **D5** — bật symmetry ordering với hard S01–S04 có điều kiện oracle. *(Đề xuất: chọn có điều kiện)*
-- [ ] **D6** — không thêm precheck tổng hợp S02/S03 trong 2B. *(Đề xuất: chọn)*
-- [ ] **D7** — violation codes `HARD_*` giữ schema `Diagnostic`, không thêm `rule_id`. *(Đề xuất: chọn)*
+- [x] **D1** — policy `0.2` (schema input 1.1) mở hard; policy 0.1 giữ nguyên. *(Đề xuất: chọn)*
+- [x] **D2** — output `1.3` cho policy 0.2; 1.2 giữ literal 0.1. *(Đề xuất: chọn)*
+- [x] **D3** — S01/S04 hard lọc domain trong `prepare`; lock trái hard → LOCK_CONFLICT. *(Đề xuất: chọn; thay thế: ràng buộc `x=0` trong model, giữ domain/precheck như cũ)*
+- [x] **D4** — overlap cùng family bị cấm bất kể mode (kể cả hard+hard). *(Đề xuất: chọn)*
+- [x] **D5** — bật symmetry ordering với hard S01–S04 có điều kiện oracle. *(Đề xuất: chọn có điều kiện)*
+- [x] **D6** — không thêm precheck tổng hợp S02/S03 trong 2B. *(Đề xuất: chọn)*
+- [x] **D7** — violation codes `HARD_*` giữ schema `Diagnostic`, không thêm `rule_id`. *(Đề xuất: chọn)*

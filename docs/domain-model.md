@@ -109,3 +109,13 @@ Unknown enabled trả UNSUPPORTED_FEATURE, unknown disabled giữ raw JSON; know
 Fingerprint 1.1 sort known sets/rules, giữ unknown array order và split order.
 Output 1.2 có quality/ScoreReport và từng stage proof/measurements; không scalar hóa vector.
 Xem [đặc tả](superpowers/specs/2026-10-26-phase-2-quality-design.md) và [nghiệm thu](phase-2a-report.md).
+
+## Bổ sung Phase 2B
+
+Input 1.1 nhận thêm `policy_version=0.2`. Hard envelope giữ id/code/scope/parameters/enabled,
+không priority/weight; S01–S04 dùng cùng parameter models như soft. Policy 0.1 giữ nguyên
+capability (enabled hard → UNSUPPORTED_FEATURE/CUSTOM_HARD_RULE) và hash. Overlap cùng family
+bị từ chối với cả hard+soft và hard+hard. Input 0.2 phát output 1.3: cùng shape 1.2, nhưng
+`quality.policy_version=0.2`; reader kiểm cặp 1.2↔0.1 và 1.3↔0.2. Validation report có thể chứa
+`HARD_AVOID_SLOT`, `HARD_SESSION_LIMIT`, `HARD_DAY_LIMIT`, `HARD_PERIOD_WINDOW` với
+resource_ids=(GV,), slot_ids và occurrence_ids. Xem [đặc tả 2B](superpowers/specs/2026-11-05-phase-2b-hard-variants-design.md).

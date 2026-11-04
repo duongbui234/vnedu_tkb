@@ -1,6 +1,7 @@
 # Phase 2B — kế hoạch triển khai hard variants S01–S04
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — CHỜ DUYỆT; CHƯA CÓ ỦY QUYỀN TRIỂN KHAI.**
+Ngày 2026-11-05. Trạng thái: **ĐÃ DUYỆT (D1–D7 theo đề xuất) VÀ ĐÃ THỰC HIỆN Task 1–8** —
+kết quả và sai khác so với kế hoạch ở [báo cáo 2B](../../phase-2b-report.md).
 Đặc tả: [2026-11-05-phase-2b-hard-variants-design.md](../specs/2026-11-05-phase-2b-hard-variants-design.md).
 Base `124b89d318467421dedf421f8d1c9a6b72b6991e`, nhánh `work/phase2a-operational-completion`.
 

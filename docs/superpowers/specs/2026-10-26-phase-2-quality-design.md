@@ -1,6 +1,6 @@
 # Phase 2 — Registry ràng buộc, ưu tiên và independent score evaluator
 
-Ngày: 2026-10-26. Trạng thái: **PHASE 2A ĐÃ ĐƯỢC DUYỆT VÀ TRIỂN KHAI**; xem [báo cáo](../../phase-2a-report.md). Mốc 2B/2C chưa triển khai.
+Ngày: 2026-10-26. Trạng thái: **PHASE 2A ĐÃ ĐƯỢC DUYỆT VÀ TRIỂN KHAI**; xem [báo cáo](../../phase-2a-report.md). Mốc 2B (hard variants S01–S04, policy 0.2) đã triển khai theo [đặc tả 2B](2026-11-05-phase-2b-hard-variants-design.md); 2C chưa triển khai.
 
 Phạm vi lượt này chỉ là tài liệu. Không sửa Core, tests, dependency, dữ liệu nghiên cứu hoặc gọi API. Thiết kế cần được review trước khi lập implementation plan; tài liệu này không phải biên bản nghiệm thu Phase 2.
 

@@ -3,7 +3,8 @@
 Phase 2A: Python core độc lập, hard-feasibility CP-SAT cho tiết đơn/đôi và tối ưu
 S01–S04 theo ưu tiên P1–P3, có independent hard validator và score evaluator.
 Input 1.0 giữ hành vi/hash Phase 1 và phát output 1.1; input 1.1/policy 0.1 phát output 1.2.
-Output reader đọc 1.0/1.1/1.2. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
+Phase 2B (synthetic): input 1.1/policy 0.2 thêm hard variants S01–S04 explicit và phát output 1.3.
+Output reader đọc 1.0/1.1/1.2/1.3. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
 
 ## Chạy local
 
@@ -51,7 +52,7 @@ xác nhận cấu trúc/tham chiếu, không chứng minh lịch có thể xếp
 Một block đôi là một assignment chiếm hai period liền nhau cùng buổi. Không qua slot
 nghỉ hoặc gap dương trong timed calendar. Tuyến input 1.0 vẫn không có objective chất lượng:
 OPTIMAL của bài feasibility không có nghĩa lịch đẹp nhất. Nghiệp vụ chưa hỗ trợ
-(nhiều GV/lớp, block >2, mọi custom hard và soft ngoài S01–S04) bị từ chối rõ ràng.
+(nhiều GV/lớp, block >2, mọi custom hard/soft ngoài S01–S04, hard trên policy 0.1) bị từ chối rõ ràng.
 Input 1.0 tiếp tục từ chối mọi enabled custom rule.
 
 Nghiên cứu trước nằm trong `docs/research/`, `research/`, `reverse-engineering/` và được
@@ -69,4 +70,13 @@ S01 tránh ô mong muốn, S02 vượt tải/buổi, S03 vượt tải/ngày, S0
 Mỗi penalty tính theo tiết dạy trên toàn block, có weight và priority explicit.
 Hard không được nới; chỉ tier có proof OPTIMAL mới được giữ cố định trước tối ưu tier sau.
 Timeout giữ incumbent đã hard-validate và score đúng; quality report tách điểm khỏi proof.
-Evaluator/CLI evaluate-score không cần OR-Tools. Chưa có hard variants, spacing/gaps hoặc repair.
+Evaluator/CLI evaluate-score không cần OR-Tools. Chưa có spacing/gaps hoặc repair.
+
+## Hard variants Phase 2B
+
+Policy `0.2` cho phép đặt S01–S04 trong `constraint_config.hard` (không weight/priority):
+S01 không dạy ô tránh (timed: cả alias giao phút), S02/S03 tải ≤ limit, S04 mọi tiết trong
+khung. Policy 0.1 vẫn từ chối mọi enabled hard. Rule cùng family không được overlap bất kể
+mode. INFEASIBLE không chỉ ra rule gây vô nghiệm. Core không có ngưỡng mặc định; xem
+[đặc tả 2B](docs/superpowers/specs/2026-11-05-phase-2b-hard-variants-design.md) và
+[báo cáo 2B](docs/phase-2b-report.md).

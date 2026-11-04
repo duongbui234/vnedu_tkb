@@ -83,3 +83,10 @@ def ordering_case(quality_case: dict[str, Any]) -> dict[str, Any]:
         },
     ]
     return quality_case
+
+
+@pytest.fixture
+def hard_case(quality_case: dict[str, Any]) -> dict[str, Any]:
+    """Policy 0.2 input: same synthetic calendar, explicit hard variants enabled later."""
+    quality_case["constraint_config"]["policy_version"] = "0.2"
+    return quality_case
