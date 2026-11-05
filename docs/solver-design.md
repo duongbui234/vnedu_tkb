@@ -120,9 +120,12 @@ vẫn đúng (tập lịch hard-valid chỉ nhỏ đi). Validator kiểm lại b
 
 ## Phân phối môn Phase 2C-1 (policy 0.3)
 
-Ngày của occurrence là `Σ day(start)·x`. Soft S05 dùng biến `diff`, `dist=|diff|`
-(`AddAbsEquality`) và `short=max(0,k−dist)` (`AddMaxEquality`) cho từng cặp trong nhóm; raw là
-equality, bound `C(n,2)·k`. Hard S05 (`constraints/hard.add_distribution_limits`): với mỗi ngày d của
+Ngày của occurrence là `Σ day(start)·x`; soft S05 tạo **một** biến ngày mỗi component bằng
+equality đó, rồi mỗi cặp dùng biến `diff`, `dist=|diff|` (`AddAbsEquality`) và `short=max(0,k−dist)`
+(`AddMaxEquality`); số hạng tăng theo placements + cặp, không phải cặp × placements. Raw là
+equality, bound `C(n,2)·k`. Guard vận hành `MAX_SPREAD_PAIRS = 20 000` cặp mỗi rule S05 (khoảng
+200 component): vượt → `UNKNOWN/RESOURCE_LIMIT` trước khi tạo biến cặp, không bao giờ INFEASIBLE.
+Đây là giới hạn kỹ thuật, không phải ngưỡng nghiệp vụ; hard S05 dùng cửa sổ nên không có giới hạn này. Hard S05 (`constraints/hard.add_distribution_limits`): với mỗi ngày d của
 calendar, các placement có start trong `[d, d+k−1]` của nhóm có tổng ≤ 1 (tương đương mọi cặp ≥ k).
 S06 dùng bucket (lớp, môn, ngày) với `AddMaxEquality` (soft) hoặc `≤ limit` (hard). Hard thêm trước
 clone hard model. Ordering occurrence hoán đổi được bật cả khi có S05/S06 (oracle 60 seeds có/không

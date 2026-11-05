@@ -245,3 +245,71 @@ def test_distribution_range_guard(dist_case: dict[str, Any]) -> None:
     with pytest.raises(CoreError) as err:
         compile_soft(p, build_model(p))
     assert err.value.diagnostics[0].code == "OBJECTIVE_RANGE"
+
+
+def _spread_case(n: int) -> dict[str, Any]:
+    return {
+        "schema_version": "1.1",
+        "school": {"school_id": "d", "academic_year": "d", "term": "d"},
+        "time_slots": [
+            {"id": f"{d}-{s}-{p}", "day": d, "session": s, "period": p}
+            for d in range(1, 7)
+            for s in ("AM", "PM")
+            for p in range(1, 6)
+        ],
+        "classes": [{"id": "c"}],
+        "teachers": [{"id": "t"}],
+        "subjects": [{"id": "sub"}],
+        "teaching_requirements": [
+            {
+                "id": "r",
+                "class_ids": ["c"],
+                "teacher_ids": ["t"],
+                "subject_id": "sub",
+                "periods_per_cycle": n,
+            }
+        ],
+        "constraint_config": {
+            "policy_version": "0.3",
+            "hard": [],
+            "soft": [
+                {
+                    "id": "s",
+                    "code": "SUBJECT_COMPONENT_DAY_SPREAD",
+                    "parameters": {"requirement_ids": ["r"], "min_day_gap": 2},
+                    "priority": 1,
+                    "weight": 1,
+                }
+            ],
+        },
+    }
+
+
+def test_spread_model_terms_grow_with_placements_plus_pairs() -> None:
+    # Review F1: one day variable per component, not both day expressions in every pair.
+    n = 40
+    p = prepare(ScheduleInput.model_validate(_spread_case(n)))
+    built = build_model(p)
+    before = sum(len(c.linear.vars) for c in built.model.proto.constraints)
+    compile_soft(p, built)
+    added = sum(len(c.linear.vars) for c in built.model.proto.constraints) - before
+    placements = sum(len(d) for d in p.domains.values())
+    pairs = n * (n - 1) // 2
+    assert added <= 2 * placements + 10 * pairs, (added, placements, pairs)
+
+
+def test_spread_pair_guard_is_resource_limit(monkeypatch: pytest.MonkeyPatch) -> None:
+    from tkb_core.constraints import soft
+    from tkb_core.solver.cp_sat import solve
+
+    monkeypatch.setattr(soft, "MAX_SPREAD_PAIRS", 5)
+    problem = ScheduleInput.model_validate(_spread_case(4))  # 6 pairs > 5
+    p = prepare(problem)
+    with pytest.raises(CoreError) as err:
+        compile_soft(p, build_model(p))
+    assert (err.value.status.value, err.value.diagnostics[0].code) == ("UNKNOWN", "RESOURCE_LIMIT")
+    result = solve(problem)
+    assert result.status == "UNKNOWN" and not result.assignments
+    assert result.diagnostics[0].code == "RESOURCE_LIMIT"
+    monkeypatch.setattr(soft, "MAX_SPREAD_PAIRS", 6)  # exactly at the limit is allowed
+    assert solve(problem).status == "OPTIMAL"

@@ -70,7 +70,8 @@ nay hợp lệ nên dùng `0.4` làm version lạ; mode matrix chỉ cho S01–S
 ## Giới hạn
 
 - Synthetic only: không chứng nhận k/limit thực tế của trường, chất lượng giáo vụ, hiệu năng, Windows.
-- S05 soft tạo O(n²) biến theo cỡ nhóm; chưa đo trên dữ liệu lớn, không tuyên bố tốc độ.
+- S05 soft tạo O(n²) biến cặp theo cỡ nhóm (sau sửa F1 của [rà soát](phase-2c-review.md): số hạng
+  ≈ placements + cặp; guard 20 000 cặp/rule → RESOURCE_LIMIT). Chưa đo solve trên dữ liệu lớn.
 - INFEASIBLE không chỉ ra rule nguyên nhân. Không có precheck tổng hợp cho S05/S06.
 - Weight trong cùng tier cộng hai unit khác nhau (ngày thiếu và tiết); đó là trade-off caller chọn.
 - Chưa build wheel/installed preflight cho source này. Hạn chế Phase 2A/2B giữ nguyên.

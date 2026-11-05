@@ -23,6 +23,9 @@ from tkb_core.solver.model_builder import BuiltModel
 Expression = cp_model.LinearExpr | int
 MAX_OBJECTIVE = 2**53 - 1
 MAX_INTEGER = 2**63 - 1
+# Component pairs per S05 rule (a group of about 200 components). Larger groups return
+# UNKNOWN/RESOURCE_LIMIT before pair variables are created.
+MAX_SPREAD_PAIRS = 20_000
 
 
 @dataclass(frozen=True)
@@ -94,19 +97,29 @@ def _compile_distribution(
         group = [
             o for o in prepared.normalized.occurrences if o.requirement_id in params.requirement_ids
         ]
+        pairs = len(group) * (len(group) - 1) // 2
+        if pairs > MAX_SPREAD_PAIRS:
+            # Operational size guard, checked before any pair variable exists; never INFEASIBLE.
+            raise CoreError("UNKNOWN", "RESOURCE_LIMIT", "Configured model resource limit exceeded")
         days = [s.day for s in problem.time_slots]
         span = max(days) - min(days) if days else 0
         k = params.min_day_gap
         _range(k + span)
         raw_bound = len(group) * (len(group) - 1) // 2 * k
         _range(raw_bound)
-        day_of = [
-            sum(
-                slots[p.start_slot_id].day * v
-                for p, v in zip(prepared.domains[o.id], built.variables[o.id], strict=True)
+        # One day variable per component: pairs reuse it instead of repeating the
+        # placement expression, so terms grow with placements + pairs (review F1).
+        day_of = []
+        for index, o in enumerate(group):
+            day_var = model.new_int_var(min(days), max(days), f"day_{rule_id}_{index}")
+            model.add(
+                day_var
+                == sum(
+                    slots[p.start_slot_id].day * v
+                    for p, v in zip(prepared.domains[o.id], built.variables[o.id], strict=True)
+                )
             )
-            for o in group
-        ]
+            day_of.append(day_var)
         for i in range(len(group)):
             for j in range(i + 1, len(group)):
                 diff = model.new_int_var(-span, span, f"dd_{rule_id}_{i}_{j}")
