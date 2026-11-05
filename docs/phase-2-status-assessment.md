@@ -1,5 +1,7 @@
 # Phase 2 — đánh giá trạng thái toàn phase
 
+> Cập nhật sau tooling hiệu năng v2 và diễn tập E0: [cập nhật 1](phase-2-status-assessment-update-1.md).
+
 Ngày 2026-11-05. Trạng thái: **E1–E4 và E6 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-05; E5 chưa quyết định
 (giữ quy tắc version hiện tại).** Duyệt không phải ủy quyền chạy campaign hay sửa code. Base `486c6a1d7c181610b917adfa627fcda6fcb112`
 (merge duongbui234/vnedu_tkb#3 vào `main`); source/tests trùng với `6a1d937`.
