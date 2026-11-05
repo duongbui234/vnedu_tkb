@@ -46,6 +46,49 @@ evaluator: hành vi `solve()` không đổi. Không chạy benchmark hay campaig
 
 8 skip vẫn là test Windows native/opt-in như trước.
 
+## Kiểm installed wheel từ `0d318d1`
+
+Bổ sung sau commit `0d318d1` (gồm bản sửa F1–F3 của [rà soát](phase-3a-review.md)). Chỉ Linux, mỗi lệnh
+chạy một lần (n = 1), input synthetic. Đây không phải benchmark và không đo hiệu năng.
+
+- Wheel `vnedu_tkb_core-0.2.0-py3-none-any.whl`, SHA256
+  `786e647e3df1e3cb9547b27b5a2d8e84b41665340fecbaab28a1a21316802cf9`, build bằng `uv build --wheel` từ
+  tree sạch tại `0d318d1`. **Wheel không được commit**; nó chỉ nằm trong scratchpad của phiên cloud.
+- Python 3.12.3; OR-Tools 9.15.6755; Pydantic 2.14.1. Dependencies từ `uv export --frozen` (lock không
+  đổi) vào hai venv sạch, có hash: `venv-solver` (có OR-Tools) và `venv-core` (không OR-Tools). Wheel cài
+  `--no-deps`.
+- 36/36 file `tkb_core/*.py` đã cài khớp byte với `src/` tại HEAD ở cả hai venv, gồm 6 file repair mới.
+- Mọi lệnh chạy bằng `python -I -m tkb_core.cli` từ một thư mục ngoài repo.
+
+| Lệnh (venv) | Exit | Kết quả |
+|---|---:|---|
+| solver: `solve old.json --time-limit 10 --workers 1 --seed 42 --output solved.json` | 0 | 1.5 OPTIMAL, Score `[0,0,0]` |
+| solver: `repair new.json solved.json --request request.json --output repaired.json` | 0 | 1.5 OPTIMAL; 1 thay đổi (forced 1, `r::3`), `min_changes_proved=true`; Score `[1,0,0]` |
+| solver: `validate-schedule new.json result-only.json` | 0 | 1.5 SCHEDULE_VALID |
+| solver / core: `evaluate-repair new.json solved.json repaired.json` | 0 / 0 | OK, `changed=1` |
+| core: `evaluate-repair … --request request.json` | 0 | OK |
+| core: `evaluate-repair … --request request-other.json` | 2 | INPUT_INVALID / RESULT_REQUEST_MISMATCH (F1) |
+| core: `evaluate-repair old.json solved.json repaired.json` | 2 | INPUT_INVALID / STALE_RESULT |
+| solver: `repair … --request request-after.json` | 0 | 1.5 OPTIMAL; 2 thay đổi, `min_changes_proved=true`; Score `[0,0,0]` |
+| core: `evaluate-repair … repaired-after.json --request request-after.json` | 0 | OK, `changed=2` |
+| solver: `repair … --request request-zero.json` | 3 | 1.5 INFEASIBLE / REPAIR_MAX_CHANGES_BELOW_FORCED (`r::3`), `solver_executed=false` (F2) |
+| solver: `repair legacy.json …` (input 1.0) | 2 | 1.1 UNSUPPORTED_FEATURE / REPAIR_INPUT_VERSION |
+| core: `repair new.json solved.json …` | 2 | 1.5 UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED |
+| solver: `solve old.json …` (lần hai) | 0 | 1.5 OPTIMAL, Score `[0,0,0]`; đường `solve` vẫn chạy |
+
+Các input dùng trong bảng:
+
+- `old.json`: 1 lớp, 1 GV, 2 ngày × 2 buổi × 4 tiết, requirement `[2,1,1]`, S08 `TEACHER_TOTAL_GAPS` P1,
+  policy 0.4.
+- `new.json`: như `old.json`, nhưng GV bận ô `1-AM-2` mà lịch cũ đặt `r::3`.
+- `request.json`: `BEFORE_QUALITY`, không giới hạn, không vùng, có hint.
+- `request-after.json`, `request-other.json` (`max_changes 5`) và `request-zero.json` (`max_changes 0`)
+  khác `request.json` đúng ở field ghi trong tên.
+- `legacy.json`: `tests/fixtures/feasible_small.json` (input 1.0).
+
+Đánh đổi `BEFORE` so với `AFTER` thấy rõ trên cùng dữ liệu: giữ lịch cũ nhất (1 thay đổi, P1 = 1) so với
+không còn tiết trống (2 thay đổi, P1 = 0). Chưa kiểm sdist, Windows, phòng hay timed calendar qua wheel.
+
 ## TDD và mutation check
 
 - Mỗi task chạy test RED trước, vì module chưa tồn tại (Task 1–5, 7). Task 6 là oracle chạy trên
@@ -85,5 +128,6 @@ evaluator: hành vi `solve()` không đổi. Không chạy benchmark hay campaig
 - `evaluate-repair` không tính lại lý do `forced` hay `min_changes_proved` (đó là claim của solver; trường
   thứ hai được in ra với tên `declared_min_changes_proved`).
 - Ghép chỉ theo `occurrence_id`: upstream đổi ID thì sẽ thấy `new`/`dropped`, không có ghép theo nội dung.
-- Chưa có 3B (chẩn đoán vô nghiệm) và 3C (benchmark repair). Chưa kiểm installed wheel cho 3A.
+- Chưa có 3B (chẩn đoán vô nghiệm) và 3C (benchmark repair). Installed wheel mới kiểm trên Linux, n = 1,
+  synthetic (mục trên).
 - Tự kiểm trong cùng phiên; chưa có review người thứ hai (P3-12, S3).
