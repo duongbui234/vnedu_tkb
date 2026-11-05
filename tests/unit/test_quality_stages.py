@@ -15,6 +15,7 @@ from tkb_core.solver.options import SolveOptions
 from tkb_core.validation.score_evaluator import _evaluate_validated
 
 
+@pytest.mark.parametrize("initial_search", ["default", "feasibility_no_lp"])
 @pytest.mark.parametrize(
     "later,expected",
     [
@@ -26,7 +27,11 @@ from tkb_core.validation.score_evaluator import _evaluate_validated
     ],
 )
 def test_stage_proof_and_fallback(
-    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch, later: str, expected: str
+    quality_case: dict[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
+    later: str,
+    expected: str,
+    initial_search: Any,
 ) -> None:
     for module in (
         "preprocessing.normalize",
@@ -82,11 +87,19 @@ def test_stage_proof_and_fallback(
     ticks = iter((0.0, 3.0, 3.0, 4.0, 4.0, 4.0, 5.0, 6.0))
     monkeypatch.setattr("tkb_core.solver.objectives.perf_counter", lambda: next(ticks))
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", fake)
-    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0), hard)
+    out = run_quality(
+        p,
+        built,
+        compiled,
+        SolveOptions(time_limit_seconds=10.0),
+        hard,
+        initial_feasibility_search=initial_search,
+    )
+    assert calls[0][1] == initial_search and calls[1][1] == "default"
     assert out.status == expected
     # An unproved slice continues interleaved on what is left of the stage budget.
     interleaved = [(5.0, "interleave")] if later in ("FEASIBLE", "UNKNOWN", "INFEASIBLE") else []
-    assert calls == [(10.0, "default"), (7.0, "default"), (6.0, "slice"), *interleaved]
+    assert calls == [(10.0, initial_search), (7.0, "default"), (6.0, "slice"), *interleaved]
     if expected != "MODEL_INVALID":
         assert out.assignments == aa
         assert out.score == _evaluate_validated(p.normalized.problem, aa)

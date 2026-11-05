@@ -22,6 +22,10 @@ def test_default_keeps_previous_settings() -> None:
     assert _params("default", workers=4) == {**BASE, "num_search_workers": 4}
 
 
+def test_feasibility_no_lp_only_disables_linear_relaxation() -> None:
+    assert _params("feasibility_no_lp") == {**BASE, "linearization_level": 0}
+
+
 def test_fix_hint_only_adds_fixing() -> None:
     assert _params("default", fix_hint=True) == {
         **BASE,

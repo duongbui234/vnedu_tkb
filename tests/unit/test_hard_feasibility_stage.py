@@ -36,6 +36,26 @@ def _setup(quality_case: dict[str, Any]) -> tuple[PreparedProblem, BuiltModel, A
     return p, built, hard, compile_soft(p, built)
 
 
+@pytest.mark.parametrize("workers,mode", [(1, "feasibility_no_lp"), (4, "default")])
+def test_public_quality_selects_initial_search_only(
+    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch, workers: int, mode: str
+) -> None:
+    from ortools.sat.python import cp_model
+
+    from tkb_core.solver.cp_sat import solve
+
+    quality_case["constraint_config"]["soft"] = [RULE]
+    calls: list[dict[str, Any]] = []
+    monkeypatch.setattr("tkb_core.solver.objectives._run_stage", _stub(calls, first="UNKNOWN"))
+    monkeypatch.setattr(cp_model.CpSolver, "solve", lambda *a, **k: pytest.fail("native solve"))
+    result = solve(ScheduleInput.model_validate(quality_case), SolveOptions(num_workers=workers))
+    assert result.status == "UNKNOWN" and not result.assignments
+    assert len(calls) == 1 and calls[0]["search"] == mode
+    assert calls[0]["priority"] is None and calls[0]["fix_hint"] is False
+    assert result.metadata.feasibility_run.raw_status == "UNKNOWN"
+    assert all(t.raw_status == "NOT_RUN" for t in result.quality.tier_runs)
+
+
 def _stub(
     calls: list[dict[str, Any]],
     first: str = "OPTIMAL",
@@ -61,6 +81,7 @@ def _stub(
                 "model": model,
                 "fix_hint": fix_hint,
                 "search": search,
+                "budget": budget,
                 "hint": sorted(zip(list(hint.vars), list(hint.values), strict=True)),
             }
         )
@@ -90,20 +111,28 @@ def _stub(
     return fake
 
 
+@pytest.mark.parametrize("mode", ["default", "feasibility_no_lp"])
 def test_feasibility_uses_hard_clone_without_soft_auxiliaries(
-    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch, mode: Any
 ) -> None:
     p, built, hard, compiled = _setup(quality_case)
     calls: list[dict[str, Any]] = []
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", _stub(calls))
-    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0), hard)
+    out = run_quality(
+        p,
+        built,
+        compiled,
+        SolveOptions(time_limit_seconds=10.0),
+        hard,
+        initial_feasibility_search=mode,
+    )
     assert out.status == "OPTIMAL" and out.assignments == SCHEDULE
     assert [(c["priority"], c["model"] is hard, c["fix_hint"]) for c in calls] == [
         (None, True, False),
         (None, False, True),
         (1, False, False),
     ]
-    assert [c["search"] for c in calls] == ["default", "default", "slice"]
+    assert [c["search"] for c in calls] == [mode, "default", "slice"]
     names = [v.name for v in hard.proto.variables]
     assert not any(n.startswith(("excess_", "raw_")) for n in names)
     assert len(names) == sum(len(v) for v in built.variables.values())
@@ -171,18 +200,70 @@ def test_verification_status_handling(
 
 @pytest.mark.parametrize(
     "first,expected,code",
-    [("INFEASIBLE", "INFEASIBLE", "INFEASIBLE"), ("UNKNOWN", "UNKNOWN", None)],
+    [
+        ("INFEASIBLE", "INFEASIBLE", "INFEASIBLE"),
+        ("UNKNOWN", "UNKNOWN", None),
+        ("MODEL_INVALID", "MODEL_INVALID", "MODEL_INVALID"),
+    ],
 )
+@pytest.mark.parametrize("mode", ["default", "feasibility_no_lp"])
 def test_hard_infeasible_or_unknown_stops_before_soft(
     quality_case: dict[str, Any],
     monkeypatch: pytest.MonkeyPatch,
     first: str,
     expected: str,
     code: str | None,
+    mode: Any,
 ) -> None:
     p, built, hard, compiled = _setup(quality_case)
     calls: list[dict[str, Any]] = []
     monkeypatch.setattr("tkb_core.solver.objectives._run_stage", _stub(calls, first=first))
-    out = run_quality(p, built, compiled, SolveOptions(time_limit_seconds=10.0), hard)
+    out = run_quality(
+        p,
+        built,
+        compiled,
+        SolveOptions(time_limit_seconds=10.0),
+        hard,
+        initial_feasibility_search=mode,
+    )
     assert out.status == expected and len(calls) == 1 and not out.assignments
     assert out.diagnostics[0].code == code if code else not out.diagnostics
+    assert out.feasibility_run.raw_status == first
+    assert out.quality.score is None
+    assert all(t.raw_status == "NOT_RUN" for t in out.quality.tier_runs)
+
+
+@pytest.mark.parametrize("mode", ["default", "feasibility_no_lp"])
+@pytest.mark.parametrize("spent", [9.5, 10.0])
+def test_initial_search_does_not_reset_remaining_budget(
+    quality_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch, mode: Any, spent: float
+) -> None:
+    from dataclasses import replace
+
+    from ortools.sat.python import cp_model
+
+    p, built, hard, compiled = _setup(quality_case)
+    calls: list[dict[str, Any]] = []
+    fake = _stub(calls)
+
+    def stage(*args: Any, **kwargs: Any) -> StageOutcome:
+        return replace(fake(*args, **kwargs), wall_time=spent if len(calls) == 1 else 0.5)
+
+    ticks = iter((0.0, spent, spent, 10.0))
+    monkeypatch.setattr("tkb_core.solver.objectives.perf_counter", lambda: next(ticks))
+    monkeypatch.setattr("tkb_core.solver.objectives._run_stage", stage)
+    monkeypatch.setattr(cp_model.CpSolver, "solve", lambda *a, **k: pytest.fail("native solve"))
+    out = run_quality(
+        p,
+        built,
+        compiled,
+        SolveOptions(time_limit_seconds=10.0),
+        hard,
+        initial_feasibility_search=mode,
+    )
+    assert out.status == "FEASIBLE" and out.assignments == SCHEDULE
+    expected_calls = [(mode, 10.0)] + ([("default", 0.5)] if spent < 10.0 else [])
+    assert [(c["search"], c["budget"]) for c in calls] == expected_calls
+    assert out.solver_wall_time == 10.0
+    assert out.quality.optimal_prefix == ()
+    assert all(t.raw_status == "NOT_RUN" for t in out.quality.tier_runs)

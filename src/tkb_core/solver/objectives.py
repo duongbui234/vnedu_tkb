@@ -30,7 +30,7 @@ class StageOutcome:
     raw_status: SolveStatus | None = None
 
 
-TierSearch = Literal["default", "slice", "interleave"]
+TierSearch = Literal["default", "slice", "interleave", "feasibility_no_lp"]
 # Cap the temporary zero-target probe; it is not a public SolveOptions field.
 _TIER_SLICE_DETERMINISTIC_SECONDS = 12.0
 
@@ -51,7 +51,7 @@ class QualityOutcome:
 def _stage_parameters(
     options: SolveOptions, budget: float, *, fix_hint: bool, search: TierSearch
 ) -> dict[str, float | int | bool]:
-    """CP-SAT settings of one native solve; ``search`` only matters for single-worker tiers."""
+    """CP-SAT settings of one native solve, including opt-in initial feasibility search."""
     settings: dict[str, float | int | bool] = {
         "max_time_in_seconds": budget,
         "num_search_workers": options.num_workers,
@@ -66,6 +66,8 @@ def _stage_parameters(
     elif search == "interleave":
         # Experimental in OR-Tools 9.15: one thread, but LNS can improve a hinted incumbent.
         settings["interleave_search"] = True
+    elif search == "feasibility_no_lp":
+        settings["linearization_level"] = 0
     return settings
 
 
@@ -217,6 +219,8 @@ def run_quality(
     compiled: CompiledSoft,
     options: SolveOptions,
     feasibility_model: cp_model.CpModel,
+    *,
+    initial_feasibility_search: Literal["default", "feasibility_no_lp"] = "default",
 ) -> QualityOutcome:
     """Hard-only feasibility, expression check, then tiers hinted by the verified incumbent.
 
@@ -267,7 +271,11 @@ def run_quality(
         )
 
     def measure(
-        priority: int | None, model: cp_model.CpModel | None = None, fix_hint: bool = False
+        priority: int | None,
+        model: cp_model.CpModel | None = None,
+        fix_hint: bool = False,
+        *,
+        search: TierSearch = "default",
     ) -> StageOutcome | None:
         nonlocal elapsed, solver_wall, executed, sticky
         remaining = options.time_limit_seconds - elapsed
@@ -276,7 +284,15 @@ def run_quality(
         start = perf_counter()
         if priority is None:
             outcome = _run_stage(
-                prepared, built, compiled, options, None, remaining, model=model, fix_hint=fix_hint
+                prepared,
+                built,
+                compiled,
+                options,
+                None,
+                remaining,
+                model=model,
+                fix_hint=fix_hint,
+                search=search,
             )
         else:
             outcome, needed = _solve_tier(
@@ -289,7 +305,7 @@ def run_quality(
             solver_wall += outcome.wall_time
         return outcome
 
-    first = measure(None, model=feasibility_model)
+    first = measure(None, model=feasibility_model, search=initial_feasibility_search)
     if first is None:
         return finish(SolveStatus.UNKNOWN)
     feasibility = StageRun(raw_status=first.status, wall_time=first.wall_time)

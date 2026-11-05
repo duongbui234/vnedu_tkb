@@ -39,11 +39,22 @@ Một khi đã cần interleave, các tier sau bỏ lát tuần tự và interle
 `tier_runs[].wall_time`
 là tổng hai native solve; status/bound là của pha được chọn. Điểm chuyển theo deterministic
 time nên tất định theo seed, còn lời giải cuối vẫn có thể phụ thuộc thời điểm cắt wall.
-`interleave_search` là Experimental trong OR-Tools 9.15; feasibility, verification và nhiều
+`interleave_search` là Experimental trong OR-Tools 9.15; verification và nhiều
 worker giữ tham số cũ. Giữ cap 12 của tuyến cũ; không hứa tốc độ hay chất lượng.
 Fallback MODEL_INVALID/INFEASIBLE không bị che bởi UNKNOWN của probe. Probe cũng tiêu
 chung ngân sách monotonic; không có budget thêm. Số đo trước thay đổi zero-target
 không được dùng để chứng nhận hiệu năng của wheel mới.
+
+Public quality `solve` có active priorities và workers1 dùng mode nội bộ
+`feasibility_no_lp`: chỉ native call hard-only đầu tiên thêm `linearization_level=0`.
+Model, constraints, budget, seed và số call không đổi. Expression verification,
+zero probe, P1/P2/P3 vẫn dùng mode cũ. `run_quality` mặc định initial search là
+`default`, nên hai nhánh repair tiếp tục đường cũ; hard-only solve không active
+quality và workers>1 cũng giữ tham số cũ. Không thêm public option hoặc hint.
+Đây là candidate kiểm giả thuyết LP overhead từ 30 UNKNOWN trong campaign Linux
+bị ngắt; số LP iterations không chứng minh phần thời gian LP. Regression tiny
+kiểm model bytes, validity, statuses và budget, chưa chứng nhận cải thiện hiệu năng
+hoặc việc hết UNKNOWN. Xem [thiết kế](superpowers/specs/2026-11-05-hard-feasibility-no-lp-design.md).
 
 Trước hard clone, tuyến quality có active soft rules đặt thứ tự placement rank giữa
 các occurrence không khóa cùng requirement/duration và giống hệt ordered domain

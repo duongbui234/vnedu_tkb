@@ -134,6 +134,26 @@ def test_change_order_trades_changes_against_quality(gap_case: dict[str, Any]) -
 
 
 @pytest.mark.parametrize("order", ["BEFORE_QUALITY", "AFTER_QUALITY"])
+def test_repair_quality_feasibility_keeps_default_search(
+    gap_case: dict[str, Any], monkeypatch: pytest.MonkeyPatch, order: str
+) -> None:
+    from tkb_core.solver import objectives
+
+    first_modes = []
+    real_stage = objectives._run_stage
+
+    def spy(*args: Any, **kwargs: Any) -> Any:
+        if kwargs.get("model") is not None:
+            first_modes.append(kwargs.get("search", "default"))
+        return real_stage(*args, **kwargs)
+
+    monkeypatch.setattr(objectives, "_run_stage", spy)
+    result = repair(_avoid_case(gap_case), PREVIOUS, _request(change_order=order), OPTIONS)
+    _check_envelope(_avoid_case(gap_case), PREVIOUS, result)
+    assert result.result.status == "OPTIMAL" and first_modes == ["default"]
+
+
+@pytest.mark.parametrize("order", ["BEFORE_QUALITY", "AFTER_QUALITY"])
 def test_hint_does_not_change_the_optimum(gap_case: dict[str, Any], order: str) -> None:
     problem = _avoid_case(gap_case)
     plain = repair(problem, PREVIOUS, _request(change_order=order), OPTIONS)

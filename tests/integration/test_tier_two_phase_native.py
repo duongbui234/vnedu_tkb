@@ -48,7 +48,7 @@ def test_unproved_slice_switches_to_sticky_interleaving(
     result = solve(problem, SolveOptions(time_limit_seconds=10.0))
     assert result.status == "OPTIMAL" and result.valid_schedule
     assert [(p, s) for p, s, _ in seen] == [
-        (None, "default"),
+        (None, "feasibility_no_lp"),
         (None, "default"),
         (1, "slice"),
         (1, "interleave"),

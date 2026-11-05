@@ -178,7 +178,16 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
             # while range errors are still raised before any solver call.
             hard_model = built.model.clone()
             compiled = compile_soft(prepared, built)
-            outcome = run_quality(prepared, built, compiled, applied, hard_model)
+            outcome = run_quality(
+                prepared,
+                built,
+                compiled,
+                applied,
+                hard_model,
+                initial_feasibility_search=(
+                    "feasibility_no_lp" if applied.num_workers == 1 else "default"
+                ),
+            )
             executed = outcome.solver_executed
             solver_wall = outcome.solver_wall_time
             quality = outcome.quality
