@@ -764,14 +764,54 @@ def _check_preflight(preflight: Path) -> dict[str, Any]:
     return manifest
 
 
+def _warmup_case(preflight: Path, manifest: dict[str, Any]) -> PlannedCase:
+    """The v1-style unmeasured warmup on the preflight's tiny fixture."""
+    from tkb_core.contracts.input import ScheduleInput
+    from tkb_core.contracts.output import ScheduleResult
+
+    tiny = preflight / "smoke/input.json"
+    for name in ("smoke/input.json", "smoke/result.json"):
+        if v1._sha(preflight / name) != manifest["files"][name]:
+            raise ValueError("WARMUP_SOURCE_DRIFT")
+    problem = ScheduleInput.model_validate(v1._json_object(tiny.read_text()))
+    expected = ScheduleResult.model_validate(
+        v1._json_object((preflight / "smoke/result.json").read_text())
+    )
+    if not expected.valid_schedule or expected.input_fingerprint != problem.fingerprint():
+        raise ValueError("WARMUP_FIXTURE_INVALID")
+    digest = v1._sha(tiny)
+    return PlannedCase(
+        run_id=f"warmup-tiny-{digest}-w1-s42-r0",
+        dataset_id="tiny",
+        phase="warmup",
+        repeat=0,
+        class_count=None,
+        profile="WARMUP",
+        variant=None,
+        generator_seed=0,
+        input_path=tiny.absolute(),
+        dataset_manifest=None,
+        manifest_sha256=None,
+        input_sha256=digest,
+        input_fingerprint=problem.fingerprint(),
+        ground_truth="FEASIBLE",
+        options=SolveOptions(time_limit_seconds=WARMUP_BUDGET[0]),
+        limits=RunLimits(watchdog_seconds=WARMUP_BUDGET[1], max_resident_bytes=WARMUP_BUDGET[2]),
+    )
+
+
 def prepare_campaign(
     bundle: Path, preflight: Path, output: Path, campaign_id: str, machine_id: str
 ) -> CampaignPlan:
-    """Seal a new campaign only; never warms up or starts a scheduling run."""
-    import subprocess
+    """Seal a new campaign only; never warms up or starts a scheduling run.
 
-    from tkb_core.contracts.input import ScheduleInput
-    from tkb_core.contracts.output import ScheduleResult
+    Review R1 (rehearsal E0): a refused admission check (headroom, bundle verification) must
+    not leave the output directory or a NEEDS_REVIEW owner marker behind, so the same command
+    can be retried. Only unexpected errors still mark the owner lease NEEDS_REVIEW.
+    """
+    import shutil
+    import subprocess
+    import tempfile
 
     check_version_table()
     manifest = _check_preflight(preflight)
@@ -780,82 +820,66 @@ def prepare_campaign(
         python=Path(sys.executable), preflight_dir=preflight, lock_path=ROOT / "uv.lock"
     )
     machine = v1._machine_identity()
+    warm = _warmup_case(preflight, manifest)
+    output = output.absolute()
     if output.exists() or output.is_symlink():
         raise FileExistsError(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    refused: str | None = None
     with v1._campaign_owner(v1._OWNER_ROOT, output, campaign_id):
-        output.mkdir(parents=True)
         headroom = v1.check_headroom(2 * 1024**3)
-        v1._write_json(output / "prepare-headroom.json", headroom, exclusive=True)
         if headroom.status != "PASS":
-            raise ValueError("PREPARE_HEADROOM_BLOCKED")
-        _verify_bundle_isolated(plan.bundle_dir, output / "bundle-verification")
-        tiny = preflight / "smoke/input.json"
-        for name in ("smoke/input.json", "smoke/result.json"):
-            if v1._sha(preflight / name) != manifest["files"][name]:
-                raise ValueError("WARMUP_SOURCE_DRIFT")
-        problem = ScheduleInput.model_validate(v1._json_object(tiny.read_text()))
-        expected = ScheduleResult.model_validate(
-            v1._json_object((preflight / "smoke/result.json").read_text())
-        )
-        if not expected.valid_schedule or expected.input_fingerprint != problem.fingerprint():
-            raise ValueError("WARMUP_FIXTURE_INVALID")
-        digest = v1._sha(tiny)
-        warm = PlannedCase(
-            run_id=f"warmup-tiny-{digest}-w1-s42-r0",
-            dataset_id="tiny",
-            phase="warmup",
-            repeat=0,
-            class_count=None,
-            profile="WARMUP",
-            variant=None,
-            generator_seed=0,
-            input_path=tiny.absolute(),
-            dataset_manifest=None,
-            manifest_sha256=None,
-            input_sha256=digest,
-            input_fingerprint=problem.fingerprint(),
-            ground_truth="FEASIBLE",
-            options=SolveOptions(time_limit_seconds=WARMUP_BUDGET[0]),
-            limits=RunLimits(
-                watchdog_seconds=WARMUP_BUDGET[1], max_resident_bytes=WARMUP_BUDGET[2]
-            ),
-        )
+            refused = f"PREPARE_HEADROOM_BLOCKED:{headroom.reason}"
+        else:
+            # Evidence of a refused verification stays beside, never inside, the output root.
+            staging = Path(tempfile.mkdtemp(prefix=f".{output.name}-prepare-", dir=output.parent))
+            try:
+                _verify_bundle_isolated(plan.bundle_dir, staging / "bundle-verification")
+            except ValueError as exc:
+                refused = f"{exc}:{staging}"
+        if refused is None:
+            output.mkdir()
+            v1._write_json(output / "prepare-headroom.json", headroom, exclusive=True)
+            (staging / "bundle-verification").rename(output / "bundle-verification")
+            shutil.rmtree(staging)
 
-        def git(*args: str) -> str:
-            return subprocess.check_output(("git", "-C", str(ROOT), *args), text=True).strip()
+            def git(*args: str) -> str:
+                return subprocess.check_output(("git", "-C", str(ROOT), *args), text=True).strip()
 
-        environment: dict[str, JsonValue] = {
-            "machine": machine,
-            "git_head": git("rev-parse", "HEAD"),
-            "git_status": git("status", "--porcelain"),
-            "windows_status": "NOT_RUN",
-            "pythonhashseed": os.environ.get("PYTHONHASHSEED"),
-            "omp_num_threads": os.environ.get("OMP_NUM_THREADS"),
-            "mkl_num_threads": os.environ.get("MKL_NUM_THREADS"),
-        }
-        sealed = CampaignPlan.model_validate(
-            plan.model_dump()
-            | dict(
-                sealed=True,
-                warmup=warm,
-                preflight_dir=preflight.absolute(),
-                preflight_sha256=v1._sha(preflight / "preflight-manifest.json"),
-                runtime_identity=runtime,
-                environment=environment,
+            environment: dict[str, JsonValue] = {
+                "machine": machine,
+                "git_head": git("rev-parse", "HEAD"),
+                "git_status": git("status", "--porcelain"),
+                "windows_status": "NOT_RUN",
+                "pythonhashseed": os.environ.get("PYTHONHASHSEED"),
+                "omp_num_threads": os.environ.get("OMP_NUM_THREADS"),
+                "mkl_num_threads": os.environ.get("MKL_NUM_THREADS"),
+            }
+            sealed = CampaignPlan.model_validate(
+                plan.model_dump()
+                | dict(
+                    sealed=True,
+                    warmup=warm,
+                    preflight_dir=preflight.absolute(),
+                    preflight_sha256=v1._sha(preflight / "preflight-manifest.json"),
+                    runtime_identity=runtime,
+                    environment=environment,
+                )
             )
-        )
-        v1._write_json(output / "plan.json", sealed, exclusive=True)
-        v1._write_json(output / "environment.json", environment, exclusive=True)
-        v1._write_json(
-            output / "seal.json",
-            {
-                "schema_version": "2.0",
-                "plan_sha256": v1._sha(output / "plan.json"),
-                "environment_sha256": v1._sha(output / "environment.json"),
-            },
-            exclusive=True,
-        )
-        return sealed
+            v1._write_json(output / "plan.json", sealed, exclusive=True)
+            v1._write_json(output / "environment.json", environment, exclusive=True)
+            v1._write_json(
+                output / "seal.json",
+                {
+                    "schema_version": "2.0",
+                    "plan_sha256": v1._sha(output / "plan.json"),
+                    "environment_sha256": v1._sha(output / "environment.json"),
+                },
+                exclusive=True,
+            )
+    if refused is not None:
+        raise ValueError(refused)
+    return sealed
 
 
 def check_campaign_identity(plan: CampaignPlan, path: Path, preflight: Path) -> str:

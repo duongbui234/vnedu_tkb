@@ -1,7 +1,8 @@
 # Phase 2 hiệu năng v2 — kế hoạch bước E (prepare, warmup, pilot)
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — K1–K7 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; chưa chạy E0–E3, mỗi bước chạy vẫn cần ủy quyền riêng.** Mã nguồn `15d7578`
-(tooling v2 sau F1–F5; `main` hiện ở `f654d63`, chỉ thêm tài liệu). Thuộc bước E của
+Ngày 2026-11-05. Trạng thái: **DRAFT — K1–K7 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; E0 (diễn tập cloud) ĐÃ CHẠY, xem §3; E1–E3 trên máy đích chưa chạy, mỗi bước chạy vẫn cần ủy quyền riêng.** Mã nguồn: commit
+đã ghi ở runbook D, phải chứa bản sửa R1 (§3 E0).
+ Thuộc bước E của
 [kế hoạch v2](2026-11-05-phase-2-linux-performance-v2.md) (§5 bước 3–4, §8), tiếp sau
 [runbook bước D](../../phase-2-linux-performance-step-d-runbook.md).
 
@@ -14,7 +15,8 @@ hoạch không phải ủy quyền chạy; bước F (216 run primary) luôn c�
 |---|---|
 | Bước D chạy trên máy đích, `preflight-1` PASS và **đã được kiểm** theo §3 của runbook D | **Chưa có.** Bước E không bắt đầu trước điều này |
 | Bundle và preflight của bước D còn nguyên (không sửa, không xóa) | Phụ thuộc bước D |
-| HEAD vẫn tại source `15d7578` (tài liệu mới hơn không ảnh hưởng `src/` và `benchmarks/`) | Kiểm lại trước khi chạy |
+| HEAD vẫn là commit đã ghi ở bước D (có bản sửa R1) | Kiểm lại trước khi chạy |
+| `/sys/fs/cgroup` là `cgroup2fs` (R2) | Kiểm ở bước D; cgroup v1 làm gate headroom chặn mọi run |
 
 ## 1. Những gì đã xác minh trong source (VERIFIED)
 
@@ -24,7 +26,8 @@ hoạch không phải ủy quyền chạy; bước F (216 run primary) luôn c�
   - đọc runtime identity: Python phải là venv đã cài, không editable, wheel khớp từng byte;
   - đọc machine identity;
   - lấy owner lock;
-  - kiểm headroom: target 2 GiB cộng reserve 2 GiB, tức cần ≥ 4 GiB khả dụng;
+  - kiểm headroom: target 2 GiB cộng reserve 2 GiB, tức cần ≥ 4 GiB khả dụng, và **chỉ trên cgroup2**
+    (R2);
   - kiểm lại bundle dưới import guard (watchdog 1 800 s, RSS ≤ 2 GiB);
   - ghi `plan.json`, `environment.json`, `seal.json`.
 - **Python dùng cho prepare/warmup/pilot phải là `<preflight>/venv-solver/bin/python`**, chạy từ thư mục
@@ -41,12 +44,16 @@ hoạch không phải ủy quyền chạy; bước F (216 run primary) luôn c�
   BLOCKED trước khi chạy.
 - **Chạy lại một phase:** khi phase đã có journal, phải dùng `--resume`. Resume chỉ chạy tiếp các run chưa
   bắt đầu và giữ nguyên các kết quả đã có; một run dở dang (PARTIAL) → NEEDS_REVIEW.
+- **Prepare bị từ chối không để lại gì (sửa R1):** headroom không đạt hoặc kiểm bundle không đạt → lệnh
+  in `BLOCKED`, không tạo thư mục output, owner marker trở về IDLE. Evidence kiểm bundle lỗi nằm cạnh
+  output, trong `.<tên>-prepare-*`. Chạy lại đúng lệnh cũ là được. Chỉ lỗi bất ngờ mới để marker
+  `NEEDS_REVIEW`.
 - **Owner lock** nằm ở `.git/tkb-campaign-owner`, dùng chung với campaign v1 trên cùng clone. Marker cũ ở
   trạng thái khác IDLE → `STALE_ACTIVE_MARKER_NEEDS_REVIEW`.
 
 ## 2. Chưa được kiểm (rủi ro tích hợp)
 
-`preflight`, `prepare` và `execute_campaign` **chưa từng chạy end-to-end** với wheel đã cài (O1 của
+Trước E0, `preflight`, `prepare` và `execute_campaign` **chưa từng chạy end-to-end** với wheel đã cài (O1 của
 [rà soát](../../phase-2-linux-performance-tooling-review.md)). Test chỉ kiểm plan chưa seal bị chặn. Lỗi
 tích hợp (đường import, identity, headroom cgroup, journal) chỉ lộ ra khi chạy thật. Vì vậy K1 đề xuất diễn
 tập trước trên cloud.
@@ -64,6 +71,33 @@ warmup → 2 pilot.
   được.
 - Nếu diễn tập lộ lỗi tooling: dừng, báo cáo, sửa theo TDD trong một nhiệm vụ riêng có ủy quyền. Sau đó
   bundle/preflight của bước D phải làm lại nếu source đổi.
+
+**Kết quả diễn tập E0 (2026-11-05, cloud, không phải evidence).** Đã chạy: bundle (72 dataset,
+`DATASETS_VERIFIED`) → preflight (`PREFLIGHT_PASS`, 25 check, smoke 0.4 ra 1.5 / Score 1.2) → prepare →
+warmup → 2 pilot → aggregate. Hai phát hiện:
+
+- **R1:** prepare `rehearsal-01` bị chặn ở headroom nhưng để lại owner marker `NEEDS_REVIEW` và thư mục
+  output, nên lần chạy lại bị `STALE_ACTIVE_MARKER_NEEDS_REVIEW`. **Đã sửa theo TDD** trong
+  `run_phase2.prepare_campaign`: kiểm headroom và bundle trước khi tạo output; lần bị từ chối để marker
+  IDLE. Đã kiểm thật trên cloud: prepare không shim bị chặn, không để lại gì; ngay sau đó prepare có shim
+  ra `PREPARED` với cùng campaign ID.
+- **R2:** container cloud dùng cgroup v1, nên gate headroom (chỉ cgroup2) chặn. Để đi tiếp, diễn tập dùng
+  một shim chỉ nằm trong scratchpad (`REHEARSAL_HEADROOM_SHIM`, ước lượng từ `/proc/meminfo`). Máy đích
+  phải là cgroup2 (đã thêm vào runbook D và §0).
+
+Với shim, `rehearsal-02` cho kết quả sau:
+
+| Bước | Kết quả |
+|---|---|
+| Prepare | `PREPARED` |
+| Warmup | `COMPLETE` |
+| Pilot SOFT | H PASS, P MET; `[39,125,243]` so witness `[0,0,72]` (WORSE); 51,3 s; 238 MiB |
+| Pilot HARD | H PASS, P MET; `[6,70,235]` (WORSE); 61,5 s; 194 MiB |
+| Aggregate | 216 missing → H/P INCOMPLETE, đúng như kỳ vọng |
+
+Số liệu là của container dùng chung, n = 1, chỉ để thử tích hợp. Riêng chất lượng (P1 khác 0, không tier
+nào được chứng minh) là tín hiệu cần chú ý khi xem pilot thật. Evidence diễn tập nằm trong scratchpad
+của phiên và sẽ mất khi container bị thu hồi.
 
 ### E1 — Prepare trên máy đích
 
@@ -168,6 +202,6 @@ Nếu bị ngắt giữa chừng (Ctrl-C, mất điện): không chạy lại ng
 |---|---|
 | Lỗi tích hợp lần đầu chạy thật | K1 diễn tập; gate dừng sớm, evidence giữ nguyên |
 | Pilot c10 không tìm được lịch trong 60 s với S08–S11 | Đó là kết quả P NOT_MET hợp lệ, không phải lỗi; không nới budget. Primary không mở; cần quyết định riêng (ví dụ phân tích model) |
-| Headroom bị chặn vì máy đang dùng nhiều RAM | Đóng bớt ứng dụng rồi chạy lại cùng lệnh (gate chặn trước khi chạy run nào, nên không phải retry) |
+| Headroom bị chặn vì máy đang dùng nhiều RAM | Prepare: đóng bớt ứng dụng rồi chạy lại đúng lệnh (sau R1, lần bị chặn không để lại output hay marker). Warmup/pilot: gate chặn trước khi run bắt đầu, ghi `GATE_BLOCKED`; gửi lại `campaign-state.json` trước khi chạy lại với `--resume` |
 | Machine identity đổi giữa các bước (cập nhật kernel, đổi RAM) | MACHINE_DRIFT chặn run. Không cập nhật hệ thống giữa E1 và F |
-| Marker owner cũ từ campaign v1 | Gửi nội dung `.git/tkb-campaign-owner/active.json`; không tự xóa |
+| Marker owner ở trạng thái khác IDLE (`STALE_ACTIVE_MARKER_NEEDS_REVIEW`) | Gửi nội dung `.git/tkb-campaign-owner/active.json` và thư mục campaign nó trỏ tới; không tự xóa. Chỉ dời marker sang chỗ khác (không xóa) sau khi đã xác nhận campaign đó không có run dở dang |

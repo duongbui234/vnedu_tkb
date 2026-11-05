@@ -583,3 +583,87 @@ def test_preflight_verifies_bundle_with_installed_solver(
     argv = calls["bundle-verification"]
     assert argv[0] == str(out / "venv-solver" / "bin/python")
     assert "import_guard(scoring=False)" in argv[3]
+
+
+def _blocked_prepare(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, *, headroom: str, verify_error: Any = None
+) -> Path:
+    """Stub every pre-lock identity read so prepare reaches the owner-locked checks."""
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(v1, "_OWNER_ROOT", tmp_path / "owner")
+    monkeypatch.setattr(r2, "_check_preflight", lambda preflight: {})
+    monkeypatch.setattr(
+        r2, "build_campaign_plan", lambda *args: SimpleNamespace(bundle_dir=tmp_path / "bundle")
+    )
+    monkeypatch.setattr(v1, "_runtime_identity", lambda **kwargs: {})
+    monkeypatch.setattr(v1, "_machine_identity", lambda: {})
+    monkeypatch.setattr(r2, "_warmup_case", lambda *args: None, raising=False)
+    target, required = 2 * 1024**3, 4 * 1024**3
+    check = (
+        v1.HeadroomCheck(
+            status="PASS",
+            target_bytes=target,
+            required_bytes=required,
+            available_bytes=8 * 1024**3,
+            host_available_bytes=8 * 1024**3,
+        )
+        if headroom == "PASS"
+        else v1.HeadroomCheck(
+            status="BLOCKED", target_bytes=target, required_bytes=required, reason="TEST_LOW"
+        )
+    )
+    monkeypatch.setattr(v1, "check_headroom", lambda target_bytes: check)
+
+    def verify(bundle: Path, out: Path) -> None:
+        out.mkdir(parents=True)
+        (out / "execution.json").write_text("{}")
+        if verify_error is not None:
+            raise verify_error
+
+    monkeypatch.setattr(r2, "_verify_bundle_isolated", verify)
+    return tmp_path / "artifacts" / "campaign-01"
+
+
+def _owner_state(tmp_path: Path) -> str:
+    return str(json.loads((tmp_path / "owner" / "active.json").read_text())["state"])
+
+
+def test_blocked_headroom_leaves_no_output_or_stale_marker(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Rehearsal R1: a refused prepare must be retryable with the same command."""
+    output = _blocked_prepare(tmp_path, monkeypatch, headroom="BLOCKED")
+    for _ in range(2):
+        with pytest.raises(ValueError, match="PREPARE_HEADROOM_BLOCKED"):
+            r2.prepare_campaign(tmp_path / "bundle", tmp_path / "pf", output, "c-01", "m1")
+        assert not output.exists()
+        assert _owner_state(tmp_path) == "IDLE"
+
+
+def test_failed_bundle_verification_keeps_evidence_outside_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output = _blocked_prepare(
+        tmp_path,
+        monkeypatch,
+        headroom="PASS",
+        verify_error=ValueError("BUNDLE_VERIFICATION_BLOCKED"),
+    )
+    with pytest.raises(ValueError, match="BUNDLE_VERIFICATION_BLOCKED"):
+        r2.prepare_campaign(tmp_path / "bundle", tmp_path / "pf", output, "c-01", "m1")
+    assert not output.exists()
+    assert _owner_state(tmp_path) == "IDLE"
+    kept = list(output.parent.glob(".campaign-01-prepare-*/bundle-verification/execution.json"))
+    assert len(kept) == 1
+
+
+def test_unexpected_prepare_error_still_needs_review(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output = _blocked_prepare(
+        tmp_path, monkeypatch, headroom="PASS", verify_error=RuntimeError("boom")
+    )
+    with pytest.raises(RuntimeError):
+        r2.prepare_campaign(tmp_path / "bundle", tmp_path / "pf", output, "c-01", "m1")
+    assert _owner_state(tmp_path) == "NEEDS_REVIEW"
