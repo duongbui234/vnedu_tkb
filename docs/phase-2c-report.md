@@ -55,6 +55,39 @@ nay hợp lệ nên dùng `0.4` làm version lạ; mode matrix chỉ cho S01–S
 
 8 skips là test cần Windows native/opt-in như trước; không phải Windows đã chạy.
 
+## Kiểm installed wheel từ `f697e41`
+
+Bổ sung sau commit `f697e41` (gồm bản sửa F1 của [rà soát](phase-2c-review.md)). Chỉ Linux, mỗi
+lệnh chạy một lần (n=1), input synthetic; không phải benchmark và không đo hiệu năng.
+
+- Wheel `vnedu_tkb_core-0.2.0-py3-none-any.whl`, SHA256
+  `5b23a5dace9810ebb6895463967f6047e6d60e7dc8162eaa9360f03bb4ff0eb8`, build bằng `uv build --wheel`
+  từ tree sạch tại `f697e41`. **Wheel không được commit**; nó chỉ nằm trong scratchpad của phiên cloud.
+  Wheel `48e31487…` (từ `d7de450`, Phase 2B) không khớp source hiện tại.
+- Python 3.12.3; OR-Tools 9.15.6755. Dependencies từ `uv export --frozen` (lock không đổi) vào hai venv
+  sạch: `venv-solver` (có OR-Tools) và `venv-core` (không OR-Tools); wheel cài `--no-deps`.
+- 29/29 file `tkb_core/*.py` đã cài khớp byte với `src/` tại HEAD ở cả hai venv.
+
+| Lệnh (venv) | Exit | Kết quả |
+|---|---|---|
+| solver: `solve dist.json --time-limit 10 --workers 1 --seed 42 --output result.json` | 0 | 1.4 OPTIMAL, policy 0.3, LEXICOGRAPHIC_OPTIMAL, Score 1.1 `[2,0,0]`, unit `day_gap_shortfall` |
+| solver: `validate-schedule dist.json result.json` | 0 | 1.4 SCHEDULE_VALID |
+| solver / core: `evaluate-score dist.json result.json` | 0 / 0 | Score 1.1 OK `[2,0,0]` |
+| core: `validate-schedule dist.json result.json` | 0 | SCHEDULE_VALID |
+| core: `evaluate-score dist.json forged.json` | 2 | Score 1.1 INVALID_SCHEDULE |
+| solver: `validate-schedule dist.json forged.json` | 2 | INPUT_INVALID / INVALID_SCHEDULE |
+| core API `validate_schedule(forged)` | – | `HARD_SUBJECT_DAY_LIMIT` (c, sub; 1-AM-1, 1-AM-2, 1-PM-1) |
+| solver: `solve infeasible.json` | 3 | 1.4 INFEASIBLE, 0 assignments |
+| solver: `solve policy02_dist.json` | 2 | 1.3 UNSUPPORTED_FEATURE / UNKNOWN_RULE |
+| core: `solve dist.json` | 2 | SOLVER_NOT_INSTALLED |
+| core: `evaluate-score dist.json result_as13.json` | 2 | Score 1.1 INPUT_INVALID / SCHEMA_VALIDATION_FAILED |
+
+Input: `dist.json` (lớp c, môn sub, split `[2,1,1]`, 3 ngày; hard S06 limit 2 + soft S05 k=2);
+`infeasible.json` (thêm hard S05 k=2: 3 component không vừa 3 ngày); `policy02_dist.json` (cùng rule,
+policy 0.2); `forged.json` dời lịch hợp lệ để ngày 1 có 3 tiết; `result_as13.json` gắn nhãn
+1.3/0.2/Score 1.0 cho result 1.4 — bị contract output từ chối trước bước `RESULT_VERSION` vì Score 1.0
+không cho unit `day_gap_shortfall`. Chưa kiểm sdist, Windows/cross-OS, pilot/campaign.
+
 ## TDD và sai khác so với kế hoạch
 
 - Task 1–5 và hard compiler Task 6: test chạy RED trước khi sửa product code.
@@ -74,4 +107,4 @@ nay hợp lệ nên dùng `0.4` làm version lạ; mode matrix chỉ cho S01–S
   ≈ placements + cặp; guard 20 000 cặp/rule → RESOURCE_LIMIT). Chưa đo solve trên dữ liệu lớn.
 - INFEASIBLE không chỉ ra rule nguyên nhân. Không có precheck tổng hợp cho S05/S06.
 - Weight trong cùng tier cộng hai unit khác nhau (ngày thiếu và tiết); đó là trade-off caller chọn.
-- Chưa build wheel/installed preflight cho source này. Hạn chế Phase 2A/2B giữ nguyên.
+- Installed wheel chỉ kiểm trên Linux, n=1, input synthetic (mục trên). Hạn chế Phase 2A/2B giữ nguyên.
