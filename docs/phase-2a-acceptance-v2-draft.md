@@ -1,6 +1,9 @@
 # Phase 2A — đề xuất tiêu chí nghiệm thu v2
 
-Ngày: 2026-11-04. **DRAFT — CHỜ DUYỆT, CHƯA CÓ HIỆU LỰC.**
+Ngày: 2026-11-04. **D1–D3 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-05** (E1 của
+[đánh giá Phase 2](phase-2-status-assessment.md)). Duyệt là duyệt **tiêu chí**: protocol, harness, gate và
+sealed plan mới **chưa triển khai**; evidence, gate và verdict lịch sử (NOT_MET, STOPPED, primary 0/108)
+giữ nguyên; mọi run mới vẫn cần ủy quyền riêng. Phần thân dưới đây là bản đã duyệt, chưa sửa nội dung.
 
 Đề xuất tách ba kết luận: **lịch đúng hard**, **chất lượng soft được chấp nhận**,
 và **khả năng đáp ứng trong giới hạn thời gian/RAM**. Zero là một kết quả benchmark
@@ -196,12 +199,12 @@ wheel và patch, không coi base core-tree là hash của candidate.
 
 ## 8. Các quyết định đề nghị duyệt
 
-- [ ] **D1 — Tách tiêu chí:** H bắt buộc; Q cần profile/duyệt kết quả; P dùng coverage
+- [x] **D1 — Tách tiêu chí:** H bắt buộc; Q cần profile/duyệt kết quả; P dùng coverage
   và giới hạn hiện có; zero là benchmark riêng, không là gate chung.
-- [ ] **D2 — Cho đo thay vì chờ lịch hoàn hảo:** trong protocol mới, pilot hard-valid,
+- [x] **D2 — Cho đo thay vì chờ lịch hoàn hảo:** trong protocol mới, pilot hard-valid,
   identity/resource/measurement đạt có thể mở primary thu thập dữ liệu dù Q còn
   REVIEW_REQUIRED hoặc zero NOT_MET. Không tự duyệt sử dụng lịch `[0,5,120]`.
-- [ ] **D3 — Giữ ranh giới:** không sửa evidence/gate cũ; không giảm denominator,
+- [x] **D3 — Giữ ranh giới:** không sửa evidence/gate cũ; không giảm denominator,
   nới budget/hard, dùng witness hint hoặc tuyên bố Windows/production đã đạt.
   Việc triển khai gate mới và mọi run mới cần ủy quyền tiếp theo.
 
