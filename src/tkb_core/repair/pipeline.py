@@ -327,6 +327,18 @@ def repair(
         matching = match(prepared, previous, request)
     except CoreError as exc:
         return finish(exc.status, diagnostics=exc.diagnostics)
+    if request.max_changes is not None and len(matching.forced) > request.max_changes:
+        # Review F2: a counted proof of infeasibility; no search is needed.
+        return finish(
+            "INFEASIBLE",
+            diagnostics=(
+                Diagnostic(
+                    code="REPAIR_MAX_CHANGES_BELOW_FORCED",
+                    message="Changes forced by the new input exceed max_changes",
+                    occurrence_ids=tuple(sorted(matching.forced)),
+                ),
+            ),
+        )
     applied = run.applied
     try:
         if not prepared.normalized.occurrences:
@@ -429,7 +441,11 @@ def repair(
 
         hard_model = built.model.clone()
         compiled = compile_soft(prepared, built)
-        outcome = run_quality(prepared, built, compiled, remaining_options(total), hard_model)
+        # Review F3: like BEFORE_QUALITY, preparation time counts against the time limit.
+        budget = left()
+        if budget <= 0:
+            return fail("UNKNOWN", "UNKNOWN", "No time budget remained")
+        outcome = run_quality(prepared, built, compiled, remaining_options(budget), hard_model)
         run.executed = outcome.solver_executed
         run.solver_wall += outcome.solver_wall_time or 0.0
         run.feasibility = outcome.feasibility_run

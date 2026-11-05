@@ -205,3 +205,40 @@ def test_every_policy_keeps_its_output_version(quality_case: dict[str, Any]) -> 
         result = repair(problem, PREVIOUS, _request(), OPTIONS)
         assert result.result.schema_version == version
         _check_envelope(problem, PREVIOUS, result)
+
+
+def test_max_changes_below_forced_is_decided_before_search(gap_case: dict[str, Any]) -> None:
+    """Review F2: forced changes above the limit are a counted proof, not a CP-SAT search."""
+    gap_case["teachers"][0]["available_slot_ids"] = [
+        s["id"] for s in gap_case["time_slots"] if s["id"] != "1-AM-1"
+    ]
+    problem = ScheduleInput.model_validate(gap_case)
+    result = repair(problem, PREVIOUS, _request(max_changes=0), OPTIONS)
+    assert result.result.status == "INFEASIBLE" and result.repair is None
+    diagnostic = result.result.diagnostics[0]
+    assert diagnostic.code == "REPAIR_MAX_CHANGES_BELOW_FORCED"
+    assert diagnostic.occurrence_ids == ("r::2",)
+    assert result.result.metadata.solver_executed is False
+    enough = repair(problem, PREVIOUS, _request(max_changes=1), OPTIONS)
+    assert enough.result.status == "OPTIMAL" and enough.repair is not None
+
+
+@pytest.mark.parametrize("order", ["BEFORE_QUALITY", "AFTER_QUALITY"])
+def test_quality_stages_get_only_the_remaining_budget(
+    gap_case: dict[str, Any], order: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Review F3: both orders charge preparation time against the one time limit."""
+    from tkb_core.solver import objectives
+
+    budgets: list[float] = []
+    real = objectives.run_quality
+
+    def spy(*args: Any) -> Any:
+        budgets.append(args[3].time_limit_seconds)
+        return real(*args)
+
+    monkeypatch.setattr(objectives, "run_quality", spy)
+    problem = _avoid_case(gap_case)
+    result = repair(problem, PREVIOUS, _request(change_order=order), OPTIONS)
+    assert result.result.status == "OPTIMAL"
+    assert len(budgets) == 1 and 0 < budgets[0] < OPTIONS.time_limit_seconds

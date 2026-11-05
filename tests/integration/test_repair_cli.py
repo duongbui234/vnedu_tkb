@@ -178,3 +178,23 @@ raise SystemExit(main(['evaluate-repair',sys.argv[1],sys.argv[2],sys.argv[3]]))
     )
     assert proc.returncode == 0, proc.stderr + proc.stdout
     assert json.loads(proc.stdout)["status"] == "OK"
+
+
+def test_evaluate_repair_checks_the_callers_request(files: dict[str, Path], capsys: Any) -> None:
+    """Review F1: a result produced under another request is rejected when one is given."""
+    assert _repair(files, files["solved"], capsys)[0] == 0
+    repaired = files["tmp"] / "repaired.json"
+    args = ["evaluate-repair", str(files["new"]), str(files["solved"]), str(repaired)]
+    assert main([*args, "--request", str(files["request"])]) == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "OK"
+    stricter = files["tmp"] / "stricter.json"
+    stricter.write_text(json.dumps({**REQUEST, "max_changes": 5}))
+    assert main([*args, "--request", str(stricter)]) == 2
+    out = json.loads(capsys.readouterr().out)
+    assert out["diagnostics"][0]["code"] == "RESULT_REQUEST_MISMATCH"
+    broken = files["tmp"] / "broken.json"
+    broken.write_text(json.dumps({**REQUEST, "change_order": "SOMETIMES"}))
+    assert main([*args, "--request", str(broken)]) == 2
+    assert json.loads(capsys.readouterr().out)["diagnostics"][0]["code"] == (
+        "REPAIR_REQUEST_INVALID"
+    )

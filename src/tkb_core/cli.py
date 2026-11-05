@@ -114,10 +114,17 @@ def _expected_output(problem: ScheduleInput) -> str:
     return "1.1"
 
 
-def _evaluate_repair(problem: ScheduleInput, previous_path: Path, result_path: Path) -> int:
+def _evaluate_repair(
+    problem: ScheduleInput, previous_path: Path, result_path: Path, request_path: Path | None
+) -> int:
     """Recompute hard validity, score and every repair count of a RepairResult file."""
     fingerprint = problem.fingerprint()
     previous = _read_previous(previous_path)
+    expected_request = (
+        None
+        if request_path is None
+        else _read_model(request_path, RepairRequest, "REPAIR_REQUEST_INVALID")
+    )
     envelope = _read_model(result_path, RepairResult)
     if (
         envelope.result.input_fingerprint != fingerprint
@@ -130,6 +137,11 @@ def _evaluate_repair(problem: ScheduleInput, previous_path: Path, result_path: P
         return _error("INPUT_INVALID", "RESULT_VERSION", "Result version does not match input")
     if envelope.repair is None or envelope.request is None:
         return _error("INPUT_INVALID", "RESULT_NOT_REPAIRED", "Result carries no repaired schedule")
+    if expected_request is not None and envelope.request != expected_request:
+        # Review F1: counts are recomputed under the embedded request; it must be the caller's.
+        return _error(
+            "INPUT_INVALID", "RESULT_REQUEST_MISMATCH", "Result was produced for another request"
+        )
     assignments = envelope.result.assignments
     if not validate_schedule(problem, assignments).valid:
         return _error("INPUT_INVALID", "SCHEDULE_INVALID", "Schedule violates hard constraints")
@@ -279,6 +291,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     rechecking.add_argument("path", type=Path)
     rechecking.add_argument("previous", type=Path)
     rechecking.add_argument("result", type=Path)
+    rechecking.add_argument("--request", type=Path)
     try:
         namespace = parser.parse_args(args)
     except _ArgumentError:
@@ -290,7 +303,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         fingerprint = problem.fingerprint()
         report_version[0] = score_version(problem)
         if namespace.command == "evaluate-repair":
-            return _evaluate_repair(problem, namespace.previous, namespace.result)
+            return _evaluate_repair(
+                problem, namespace.previous, namespace.result, namespace.request
+            )
         if namespace.command in ("validate-schedule", "evaluate-score"):
             previous = _read_model(namespace.result, ScheduleResult)
             if previous.input_fingerprint != fingerprint:
