@@ -1,0 +1,130 @@
+# vnEdu TKB — báo cáo hiện trạng toàn dự án
+
+Ngày 2026-11-05. Base `47d172c` trên `main`. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-05.**
+
+Báo cáo tổng hợp hiện trạng toàn dự án so với lộ trình trong
+[đặc tả Core First](VNEDU_TKB_CORE_FIRST_CODEX.md) §10. Lượt soạn chỉ đọc tài liệu, source và git log.
+Không sửa code, không chạy test, solver hay campaign; mọi con số là kết quả đã lưu trong tài liệu được
+dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-progress-report.md).
+
+## 1. Tóm tắt
+
+- **Sản phẩm hiện có là Scheduling Core** (thư viện Python và CLI), chưa có ứng dụng cho người dùng cuối.
+  Đúng phạm vi Core First: chưa có UI, SQLite, vnEdu API hay installer (Phase 4).
+- **Phase 0 và Phase 1 đã đạt.** **Phase 2 đạt về kỹ thuật synthetic** (S01–S11, hard variants
+  S01–S06), nhưng **chưa nghiệm thu vận hành**: chưa có số đo hiệu năng cho candidate hiện tại; chất lượng
+  giáo vụ cần duyệt; Windows ngoài phạm vi Phase 2 v2.
+- **Phase 3 (repair + benchmark) chưa bắt đầu.** Tooling benchmark synthetic đã có từ Phase 2, nhưng
+  repair so với lịch trước và diagnostics vô nghiệm (IIS) chưa có.
+- **Nút thắt hiện tại là số đo hiệu năng** trên máy Linux của người dùng (bước D/E/F đã có runbook duyệt).
+- **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
+
+## 2. Trạng thái theo phase
+
+| Phase | Điều kiện Done (đặc tả §10) | Trạng thái | Bằng chứng |
+|---|---|---|---|
+| 0 — Skeleton, contracts | Import được, validate fixture, test/lint chạy | **Đạt** | [báo cáo Phase 0](phase-0-report.md) |
+| 1 — Scheduling MVP (hard) | CLI solve trên fixture có nghiệm; validator độc lập xác nhận; xử lý đúng fixture vô nghiệm; test pass | **Đạt** (2026-10-26) | [báo cáo Phase 1](phase-1-report.md) |
+| 2 — Quality optimization | Fixture chứng minh soft score cải thiện so baseline mà không phá hard; test pass | **Đạt về kỹ thuật synthetic.** Vận hành chưa nghiệm thu | [tiến độ Phase 2](phase-2-progress-report.md), [đánh giá cập nhật 1](phase-2-status-assessment-update-1.md) |
+| 3 — Repair + Benchmark | Repair test pass; benchmark có số liệu thực; validator pass trên mọi nghiệm | **Chưa bắt đầu.** Tooling benchmark synthetic đã có (2A v1, Phase 2 v2); chưa có repair | — |
+| 4 — Adapter, SQLite, UI, installer, Windows benchmark | Ngoài phạm vi hiện tại | **Không thực hiện** (đúng đặc tả) | — |
+
+## 3. Năng lực của Core hiện tại
+
+| Nhóm | Đã có |
+|---|---|
+| Contracts | Input 1.0/1.1 (policy 0.1–0.4); output 1.1–1.5; ScoreReport 1.0–1.2. Pydantic strict, từ chối field lạ, fingerprint SHA-256 canonical. Ghép version chặt (`RESULT_VERSION`) |
+| Hard (Phase 1) | Lớp, GV, môn, phân công, slot symbolic/timed, availability, tiết đơn/đôi, phòng (khi bật), khóa time/room, precheck tải/phòng cần thiết, resource guards |
+| Soft (Phase 2) | S01–S04 nguyện vọng GV; S05/S06 phân phối môn; S07–S11 tiết trống, buổi/ngày rảnh, buổi một tiết; `occupied_work`. Priority P1–P3 lexicographic, trọng số tường minh, không có giá trị mặc định ngầm |
+| Hard variants | S01–S04 (0.2), S05/S06 (0.3) |
+| Kiểm chứng độc lập | Validator và evaluator không import solver/compiler (có test guard), dùng được cả khi không cài OR-Tools |
+| CLI | `validate-input`, `solve`, `validate-schedule`, `evaluate-score`; JSON stdout, exit code theo status |
+| Đóng gói | Wheel `vnedu-tkb-core` 0.2.0 (`cdd34282…35d1`), OR-Tools là extra `solver`; đã kiểm installed wheel trên Linux |
+
+**Chưa có trong Core:**
+
+- repair hoặc giữ lịch đã công bố ngoài tiết khóa;
+- chẩn đoán vì sao vô nghiệm (IIS hoặc relax);
+- S12;
+- hard mode cho S07–S11;
+- timed calendar có buổi chồng giờ cho S08–S11 (bị từ chối có chủ ý);
+- requirement có nhiều lớp hoặc nhiều GV (đồng giảng, lớp ghép), block dài hơn 2 tiết, tuần A/B. Các
+  trường hợp này bị từ chối tường minh; theo đặc tả, chỉ hỗ trợ khi có quy tắc xác nhận.
+
+## 4. Kiểm chứng và evidence
+
+| Hạng mục | Kết quả đã lưu |
+|---|---|
+| Test suite (`f873126`, source hiện tại) | `pytest tests benchmarks/tests` **1352 passed, 8 skipped**. 8 skip là test Windows native/opt-in. Ruff, format và mypy strict (30 file) PASS |
+| Oracle | Mỗi mốc soft có oracle vét cạn 60 seed, bật/tắt ordering; Phase 1 có 20 tiny exhaustive cases |
+| Installed wheel | Kiểm trên Linux ở mỗi mốc 2B/2C (n = 1, synthetic) |
+| Benchmark v1 (2A, policy 0.1) | Campaign Linux cũ: 54/81 known-feasible có lịch, 27/27 UNSAT đúng. Campaign candidate 2A: STOPPED, primary 0/108. Benchmark zero NOT_MET. Toàn bộ là lịch sử, giữ nguyên |
+| Điều tra TIGHT10 / Windows S03 | Chuỗi báo cáo trace, CPU và accounting ([tổng hợp](tight10-evidence-synthesis.md)); lịch sử 2A |
+| Benchmark v2 (policy 0.4) | Tooling sẵn sàng; diễn tập cloud chạy hết pilot (không phải evidence). **Chưa có số đo trên máy đích** |
+| Windows | Evidence chỉ cho snapshot cũ; Phase 2 v2 là Linux-only (S2) |
+
+Evidence thô của campaign nằm trong `benchmarks/artifacts/` trên máy người dùng và không có trong clone
+cloud.
+
+## 5. Quy trình và quản trị
+
+- **Quy tắc làm việc:** AGENTS.md và CLAUDE.md. Mỗi thay đổi product code, commit, push, merge hay xóa
+  nhánh cần duyệt riêng. Không đổi gate, không dùng witness hint, không chạy campaign khi chưa được giao.
+- **Mỗi mốc đi qua:** đặc tả và kế hoạch DRAFT → duyệt → TDD → checks → commit/push → tự rà soát → sửa →
+  kiểm installed wheel.
+- **Nhánh:** PR duongbui234/vnedu_tkb#3 đến duongbui234/vnedu_tkb#6 đã merge, không có review comment hay
+  CI. Repo chưa có `.github`. Từ `812b0b6`, theo yêu cầu người dùng, thay đổi push thẳng lên `main`,
+  nhưng mỗi commit vẫn cần duyệt (S4).
+- **Sổ quyết định:** D1–D3, E1–E4/E6, G1–G10, K1–K7, M1–M7 và S1–S4 đã duyệt; E5 (chính sách version)
+  chưa quyết định. Xem [tiến độ Phase 2 §4](phase-2-progress-report.md).
+
+## 6. Câu hỏi nghiệp vụ còn mở (đặc tả §13)
+
+Core được thiết kế để các câu hỏi này là **cấu hình tường minh**, không phải giá trị đoán. Chưa câu nào có
+câu trả lời từ trường thật.
+
+| # | Câu hỏi | Core hiện tại |
+|---:|---|---|
+| 1–2 | Quy tắc theo cấp học; số ngày/buổi/tiết theo lớp | Calendar và availability do input khai báo; không có mặc định theo cấp học |
+| 3 | Chào cờ, sinh hoạt | Biểu diễn được bằng tiết khóa hoặc requirement; chưa có quy ước |
+| 4 | Đồng giảng, lớp ghép, nhóm, phòng bộ môn | Phòng theo loại có. Requirement có nhiều lớp hoặc nhiều GV bị từ chối (`UNSUPPORTED_FEATURE/MULTIPLE_PARTICIPANTS`) |
+| 5 | Tiết đôi, liên tiếp, giãn cách | Block dài 1 hoặc 2 tiết (dài hơn bị từ chối); giãn cách (S05) và giới hạn môn/ngày (S06) có, ngưỡng UNKNOWN |
+| 6 | Nhiều GV cho cùng môn/lớp | Mỗi requirement một GV; chưa hỗ trợ khác |
+| 7 | Tuần cố định hay A/B | Chu kỳ một tuần; A/B chưa hỗ trợ |
+| 8 | Tiêu chí nào bắt buộc, tiêu chí nào ưu tiên | Mỗi rule chọn được soft/hard (khi có hard mode), priority và trọng số; quyết định thuộc nhà trường |
+| 9 | Sửa lịch giữ tiết đã công bố hay chỉ tiết khóa | Chỉ tiết khóa; repair thuộc Phase 3 |
+| 10 | Contract vnEdu API | Phase 4, khi có contract thật |
+
+## 7. Rủi ro chính
+
+1. **Hiệu năng chưa biết ở quy mô trường.** Diễn tập cho thấy biến thể có hard rule mất khoảng 46 s chỉ
+   để tìm lịch khả thi ở cỡ 10 lớp (cloud, n = 1). Cỡ 20/40 lớp chưa đo.
+2. **Chất lượng lịch chưa được người có thẩm quyền chấp nhận.** Q là REVIEW_REQUIRED; chưa có quality
+   profile.
+3. **Khoảng cách tới dữ liệu thật.** Mọi ngưỡng, nhóm và lịch họp là UNKNOWN; synthetic không thay được
+   trường thật.
+4. **Kiểm chứng độc lập mỏng.** Mọi rà soát là tự kiểm; không CI; không review người thứ hai (E6, S3).
+5. **Số phiên bản contract tăng theo từng mốc** (E5 chưa quyết định).
+6. **Windows chưa được kiểm cho candidate hiện tại**, trong khi Phase 4 nhắm ứng dụng desktop.
+
+## 8. Lộ trình đề xuất
+
+1. **Ngay bây giờ:** người dùng chạy bước D, rồi E, rồi F trên máy Linux; viết báo cáo hiệu năng v2.
+2. **Sau khi có số đo:** quyết định hướng hiệu năng (phân tích model hoặc giảm số biến) dựa trên dữ liệu
+   (S1); review người thứ hai cho contract và tooling (S3).
+3. **Phase 3:** repair so với lịch trước, diagnostics vô nghiệm, benchmark có số liệu thực. Bắt đầu bằng
+   đặc tả và kế hoạch DRAFT như các mốc trước.
+4. **Song song khi có thể:** thu thập câu trả lời nghiệp vụ §13 và một bộ dữ liệu thật đã ẩn danh; quality
+   profile cùng chủ thể nghiệp vụ; quyết định E5.
+5. **Phase 4** (adapter, SQLite, UI, Windows) chỉ khi Core đạt Phase 3 và có contract vnEdu thật.
+
+## 9. Tài liệu chính
+
+| Chủ đề | Tài liệu |
+|---|---|
+| Đặc tả gốc | [Core First](VNEDU_TKB_CORE_FIRST_CODEX.md) |
+| Mô hình và giả định | [domain model](domain-model.md), [assumptions](assumptions.md), [constraint catalog](constraint-catalog.md), [solver design](solver-design.md) |
+| Phase 0/1 | [Phase 0](phase-0-report.md), [Phase 1](phase-1-report.md) |
+| Phase 2 | [tiến độ](phase-2-progress-report.md), [đánh giá](phase-2-status-assessment.md), [cập nhật 1](phase-2-status-assessment-update-1.md), [acceptance v2](phase-2a-acceptance-v2-draft.md) |
+| Hiệu năng v2 | [kế hoạch](superpowers/plans/2026-11-05-phase-2-linux-performance-v2.md), runbook [D](phase-2-linux-performance-step-d-runbook.md) / [E](phase-2-linux-performance-step-e-runbook.md) / [F](phase-2-linux-performance-step-f-runbook.md), [diễn tập E0](phase-2-linux-performance-rehearsal-e0-report.md) |
+| Quy tắc làm việc | `AGENTS.md`, `CLAUDE.md` |
