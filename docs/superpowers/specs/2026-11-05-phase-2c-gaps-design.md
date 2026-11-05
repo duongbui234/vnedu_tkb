@@ -52,8 +52,9 @@ chỉ synthetic, Windows chưa nghiệm thu, acceptance v2 DRAFT, zero NOT_MET, 
 - **Phải nằm ngoài availability của GV đó:** nếu `available_slot_ids` là `null` (dạy được mọi ô) hoặc
   chứa slot occupied → INPUT_INVALID/OCCUPIED_AVAILABLE. Upstream phải loại ô họp khỏi availability
   (H09), nên Core không xếp dạy vào ô họp mà không cần ràng buộc mới.
-- Với policy 0.1–0.3: field không được có mặt (khác rỗng → INPUT_INVALID) và **không xuất hiện** trong
-  dump/fingerprint, nên hash cũ không đổi.
+- Với policy 0.1–0.3: key `occupied_work` không được có mặt, **kể cả danh sách rỗng** → INPUT_INVALID
+  (như mọi field lạ; làm rõ sau rà soát F1). Danh sách rỗng **không xuất hiện** trong dump/fingerprint,
+  nên hash cũ không đổi.
 - Occupied work chỉ dùng cho định nghĩa gap/nghỉ (S08–S10); không cộng tải S02/S03/S11, không là lock.
 - Thay thế đã cân nhắc: (B) tham số `occupied_slot_ids` trên từng rule — không đổi contract nhưng các
   rule khác family có thể khai báo lịch họp khác nhau cho cùng GV; (C) bỏ occupied work — ô họp sẽ bị

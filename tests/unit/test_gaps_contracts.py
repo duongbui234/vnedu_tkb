@@ -201,9 +201,21 @@ def test_occupied_work_only_in_policy_04(gap_case: dict[str, Any], policy: str) 
     gap_case["constraint_config"]["occupied_work"] = [{"teacher_id": "t", "slot_ids": ["1-AM-3"]}]
     with pytest.raises(ValidationError):
         ScheduleInput.model_validate(gap_case)
+    # Review F1: the key was unknown to these policies, so even an empty list is refused.
     gap_case["constraint_config"]["occupied_work"] = []
+    with pytest.raises(ValidationError):
+        ScheduleInput.model_validate(gap_case)
+    del gap_case["constraint_config"]["occupied_work"]
     dumped = ScheduleInput.model_validate(gap_case).model_dump()
     assert "occupied_work" not in dumped["constraint_config"]
+
+
+def test_policy_04_accepts_explicit_empty_occupied_work(gap_case: dict[str, Any]) -> None:
+    gap_case["constraint_config"]["occupied_work"] = []
+    p = ScheduleInput.model_validate(gap_case)
+    assert "occupied_work" not in p.model_dump()["constraint_config"]
+    del gap_case["constraint_config"]["occupied_work"]
+    assert ScheduleInput.model_validate(gap_case).fingerprint() == p.fingerprint()
 
 
 def test_older_fixture_hashes_unchanged() -> None:

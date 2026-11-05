@@ -219,7 +219,9 @@ class ConstraintConfigV11(DomainModel):
 
     @model_validator(mode="after")
     def occupied_work_policy(self) -> Self:
-        if self.occupied_work and self.policy_version != "0.4":
+        # Older policies never defined this key: refuse it even when empty, like any unknown
+        # field. Dumps omit an empty list, so revalidated older payloads stay accepted.
+        if "occupied_work" in self.model_fields_set and self.policy_version != "0.4":
             raise ValueError("occupied_work requires policy_version 0.4")
         return self
 

@@ -94,4 +94,6 @@ thuộc `occupied_work` của GV. **Chuỗi idle:** các ô idle liền kề the
 và không có ô họp. `occupied_work` (policy 0.4) phải nằm ngoài availability (availability `null` bị
 từ chối), không cộng tải và không là lock. S01 và S07 cùng GV với ô giao nhau bị từ chối như overlap;
 S10 hai unit cùng GV cũng vậy. S08–S11 bị từ chối (`GAP_TIMELINE`) khi hai buổi cùng ngày giao phút.
-Không có hard mode và không có ngưỡng mặc định.
+Không có hard mode và không có ngưỡng mặc định. Key `occupied_work` ở policy 0.1–0.3 bị từ chối kể cả
+khi rỗng. Lưu ý S10: ngày/buổi GV chỉ *không thể dạy* (unavailable, không có occupied work) vẫn được
+tính là rảnh; muốn không tính, upstream phải khai báo occupied work cho ngày/buổi đó.
