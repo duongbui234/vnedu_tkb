@@ -11,9 +11,11 @@ from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import ConstraintConfigV11
 from tkb_core.domain.rule_parameters import (
     AvoidSlotsParameters,
+    DaySpreadParameters,
     MaxDayParameters,
     MaxSessionParameters,
     PeriodWindowParameters,
+    SubjectDayLimitParameters,
 )
 from tkb_core.preprocessing.feasibility import PreparedProblem
 from tkb_core.solver.model_builder import BuiltModel
@@ -74,6 +76,77 @@ def _add_s03_bounds(
         model.add_linear_constraint(var, lower, upper)
 
 
+def _compile_distribution(
+    prepared: PreparedProblem,
+    built: BuiltModel,
+    rule_id: str,
+    params: DaySpreadParameters | SubjectDayLimitParameters,
+    classes: set[str],
+    subjects: set[str],
+) -> tuple[cp_model.IntVar, int]:
+    """Exact S05/S06 raw penalty; equalities hold whether or not the tier is optimized."""
+    problem = prepared.normalized.problem
+    slots = {s.id: s for s in problem.time_slots}
+    reqs = {r.id: r for r in problem.teaching_requirements}
+    model = built.model
+    costs: list[cp_model.IntVar] = []
+    if isinstance(params, DaySpreadParameters):
+        group = [
+            o for o in prepared.normalized.occurrences if o.requirement_id in params.requirement_ids
+        ]
+        days = [s.day for s in problem.time_slots]
+        span = max(days) - min(days) if days else 0
+        k = params.min_day_gap
+        _range(k + span)
+        raw_bound = len(group) * (len(group) - 1) // 2 * k
+        _range(raw_bound)
+        day_of = [
+            sum(
+                slots[p.start_slot_id].day * v
+                for p, v in zip(prepared.domains[o.id], built.variables[o.id], strict=True)
+            )
+            for o in group
+        ]
+        for i in range(len(group)):
+            for j in range(i + 1, len(group)):
+                diff = model.new_int_var(-span, span, f"dd_{rule_id}_{i}_{j}")
+                model.add(diff == day_of[i] - day_of[j])
+                dist = model.new_int_var(0, span, f"dist_{rule_id}_{i}_{j}")
+                model.add_abs_equality(dist, diff)
+                short = model.new_int_var(0, k, f"short_{rule_id}_{i}_{j}")
+                model.add_max_equality(short, [0, k - dist])
+                costs.append(short)
+    else:
+        _range(params.limit)
+        buckets: dict[tuple[str, str, int], list[tuple[cp_model.IntVar, int]]] = defaultdict(list)
+        bucket_bounds: dict[tuple[str, str, int], int] = defaultdict(int)
+        for occurrence in prepared.normalized.occurrences:
+            req = reqs[occurrence.requirement_id]
+            if req.class_ids[0] not in classes or req.subject_id not in subjects:
+                continue
+            maxima: dict[tuple[str, str, int], int] = defaultdict(int)
+            for placement, var in zip(
+                prepared.domains[occurrence.id], built.variables[occurrence.id], strict=True
+            ):
+                key = (req.class_ids[0], req.subject_id, slots[placement.start_slot_id].day)
+                buckets[key].append((var, len(placement.slot_ids)))
+                maxima[key] = max(maxima[key], len(placement.slot_ids))
+            for key, n in maxima.items():
+                bucket_bounds[key] += n
+        raw_bound = sum(max(0, n - params.limit) for n in bucket_bounds.values())
+        _range(raw_bound)
+        for key, terms in buckets.items():
+            _range(sum(n for _, n in terms) + params.limit)
+            excess = model.new_int_var(
+                0, max(0, bucket_bounds[key] - params.limit), f"sd_{rule_id}_{key}"
+            )
+            model.add_max_equality(excess, [0, sum(n * v for v, n in terms) - params.limit])
+            costs.append(excess)
+    raw = model.new_int_var(0, raw_bound, f"raw_{rule_id}")
+    model.add(raw == sum(costs))
+    return raw, raw_bound
+
+
 def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
     """Add exact expressions for enabled preferences without pruning hard domains."""
     problem = prepared.normalized.problem
@@ -87,7 +160,31 @@ def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
     for rule in sorted(config.soft, key=lambda r: r.id):
         if not rule.enabled:
             continue
-        params = parse_parameters(rule.code, rule.parameters)
+        params = parse_parameters(rule.code, rule.parameters, config.policy_version)
+        if isinstance(params, (DaySpreadParameters, SubjectDayLimitParameters)):
+            raw_var, raw_limit = _compile_distribution(
+                prepared,
+                built,
+                rule.id,
+                params,
+                set(rule.scope.class_ids) or {c.id for c in problem.classes},
+                set(rule.scope.subject_ids) or {s.id for s in problem.subjects},
+            )
+            _range(rule.weight)
+            _range(raw_limit * rule.weight, MAX_OBJECTIVE)
+            tier_bounds[rule.priority] += raw_limit * rule.weight
+            _range(tier_bounds[rule.priority], MAX_OBJECTIVE)
+            rules.append(
+                CompiledRule(
+                    rule.id,
+                    rule.priority,
+                    raw_var,
+                    raw_var * rule.weight,
+                    raw_limit,
+                    raw_limit * rule.weight,
+                )
+            )
+            continue
         teachers = set(rule.scope.teacher_ids) or {t.id for t in problem.teachers}
         costs = []
         buckets: dict[tuple[str, int, str], list[tuple[cp_model.IntVar, int]]] = defaultdict(list)

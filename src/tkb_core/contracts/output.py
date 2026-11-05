@@ -1,4 +1,4 @@
-"""Output schemas 1.0-1.3 with guardrails against contradictory schedule claims."""
+"""Output schemas 1.0-1.4 with guardrails against contradictory schedule claims."""
 
 from typing import Annotated, Any, Literal, Self
 
@@ -24,7 +24,9 @@ from tkb_core.domain.models import (
 
 # Quality output version -> the only policy version it may describe; strict pairing keeps
 # a 1.2 reader from misreading policy 0.2 hard-variant semantics.
-QUALITY_POLICY = {"1.2": "0.1", "1.3": "0.2"}
+QUALITY_POLICY = {"1.2": "0.1", "1.3": "0.2", "1.4": "0.3"}
+# Quality output version -> the ScoreReport version its embedded score must use.
+SCORE_VERSION = {"1.2": "1.0", "1.3": "1.0", "1.4": "1.1"}
 
 
 class ValidationReport(DomainModel):
@@ -68,7 +70,7 @@ class SolverRunMetadataV12(SolverRunMetadata):
 class ScheduleResult(DomainModel):
     """Versioned result; structural consistency alone is not scheduling correctness."""
 
-    schema_version: Literal["1.0", "1.1", "1.2", "1.3"]
+    schema_version: Literal["1.0", "1.1", "1.2", "1.3", "1.4"]
     status: SolveStatus
     input_fingerprint: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")] | None = None
     valid_schedule: StrictBool = False
@@ -91,6 +93,7 @@ class ScheduleResult(DomainModel):
                 "1.1": SolverRunMetadata,
                 "1.2": SolverRunMetadataV12,
                 "1.3": SolverRunMetadataV12,
+                "1.4": SolverRunMetadataV12,
             }
             metadata_type = metadata_types.get(version) if isinstance(version, str) else None
             if metadata_type is not None:
@@ -107,6 +110,9 @@ class ScheduleResult(DomainModel):
                 raise ValueError("Quality output requires versioned metadata/report")
             if self.quality.policy_version != QUALITY_POLICY[self.schema_version]:
                 raise ValueError("Output schema version does not match policy version")
+            score = self.quality.score
+            if score is not None and score.schema_version != SCORE_VERSION[self.schema_version]:
+                raise ValueError("Output schema version does not match score version")
             if self.valid_schedule and self.quality.status == "NOT_EVALUATED":
                 raise ValueError("Valid quality output requires complete evaluation")
             if self.status == SolveStatus.OPTIMAL and self.quality.status == "SCORED_FEASIBLE":

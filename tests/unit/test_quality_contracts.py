@@ -148,10 +148,18 @@ def test_new_rule_definitions_start_without_capabilities() -> None:
 def test_phase2a_rules_explicitly_support_soft_only() -> None:
     from tkb_core.constraints.registry import DEFINITIONS
 
-    assert set(DEFINITIONS) == {
+    phase2a = {
         "TEACHER_AVOID_SLOTS",
         "TEACHER_MAX_PERIODS_PER_SESSION",
         "TEACHER_MAX_PERIODS_PER_DAY",
         "TEACHER_PREFERRED_PERIOD_WINDOW",
     }
-    assert all(rule.supported_modes == ("soft",) for rule in DEFINITIONS.values())
+    # Policy 0.1 modes: S01-S04 soft only; later codes (Phase 2C-1) have none in 0.1.
+    assert set(DEFINITIONS) == phase2a | {
+        "SUBJECT_COMPONENT_DAY_SPREAD",
+        "CLASS_SUBJECT_MAX_PERIODS_PER_DAY",
+    }
+    assert all(
+        rule.supported_modes == (("soft",) if code in phase2a else ())
+        for code, rule in DEFINITIONS.items()
+    )

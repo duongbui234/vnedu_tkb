@@ -32,6 +32,24 @@ class PeriodWindowParameters(DomainModel):
         return self
 
 
+class DaySpreadParameters(DomainModel):
+    """S05: one explicit component group and the minimum day distance between components."""
+
+    requirement_ids: Annotated[tuple[Identifier, ...], Field(min_length=1)]
+    min_day_gap: PositiveInt
+
+
+class SubjectDayLimitParameters(DomainModel):
+    """S06: maximum teaching periods of one class+subject on one real day."""
+
+    limit: NonNegativeInt
+
+
 RuleParameters = (
-    AvoidSlotsParameters | MaxSessionParameters | MaxDayParameters | PeriodWindowParameters
+    AvoidSlotsParameters
+    | MaxSessionParameters
+    | MaxDayParameters
+    | PeriodWindowParameters
+    | DaySpreadParameters
+    | SubjectDayLimitParameters
 )

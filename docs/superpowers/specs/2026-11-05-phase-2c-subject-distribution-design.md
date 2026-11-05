@@ -1,6 +1,8 @@
 # Phase 2C-1 — phân phối môn S05/S06
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — CHỜ DUYỆT, CHƯA TRIỂN KHAI.**
+Ngày 2026-11-05. Trạng thái: **D1–D7 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT THEO ĐỀ XUẤT; ĐÃ TRIỂN KHAI
+(technical synthetic)** — xem [báo cáo 2C-1](../../phase-2c-report.md). Thân bài là bản đặc tả được
+duyệt; các câu “chưa triển khai/chưa viết” phản ánh thời điểm soạn.
 Base: `7e83fd349772412289b34864d89199c200e3ffdf` (merge của duongbui234/vnedu_tkb#1 vào `main`),
 nhánh `work/phase2a-operational-completion` được đặt lại từ `origin/main`.
 
@@ -130,14 +132,14 @@ lượng giáo vụ, hiệu năng hay Windows.
 
 ## 8. Quyết định cần duyệt
 
-- [ ] **D1** — policy `0.3` cho S05/S06; 0.1/0.2 giữ nguyên. *(Đề xuất: chọn. Thay thế: thêm vào 0.2 —
+- [x] **D1** — policy `0.3` cho S05/S06; 0.1/0.2 giữ nguyên. *(Đề xuất: chọn. Thay thế: thêm vào 0.2 —
   đơn giản hơn nhưng đổi capability của policy đã phát hành.)*
-- [ ] **D2** — output `1.4` và ScoreReport `1.1` (thêm unit `day_gap_shortfall`). *(Đề xuất: chọn.)*
-- [ ] **D3** — S05 nhóm bằng `requirement_ids` explicit, một nhóm mỗi rule. *(Đề xuất: chọn. Thay thế:
+- [x] **D2** — output `1.4` và ScoreReport `1.1` (thêm unit `day_gap_shortfall`). *(Đề xuất: chọn.)*
+- [x] **D3** — S05 nhóm bằng `requirement_ids` explicit, một nhóm mỗi rule. *(Đề xuất: chọn. Thay thế:
   scope lớp+môn tự lập nhóm mỗi (lớp,môn) — tiện hơn nhưng gần với “tự gom” mà policy cấm.)*
-- [ ] **D4** — khoảng cách ngày theo giá trị `day`, không theo thứ hạng ngày có slot. *(Đề xuất: chọn.
+- [x] **D4** — khoảng cách ngày theo giá trị `day`, không theo thứ hạng ngày có slot. *(Đề xuất: chọn.
   Thay thế: thứ hạng — bỏ qua ngày không có slot.)*
-- [ ] **D5** — S06 dùng scope `class_ids`/`subject_ids` (rỗng = tất cả). *(Đề xuất: chọn.)*
-- [ ] **D6** — có hard mode cho S05 (cửa sổ k ngày) và S06 trong cùng mốc. *(Đề xuất: chọn. Thay thế:
+- [x] **D5** — S06 dùng scope `class_ids`/`subject_ids` (rỗng = tất cả). *(Đề xuất: chọn.)*
+- [x] **D6** — có hard mode cho S05 (cửa sổ k ngày) và S06 trong cùng mốc. *(Đề xuất: chọn. Thay thế:
   chỉ soft, hard để mốc sau.)*
-- [ ] **D7** — bật symmetry ordering với S05/S06 nếu oracle đạt; nếu không thì giữ tắt. *(Đề xuất: chọn.)*
+- [x] **D7** — bật symmetry ordering với S05/S06 nếu oracle đạt; nếu không thì giữ tắt. *(Đề xuất: chọn.)*

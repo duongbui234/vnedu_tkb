@@ -17,9 +17,11 @@ from tkb_core.domain.models import (
 )
 from tkb_core.domain.rule_parameters import (
     AvoidSlotsParameters,
+    DaySpreadParameters,
     MaxDayParameters,
     MaxSessionParameters,
     PeriodWindowParameters,
+    SubjectDayLimitParameters,
 )
 
 # Placed periods of one occurrence: (teacher ID, covered slots, occurrence ID).
@@ -34,9 +36,10 @@ def _hard_variant_violations(problem: ScheduleInput, placed: Sequence[_Placed]) 
     so (code, teacher, slots) identifies the violated rule without exposing its ID.
     """
     config = problem.constraint_config
-    if not isinstance(config, ConstraintConfigV11) or config.policy_version != "0.2":
+    if not isinstance(config, ConstraintConfigV11) or config.policy_version not in ("0.2", "0.3"):
         return []
     slots = {s.id: s for s in problem.time_slots}
+    requirements = {r.id: r for r in problem.teaching_requirements}
     found: list[Diagnostic] = []
     for rule in sorted(config.hard, key=lambda r: r.id):
         if not rule.enabled:
@@ -89,6 +92,47 @@ def _hard_variant_violations(problem: ScheduleInput, placed: Sequence[_Placed]) 
                             else "HARD_DAY_LIMIT",
                             message="Teacher load exceeds a hard limit",
                             resource_ids=(teacher,),
+                            slot_ids=tuple(sorted({sid for sid, _ in rows})),
+                            occurrence_ids=tuple(sorted({o for _, o in rows})),
+                        )
+                    )
+        elif isinstance(params, DaySpreadParameters):
+            group = sorted(
+                (occurrence, covered[0])
+                for _, covered, occurrence in placed
+                if occurrence.rpartition("::")[0] in params.requirement_ids
+            )
+            for i, (first, first_start) in enumerate(group):
+                for second, second_start in group[i + 1 :]:
+                    if abs(first_start.day - second_start.day) < params.min_day_gap:
+                        found.append(
+                            Diagnostic(
+                                code="HARD_DAY_SPREAD",
+                                message="Components are closer than the required day gap",
+                                resource_ids=tuple(
+                                    sorted({o.rpartition("::")[0] for o in (first, second)})
+                                ),
+                                slot_ids=(first_start.id, second_start.id),
+                                occurrence_ids=(first, second),
+                            )
+                        )
+        elif isinstance(params, SubjectDayLimitParameters):
+            classes = set(rule.scope.class_ids) or {c.id for c in problem.classes}
+            subjects = set(rule.scope.subject_ids) or {s.id for s in problem.subjects}
+            by_day: dict[tuple[str, str, int], list[tuple[str, str]]] = defaultdict(list)
+            for _, covered, occurrence in placed:
+                req = requirements[occurrence.rpartition("::")[0]]
+                if req.class_ids[0] not in classes or req.subject_id not in subjects:
+                    continue
+                for c in covered:
+                    by_day[req.class_ids[0], req.subject_id, c.day].append((c.id, occurrence))
+            for (cls, subject, _), rows in sorted(by_day.items()):
+                if len(rows) > params.limit:
+                    found.append(
+                        Diagnostic(
+                            code="HARD_SUBJECT_DAY_LIMIT",
+                            message="Class subject periods exceed a hard daily limit",
+                            resource_ids=(cls, subject),
                             slot_ids=tuple(sorted({sid for sid, _ in rows})),
                             occurrence_ids=tuple(sorted({o for _, o in rows})),
                         )

@@ -6,7 +6,7 @@ from itertools import pairwise
 
 from ortools.sat.python import cp_model
 
-from tkb_core.constraints.hard import add_load_limits, add_occupancy
+from tkb_core.constraints.hard import add_distribution_limits, add_load_limits, add_occupancy
 from tkb_core.domain.models import ConstraintConfigV11, LessonOccurrence
 from tkb_core.preprocessing.feasibility import Placement, PreparedProblem
 
@@ -17,6 +17,10 @@ _RESOURCE_ONLY_SOFT_RULES = frozenset(
         "TEACHER_MAX_PERIODS_PER_SESSION",
         "TEACHER_MAX_PERIODS_PER_DAY",
         "TEACHER_PREFERRED_PERIOD_WINDOW",
+        # Phase 2C-1: depend only on requirement/class/subject/day of the chosen start, so
+        # relabeling equal-domain occurrences of one requirement keeps validity and score.
+        "SUBJECT_COMPONENT_DAY_SPREAD",
+        "CLASS_SUBJECT_MAX_PERIODS_PER_DAY",
     }
 )
 
@@ -48,7 +52,10 @@ def _add_interchangeable_ordering(prepared: PreparedProblem, built: BuiltModel) 
         # preferences: relabeling equal-domain occurrences keeps validity (oracle-tested).
         or any(
             r.enabled
-            and (config.policy_version != "0.2" or r.code not in _RESOURCE_ONLY_SOFT_RULES)
+            and (
+                config.policy_version not in ("0.2", "0.3")
+                or r.code not in _RESOURCE_ONLY_SOFT_RULES
+            )
             for r in config.hard
         )
     ):
@@ -95,6 +102,7 @@ def build_model(prepared: PreparedProblem, *, order_interchangeable: bool = Fals
     add_occupancy(model, prepared, variables)
     # Policy 0.2 hard load limits belong to the hard model: callers clone it afterwards.
     add_load_limits(model, prepared, variables)
+    add_distribution_limits(model, prepared, variables)
     built = BuiltModel(model, variables)
     if order_interchangeable:
         _add_interchangeable_ordering(prepared, built)

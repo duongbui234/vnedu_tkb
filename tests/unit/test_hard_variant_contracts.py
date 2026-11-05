@@ -28,7 +28,7 @@ def test_policy_versions_dispatch(hard_case: dict[str, Any]) -> None:
     p = ScheduleInput.model_validate(hard_case)
     assert p.constraint_config.policy_version == "0.2"
     assert ScheduleInput.model_validate_json(p.model_dump_json()) == p
-    hard_case["constraint_config"]["policy_version"] = "0.3"
+    hard_case["constraint_config"]["policy_version"] = "0.4"
     with pytest.raises(ValidationError):
         ScheduleInput.model_validate(hard_case)
 
@@ -62,7 +62,7 @@ def test_capability_matrix(quality_case: dict[str, Any]) -> None:
 
 
 def test_mode_support_by_policy() -> None:
-    for code in DEFINITIONS:
+    for code in [c for c, d in DEFINITIONS.items() if d.policy_id in ("S01", "S02", "S03", "S04")]:
         assert supports_mode(code, "soft", "0.1") and supports_mode(code, "soft", "0.2")
         assert not supports_mode(code, "hard", "0.1")
         assert supports_mode(code, "hard", "0.2")

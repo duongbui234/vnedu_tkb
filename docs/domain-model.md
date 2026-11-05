@@ -119,3 +119,12 @@ bị từ chối với cả hard+soft và hard+hard. Input 0.2 phát output 1.3:
 `quality.policy_version=0.2`; reader kiểm cặp 1.2↔0.1 và 1.3↔0.2. Validation report có thể chứa
 `HARD_AVOID_SLOT`, `HARD_SESSION_LIMIT`, `HARD_DAY_LIMIT`, `HARD_PERIOD_WINDOW` với
 resource_ids=(GV,), slot_ids và occurrence_ids. Xem [đặc tả 2B](superpowers/specs/2026-11-05-phase-2b-hard-variants-design.md).
+
+## Bổ sung Phase 2C-1
+
+Input 1.1 nhận `policy_version=0.3`: S01–S04 như 0.2, thêm S05/S06 ở soft và hard. Rule có
+`since_policy`: policy 0.1/0.2 coi S05/S06 là mã unknown (disabled giữ raw parameters, enabled →
+UNKNOWN_RULE), nên hash/hành vi cũ không đổi. Output 1.4 ↔ policy 0.3 ↔ ScoreReport 1.1; ScoreReport
+1.1 thêm unit `day_gap_shortfall`, ScoreReport 1.0 chỉ nhận `teaching_periods`. Validation report có
+thể chứa `HARD_DAY_SPREAD` (resource_ids = requirements của cặp) và `HARD_SUBJECT_DAY_LIMIT`
+(resource_ids = (lớp, môn)).

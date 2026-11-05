@@ -1,6 +1,7 @@
 # Phase 2C-1 — kế hoạch triển khai S05/S06
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — CHỜ DUYỆT; CHƯA CÓ ỦY QUYỀN TRIỂN KHAI.**
+Ngày 2026-11-05. Trạng thái: **ĐÃ DUYỆT (D1–D7 theo đề xuất) VÀ ĐÃ THỰC HIỆN Task 1–8** — kết quả
+và sai khác so với kế hoạch ở [báo cáo 2C-1](../../phase-2c-report.md).
 Đặc tả: [2026-11-05-phase-2c-subject-distribution-design.md](../specs/2026-11-05-phase-2c-subject-distribution-design.md).
 Base `7e83fd349772412289b34864d89199c200e3ffdf` trên `main`.
 

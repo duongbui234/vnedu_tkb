@@ -73,10 +73,10 @@ def solve(problem: ScheduleInput, options: SolveOptions | None = None) -> Schedu
                 {**selected_quality.model_dump(), "policy_version": policy_version}
             )
         result_extra = {"quality": selected_quality} if quality_input else {}
-        # Policy 0.2 (hard variants) is only described by output 1.3; 0.1 keeps 1.2.
+        # Each policy has exactly one quality output version: 0.1->1.2, 0.2->1.3, 0.3->1.4.
         schema_version = "1.1"
         if quality_input:
-            schema_version = "1.3" if policy_version == "0.2" else "1.2"
+            schema_version = {"0.2": "1.3", "0.3": "1.4"}.get(policy_version, "1.2")
         return ScheduleResult(
             schema_version=schema_version,
             status=SolveStatus(status),
