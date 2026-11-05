@@ -104,6 +104,16 @@ class ScheduleInput(DomainModel):
 
             rules = (*self.constraint_config.hard, *self.constraint_config.soft)
             _unique((r.id for r in rules), "rule ID")
+            work = self.constraint_config.occupied_work
+            _references((w.teacher_id for w in work), ids["teacher"], "occupied teacher")
+            teacher_records = {t.id: t for t in self.teachers}
+            for entry in work:
+                _references(entry.slot_ids, ids["slot"], "occupied slot")
+                available = teacher_records[entry.teacher_id].available_slot_ids
+                # Meetings must already be excluded from availability (H09), or the solver
+                # could place teaching on them; null availability means every slot is open.
+                if available is None or set(entry.slot_ids) & set(available):
+                    raise ValueError("Occupied work must lie outside teacher availability")
             sessions = {s.session for s in self.time_slots}
             teaching_slots = {s.id for s in self.time_slots if s.can_teach}
             policy = self.constraint_config.policy_version
@@ -174,6 +184,10 @@ class ScheduleInput(DomainModel):
                         for key in ("slot_ids", "session_ids", "requirement_ids"):
                             if key in rule["parameters"]:
                                 rule["parameters"][key].sort()
+        for entry in data["constraint_config"].get("occupied_work", []):
+            entry["slot_ids"].sort()
+        if "occupied_work" in data["constraint_config"]:
+            data["constraint_config"]["occupied_work"].sort(key=lambda w: w["teacher_id"])
         payload = json.dumps(
             data, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False
         )

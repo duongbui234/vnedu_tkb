@@ -77,3 +77,23 @@ Component là một occurrence (block đôi là một component nhưng 2 tiết 
 start slot, khoảng cách theo giá trị `day` (không thứ hạng, không vòng tuần). S05 không ngầm thêm cap
 cùng ngày hay điều kiện liên tiếp. Overlap: S05 chung requirement, S06 giao lớp×môn, bất kể mode.
 Không có precheck tổng hợp; lock tổ hợp vượt hard → INFEASIBLE. Không có k/limit mặc định.
+
+## Phase 2C-2 — S07–S11 trên policy 0.4 (chỉ soft)
+
+| Code | Parameters | Raw penalty (unit) |
+|---|---|---|
+| TEACHER_RESTRICTED_SLOTS (S07) | `slot_ids` | Tiết dạy trên ô hạn chế, như S01 (`teaching_periods`) |
+| TEACHER_TOTAL_GAPS (S08) | `session_ids` | Σ ô idle theo GV/ngày/buổi (`idle_periods`) |
+| TEACHER_MAX_GAP_RUN (S09) | `limit`≥0, `session_ids` | Σ `max(0, chuỗi idle dài nhất − limit)` (`idle_periods`) |
+| TEACHER_MIN_FREE_TIME (S10) | `unit` day/session, `target`≥1 | Σ GV `max(0, target − số ngày/buổi rảnh)` (`free_days`/`free_sessions`) |
+| TEACHER_SINGLE_PERIOD_SESSION (S11) | `session_ids` | Số (GV, ngày, buổi) dạy đúng 1 tiết (`single_period_sessions`) |
+
+**Ô idle:** `can_teach=true`, nằm giữa tiết dạy đầu và cuối của GV trong buổi, GV không dạy và không
+thuộc `occupied_work` của GV. **Chuỗi idle:** các ô idle liền kề theo thứ tự period của calendar buổi;
+ô `can_teach=false` hoặc ô họp cắt chuỗi. **Rảnh:** ngày/buổi có ít nhất một ô dạy được, GV không dạy
+và không có ô họp. `occupied_work` (policy 0.4) phải nằm ngoài availability (availability `null` bị
+từ chối), không cộng tải và không là lock. S01 và S07 cùng GV với ô giao nhau bị từ chối như overlap;
+S10 hai unit cùng GV cũng vậy. S08–S11 bị từ chối (`GAP_TIMELINE`) khi hai buổi cùng ngày giao phút.
+Không có hard mode và không có ngưỡng mặc định. Key `occupied_work` ở policy 0.1–0.3 bị từ chối kể cả
+khi rỗng. Lưu ý S10: ngày/buổi GV chỉ *không thể dạy* (unavailable, không có occupied work) vẫn được
+tính là rảnh; muốn không tính, upstream phải khai báo occupied work cho ngày/buổi đó.

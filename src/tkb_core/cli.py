@@ -110,7 +110,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     evaluation = bool(args and args[0] == "evaluate-score")
     # Error reports follow the input's ScoreReport version once the input has been parsed.
-    report_version: list[Literal["1.0", "1.1"]] = ["1.0"]
+    report_version: list[Literal["1.0", "1.1", "1.2"]] = ["1.0"]
 
     def emit_error(status: str, code: str, message: str) -> int:
         if not evaluation:
@@ -175,7 +175,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             expected_version = "1.1"
             if isinstance(problem.constraint_config, ConstraintConfigV11):
-                expected_version = {"0.2": "1.3", "0.3": "1.4"}.get(
+                expected_version = {"0.2": "1.3", "0.3": "1.4", "0.4": "1.5"}.get(
                     problem.constraint_config.policy_version, "1.2"
                 )
             # Input 1.0 may still be checked against legacy 1.0/1.1 results, never a quality

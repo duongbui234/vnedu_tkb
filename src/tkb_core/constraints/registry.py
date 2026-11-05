@@ -15,19 +15,24 @@ from tkb_core.domain.models import (
 from tkb_core.domain.rule_parameters import (
     AvoidSlotsParameters,
     DaySpreadParameters,
+    FreeTimeParameters,
+    GapRunParameters,
     MaxDayParameters,
     MaxSessionParameters,
     PeriodWindowParameters,
+    RestrictedSlotsParameters,
     RuleParameters,
+    SinglePeriodParameters,
     SubjectDayLimitParameters,
+    TotalGapsParameters,
 )
 
 if TYPE_CHECKING:
     from tkb_core.contracts.input import ScheduleInput
 
-POLICY_ORDER = ("0.1", "0.2", "0.3")
+POLICY_ORDER = ("0.1", "0.2", "0.3", "0.4")
 # Policies whose enabled hard rules are compiled (0.1 refuses every enabled hard rule).
-HARD_POLICIES = ("0.2", "0.3")
+HARD_POLICIES = ("0.2", "0.3", "0.4")
 TEACHER_SCOPE = "teacher"
 NO_SCOPE = "none"
 CLASS_SUBJECT_SCOPE = "class_subject"
@@ -61,7 +66,7 @@ DEFINITIONS = {
             AvoidSlotsParameters,
             supported_modes=("soft",),
             hard_policies=HARD_POLICIES,
-            soft_policies=("0.1", "0.2", "0.3"),
+            soft_policies=("0.1", "0.2", "0.3", "0.4"),
         ),
         RuleDefinition(
             "TEACHER_MAX_PERIODS_PER_SESSION",
@@ -69,7 +74,7 @@ DEFINITIONS = {
             MaxSessionParameters,
             supported_modes=("soft",),
             hard_policies=HARD_POLICIES,
-            soft_policies=("0.1", "0.2", "0.3"),
+            soft_policies=("0.1", "0.2", "0.3", "0.4"),
         ),
         RuleDefinition(
             "TEACHER_MAX_PERIODS_PER_DAY",
@@ -77,7 +82,7 @@ DEFINITIONS = {
             MaxDayParameters,
             supported_modes=("soft",),
             hard_policies=HARD_POLICIES,
-            soft_policies=("0.1", "0.2", "0.3"),
+            soft_policies=("0.1", "0.2", "0.3", "0.4"),
         ),
         RuleDefinition(
             "TEACHER_PREFERRED_PERIOD_WINDOW",
@@ -85,15 +90,15 @@ DEFINITIONS = {
             PeriodWindowParameters,
             supported_modes=("soft",),
             hard_policies=HARD_POLICIES,
-            soft_policies=("0.1", "0.2", "0.3"),
+            soft_policies=("0.1", "0.2", "0.3", "0.4"),
         ),
         RuleDefinition(
             "SUBJECT_COMPONENT_DAY_SPREAD",
             "S05",
             DaySpreadParameters,
             unit="day_gap_shortfall",
-            hard_policies=("0.3",),
-            soft_policies=("0.3",),
+            hard_policies=("0.3", "0.4"),
+            soft_policies=("0.3", "0.4"),
             scope=NO_SCOPE,
             since_policy="0.3",
         ),
@@ -101,13 +106,70 @@ DEFINITIONS = {
             "CLASS_SUBJECT_MAX_PERIODS_PER_DAY",
             "S06",
             SubjectDayLimitParameters,
-            hard_policies=("0.3",),
-            soft_policies=("0.3",),
+            hard_policies=("0.3", "0.4"),
+            soft_policies=("0.3", "0.4"),
             scope=CLASS_SUBJECT_SCOPE,
             since_policy="0.3",
         ),
+        # Phase 2C-2 (policy 0.4): soft only, teacher scope.
+        RuleDefinition(
+            "TEACHER_RESTRICTED_SLOTS",
+            "S07",
+            RestrictedSlotsParameters,
+            soft_policies=("0.4",),
+            since_policy="0.4",
+        ),
+        RuleDefinition(
+            "TEACHER_TOTAL_GAPS",
+            "S08",
+            TotalGapsParameters,
+            unit="idle_periods",
+            soft_policies=("0.4",),
+            since_policy="0.4",
+        ),
+        RuleDefinition(
+            "TEACHER_MAX_GAP_RUN",
+            "S09",
+            GapRunParameters,
+            unit="idle_periods",
+            soft_policies=("0.4",),
+            since_policy="0.4",
+        ),
+        RuleDefinition(
+            "TEACHER_MIN_FREE_TIME",
+            "S10",
+            FreeTimeParameters,
+            unit="free_days",  # free_sessions when parameters.unit == "session"
+            soft_policies=("0.4",),
+            since_policy="0.4",
+        ),
+        RuleDefinition(
+            "TEACHER_SINGLE_PERIOD_SESSION",
+            "S11",
+            SinglePeriodParameters,
+            unit="single_period_sessions",
+            soft_policies=("0.4",),
+            since_policy="0.4",
+        ),
     )
 }
+# S01 and S07 are distinct preferences, but policy forbids counting one teacher period twice.
+SHARED_SLOT_FAMILY = frozenset({"TEACHER_AVOID_SLOTS", "TEACHER_RESTRICTED_SLOTS"})
+GAP_CODES = frozenset(
+    {
+        "TEACHER_TOTAL_GAPS",
+        "TEACHER_MAX_GAP_RUN",
+        "TEACHER_MIN_FREE_TIME",
+        "TEACHER_SINGLE_PERIOD_SESSION",
+    }
+)
+
+
+def rule_unit(code: str, params: object) -> str:
+    """Raw-penalty unit of one rule; S10 depends on its chosen unit."""
+    if isinstance(params, FreeTimeParameters) and params.unit == "session":
+        return "free_sessions"
+    return DEFINITIONS[code].unit
 
 
 def known_in_policy(code: str, policy_version: str) -> bool:
@@ -157,6 +219,11 @@ def parse_parameters(
             PeriodWindowParameters,
             DaySpreadParameters,
             SubjectDayLimitParameters,
+            RestrictedSlotsParameters,
+            TotalGapsParameters,
+            GapRunParameters,
+            FreeTimeParameters,
+            SinglePeriodParameters,
         ),
     )
     for field in ("slot_ids", "session_ids", "requirement_ids"):
@@ -164,6 +231,33 @@ def parse_parameters(
         if len(values) != len(set(values)):
             raise ValueError("Duplicate rule parameter references")
     return parsed
+
+
+SLOT_PARAMETERS = (AvoidSlotsParameters, RestrictedSlotsParameters)
+SESSION_PARAMETERS = (
+    MaxSessionParameters,
+    PeriodWindowParameters,
+    TotalGapsParameters,
+    GapRunParameters,
+    SinglePeriodParameters,
+)
+
+
+def _gap_timeline_ambiguous(problem: "ScheduleInput") -> bool:
+    """Two sessions of one day overlapping in minutes make per-session gaps undefined."""
+    timed = [s for s in problem.time_slots if s.start_minute is not None]
+    for i, a in enumerate(timed):
+        for b in timed[i + 1 :]:
+            assert a.start_minute is not None and a.end_minute is not None
+            assert b.start_minute is not None and b.end_minute is not None
+            if (
+                a.day == b.day
+                and a.session != b.session
+                and a.start_minute < b.end_minute
+                and b.start_minute < a.end_minute
+            ):
+                return True
+    return False
 
 
 def _scope_allowed(rule: HardConstraintConfigV11 | SoftConstraintConfigV11) -> bool:
@@ -198,7 +292,7 @@ def validate_rule_config(problem: "ScheduleInput") -> None:
             raise CoreError("UNSUPPORTED_FEATURE", "RULE_SCOPE", "Rule scope is not supported")
         params = parse_parameters(r.code, r.parameters, policy)
         for other in enabled[:i]:
-            if other.code != r.code:
+            if other.code != r.code and {r.code, other.code} != SHARED_SLOT_FAMILY:
                 continue
             op = parse_parameters(other.code, other.parameters, policy)
             if isinstance(params, DaySpreadParameters) and isinstance(op, DaySpreadParameters):
@@ -215,7 +309,7 @@ def validate_rule_config(problem: "ScheduleInput") -> None:
                 set(other.scope.teacher_ids) or everyone
             ):
                 overlap = False
-            elif isinstance(params, AvoidSlotsParameters) and isinstance(op, AvoidSlotsParameters):
+            elif isinstance(params, SLOT_PARAMETERS) and isinstance(op, SLOT_PARAMETERS):
 
                 def hits(covered_id: str, targets: tuple[str, ...]) -> bool:
                     a = slots[covered_id]
@@ -233,9 +327,7 @@ def validate_rule_config(problem: "ScheduleInput") -> None:
                     s.can_teach and hits(s.id, params.slot_ids) and hits(s.id, op.slot_ids)
                     for s in slots.values()
                 )
-            elif isinstance(params, (MaxSessionParameters, PeriodWindowParameters)) and isinstance(
-                op, (MaxSessionParameters, PeriodWindowParameters)
-            ):
+            elif isinstance(params, SESSION_PARAMETERS) and isinstance(op, SESSION_PARAMETERS):
                 overlap = bool(set(params.session_ids) & set(op.session_ids))
             else:
                 overlap = True
@@ -243,3 +335,9 @@ def validate_rule_config(problem: "ScheduleInput") -> None:
                 raise CoreError(
                     "INPUT_INVALID", "OVERLAPPING_RULES", "Effective rule scopes overlap"
                 )
+    if any(r.code in GAP_CODES for r in enabled) and _gap_timeline_ambiguous(problem):
+        raise CoreError(
+            "UNSUPPORTED_FEATURE",
+            "GAP_TIMELINE",
+            "Gap and free-time rules need sessions that do not overlap within a day",
+        )

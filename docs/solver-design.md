@@ -131,6 +131,17 @@ S06 dùng bucket (lớp, môn, ngày) với `AddMaxEquality` (soft) hoặc `≤ 
 clone hard model. Ordering occurrence hoán đổi được bật cả khi có S05/S06 (oracle 60 seeds có/không
 ordering khớp optimum). Không chứng nhận hiệu năng; số cặp S05 tăng bậc hai theo cỡ nhóm.
 
+## Tiết trống và thời gian rảnh Phase 2C-2 (policy 0.4)
+
+`constraints/gaps.py` dựng cho mỗi GV trong scope và mỗi buổi được chọn: `teach[i]` (tổng biến
+placement phủ ô i, ≤ 1 nhờ occupancy), tiền tố/hậu tố OR bằng `AddMaxEquality`, và
+`idle = before ∧ after ∧ ¬teach` bằng bốn bất đẳng thức Boolean (exact). S09 dùng `run[i]` big-M với
+M = số ô của buổi, reset khi không idle, `longest = max(run)`; S10 dùng OR theo ngày/buổi; S11 reified
+`load == 1` hai chiều. Ô `can_teach=false` hoặc ô họp có idle = 0 cố định. Trên fixture 6 ngày × 2 buổi
+× 5 tiết, 1 GV, 20 tiết đơn, một rule thêm khoảng 169 biến (S08), 229 (S09), 8 (S10), 13 (S11); đây là
+số đếm model, không phải số đo hiệu năng. Ordering bật cả khi có S07–S11 (oracle 60 seeds có/không
+ordering khớp optimum).
+
 ## Run config và trạng thái
 
 SolveOptions: time_limit_seconds=60, num_workers=1 (1..64), seed=42 (0..2^31-1),

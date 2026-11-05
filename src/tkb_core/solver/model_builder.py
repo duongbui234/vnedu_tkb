@@ -7,6 +7,7 @@ from itertools import pairwise
 from ortools.sat.python import cp_model
 
 from tkb_core.constraints.hard import add_distribution_limits, add_load_limits, add_occupancy
+from tkb_core.constraints.registry import HARD_POLICIES
 from tkb_core.domain.models import ConstraintConfigV11, LessonOccurrence
 from tkb_core.preprocessing.feasibility import Placement, PreparedProblem
 
@@ -21,6 +22,12 @@ _RESOURCE_ONLY_SOFT_RULES = frozenset(
         # relabeling equal-domain occurrences of one requirement keeps validity and score.
         "SUBJECT_COMPONENT_DAY_SPREAD",
         "CLASS_SUBJECT_MAX_PERIODS_PER_DAY",
+        # Phase 2C-2: teacher/day/session/period only, same relabeling argument.
+        "TEACHER_RESTRICTED_SLOTS",
+        "TEACHER_TOTAL_GAPS",
+        "TEACHER_MAX_GAP_RUN",
+        "TEACHER_MIN_FREE_TIME",
+        "TEACHER_SINGLE_PERIOD_SESSION",
     }
 )
 
@@ -53,7 +60,7 @@ def _add_interchangeable_ordering(prepared: PreparedProblem, built: BuiltModel) 
         or any(
             r.enabled
             and (
-                config.policy_version not in ("0.2", "0.3")
+                config.policy_version not in HARD_POLICIES
                 or r.code not in _RESOURCE_ONLY_SOFT_RULES
             )
             for r in config.hard

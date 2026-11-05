@@ -4,7 +4,7 @@ from collections import Counter, defaultdict
 from collections.abc import Sequence
 from itertools import pairwise
 
-from tkb_core.constraints.registry import DEFINITIONS
+from tkb_core.constraints.registry import DEFINITIONS, HARD_POLICIES
 from tkb_core.contracts.capabilities import check_capabilities
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.contracts.output import ValidationReport
@@ -36,7 +36,7 @@ def _hard_variant_violations(problem: ScheduleInput, placed: Sequence[_Placed]) 
     so (code, teacher, slots) identifies the violated rule without exposing its ID.
     """
     config = problem.constraint_config
-    if not isinstance(config, ConstraintConfigV11) or config.policy_version not in ("0.2", "0.3"):
+    if not isinstance(config, ConstraintConfigV11) or config.policy_version not in HARD_POLICIES:
         return []
     slots = {s.id: s for s in problem.time_slots}
     requirements = {r.id: r for r in problem.teaching_requirements}

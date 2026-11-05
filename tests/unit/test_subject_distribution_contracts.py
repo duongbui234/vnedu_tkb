@@ -42,7 +42,7 @@ def test_policy_03_roundtrip_and_unknown_version(dist_case: dict[str, Any]) -> N
     p = ScheduleInput.model_validate(dist_case)
     assert ScheduleInput.model_validate_json(p.model_dump_json()) == p
     check_capabilities(p)
-    dist_case["constraint_config"]["policy_version"] = "0.4"
+    dist_case["constraint_config"]["policy_version"] = "0.9"
     with pytest.raises(ValidationError):
         ScheduleInput.model_validate(dist_case)
 

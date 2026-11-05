@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from ortools.sat.python import cp_model
 
+from tkb_core.constraints.gaps import compile_gap_rule
 from tkb_core.constraints.registry import parse_parameters
 from tkb_core.constraints.s03_bounds import S03BoundsDecision, derive_s03_bounds
 from tkb_core.domain.errors import CoreError
@@ -12,10 +13,15 @@ from tkb_core.domain.models import ConstraintConfigV11
 from tkb_core.domain.rule_parameters import (
     AvoidSlotsParameters,
     DaySpreadParameters,
+    FreeTimeParameters,
+    GapRunParameters,
     MaxDayParameters,
     MaxSessionParameters,
     PeriodWindowParameters,
+    RestrictedSlotsParameters,
+    SinglePeriodParameters,
     SubjectDayLimitParameters,
+    TotalGapsParameters,
 )
 from tkb_core.preprocessing.feasibility import PreparedProblem
 from tkb_core.solver.model_builder import BuiltModel
@@ -174,15 +180,34 @@ def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
         if not rule.enabled:
             continue
         params = parse_parameters(rule.code, rule.parameters, config.policy_version)
-        if isinstance(params, (DaySpreadParameters, SubjectDayLimitParameters)):
-            raw_var, raw_limit = _compile_distribution(
-                prepared,
-                built,
-                rule.id,
-                params,
-                set(rule.scope.class_ids) or {c.id for c in problem.classes},
-                set(rule.scope.subject_ids) or {s.id for s in problem.subjects},
-            )
+        if isinstance(
+            params,
+            (
+                DaySpreadParameters,
+                SubjectDayLimitParameters,
+                TotalGapsParameters,
+                GapRunParameters,
+                FreeTimeParameters,
+                SinglePeriodParameters,
+            ),
+        ):
+            if isinstance(params, (DaySpreadParameters, SubjectDayLimitParameters)):
+                raw_var, raw_limit = _compile_distribution(
+                    prepared,
+                    built,
+                    rule.id,
+                    params,
+                    set(rule.scope.class_ids) or {c.id for c in problem.classes},
+                    set(rule.scope.subject_ids) or {s.id for s in problem.subjects},
+                )
+            else:
+                raw_var, raw_limit = compile_gap_rule(
+                    prepared,
+                    built,
+                    rule.id,
+                    params,
+                    set(rule.scope.teacher_ids) or {t.id for t in problem.teachers},
+                )
             _range(rule.weight)
             _range(raw_limit * rule.weight, MAX_OBJECTIVE)
             tier_bounds[rule.priority] += raw_limit * rule.weight
@@ -216,7 +241,7 @@ def compile_soft(prepared: PreparedProblem, built: BuiltModel) -> CompiledSoft:
             ):
                 covered = [slots[s] for s in placement.slot_ids]
                 cost = 0
-                if isinstance(params, AvoidSlotsParameters):
+                if isinstance(params, (AvoidSlotsParameters, RestrictedSlotsParameters)):
                     for slot in covered:
                         if prepared.normalized.timed:
                             assert slot.start_minute is not None and slot.end_minute is not None
