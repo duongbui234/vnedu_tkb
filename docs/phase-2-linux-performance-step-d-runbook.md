@@ -1,10 +1,17 @@
 # Phase 2 hiệu năng v2 — runbook bước D (sinh bundle + preflight) trên Linux
 
 Ngày 2026-11-05. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-05; chưa chạy.** Dùng cho bước D của
-[kế hoạch v2](superpowers/plans/2026-11-05-phase-2-linux-performance-v2.md) (§5 bước 1–2, §8). Mã nguồn:
-commit mới nhất của `main`, **phải chứa bản sửa R1** của diễn tập E0 (commit "benchmarks: fix rehearsal
-finding R1 …"). Ghi lại `git rev-parse HEAD` khi chạy; mọi chỗ dưới đây gọi đó là "commit đã ghi". Bản
-đầu runbook ghi `15d7578`; commit đó thiếu bản sửa R1 nên không dùng nữa.
+[kế hoạch v2](superpowers/plans/2026-11-05-phase-2-linux-performance-v2.md) (§5 bước 1–2, §8).
+
+**Mã nguồn: ghim commit `86f624d`** (`86f624df1600f95f1222bc6c7e81f96b43e6c8e1`) theo P3-1 của
+[đặc tả Phase 3](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md). Commit này có đủ
+tooling v2 và bản sửa R1, chưa có code Phase 3. Không dùng `origin/main` mới nhất, vì từ khi Phase 3 bắt
+đầu `main` sẽ có thay đổi trong `src/`, làm số đo lẫn code mới. D, E, F phải cùng commit này. Mọi chỗ
+dưới đây gọi đó là "commit ghim". Các bản trước của runbook ghi `15d7578` (thiếu R1), rồi `origin/main`
+(không còn đúng sau P3-1).
+
+Đọc runbook này từ `main` trên GitHub. Sau `git checkout --detach 86f624d`, file runbook trong thư mục
+làm việc là bản cũ, chưa có đoạn ghim commit này.
 
 Bước D **chỉ** gồm hai việc: sinh bundle 72 dataset, rồi chạy preflight trên wheel đã cài. Không có bước
 nào ở đây gọi `prepare`, seal, warmup, pilot hay primary. Duyệt runbook này không phải ủy quyền chạy các
@@ -16,7 +23,7 @@ bước đó. Mọi output nằm dưới `benchmarks/artifacts/` (đã được 
 |---|---|
 | Linux x86_64 native (không WSL), cùng máy dự định chạy campaign (G9) | `preflight` từ chối nền tảng khác Linux; số đo P sau này phải trên cùng máy |
 | Python 3.12 (`.python-version`) qua `uv`; cloud đã dùng `uv 0.11.32` | `preflight` đòi đúng 3.12 |
-| `git` có trong PATH; repo là clone git, **working tree sạch** tại commit đã ghi | Probe so từng byte wheel đã cài với `src/` và ghi `git rev-parse` |
+| `git` có trong PATH; repo là clone git, **working tree sạch** tại commit ghim | Probe so từng byte wheel đã cài với `src/` và ghi `git rev-parse` |
 | Mạng tới PyPI | Hai venv cài dependency từ `uv export --locked` với `--require-hashes --only-binary :all:` |
 | Đĩa trống ≥ 3 GiB | Bundle, hai venv, wheel, log |
 | **cgroup v2**: `stat -fc %T /sys/fs/cgroup` in ra `cgroup2fs` (R2) | Gate headroom của prepare/run (bước E) chỉ chấp nhận cgroup2 có memory controller; diễn tập E0 trên cloud (cgroup v1) bị chặn ở đây. Bước D không cần, nhưng kiểm ngay để không phí công |
@@ -33,15 +40,11 @@ git fetch origin main
 ```
 
 ```bash
-git checkout --detach origin/main
+git checkout --detach 86f624d
 ```
 
 ```bash
 git rev-parse HEAD
-```
-
-```bash
-git log --oneline -1 -- benchmarks/run_phase2.py
 ```
 
 ```bash
@@ -52,7 +55,7 @@ git status --porcelain
 stat -fc %T /sys/fs/cgroup
 ```
 
-Ghi lại commit (`git rev-parse HEAD`). Dòng `git log` phải là commit sửa R1 hoặc mới hơn. `git status
+`git rev-parse HEAD` phải in `86f624df1600f95f1222bc6c7e81f96b43e6c8e1`. `git status
 --porcelain` phải không in gì. Lệnh `stat` phải in `cgroup2fs`. Sai bất kỳ điều nào thì dừng lại (§4).
 
 2. Đồng bộ môi trường dev theo lock:
@@ -75,7 +78,7 @@ Kỳ vọng: exit 0 và một dòng JSON `{"status": "DATASETS_VERIFIED", "proto
 sha256sum benchmarks/artifacts/phase2-v2/bundle/manifest.json
 ```
 
-5. Chạy preflight. Bước này tự build wheel từ commit đã ghi, tạo hai venv (có và không OR-Tools), chạy
+5. Chạy preflight. Bước này tự build wheel từ commit ghim, tạo hai venv (có và không OR-Tools), chạy
    smoke 0.4 và kiểm lại bundle dưới import guard:
 
 ```bash
@@ -115,7 +118,7 @@ Tôi sẽ kiểm:
 
 - manifest có `protocol = phase2-linux-v2`, `linux_status = PASS`, `policy04_smoke = PASS` (output 1.5,
   Score 1.2);
-- `git_commit` trùng commit đã ghi; bundle có 72 dataset;
+- `git_commit` trùng commit ghim; bundle có 72 dataset;
 - hash wheel và bundle khớp với output lệnh 4 và 6;
 - log không có check nào bị timeout hay exit khác 0.
 
@@ -125,7 +128,7 @@ Kết quả sẽ được ghi vào tài liệu báo cáo khi anh/chị cho phép
 
 Dừng, giữ nguyên thư mục và gửi lại log khi gặp bất kỳ trường hợp nào sau đây:
 
-- `git status --porcelain` có in ra gì, HEAD không chứa bản sửa R1, hoặc `/sys/fs/cgroup` không phải
+- `git status --porcelain` có in ra gì, HEAD khác `86f624d…`, hoặc `/sys/fs/cgroup` không phải
   `cgroup2fs`.
 - `uv sync --locked` báo lock lệch, hoặc không tải được dependency.
 - Lệnh 3 không ra `DATASETS_VERIFIED` với 72 dataset (ví dụ `DATASET_GENERATION_FAILED`).
@@ -142,7 +145,7 @@ ví dụ `preflight-2`, và báo cả hai lần.
   sau khi preflight được kiểm.
 - Preflight PASS chỉ nói rằng tooling, wheel và bundle nhất quán trên máy này. Nó không phải số đo hiệu
   năng, không chứng nhận Windows, không chấp nhận chất lượng lịch.
-- Nếu Core hoặc generator thay đổi sau commit đã ghi, bundle cũ hết hiệu lực (kiểm bằng sinh lại) và phải sinh
+- Nếu Core hoặc generator thay đổi sau commit ghim, bundle cũ hết hiệu lực (kiểm bằng sinh lại) và phải sinh
   lại từ đầu.
 
 ## 6. Kiểm tra khi soạn runbook

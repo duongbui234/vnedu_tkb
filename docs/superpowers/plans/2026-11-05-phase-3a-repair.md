@@ -1,6 +1,6 @@
 # Phase 3A — kế hoạch triển khai repair
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — P3-1 đến P3-12 đã duyệt ngày 2026-11-05; chưa triển khai (bước B và C cần ủy quyền riêng).**
+Ngày 2026-11-05. Trạng thái: **DRAFT — P3-1 đến P3-12 đã duyệt ngày 2026-11-05; bước B (ghim commit `86f624d` trong runbook D/E/F) đã xong; bước C chưa triển khai, cần ủy quyền riêng.**
 Đặc tả: [2026-11-05-phase-3-repair-diagnostics-design.md](../specs/2026-11-05-phase-3-repair-diagnostics-design.md).
 Base `86f624d` trên `main`.
 

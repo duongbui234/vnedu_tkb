@@ -3,6 +3,10 @@
 Ngày 2026-11-05. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-05; chưa chạy.** Đây là phần thao tác của
 [kế hoạch bước F](superpowers/plans/2026-11-05-phase-2-linux-performance-step-f.md) (M1–M7 đã duyệt).
 
+**Mã nguồn: commit ghim `86f624d`** (`86f624df1600f95f1222bc6c7e81f96b43e6c8e1`), giống bước D và E (P3-1 của
+[đặc tả Phase 3](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md)). Đọc runbook này
+từ `main` trên GitHub, vì file trong thư mục làm việc ở `86f624d` là bản cũ.
+
 Chỉ dùng khi **cả ba** điều kiện sau đều đúng (M1):
 
 - [bước E](phase-2-linux-performance-step-e-runbook.md) đã chạy trên chính máy này;
@@ -55,7 +59,7 @@ command -v tmux systemd-inhibit
 
 Điều kiện để đi tiếp:
 
-- `git rev-parse HEAD` **trùng commit của bước D/E**.
+- `git rev-parse HEAD` in **`86f624df1600f95f1222bc6c7e81f96b43e6c8e1`** (commit ghim, trùng bước D/E).
 - `git status --porcelain` không in gì.
 - `stat` in `cgroup2fs`.
 - `MemAvailable` ≥ 6 291 456 kB (6 GiB). Cỡ 40 lớp cần target 4 GiB cộng reserve 2 GiB. Thiếu thì gate sẽ

@@ -5,6 +5,11 @@ Ngày 2026-11-05. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 20
 duyệt). Chỉ dùng sau khi [bước D](phase-2-linux-performance-step-d-runbook.md) đã PASS trên chính máy này
 và kết quả đã được kiểm.
 
+**Mã nguồn: commit ghim `86f624d`** (`86f624df1600f95f1222bc6c7e81f96b43e6c8e1`), giống bước D (P3-1 của
+[đặc tả Phase 3](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md)). Không checkout
+`main` mới hơn giữa bước D và F. Đọc runbook này từ `main` trên GitHub, vì file trong thư mục làm việc ở
+`86f624d` là bản cũ.
+
 Bước E chỉ gồm prepare (không solve), warmup (một bài tiny, không tính là mẫu) và đúng 2 pilot. **Không
 chạy `--phase primary`.** Primary (bước F) cần ủy quyền riêng sau khi xem kết quả pilot. Mọi output nằm
 dưới `benchmarks/artifacts/` (đã `.gitignore`); không commit chúng.
@@ -39,7 +44,7 @@ cat .git/tkb-campaign-owner/active.json
 
 Điều kiện để đi tiếp:
 
-- `git rev-parse HEAD` **trùng commit đã ghi ở bước D**.
+- `git rev-parse HEAD` in **`86f624df1600f95f1222bc6c7e81f96b43e6c8e1`** (commit ghim, trùng bước D).
 - `git status --porcelain` không in gì.
 - `stat` in `cgroup2fs`.
 - `MemAvailable` ≥ 4 194 304 kB (4 GiB). Trước khi chạy, đóng bớt ứng dụng nặng.
