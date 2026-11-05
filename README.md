@@ -5,7 +5,9 @@ S01–S04 theo ưu tiên P1–P3, có independent hard validator và score evalu
 Input 1.0 giữ hành vi/hash Phase 1 và phát output 1.1; input 1.1/policy 0.1 phát output 1.2.
 Phase 2B (synthetic): input 1.1/policy 0.2 thêm hard variants S01–S04 explicit và phát output 1.3.
 Phase 2C-1 (synthetic): policy 0.3 thêm phân phối môn S05/S06 (soft và hard), phát output 1.4
-với ScoreReport 1.1. Output reader đọc 1.0–1.4. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
+với ScoreReport 1.1. Phase 2C-2 (synthetic): policy 0.4 thêm S07–S11 (ô hạn chế, tiết trống,
+ngày/buổi rảnh, buổi một tiết; chỉ soft) và `occupied_work`, phát output 1.5 với ScoreReport 1.2.
+Output reader đọc 1.0–1.5. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
 
 ## Chạy local
 
@@ -90,3 +92,12 @@ component phạt `max(0, k − |day_i − day_j|)` ngày thiếu; hard: mọi c�
 Khoảng cách theo giá trị `day`; không có k/limit mặc định. Policy 0.1/0.2 coi hai mã này là
 unknown. Xem [đặc tả 2C-1](docs/superpowers/specs/2026-11-05-phase-2c-subject-distribution-design.md)
 và [báo cáo 2C-1](docs/phase-2c-report.md).
+
+## Tiết trống và thời gian rảnh Phase 2C-2
+
+Policy `0.4` thêm S07 `TEACHER_RESTRICTED_SLOTS`, S08 `TEACHER_TOTAL_GAPS`, S09 `TEACHER_MAX_GAP_RUN`,
+S10 `TEACHER_MIN_FREE_TIME` và S11 `TEACHER_SINGLE_PERIOD_SESSION` (chỉ soft, teacher scope), cùng
+`constraint_config.occupied_work` cho lịch họp đã xác nhận (phải nằm ngoài availability). Ô
+`can_teach=false` và ô họp không phải tiết trống. Xem
+[đặc tả 2C-2](docs/superpowers/specs/2026-11-05-phase-2c-gaps-design.md) và
+[báo cáo 2C-2](docs/phase-2c-gaps-report.md).

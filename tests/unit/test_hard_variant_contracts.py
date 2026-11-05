@@ -28,7 +28,7 @@ def test_policy_versions_dispatch(hard_case: dict[str, Any]) -> None:
     p = ScheduleInput.model_validate(hard_case)
     assert p.constraint_config.policy_version == "0.2"
     assert ScheduleInput.model_validate_json(p.model_dump_json()) == p
-    hard_case["constraint_config"]["policy_version"] = "0.4"
+    hard_case["constraint_config"]["policy_version"] = "0.9"
     with pytest.raises(ValidationError):
         ScheduleInput.model_validate(hard_case)
 

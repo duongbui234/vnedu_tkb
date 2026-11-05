@@ -313,3 +313,133 @@ def test_spread_pair_guard_is_resource_limit(monkeypatch: pytest.MonkeyPatch) ->
     assert result.diagnostics[0].code == "RESOURCE_LIMIT"
     monkeypatch.setattr(soft, "MAX_SPREAD_PAIRS", 6)  # exactly at the limit is allowed
     assert solve(problem).status == "OPTIMAL"
+
+
+GAP_SLOTS = [f"{d}-{s}-{p}" for d in (1, 2) for s in ("AM", "PM") for p in (1, 2, 3, 4)]
+
+
+def _gap_raw(
+    data: dict[str, Any],
+    code: str,
+    parameters: dict[str, Any],
+    starts: list[str],
+    blocks: list[int] | None = None,
+    occupied: list[str] | None = None,
+    no_teach: list[str] | None = None,
+) -> int:
+    blocks = blocks or [1] * len(starts)
+    data["teaching_requirements"][0].update(periods_per_cycle=sum(blocks), block_durations=blocks)
+    for slot in data["time_slots"]:
+        slot["can_teach"] = slot["id"] not in (no_teach or [])
+    data["teachers"][0]["available_slot_ids"] = [s for s in GAP_SLOTS if s not in (occupied or [])]
+    data["constraint_config"]["occupied_work"] = (
+        [{"teacher_id": "t", "slot_ids": occupied}] if occupied else []
+    )
+    data["constraint_config"]["soft"] = [
+        {"id": "g", "code": code, "parameters": parameters, "priority": 2, "weight": 3}
+    ]
+    p = prepare(ScheduleInput.model_validate(data))
+    built = build_model(p)
+    compiled = compile_soft(p, built)
+    target = {f"r::{i}": s for i, s in enumerate(starts, 1)}
+    for oid, domain in p.domains.items():
+        for placement, v in zip(domain, built.variables[oid], strict=True):
+            built.model.add(v == int(placement.start_slot_id == target[oid]))
+    solver = cp_model.CpSolver()
+    assert solver.solve(built.model) == cp_model.OPTIMAL
+    raw = int(solver.value(compiled.rules[0].raw_expression))
+    assert solver.value(compiled.tiers[2]) == 3 * raw
+    return raw
+
+
+@pytest.mark.parametrize(
+    "code,parameters,starts,extra,expected",
+    [
+        ("TEACHER_TOTAL_GAPS", {"session_ids": ["AM"]}, ["1-AM-1", "1-AM-4"], {}, 2),
+        (
+            "TEACHER_TOTAL_GAPS",
+            {"session_ids": ["AM"]},
+            ["1-AM-1", "1-AM-4"],
+            {"no_teach": ["1-AM-2"]},
+            1,
+        ),
+        (
+            "TEACHER_TOTAL_GAPS",
+            {"session_ids": ["AM"]},
+            ["1-AM-1", "1-AM-4"],
+            {"occupied": ["1-AM-3"]},
+            1,
+        ),
+        (
+            "TEACHER_TOTAL_GAPS",
+            {"session_ids": ["AM"]},
+            ["1-AM-1", "1-AM-4"],
+            {"blocks": [2, 1]},
+            1,
+        ),
+        ("TEACHER_TOTAL_GAPS", {"session_ids": ["AM"]}, ["1-PM-1", "1-PM-4"], {}, 0),
+        ("TEACHER_MAX_GAP_RUN", {"limit": 0, "session_ids": ["AM"]}, ["1-AM-1", "1-AM-4"], {}, 2),
+        ("TEACHER_MAX_GAP_RUN", {"limit": 1, "session_ids": ["AM"]}, ["1-AM-1", "1-AM-4"], {}, 1),
+        (
+            "TEACHER_MAX_GAP_RUN",
+            {"limit": 0, "session_ids": ["AM"]},
+            ["1-AM-1", "1-AM-4"],
+            {"no_teach": ["1-AM-2"]},
+            1,
+        ),
+        (
+            "TEACHER_MAX_GAP_RUN",
+            {"limit": 0, "session_ids": ["AM"]},
+            ["1-AM-1", "1-AM-4"],
+            {"occupied": ["1-AM-2"]},
+            1,
+        ),
+        (
+            "TEACHER_MAX_GAP_RUN",
+            {"limit": 1, "session_ids": ["AM", "PM"]},
+            ["1-AM-1", "1-AM-4", "1-PM-1", "1-PM-4"],
+            {},
+            2,
+        ),
+        ("TEACHER_MIN_FREE_TIME", {"unit": "day", "target": 2}, ["1-AM-1", "1-PM-1"], {}, 1),
+        (
+            "TEACHER_MIN_FREE_TIME",
+            {"unit": "day", "target": 2},
+            ["1-AM-1", "1-PM-1"],
+            {"occupied": ["2-PM-3"]},
+            2,
+        ),
+        ("TEACHER_MIN_FREE_TIME", {"unit": "session", "target": 4}, ["1-AM-1", "1-AM-2"], {}, 1),
+        (
+            "TEACHER_MIN_FREE_TIME",
+            {"unit": "day", "target": 1},
+            ["1-AM-1"],
+            {"no_teach": [s for s in GAP_SLOTS if s.startswith("2-")]},
+            1,
+        ),
+        (
+            "TEACHER_SINGLE_PERIOD_SESSION",
+            {"session_ids": ["AM", "PM"]},
+            ["1-AM-1", "2-AM-1"],
+            {},
+            2,
+        ),
+        (
+            "TEACHER_SINGLE_PERIOD_SESSION",
+            {"session_ids": ["AM", "PM"]},
+            ["1-AM-1", "1-PM-1"],
+            {"blocks": [2, 1]},
+            1,
+        ),
+        ("TEACHER_RESTRICTED_SLOTS", {"slot_ids": ["1-AM-2"]}, ["1-AM-1"], {"blocks": [2]}, 1),
+    ],
+)
+def test_gap_expressions_without_objective(
+    gap_case: dict[str, Any],
+    code: str,
+    parameters: dict[str, Any],
+    starts: list[str],
+    extra: dict[str, Any],
+    expected: int,
+) -> None:
+    assert _gap_raw(gap_case, code, parameters, starts, **extra) == expected

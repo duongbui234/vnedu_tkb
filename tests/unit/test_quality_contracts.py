@@ -154,10 +154,15 @@ def test_phase2a_rules_explicitly_support_soft_only() -> None:
         "TEACHER_MAX_PERIODS_PER_DAY",
         "TEACHER_PREFERRED_PERIOD_WINDOW",
     }
-    # Policy 0.1 modes: S01-S04 soft only; later codes (Phase 2C-1) have none in 0.1.
+    # Policy 0.1 modes: S01-S04 soft only; later codes (Phase 2C) have none in 0.1.
     assert set(DEFINITIONS) == phase2a | {
         "SUBJECT_COMPONENT_DAY_SPREAD",
         "CLASS_SUBJECT_MAX_PERIODS_PER_DAY",
+        "TEACHER_RESTRICTED_SLOTS",
+        "TEACHER_TOTAL_GAPS",
+        "TEACHER_MAX_GAP_RUN",
+        "TEACHER_MIN_FREE_TIME",
+        "TEACHER_SINGLE_PERIOD_SESSION",
     }
     assert all(
         rule.supported_modes == (("soft",) if code in phase2a else ())

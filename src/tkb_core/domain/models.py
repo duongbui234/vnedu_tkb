@@ -1,15 +1,17 @@
 """Typed domain records; parsing these records does not prove scheduling feasibility."""
 
-from typing import Annotated, Literal, Self
+from typing import Annotated, Any, Literal, Self
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
     JsonValue,
+    SerializerFunctionWrapHandler,
     StrictBool,
     StrictInt,
     StrictStr,
+    model_serializer,
     model_validator,
 )
 
@@ -199,9 +201,31 @@ class SoftConstraintConfigV11(HardConstraintConfigV11):
     weight: PositiveInt
 
 
+class OccupiedWork(DomainModel):
+    """Confirmed non-teaching work (e.g. meetings) of one teacher; never teaching load."""
+
+    teacher_id: Identifier
+    slot_ids: Annotated[tuple[Identifier, ...], Field(min_length=1)]
+
+
 class ConstraintConfigV11(DomainModel):
     """Versioned policy manifest with already-resolved effective scopes."""
 
-    policy_version: Literal["0.1", "0.2", "0.3"]
+    policy_version: Literal["0.1", "0.2", "0.3", "0.4"]
     hard: tuple[HardConstraintConfigV11, ...] = ()
     soft: tuple[SoftConstraintConfigV11, ...] = ()
+    # Policy 0.4 only. Empty is omitted from dumps so older payloads and hashes are unchanged.
+    occupied_work: tuple[OccupiedWork, ...] = ()
+
+    @model_validator(mode="after")
+    def occupied_work_policy(self) -> Self:
+        if self.occupied_work and self.policy_version != "0.4":
+            raise ValueError("occupied_work requires policy_version 0.4")
+        return self
+
+    @model_serializer(mode="wrap")
+    def omit_empty_occupied_work(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
+        data = dict(handler(self))
+        if not self.occupied_work:
+            data.pop("occupied_work", None)
+        return data

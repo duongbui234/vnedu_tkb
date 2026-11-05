@@ -16,7 +16,14 @@ class RuleScore(DomainModel):
     code: Identifier
     priority: Priority
     weight: PositiveInt
-    unit: Literal["teaching_periods", "day_gap_shortfall"] = "teaching_periods"
+    unit: Literal[
+        "teaching_periods",
+        "day_gap_shortfall",
+        "idle_periods",
+        "free_days",
+        "free_sessions",
+        "single_period_sessions",
+    ] = "teaching_periods"
     raw_penalty: NonNegativeInt
     weighted_penalty: NonNegativeInt
 
@@ -27,9 +34,25 @@ class RuleScore(DomainModel):
         return self
 
 
+SCORE_UNITS = {
+    "1.0": frozenset({"teaching_periods"}),
+    "1.1": frozenset({"teaching_periods", "day_gap_shortfall"}),
+    "1.2": frozenset(
+        {
+            "teaching_periods",
+            "day_gap_shortfall",
+            "idle_periods",
+            "free_days",
+            "free_sessions",
+            "single_period_sessions",
+        }
+    ),
+}
+
+
 class ScoreReport(DomainModel):
-    # 1.1 (policy 0.3) adds the day_gap_shortfall unit; 1.0 keeps only teaching_periods.
-    schema_version: Literal["1.0", "1.1"] = "1.0"
+    # 1.1 (policy 0.3) adds day_gap_shortfall; 1.2 (policy 0.4) adds the gap/free-time units.
+    schema_version: Literal["1.0", "1.1", "1.2"] = "1.0"
     status: Literal[
         "OK", "INPUT_INVALID", "UNSUPPORTED_FEATURE", "INVALID_SCHEDULE", "INTERNAL_ERROR"
     ]
@@ -40,8 +63,9 @@ class ScoreReport(DomainModel):
 
     @model_validator(mode="after")
     def arithmetic(self) -> Self:
-        if self.schema_version == "1.0" and any(r.unit != "teaching_periods" for r in self.rules):
-            raise ValueError("Score report 1.0 only has teaching_periods units")
+        allowed = SCORE_UNITS[self.schema_version]
+        if any(r.unit not in allowed for r in self.rules):
+            raise ValueError("Score report version does not define this unit")
         if self.status == "OK":
             totals = tuple(
                 sum(r.weighted_penalty for r in self.rules if r.priority == p) for p in (1, 2, 3)
@@ -81,7 +105,7 @@ class StageRun(DomainModel):
 
 
 class QualityReport(DomainModel):
-    policy_version: Literal["0.1", "0.2", "0.3"] = "0.1"
+    policy_version: Literal["0.1", "0.2", "0.3", "0.4"] = "0.1"
     status: Literal["NOT_REQUESTED", "NOT_EVALUATED", "SCORED_FEASIBLE", "LEXICOGRAPHIC_OPTIMAL"]
     score: ScoreReport | None = None
     optimal_prefix: tuple[Priority, ...] = ()

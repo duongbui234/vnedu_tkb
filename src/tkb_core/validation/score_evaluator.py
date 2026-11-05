@@ -1,22 +1,27 @@
 """Recompute scores from raw assignments, independently of placements and CP-SAT."""
 
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Sequence
 from typing import Literal
 
-from tkb_core.constraints.registry import DEFINITIONS, parse_parameters, validate_rule_config
+from tkb_core.constraints.registry import parse_parameters, rule_unit, validate_rule_config
 from tkb_core.contracts.capabilities import check_capabilities
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.contracts.score import RuleScore, ScoreReport
 from tkb_core.domain.errors import CoreError
-from tkb_core.domain.models import ConstraintConfigV11, Diagnostic, ScheduleAssignment
+from tkb_core.domain.models import ConstraintConfigV11, Diagnostic, ScheduleAssignment, TimeSlot
 from tkb_core.domain.rule_parameters import (
     AvoidSlotsParameters,
     DaySpreadParameters,
+    FreeTimeParameters,
+    GapRunParameters,
     MaxDayParameters,
     MaxSessionParameters,
     PeriodWindowParameters,
+    RestrictedSlotsParameters,
+    SinglePeriodParameters,
     SubjectDayLimitParameters,
+    TotalGapsParameters,
 )
 from tkb_core.validation.independent_validator import validate_schedule
 
@@ -33,6 +38,7 @@ def _evaluate_validated(
     # One entry per component (occurrence): requirement and the real day it starts on.
     component_days: list[tuple[str, int]] = []
     subject_days: Counter[tuple[str, str, int]] = Counter()
+    taught: dict[tuple[str, int, str], set[str]] = defaultdict(set)
     for a in assignments:
         rid, _, ordinal = a.occurrence_id.rpartition("::")
         req = reqs[rid]
@@ -44,9 +50,17 @@ def _evaluate_validated(
             teacher = req.teacher_ids[0]
             covered.append((teacher, slot))
             loads[teacher, slot.day, slot.session] += 1
+            taught[teacher, slot.day, slot.session].add(slot.id)
             subject_days[req.class_ids[0], req.subject_id, slot.day] += 1
     rows = []
     config = problem.constraint_config
+    calendar: dict[tuple[int, str], list[TimeSlot]] = defaultdict(list)
+    for slot in sorted(problem.time_slots, key=lambda x: (x.day, x.session, x.period)):
+        calendar[slot.day, slot.session].append(slot)
+    occupied: dict[str, set[str]] = defaultdict(set)
+    if isinstance(config, ConstraintConfigV11):
+        for entry in config.occupied_work:
+            occupied[entry.teacher_id].update(entry.slot_ids)
     if isinstance(config, ConstraintConfigV11):
         for rule in sorted(config.soft, key=lambda r: r.id):
             if not rule.enabled:
@@ -54,7 +68,7 @@ def _evaluate_validated(
             teachers = set(rule.scope.teacher_ids) or {t.id for t in problem.teachers}
             params = parse_parameters(rule.code, rule.parameters, config.policy_version)
             raw = 0
-            if isinstance(params, AvoidSlotsParameters):
+            if isinstance(params, (AvoidSlotsParameters, RestrictedSlotsParameters)):
                 for teacher, slot in covered:
                     if teacher not in teachers:
                         continue
@@ -107,6 +121,48 @@ def _evaluate_validated(
                     for (cls, subject, _), n in subject_days.items()
                     if cls in classes and subject in subjects
                 )
+            elif isinstance(params, (TotalGapsParameters, GapRunParameters)):
+                for teacher in sorted(teachers):
+                    for (day, session), session_slots in calendar.items():
+                        mine = taught.get((teacher, day, session), set())
+                        if session not in params.session_ids or len(mine) < 2:
+                            continue
+                        periods = [x.period for x in session_slots if x.id in mine]
+                        first, last = min(periods), max(periods)
+                        run = longest = idle_count = 0
+                        for slot in session_slots:
+                            idle = (
+                                first < slot.period < last
+                                and slot.can_teach
+                                and slot.id not in mine
+                                and slot.id not in occupied[teacher]
+                            )
+                            idle_count += int(idle)
+                            run = run + 1 if idle else 0
+                            longest = max(longest, run)
+                        if isinstance(params, GapRunParameters):
+                            raw += max(0, longest - params.limit)
+                        else:
+                            raw += idle_count
+            elif isinstance(params, FreeTimeParameters):
+                for teacher in sorted(teachers):
+                    units: set[object] = set()
+                    busy: set[object] = set()
+                    for (day, session), session_slots in calendar.items():
+                        key = day if params.unit == "day" else (day, session)
+                        if any(x.can_teach for x in session_slots):
+                            units.add(key)
+                        if taught.get((teacher, day, session)) or any(
+                            x.id in occupied[teacher] for x in session_slots
+                        ):
+                            busy.add(key)
+                    raw += max(0, params.target - len(units - busy))
+            elif isinstance(params, SinglePeriodParameters):
+                raw = sum(
+                    1
+                    for (teacher, _, session), mine in taught.items()
+                    if teacher in teachers and session in params.session_ids and len(mine) == 1
+                )
             else:
                 raise CoreError("UNSUPPORTED_FEATURE", "UNKNOWN_RULE", "Unknown enabled preference")
             rows.append(
@@ -115,7 +171,7 @@ def _evaluate_validated(
                     code=rule.code,
                     priority=rule.priority,
                     weight=rule.weight,
-                    unit=DEFINITIONS[rule.code].unit,
+                    unit=rule_unit(rule.code, params),
                     raw_penalty=raw,
                     weighted_penalty=raw * rule.weight,
                 )
@@ -130,11 +186,14 @@ def _evaluate_validated(
     )
 
 
-def score_version(problem: ScheduleInput) -> Literal["1.0", "1.1"]:
-    """Policy 0.3 reports use ScoreReport 1.1 (day_gap_shortfall unit); others keep 1.0."""
+def score_version(problem: ScheduleInput) -> Literal["1.0", "1.1", "1.2"]:
+    """ScoreReport version of the input's policy: 0.3 -> 1.1, 0.4 -> 1.2, older -> 1.0."""
     config = problem.constraint_config
-    if isinstance(config, ConstraintConfigV11) and config.policy_version == "0.3":
-        return "1.1"
+    if isinstance(config, ConstraintConfigV11):
+        if config.policy_version == "0.3":
+            return "1.1"
+        if config.policy_version == "0.4":
+            return "1.2"
     return "1.0"
 
 
@@ -143,7 +202,7 @@ def evaluate_score(
 ) -> ScoreReport:
     """Validate hard correctness before returning a complete independent score."""
     fingerprint = None
-    version: Literal["1.0", "1.1"] = "1.0"
+    version: Literal["1.0", "1.1", "1.2"] = "1.0"
 
     def error(
         status: Literal[

@@ -128,3 +128,12 @@ UNKNOWN_RULE), nên hash/hành vi cũ không đổi. Output 1.4 ↔ policy 0.3 �
 1.1 thêm unit `day_gap_shortfall`, ScoreReport 1.0 chỉ nhận `teaching_periods`. Validation report có
 thể chứa `HARD_DAY_SPREAD` (resource_ids = requirements của cặp) và `HARD_SUBJECT_DAY_LIMIT`
 (resource_ids = (lớp, môn)).
+
+## Bổ sung Phase 2C-2
+
+Input 1.1 nhận `policy_version=0.4` (gồm mọi rule của 0.3) và `constraint_config.occupied_work`:
+`[{teacher_id, slot_ids}]`, mỗi GV một entry, slot tồn tại và không trùng, phải nằm ngoài
+`available_slot_ids` của GV (availability `null` bị từ chối). Field chỉ hợp lệ ở policy 0.4; danh sách
+rỗng không xuất hiện trong dump/fingerprint nên payload và hash cũ không đổi. Fingerprint sort entries
+theo GV và sort `slot_ids`. Output 1.5 ↔ policy 0.4 ↔ ScoreReport 1.2 (thêm unit `idle_periods`,
+`free_days`, `free_sessions`, `single_period_sessions`).

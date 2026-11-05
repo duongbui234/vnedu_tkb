@@ -1,6 +1,8 @@
 # Phase 2C-2 — ô hạn chế, tiết trống và ngày nghỉ S07–S11
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — CHỜ DUYỆT, CHƯA TRIỂN KHAI.**
+Ngày 2026-11-05. Trạng thái: **D1–D7 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT THEO ĐỀ XUẤT; ĐÃ TRIỂN KHAI
+(technical synthetic)** — xem [báo cáo 2C-2](../../phase-2c-gaps-report.md). Thân bài là bản đặc tả
+được duyệt; câu “chưa triển khai/chưa viết” phản ánh thời điểm soạn.
 Base: `45f63eec0380b22e60b4a4ab83a790cbe0f4921e` (merge của duongbui234/vnedu_tkb#2 vào `main`),
 nhánh `work/phase2a-operational-completion` được đặt lại từ `origin/main`.
 
@@ -139,13 +141,13 @@ chất lượng giáo vụ, hiệu năng hay Windows.
 
 ## 9. Quyết định cần duyệt
 
-- [ ] **D1** — policy `0.4` cho S07–S11. *(Đề xuất: chọn.)*
-- [ ] **D2** — output `1.5`, ScoreReport `1.2` với bốn unit mới. *(Đề xuất: chọn.)*
-- [ ] **D3** — `constraint_config.occupied_work` chỉ ở policy 0.4, bắt buộc nằm ngoài availability.
+- [x] **D1** — policy `0.4` cho S07–S11. *(Đề xuất: chọn.)*
+- [x] **D2** — output `1.5`, ScoreReport `1.2` với bốn unit mới. *(Đề xuất: chọn.)*
+- [x] **D3** — `constraint_config.occupied_work` chỉ ở policy 0.4, bắt buộc nằm ngoài availability.
   *(Đề xuất: chọn. Thay thế: tham số mỗi rule (B), hoặc bỏ occupied work (C).)*
-- [ ] **D4** — từ chối S08–S11 trên timed calendar có slot khác buổi cùng ngày giao phút. *(Đề xuất: chọn.
+- [x] **D4** — từ chối S08–S11 trên timed calendar có slot khác buổi cùng ngày giao phút. *(Đề xuất: chọn.
   Thay thế: coi ô giao giờ với tiết dạy ở buổi khác là không idle — phức tạp hơn.)*
-- [ ] **D5** — chỉ soft trong 2C-2; không hard mode cho S07–S11. *(Đề xuất: chọn. S07 hard trùng S01
+- [x] **D5** — chỉ soft trong 2C-2; không hard mode cho S07–S11. *(Đề xuất: chọn. S07 hard trùng S01
   hard; S08 là objective tổng; hard S09/S10/S11 để mốc sau khi trường xác nhận.)*
-- [ ] **D6** — bật ordering với S07–S11 nếu oracle đạt; nếu không thì giữ tắt. *(Đề xuất: chọn.)*
-- [ ] **D7** — S01 và S07 cùng GV với ô giao nhau bị từ chối như overlap. *(Đề xuất: chọn, theo policy.)*
+- [x] **D6** — bật ordering với S07–S11 nếu oracle đạt; nếu không thì giữ tắt. *(Đề xuất: chọn.)*
+- [x] **D7** — S01 và S07 cùng GV với ô giao nhau bị từ chối như overlap. *(Đề xuất: chọn, theo policy.)*

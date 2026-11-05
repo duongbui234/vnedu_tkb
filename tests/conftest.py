@@ -103,3 +103,10 @@ def dist_case(quality_case: dict[str, Any]) -> dict[str, Any]:
     ]
     quality_case["constraint_config"]["policy_version"] = "0.3"
     return quality_case
+
+
+@pytest.fixture
+def gap_case(quality_case: dict[str, Any]) -> dict[str, Any]:
+    """Policy 0.4 input for restricted-slot, gap and free-time rules (Phase 2C-2)."""
+    quality_case["constraint_config"]["policy_version"] = "0.4"
+    return quality_case
