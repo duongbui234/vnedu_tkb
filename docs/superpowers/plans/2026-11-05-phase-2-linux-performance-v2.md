@@ -1,6 +1,6 @@
 # Phase 2 — kế hoạch đo hiệu năng Linux theo acceptance v2 (policy 0.4)
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — G1–G10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; Task 1–5, preflight, dataset, pilot và campaign chưa thực hiện, mỗi bước vẫn cần ủy quyền riêng (§8).** Base `5d685f9` trên nhánh
+Ngày 2026-11-05. Trạng thái: **DRAFT — G1–G10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; Task 1–5 ĐÃ TRIỂN KHAI trong working tree, chờ duyệt commit (xem §11); preflight, bundle thật, pilot và campaign chưa thực hiện, mỗi bước vẫn cần ủy quyền riêng (§8).** Base `5d685f9` trên nhánh
 `work/phase2a-operational-completion` (source/tests trùng `main` tại `486c6a1`).
 
 Thực hiện E2 của [đánh giá Phase 2](../../phase-2-status-assessment.md): mở rộng benchmark sang policy 0.4
@@ -260,3 +260,52 @@ E5 (chính sách version) không ảnh hưởng kế hoạch này, vì kế ho�
 | Witness có ô available không đủ cho S01 và S07 | Generator dừng rõ; TIGHT được thiết kế đúng 2 ô |
 | Import hàm private v1 gắn với chi tiết nội bộ | Ghi hash file v1 trong `source_ids` v2; test byte-identical |
 | Campaign dài (trần watchdog ~9,45 h cho phần feasible) | Journal/resume theo run ID như v1; không retry |
+
+## 11. Ghi nhận thực hiện Task 1–5 (2026-11-05)
+
+Được ủy quyền "Triển khai Task 1–5". Chỉ thêm file mới; không sửa `src/`, tooling v1, gate, budget hay pins.
+Không sinh bundle thật, không chạy preflight, pilot hay campaign.
+
+| File mới | Nội dung |
+|---|---|
+| `benchmarks/generate_phase2.py` | Generator policy 0.4, hai biến thể, 72 datasets. Witness dựng bằng `_construct` của v1 (import); availability/locks trùng v1 |
+| `benchmarks/run_phase2.py` | Bảng version, `verify_output_v2`, `judge_case` H/Q/P/zero, plan v2 (216 + 2 pilot), gate §6, controller, preflight v2 và smoke 0.4. Supervisor, headroom, journal và owner lock import nguyên từ v1 |
+| `benchmarks/aggregate_phase2.py` | Tổng hợp chỉ đọc. Mẫu số đủ; null không thành 0; thời gian conditional-on-success; timeout là censored; không P95 |
+| `benchmarks/tests/test_generate_phase2.py`, `test_run_phase2.py`, `test_aggregate_phase2.py`, `test_phase2_v1_frozen.py` | 70 test mới |
+
+Lệnh và kết quả:
+
+| Lệnh | Kết quả |
+|---|---|
+| `uv sync --locked --extra solver` | PASS (lock không đổi) |
+| `uv run --extra solver pytest tests benchmarks/tests` | **1341 passed, 8 skipped** (trước thay đổi: 1271 passed, 8 skipped); 8 skip vẫn là Windows/opt-in |
+| `uv run ruff check .`, `uv run ruff format --check src tests benchmarks` | PASS |
+| `uv run mypy` | PASS (30 source files; phạm vi mypy của dự án chỉ gồm `src/`, `benchmarks/` không được kiểm kiểu, như v1) |
+| Test byte-identical | 6 file v1 trùng SHA-256 tại `5d685f9` |
+
+Kiểm trong bộ nhớ (không ghi bundle, không solve): cả 72 dataset sinh và tự kiểm được trong khoảng 2 phút.
+
+Sai khác so với kế hoạch và các phát hiện:
+
+- **TDD:** Task 1 và Task 3 viết test trước và chạy RED (module chưa có). Task 2 lại viết code trước test. Để
+  bù, đã mutation-check sáu gate, mỗi lần tạm sửa một gate rồi khôi phục: zero làm gate P, cặp version
+  cứng 1.2, bỏ dừng khi H FAIL, bỏ gate pilot, bỏ kiểm thứ tự, bỏ lower bound. Cả sáu đều làm test đỏ.
+- **Zero NOT_APPLICABLE ở cả 72 datasets:** S08/S11 làm P3 của witness dương (c10 ≈ 72, c40 ≈ 275), nên
+  không dataset nào có `known_optimum`. Đây là hệ quả dự kiến của G5. Benchmark zero của v1 vẫn là
+  hồ sơ riêng.
+- **S05 bỏ khoảng một nửa requirement nhiều component** (ví dụ 19/40 ở c10-s101), vì witness đặt các
+  component cùng ngày. S10 bỏ các GV không có buổi rảnh (4–18 GV/dataset). Số bỏ được ghi trong
+  `omitted` của manifest.
+- **Input 1.0 → output 1.1 không được hỗ trợ:** bộ kiểm v2 trả `INPUT_VERSION_UNSUPPORTED`. Campaign
+  chỉ dùng 0.4; bảng §3 vẫn kiểm đủ bốn cặp 0.1–0.4 với Core đã cài.
+- **Schema record:** `RunRecord` dùng lại model v1 (schema 1.0). Verdict, plan, state, journal và seal
+  dùng 2.0.
+- **Kiểm bundle khi prepare:** watchdog 1 800 s và 2 GiB, vì kiểm bundle là tái sinh 72 dataset. Đây là
+  giới hạn cho tooling, không phải budget solve.
+- **Prepare §2.5:** manifest ghi dimensions của v1 (placements, occupancy terms, tokens) và số cặp S05;
+  chưa đếm biến S08/S09.
+- **Warmup** vẫn là fixture tiny 0.1 như v1. Smoke 0.4 là bước preflight riêng, và preflight chạy thêm
+  `benchmarks/tests`.
+- **Chưa chạy end-to-end** `preflight`, `prepare` và `execute_campaign`, vì cần wheel cài đặt và ủy quyền
+  bước D/E. Test chỉ kiểm rằng plan chưa seal không chạy run nào. Test smoke dùng interpreter dev cho cả
+  hai nhãn solver/no-solver.
