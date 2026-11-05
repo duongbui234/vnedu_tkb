@@ -113,7 +113,7 @@ def test_all_met_keeps_q_review_and_zero_separate() -> None:
         "H": "PASS",
         "P": "MET",
         "Q": "REVIEW_REQUIRED",
-        "zero": {"MET": 0, "NOT_MET": 0, "NOT_APPLICABLE": 4},
+        "zero": {"MET": 0, "NOT_MET": 0, "NOT_APPLICABLE": 4, "MISSING": 0},
     }
     group = summary["groups"]["SOFT/c10/BASE/c10-base-s101-soft"]
     assert group["launch_to_exit_seconds"] == {
@@ -200,3 +200,29 @@ def test_aggregate_refuses_output_inside_campaign(tmp_path: Path) -> None:
     (tmp_path / "plan.json").write_text("{}")
     with pytest.raises(ValueError, match="OUTPUT_WOULD_MODIFY_FROZEN_EVIDENCE"):
         agg.aggregate(tmp_path, tmp_path / "preflight", tmp_path / "summary")
+
+
+def test_zero_counts_cover_the_denominator() -> None:
+    """Review F2: missing rows are counted, not dropped."""
+    rows = _met_rows()
+    rows[1] = agg.Row(rows[1].case, None, None)
+    zero = agg.summarize(rows)["campaign"]["zero"]
+    assert zero == {"MET": 0, "NOT_MET": 0, "NOT_APPLICABLE": 3, "MISSING": 1}
+
+
+def test_incomplete_unsat_execution_is_p_incomplete() -> None:
+    """Review F3: only an UNSAT hard FAIL makes P NOT_MET."""
+    rows = _met_rows()
+    incomplete = r2.CaseVerdict(
+        hard="NOT_ASSESSED",
+        quality="NOT_APPLICABLE",
+        performance="NOT_APPLICABLE",
+        run_sha256="c" * 64,
+    )
+    rows[3] = agg.Row(
+        rows[3].case,
+        _record(schedule=False, seconds=None, status="MEASUREMENT_BLOCKED"),
+        incomplete,
+    )
+    campaign = agg.summarize(rows)["campaign"]
+    assert campaign["P"] == "INCOMPLETE" and campaign["H"] == "INCOMPLETE"

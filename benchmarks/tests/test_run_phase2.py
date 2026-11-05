@@ -475,3 +475,111 @@ def test_cli_argument_contract() -> None:
         r2.main(["--phase", "preflight"])
     with pytest.raises(SystemExit):
         r2.main(["--phase", "pilot", "--preflight-dir", "/x"])
+
+
+def test_output_invalid_on_known_feasible_is_h_fail(tmp_path: Path) -> None:
+    """Review F1: a schedule whose embedded score disagrees is a Core technical error."""
+    base, source, score = _solved_case(tmp_path)
+    result = json.loads((base / "result.json").read_text())
+    row = result["quality"]["score"]["rules"][0]
+    row["raw_penalty"] += 1
+    row["weighted_penalty"] += 1
+    result["quality"]["score"]["tiers"][row["priority"] - 1] += 1
+    text = json.dumps(result)
+    (base / "result.json").write_text(text)
+    (base / "stdout.json").write_text(text)
+    record = _record(base, source, _execution(base, 0))
+    assert record.harness_status == "OUTPUT_INVALID"
+    verdict = r2.judge_case(base, _manifest(base, source, baseline=score))
+    assert verdict.hard == "FAIL"
+    assert verdict.reasons[0].startswith("OUTPUT_INVALID")
+    assert r2.stop_status(record, verdict, _case("primary")) == "STOPPED"
+
+
+def test_measurement_failure_is_not_h_fail(tmp_path: Path) -> None:
+    base, source, score = _solved_case(tmp_path)
+    _record(base, source, _execution(base, 0, measured=False))
+    verdict = r2.judge_case(base, _manifest(base, source, baseline=score))
+    assert verdict.hard == "NOT_APPLICABLE" and verdict.performance == "INCOMPLETE"
+
+
+def test_input_changed_after_capture_is_never_spawned(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Review F4: v1's last pre-spawn hash check is kept."""
+    source, _, _ = _solve(tmp_path / "src", r2.policy04_smoke_input())
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    original = r2.expected_versions
+
+    def mutate(problem: Any) -> tuple[str, str]:
+        source.write_text(source.read_text() + " ")
+        return original(problem)
+
+    def never(*args: Any, **kwargs: Any) -> Any:
+        raise AssertionError("spawned after the input changed")
+
+    monkeypatch.setattr(v1, "_runtime_identity", lambda **kwargs: {})
+    monkeypatch.setattr(r2, "expected_versions", mutate)
+    monkeypatch.setattr(v1, "supervise", never)
+    record = r2.run_cli_once(
+        python=Path(sys.executable),
+        input_path=source,
+        run_dir=tmp_path / "run",
+        preflight_dir=tmp_path / "preflight",
+        lock_path=ROOT / "uv.lock",
+        input_sha256=digest,
+        limits=v1.RunLimits(watchdog_seconds=15.0, max_resident_bytes=256 * 1024**2),
+        options=r2.SolveOptions(time_limit_seconds=10.0),
+    )
+    assert record.harness_status == "ENVIRONMENT_BLOCKED"
+    assert record.output.diagnostics == ("INPUT_CHANGED_BEFORE_SPAWN",)
+
+
+def test_bundle_verification_is_guarded_and_bounded(tmp_path: Path) -> None:
+    """Review F5: installed interpreter, import guard and v1-style peak RSS condition."""
+    argv = r2.bundle_verification_argv(Path("/venv/bin/python"), tmp_path / "bundle")
+    assert argv[:3] == ("/venv/bin/python", "-I", "-c")
+    assert "import_guard(scoring=False)" in argv[3]
+    ok = _execution(tmp_path, 0)
+    (tmp_path / "stdout.json").write_text("BUNDLE_VERIFIED\n")
+    assert r2.bundle_verification_passed(ok)
+    big = _execution(tmp_path, 0, rss_kib=2 * 1024**2 + 1)
+    assert not r2.bundle_verification_passed(big)
+    assert not r2.bundle_verification_passed(_execution(tmp_path, 0, measured=False))
+    (tmp_path / "stdout.json").write_text("other\n")
+    assert not r2.bundle_verification_passed(ok)
+
+
+def test_guarded_bundle_script_runs(tmp_path: Path) -> None:
+    argv = r2.bundle_verification_argv(Path(sys.executable), tmp_path / "missing")
+    done = subprocess.run(list(argv), capture_output=True, text=True, cwd=tmp_path)
+    # A missing bundle fails inside verify_bundle, after the guarded import succeeded.
+    assert done.returncode != 0 and "DatasetGenerationError" in done.stderr
+
+
+def test_preflight_verifies_bundle_with_installed_solver(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from benchmarks import phase2a_preflight as pf
+
+    calls: dict[str, list[str]] = {}
+
+    def fake_run(argv: list[str], log: Path, *, timeout: float = 300) -> str:
+        calls[log.name] = argv
+        if log.name.startswith("identity-"):
+            return json.dumps({"git_commit": "c", "core_tree": "t"})
+        return ""
+
+    wheel = tmp_path / "core.whl"
+    wheel.write_bytes(b"wheel")
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "manifest.json").write_text("{}")
+    monkeypatch.setattr(pf, "checked_run", fake_run)
+    monkeypatch.setattr(r2, "run_policy04_smoke", lambda *a, **k: {"status": "PASS"})
+    monkeypatch.setattr(sys, "platform", "linux")
+    out = tmp_path / "preflight"
+    r2.preflight(out, bundle, wheel, hashlib.sha256(b"wheel").hexdigest())
+    argv = calls["bundle-verification"]
+    assert argv[0] == str(out / "venv-solver" / "bin/python")
+    assert "import_guard(scoring=False)" in argv[3]

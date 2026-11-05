@@ -221,6 +221,12 @@ def judge_case(run_dir: Path, dataset_manifest: Path) -> CaseVerdict:
     ):
         raise ValueError("Outcome/input identity mismatch")
     status = run.output.solver_status
+    if run.harness_status == "OUTPUT_INVALID":
+        # Review F1: an output that fails independent verification is a Core technical error
+        # (acceptance v2 H4), unlike crashes or measurement/environment failures.
+        verdict.hard = "FAIL"
+        verdict.reasons = ("OUTPUT_INVALID:" + ",".join(run.output.diagnostics),)
+        return verdict
     if unsat:
         if run.harness_status != "COMPLETE":
             verdict.reasons = ("UNSAT_EXECUTION_INCOMPLETE:" + run.harness_status,)
@@ -591,6 +597,9 @@ def run_cli_once(
                 "limits": limits.model_dump(mode="json"),
             }
         )
+        # Review F4: v1's last check immediately before spawn.
+        if v1._sha(input_path) != input_sha256:
+            raise ValueError("INPUT_CHANGED_BEFORE_SPAWN")
     except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
         run_dir.parent.mkdir(parents=True, exist_ok=True)
         run_dir.mkdir()
@@ -698,26 +707,53 @@ def phase_cases(plan: CampaignPlan, phase: Phase) -> tuple[PlannedCase, ...]:
     return (plan.warmup,)
 
 
+BUNDLE_WATCHDOG_SECONDS = 1800.0
+BUNDLE_MAX_RESIDENT_BYTES = 2 * 1024**3
+
+
+def bundle_verification_argv(python: Path, bundle: Path) -> tuple[str, ...]:
+    """Verify a bundle with the given (installed) interpreter under v1's search-import guard."""
+    script = (
+        "import sys\n"
+        "from pathlib import Path\n"
+        "sys.path.insert(0, sys.argv[1])\n"
+        "from benchmarks.windows_preflight import import_guard\n"
+        "with import_guard(scoring=False):\n"
+        "    from benchmarks.generate_phase2 import verify_bundle\n"
+        "    verify_bundle(Path(sys.argv[2]))\n"
+        'print("BUNDLE_VERIFIED")\n'
+    )
+    return (str(python), "-I", "-c", script, str(ROOT), str(bundle))
+
+
+def bundle_verification_passed(execution: v1.ExecutionRecord) -> bool:
+    """Exit 0, measured, within the tooling RSS bound, and an explicit success marker."""
+    try:
+        marker = execution.stdout_path.read_text().strip()
+    except OSError:
+        return False
+    return (
+        execution.measurement_status == "OK"
+        and execution.exit_code == 0
+        and execution.stop_reason is None
+        and execution.peak_resident_bytes is not None
+        and execution.peak_resident_bytes <= BUNDLE_MAX_RESIDENT_BYTES
+        and marker == "BUNDLE_VERIFIED"
+    )
+
+
 def _verify_bundle_isolated(bundle: Path, output: Path) -> None:
     """Supervised child verifies every dataset by deterministic regeneration (no search)."""
-    script = (
-        "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);"
-        "from benchmarks.generate_phase2 import verify_bundle;"
-        'verify_bundle(Path(sys.argv[2]));print("BUNDLE_VERIFIED")'
-    )
     execution = v1.supervise(
-        (sys.executable, "-I", "-c", script, str(ROOT), str(bundle)),
+        bundle_verification_argv(Path(sys.executable), bundle),
         output,
         # Regenerating 72 datasets is slower than v1's 36; this bounds tooling, not a solve.
-        RunLimits(watchdog_seconds=1800.0, max_resident_bytes=2 * 1024**3),
+        RunLimits(
+            watchdog_seconds=BUNDLE_WATCHDOG_SECONDS, max_resident_bytes=BUNDLE_MAX_RESIDENT_BYTES
+        ),
     )
     v1._write_json(output / "execution.json", execution, exclusive=True)
-    if (
-        execution.measurement_status != "OK"
-        or execution.exit_code != 0
-        or execution.stop_reason is not None
-        or execution.stdout_path.read_text().strip() != "BUNDLE_VERIFIED"
-    ):
+    if not bundle_verification_passed(execution):
         raise ValueError("BUNDLE_VERIFICATION_BLOCKED")
 
 
@@ -1386,17 +1422,8 @@ def preflight(
     smoke = run_policy04_smoke(output / "smoke/policy04", pythons, run)
     run(
         "bundle-verification",
-        [
-            sys.executable,
-            "-I",
-            "-c",
-            "import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);"
-            "from benchmarks.generate_phase2 import verify_bundle;"
-            "m=verify_bundle(Path(sys.argv[2]));print(len(m.datasets))",
-            str(ROOT),
-            str(bundle),
-        ],
-        1800,
+        list(bundle_verification_argv(Path(pythons["solver"]), bundle)),
+        BUNDLE_WATCHDOG_SECONDS,
     )
     env = json.loads((output / "environment-solver.json").read_text())
     files = {

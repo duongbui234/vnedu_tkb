@@ -50,19 +50,20 @@ def summarize(rows: Sequence[Row]) -> dict[str, Any]:
     unsat = [r for r in terminal if r.case.ground_truth == "INFEASIBLE"]
     if any(v.hard == "FAIL" for v in verdicts):
         hard = "FAIL"
-    elif missing:
+    elif missing or any(v.hard == "NOT_ASSESSED" for v in verdicts):
         hard = "INCOMPLETE"
     else:
         hard = "PASS"
     perf = [r.verdict.performance for r in feasible if r.verdict is not None]
-    if "NOT_MET" in perf or any(r.verdict is not None and r.verdict.hard != "PASS" for r in unsat):
+    unsat_hard = [r.verdict.hard for r in unsat if r.verdict is not None]
+    if "NOT_MET" in perf or "FAIL" in unsat_hard:
         performance = "NOT_MET"
-    elif missing or "INCOMPLETE" in perf:
+    elif missing or "INCOMPLETE" in perf or any(h != "PASS" for h in unsat_hard):
         performance = "INCOMPLETE"
     else:
         performance = "MET"
     zero = Counter(v.zero for v in verdicts)
-    zero["NOT_APPLICABLE"] += missing if not verdicts else 0
+    zero["MISSING"] = missing
     groups: dict[str, dict[str, Any]] = {}
     for key in sorted({_group_key(r.case) for r in rows}):
         members = [r for r in rows if _group_key(r.case) == key]
@@ -134,7 +135,10 @@ def summarize(rows: Sequence[Row]) -> dict[str, Any]:
             "Q": "REVIEW_REQUIRED"
             if any(v.quality == "REVIEW_REQUIRED" for v in verdicts)
             else "NO_SCHEDULE",
-            "zero": {label: zero.get(label, 0) for label in ("MET", "NOT_MET", "NOT_APPLICABLE")},
+            "zero": {
+                label: zero.get(label, 0)
+                for label in ("MET", "NOT_MET", "NOT_APPLICABLE", "MISSING")
+            },
         },
         "groups": groups,
     }
