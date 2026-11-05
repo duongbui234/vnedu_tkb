@@ -137,3 +137,30 @@ Input 1.1 nhận `policy_version=0.4` (gồm mọi rule của 0.3) và `constrai
 rỗng không xuất hiện trong dump/fingerprint nên payload và hash cũ không đổi. Fingerprint sort entries
 theo GV và sort `slot_ids`. Output 1.5 ↔ policy 0.4 ↔ ScoreReport 1.2 (thêm unit `idle_periods`,
 `free_days`, `free_sessions`, `single_period_sessions`).
+
+## Bổ sung Phase 3A — repair
+
+Ba contract riêng, version 1.0, không sửa `ScheduleInput` hay output hiện có:
+
+- `PreviousSchedule`: `assignments` (shape `ScheduleAssignment`, mỗi occurrence tối đa một lần) và
+  `source_input_fingerprint` tùy chọn. Fingerprint canonical không phụ thuộc thứ tự. CLI cũng nhận một
+  `ScheduleResult` 1.1–1.5 có `valid_schedule=true`.
+- `RepairRequest`: `change_order`, `max_changes`, `change_scope`, `use_previous_as_hint`. Cả bốn đều
+  bắt buộc, không có mặc định. `change_scope` cần ít nhất một tiêu chí; occurrence khớp **bất kỳ** tiêu
+  chí nào (lớp, GV, môn, hoặc ngày của vị trí cũ) được phép đổi.
+- `RepairResult`: bọc `ScheduleResult` đúng version theo policy (1.2–1.5), cùng `previous_fingerprint`,
+  `request` và `RepairReport` (chỉ có khi có lịch hợp lệ).
+
+Ghép theo `occurrence_id` ổn định:
+
+| Nhóm | Định nghĩa |
+|---|---|
+| matched | Có trong lịch trước |
+| forced | Matched nhưng vị trí cũ `(slot, phòng)` không còn trong domain (`LOCK` hoặc `DOMAIN`) |
+| new | Không có trong lịch trước |
+| dropped | Có trong lịch trước, không còn trong input |
+| frozen | Matched, ngoài `change_scope`, phải giữ vị trí cũ |
+
+Slot hay phòng cũ không còn tồn tại không phải lỗi contract mà là `forced`. Occurrence frozen có vị trí
+cũ không hợp lệ → `INPUT_INVALID / REPAIR_FROZEN_TARGET_INVALID`. Input 1.0 →
+`UNSUPPORTED_FEATURE / REPAIR_INPUT_VERSION`.

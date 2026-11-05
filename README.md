@@ -7,7 +7,10 @@ Phase 2B (synthetic): input 1.1/policy 0.2 thêm hard variants S01–S04 explici
 Phase 2C-1 (synthetic): policy 0.3 thêm phân phối môn S05/S06 (soft và hard), phát output 1.4
 với ScoreReport 1.1. Phase 2C-2 (synthetic): policy 0.4 thêm S07–S11 (ô hạn chế, tiết trống,
 ngày/buổi rảnh, buổi một tiết; chỉ soft) và `occupied_work`, phát output 1.5 với ScoreReport 1.2.
-Output reader đọc 1.0–1.5. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
+Output reader đọc 1.0–1.5. Phase 3A (synthetic): lệnh `repair` xếp lại khi dữ liệu đổi, giữ lịch
+trước nhiều nhất có thể, và `evaluate-repair` kiểm lại độc lập; kết quả là envelope `RepairResult`
+1.0 bọc output hiện có, không thêm version output mới. Không có Electron, React, SQLite, HTTP hoặc
+vnEdu adapter.
 
 ## Chạy local
 
@@ -101,3 +104,20 @@ S10 `TEACHER_MIN_FREE_TIME` và S11 `TEACHER_SINGLE_PERIOD_SESSION` (chỉ soft,
 `can_teach=false` và ô họp không phải tiết trống. Xem
 [đặc tả 2C-2](docs/superpowers/specs/2026-11-05-phase-2c-gaps-design.md) và
 [báo cáo 2C-2](docs/phase-2c-gaps-report.md).
+
+## Repair Phase 3A
+
+`repair <input> <previous> --request <request>` nhận input mới (1.1), lịch trước (`PreviousSchedule`
+1.0 hoặc một `ScheduleResult` hợp lệ) và `RepairRequest` 1.0 khai báo tường minh: thứ tự
+(`BEFORE_QUALITY` hoặc `AFTER_QUALITY`), `max_changes` (hard hoặc `null`), `change_scope` (lớp, GV, môn,
+ngày; ngoài scope giữ nguyên) và `use_previous_as_hint`. Đơn vị: một occurrence đổi slot hoặc phòng là
+một thay đổi. `evaluate-repair <input> <previous> <repair-result>` tính lại hard, score và mọi bộ đếm
+thay đổi, chạy được khi không cài OR-Tools.
+
+```sh
+uv run --extra solver tkb-core repair new.json previous.json --request request.json --output repaired.json
+uv run tkb-core evaluate-repair new.json previous.json repaired.json
+```
+
+Xem [đặc tả Phase 3](docs/superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md) và
+[báo cáo 3A](docs/phase-3a-report.md).

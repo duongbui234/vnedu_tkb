@@ -97,3 +97,11 @@ S10 hai unit cùng GV cũng vậy. S08–S11 bị từ chối (`GAP_TIMELINE`) k
 Không có hard mode và không có ngưỡng mặc định. Key `occupied_work` ở policy 0.1–0.3 bị từ chối kể cả
 khi rỗng. Lưu ý S10: ngày/buổi GV chỉ *không thể dạy* (unavailable, không có occupied work) vẫn được
 tính là rảnh; muốn không tính, upstream phải khai báo occupied work cho ngày/buổi đó.
+
+## Phase 3A — repair (không phải soft rule)
+
+Số thay đổi so với lịch trước **không** là một rule trong `constraint_config` và không có priority
+P1–P3. Request khai báo nó đứng trước (`BEFORE_QUALITY`) hay sau (`AFTER_QUALITY`) các tier P1–P3.
+`max_changes` là giới hạn cứng của repair; `change_scope` biến occurrence matched ngoài scope thành
+khóa vị trí cũ. Khóa trong input luôn thắng lịch trước. Đơn vị và quy tắc ghép: xem
+[domain model](domain-model.md).

@@ -204,6 +204,32 @@ CLI input/usage errors dùng envelope 1.0 như Phase 0; solver results dùng 1.1
 ## Giới hạn
 
 Chỉ một class/GV mỗi requirement và block 1/2 đã khai báo split. Chưa có tự chọn
-split, soft objective, repair, travel, callback progress public hoặc worker IPC.
+split, travel, callback progress public hoặc worker IPC. Repair (Phase 3A) là đường riêng, xem mục
+Repair; `solve()` không đổi.
 Không benchmark tốc độ so STKB/FET, không chứng nhận Windows hoặc dữ liệu trường thật.
 Giờ nghỉ phải khai báo đúng; timed block bảo thủ không vượt bất kỳ gap dương nào.
+
+## Repair Phase 3A
+
+`repair/pipeline.py` dùng lại `prepare`, `build_model`, `compile_soft` và `run_quality`; `solve()` không
+đổi. Thêm:
+
+- **Số thay đổi:** `Σ (1 − x[l, p₀])` trên occurrence matched có `p₀` trong domain, cộng số occurrence
+  forced. Không có biến, cặp hay big-M mới: mỗi occurrence matched chỉ thêm một hệ số. Trên fixture 10
+  lớp (260 occurrence), tối đa 260 hệ số và tối đa ba ràng buộc mới (giới hạn, đóng băng, bằng nhau).
+- **Ràng buộc:** frozen → `x[l, p₀] = 1`; `max_changes` → `Σ ≤ K`.
+- **Không có ordering interchangeable:** đổi nhãn occurrence cùng requirement sẽ bị tính là thay đổi,
+  nên ordering (dùng trong `solve()` khi có preference) bị tắt cho repair.
+- **Giai đoạn,** dùng chung một budget:
+  - `BEFORE_QUALITY`: min thay đổi; nếu chứng minh được tối ưu thì thêm `Σ = opt` rồi chạy P1–P3 bằng
+    `run_quality` (hint là nghiệm của tầng thay đổi). Không chứng minh được hoặc hết budget → trả nghiệm
+    tầng thay đổi đã kiểm, với P1–P3 NOT_RUN.
+  - `AFTER_QUALITY`: `run_quality` trước; chỉ khi mọi tier đã chứng minh mới min thay đổi trên model có
+    các đẳng thức tier, với hint là nghiệm chất lượng.
+- **Hint:** `use_previous_as_hint` gợi ý các occurrence matched có `p₀` hợp lệ. Hint không vào
+  validator, evaluator hay oracle.
+- **Trạng thái:** `ScheduleResult.status/quality` mô tả P1–P3 như `solve()`. Bằng chứng tối ưu số thay
+  đổi nằm trong `RepairReport.change_stage` và `min_changes_proved`. `metadata.feasibility_run` là lần
+  solve native đầu tiên (tầng thay đổi, hoặc feasibility của `run_quality` khi `AFTER_QUALITY`).
+- **Kiểm chứng:** mọi lịch qua validator độc lập, score evaluator và `evaluate_repair`. Số thay đổi của
+  model phải bằng số tính lại. Lệch → `MODEL_INVALID / REPAIR_REPORT_MISMATCH`, không xuất lịch.
