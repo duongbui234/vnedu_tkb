@@ -118,6 +118,19 @@ Limit/tổng hệ số ngoài int64 → INPUT_INVALID/HARD_RULE_RANGE trước s
 tổng hợp mới cho S02/S03; CP-SAT chứng minh INFEASIBLE. Bound dư thừa S03 lấy từ domains nên
 vẫn đúng (tập lịch hard-valid chỉ nhỏ đi). Validator kiểm lại bằng code riêng; không có IIS.
 
+## Phân phối môn Phase 2C-1 (policy 0.3)
+
+Ngày của occurrence là `Σ day(start)·x`; soft S05 tạo **một** biến ngày mỗi component bằng
+equality đó, rồi mỗi cặp dùng biến `diff`, `dist=|diff|` (`AddAbsEquality`) và `short=max(0,k−dist)`
+(`AddMaxEquality`); số hạng tăng theo placements + cặp, không phải cặp × placements. Raw là
+equality, bound `C(n,2)·k`. Guard vận hành `MAX_SPREAD_PAIRS = 20 000` cặp mỗi rule S05 (khoảng
+200 component): vượt → `UNKNOWN/RESOURCE_LIMIT` trước khi tạo biến cặp, không bao giờ INFEASIBLE.
+Đây là giới hạn kỹ thuật, không phải ngưỡng nghiệp vụ; hard S05 dùng cửa sổ nên không có giới hạn này. Hard S05 (`constraints/hard.add_distribution_limits`): với mỗi ngày d của
+calendar, các placement có start trong `[d, d+k−1]` của nhóm có tổng ≤ 1 (tương đương mọi cặp ≥ k).
+S06 dùng bucket (lớp, môn, ngày) với `AddMaxEquality` (soft) hoặc `≤ limit` (hard). Hard thêm trước
+clone hard model. Ordering occurrence hoán đổi được bật cả khi có S05/S06 (oracle 60 seeds có/không
+ordering khớp optimum). Không chứng nhận hiệu năng; số cặp S05 tăng bậc hai theo cỡ nhóm.
+
 ## Run config và trạng thái
 
 SolveOptions: time_limit_seconds=60, num_workers=1 (1..64), seed=42 (0..2^31-1),

@@ -186,3 +186,130 @@ def test_bound_helper_is_s03_only(
     legacy = {k: v for k, v in quality_case.items() if k != "constraint_config"}
     p = prepare(ScheduleInput.model_validate({**legacy, "schema_version": "1.0"}))
     assert compile_soft(p, build_model(p)).rules == ()
+
+
+def _forced_raw(data: dict[str, Any], rule: dict[str, Any], target: dict[str, str]) -> int:
+    data["constraint_config"]["soft"] = [{**rule, "weight": 2, "priority": 1}]
+    p = prepare(ScheduleInput.model_validate(data))
+    built = build_model(p)
+    compiled = compile_soft(p, built)
+    for oid, domain in p.domains.items():
+        for placement, v in zip(domain, built.variables[oid], strict=True):
+            built.model.add(v == int(placement.start_slot_id == target[oid]))
+    solver = cp_model.CpSolver()
+    assert solver.solve(built.model) == cp_model.OPTIMAL
+    raw = solver.value(compiled.rules[0].raw_expression)
+    assert solver.value(compiled.tiers[1]) == 2 * raw
+    return int(raw)
+
+
+SPREAD_RULE = {"id": "spread", "code": "SUBJECT_COMPONENT_DAY_SPREAD"}
+SUBJECT_DAY_RULE = {"id": "sd", "code": "CLASS_SUBJECT_MAX_PERIODS_PER_DAY"}
+
+
+@pytest.mark.parametrize(
+    "rule,target,expected",
+    [
+        (
+            {**SPREAD_RULE, "parameters": {"requirement_ids": ["r"], "min_day_gap": 2}},
+            {"r::1": "1-AM-1", "r::2": "1-PM-1", "r::3": "3-AM-1"},
+            2,
+        ),
+        (
+            {**SPREAD_RULE, "parameters": {"requirement_ids": ["r"], "min_day_gap": 3}},
+            {"r::1": "1-AM-1", "r::2": "2-AM-1", "r::3": "3-AM-1"},
+            5,  # days (1,2,3), k=3: (1,2)=2 (1,3)=1 (2,3)=2
+        ),
+        (
+            {**SUBJECT_DAY_RULE, "parameters": {"limit": 2}},
+            {"r::1": "1-AM-1", "r::2": "1-PM-1", "r::3": "3-AM-1"},
+            1,
+        ),
+        (
+            {**SUBJECT_DAY_RULE, "parameters": {"limit": 0}},
+            {"r::1": "1-AM-1", "r::2": "1-PM-1", "r::3": "3-AM-1"},
+            4,
+        ),
+    ],
+)
+def test_distribution_expressions_without_objective(
+    dist_case: dict[str, Any], rule: dict[str, Any], target: dict[str, str], expected: int
+) -> None:
+    assert _forced_raw(dist_case, rule, target) == expected
+
+
+def test_distribution_range_guard(dist_case: dict[str, Any]) -> None:
+    rule = {**SPREAD_RULE, "parameters": {"requirement_ids": ["r"], "min_day_gap": 2**62}}
+    dist_case["constraint_config"]["soft"] = [{**rule, "weight": 4, "priority": 1}]
+    p = prepare(ScheduleInput.model_validate(dist_case))
+    with pytest.raises(CoreError) as err:
+        compile_soft(p, build_model(p))
+    assert err.value.diagnostics[0].code == "OBJECTIVE_RANGE"
+
+
+def _spread_case(n: int) -> dict[str, Any]:
+    return {
+        "schema_version": "1.1",
+        "school": {"school_id": "d", "academic_year": "d", "term": "d"},
+        "time_slots": [
+            {"id": f"{d}-{s}-{p}", "day": d, "session": s, "period": p}
+            for d in range(1, 7)
+            for s in ("AM", "PM")
+            for p in range(1, 6)
+        ],
+        "classes": [{"id": "c"}],
+        "teachers": [{"id": "t"}],
+        "subjects": [{"id": "sub"}],
+        "teaching_requirements": [
+            {
+                "id": "r",
+                "class_ids": ["c"],
+                "teacher_ids": ["t"],
+                "subject_id": "sub",
+                "periods_per_cycle": n,
+            }
+        ],
+        "constraint_config": {
+            "policy_version": "0.3",
+            "hard": [],
+            "soft": [
+                {
+                    "id": "s",
+                    "code": "SUBJECT_COMPONENT_DAY_SPREAD",
+                    "parameters": {"requirement_ids": ["r"], "min_day_gap": 2},
+                    "priority": 1,
+                    "weight": 1,
+                }
+            ],
+        },
+    }
+
+
+def test_spread_model_terms_grow_with_placements_plus_pairs() -> None:
+    # Review F1: one day variable per component, not both day expressions in every pair.
+    n = 40
+    p = prepare(ScheduleInput.model_validate(_spread_case(n)))
+    built = build_model(p)
+    before = sum(len(c.linear.vars) for c in built.model.proto.constraints)
+    compile_soft(p, built)
+    added = sum(len(c.linear.vars) for c in built.model.proto.constraints) - before
+    placements = sum(len(d) for d in p.domains.values())
+    pairs = n * (n - 1) // 2
+    assert added <= 2 * placements + 10 * pairs, (added, placements, pairs)
+
+
+def test_spread_pair_guard_is_resource_limit(monkeypatch: pytest.MonkeyPatch) -> None:
+    from tkb_core.constraints import soft
+    from tkb_core.solver.cp_sat import solve
+
+    monkeypatch.setattr(soft, "MAX_SPREAD_PAIRS", 5)
+    problem = ScheduleInput.model_validate(_spread_case(4))  # 6 pairs > 5
+    p = prepare(problem)
+    with pytest.raises(CoreError) as err:
+        compile_soft(p, build_model(p))
+    assert (err.value.status.value, err.value.diagnostics[0].code) == ("UNKNOWN", "RESOURCE_LIMIT")
+    result = solve(problem)
+    assert result.status == "UNKNOWN" and not result.assignments
+    assert result.diagnostics[0].code == "RESOURCE_LIMIT"
+    monkeypatch.setattr(soft, "MAX_SPREAD_PAIRS", 6)  # exactly at the limit is allowed
+    assert solve(problem).status == "OPTIMAL"

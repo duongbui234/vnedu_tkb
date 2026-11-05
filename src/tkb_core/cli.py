@@ -7,7 +7,7 @@ import sys
 import tempfile
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, NoReturn
+from typing import Any, Literal, NoReturn
 
 from pydantic import BaseModel, ValidationError
 
@@ -18,7 +18,7 @@ from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import ConstraintConfigV11, Diagnostic
 from tkb_core.solver.options import SolveOptions
 from tkb_core.validation.independent_validator import validate_schedule
-from tkb_core.validation.score_evaluator import evaluate_score
+from tkb_core.validation.score_evaluator import evaluate_score, score_version
 
 
 class _ArgumentError(ValueError):
@@ -109,11 +109,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Exit 0 valid, 2 input/unsupported, 3 infeasible, 4 unknown, 5 model failure."""
     args = list(sys.argv[1:] if argv is None else argv)
     evaluation = bool(args and args[0] == "evaluate-score")
+    # Error reports follow the input's ScoreReport version once the input has been parsed.
+    report_version: list[Literal["1.0", "1.1"]] = ["1.0"]
 
     def emit_error(status: str, code: str, message: str) -> int:
         if not evaluation:
             return _error(status, code, message)
         report = ScoreReport(
+            schema_version=report_version[0],
             status="UNSUPPORTED_FEATURE" if status == "UNSUPPORTED_FEATURE" else "INPUT_INVALID",
             diagnostics=(Diagnostic(code=code, message=message),),
         )
@@ -163,6 +166,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         problem = _read_model(namespace.path, ScheduleInput)
         fingerprint = problem.fingerprint()
+        report_version[0] = score_version(problem)
         if namespace.command in ("validate-schedule", "evaluate-score"):
             previous = _read_model(namespace.result, ScheduleResult)
             if previous.input_fingerprint != fingerprint:
@@ -171,8 +175,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             expected_version = "1.1"
             if isinstance(problem.constraint_config, ConstraintConfigV11):
-                expected_version = (
-                    "1.3" if problem.constraint_config.policy_version == "0.2" else "1.2"
+                expected_version = {"0.2": "1.3", "0.3": "1.4"}.get(
+                    problem.constraint_config.policy_version, "1.2"
                 )
             # Input 1.0 may still be checked against legacy 1.0/1.1 results, never a quality
             # result; input 1.1 requires exactly the output version its policy produces.

@@ -9,22 +9,33 @@ and the independent validator deliberately does not use this module.
 from collections import defaultdict
 from collections.abc import Callable, Sequence
 
-from tkb_core.constraints.registry import parse_parameters
+from tkb_core.constraints.registry import HARD_POLICIES, parse_parameters
 from tkb_core.contracts.input import ScheduleInput
-from tkb_core.domain.models import ConstraintConfigV11, TimeSlot
-from tkb_core.domain.rule_parameters import AvoidSlotsParameters, PeriodWindowParameters
+from tkb_core.domain.models import ConstraintConfigV11, HardConstraintConfigV11, TimeSlot
+from tkb_core.domain.rule_parameters import (
+    AvoidSlotsParameters,
+    PeriodWindowParameters,
+    RuleParameters,
+)
 
 PlacementFilter = Callable[[str, Sequence[TimeSlot]], bool]
 
 
-def enabled_hard(problem: ScheduleInput) -> list[tuple[frozenset[str], object]]:
-    """Resolved (teachers, parameters) of enabled policy 0.2 hard rules, sorted by ID."""
+def enabled_hard(
+    problem: ScheduleInput,
+) -> list[tuple[HardConstraintConfigV11, frozenset[str], RuleParameters | None]]:
+    """(rule, resolved teachers, parameters) of enabled compiled hard rules, sorted by ID."""
     config = problem.constraint_config
-    if not isinstance(config, ConstraintConfigV11) or config.policy_version != "0.2":
+    if not isinstance(config, ConstraintConfigV11) or config.policy_version not in HARD_POLICIES:
         return []
     everyone = frozenset(t.id for t in problem.teachers)
+    policy = config.policy_version
     return [
-        (frozenset(r.scope.teacher_ids) or everyone, parse_parameters(r.code, r.parameters))
+        (
+            r,
+            frozenset(r.scope.teacher_ids) or everyone,
+            parse_parameters(r.code, r.parameters, policy),
+        )
         for r in sorted(config.hard, key=lambda r: r.id)
         if r.enabled
     ]
@@ -34,7 +45,7 @@ def placement_filter(problem: ScheduleInput) -> PlacementFilter | None:
     """Return ``allowed(teacher_id, covered_slots)`` or None when nothing is filtered."""
     forbidden: dict[str, set[str]] = defaultdict(set)
     slots = problem.time_slots
-    for teachers, params in enabled_hard(problem):
+    for _, teachers, params in enabled_hard(problem):
         if isinstance(params, AvoidSlotsParameters):
             targets = [s for s in slots if s.id in params.slot_ids]
             blocked = set()

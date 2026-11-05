@@ -1,6 +1,11 @@
 """Shared feature declarations, not scheduling/footprint implementation."""
 
-from tkb_core.constraints.registry import DEFINITIONS, supports_mode, validate_rule_config
+from tkb_core.constraints.registry import (
+    DEFINITIONS,
+    HARD_POLICIES,
+    supports_mode,
+    validate_rule_config,
+)
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import ConstraintConfigV11
@@ -22,7 +27,7 @@ def check_capabilities(problem: ScheduleInput) -> None:
     if isinstance(problem.constraint_config, ConstraintConfigV11):
         validate_rule_config(problem)
         config = problem.constraint_config
-        if config.policy_version == "0.2":
+        if config.policy_version in HARD_POLICIES:
             modes = [("hard", r) for r in config.hard] + [("soft", r) for r in config.soft]
             for mode, rule in modes:
                 if rule.enabled and not supports_mode(rule.code, mode, config.policy_version):

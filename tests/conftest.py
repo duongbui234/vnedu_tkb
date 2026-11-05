@@ -90,3 +90,16 @@ def hard_case(quality_case: dict[str, Any]) -> dict[str, Any]:
     """Policy 0.2 input: same synthetic calendar, explicit hard variants enabled later."""
     quality_case["constraint_config"]["policy_version"] = "0.2"
     return quality_case
+
+
+@pytest.fixture
+def dist_case(quality_case: dict[str, Any]) -> dict[str, Any]:
+    """Policy 0.3 input over three days, for subject-distribution rules (Phase 2C-1)."""
+    quality_case["time_slots"] = [
+        {"id": f"{d}-{s}-{p}", "day": d, "session": s, "period": p}
+        for d in (1, 2, 3)
+        for s in ("AM", "PM")
+        for p in range(1, 5)
+    ]
+    quality_case["constraint_config"]["policy_version"] = "0.3"
+    return quality_case

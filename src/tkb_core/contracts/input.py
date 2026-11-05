@@ -106,9 +106,12 @@ class ScheduleInput(DomainModel):
             _unique((r.id for r in rules), "rule ID")
             sessions = {s.session for s in self.time_slots}
             teaching_slots = {s.id for s in self.time_slots if s.can_teach}
+            policy = self.constraint_config.policy_version
             for rule in rules:
-                parsed = parse_parameters(rule.code, rule.parameters)
+                parsed = parse_parameters(rule.code, rule.parameters, policy)
                 if parsed is not None:
+                    if hasattr(parsed, "requirement_ids"):
+                        _references(parsed.requirement_ids, ids["requirement"], "rule requirement")
                     if hasattr(parsed, "slot_ids"):
                         _references(parsed.slot_ids, teaching_slots, "rule teaching slot")
                     if hasattr(parsed, "session_ids"):
@@ -166,8 +169,9 @@ class ScheduleInput(DomainModel):
             for kind in ("hard", "soft"):
                 data["constraint_config"][kind].sort(key=lambda r: r["id"])
                 for rule in data["constraint_config"][kind]:
-                    if parse_parameters(rule["code"], rule["parameters"]) is not None:
-                        for key in ("slot_ids", "session_ids"):
+                    policy = data["constraint_config"]["policy_version"]
+                    if parse_parameters(rule["code"], rule["parameters"], policy) is not None:
+                        for key in ("slot_ids", "session_ids", "requirement_ids"):
                             if key in rule["parameters"]:
                                 rule["parameters"][key].sort()
         payload = json.dumps(

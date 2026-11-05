@@ -65,3 +65,15 @@ S01 hard khác availability: nó cấm cả slot alias giao phút với ô trán
 hard S02/S03 (mỗi lock tự nó hợp lệ) → INFEASIBLE từ solver, không phải LOCK_CONFLICT. INFEASIBLE nghĩa là vô
 nghiệm với built-ins cộng hard variants đã khai báo, không chỉ ra rule nguyên nhân. Ngưỡng hard
 thực tế (H10) phải được trường xác nhận upstream; Core không tự nâng soft thành hard.
+
+## Phase 2C-1 — phân phối môn S05/S06 trên policy 0.3
+
+| Code | Parameters / scope | Soft raw (unit) | Hard | Compiler | Validator |
+|---|---|---|---|---|---|
+| SUBJECT_COMPONENT_DAY_SPREAD (S05) | `requirement_ids` (tập không rỗng), `min_day_gap` k≥1; scope phải rỗng | Σ cặp component `max(0,k−|day_i−day_j|)` (`day_gap_shortfall`) | mọi cặp ≥ k ngày | Soft: `AddAbsEquality`+`AddMaxEquality` từng cặp; hard: mỗi cửa sổ k ngày ≤ 1 component | `HARD_DAY_SPREAD` |
+| CLASS_SUBJECT_MAX_PERIODS_PER_DAY (S06) | `limit`≥0; scope `class_ids`/`subject_ids` (rỗng = tất cả), không teacher/room | Σ `max(0, tiết lớp+môn+ngày − limit)` (`teaching_periods`) | tiết ≤ limit | Bucket (lớp, môn, ngày) theo start slot × duration | `HARD_SUBJECT_DAY_LIMIT` |
+
+Component là một occurrence (block đôi là một component nhưng 2 tiết khi tính S06). Ngày lấy từ
+start slot, khoảng cách theo giá trị `day` (không thứ hạng, không vòng tuần). S05 không ngầm thêm cap
+cùng ngày hay điều kiện liên tiếp. Overlap: S05 chung requirement, S06 giao lớp×môn, bất kể mode.
+Không có precheck tổng hợp; lock tổ hợp vượt hard → INFEASIBLE. Không có k/limit mặc định.

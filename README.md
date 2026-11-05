@@ -4,7 +4,8 @@ Phase 2A: Python core độc lập, hard-feasibility CP-SAT cho tiết đơn/đ�
 S01–S04 theo ưu tiên P1–P3, có independent hard validator và score evaluator.
 Input 1.0 giữ hành vi/hash Phase 1 và phát output 1.1; input 1.1/policy 0.1 phát output 1.2.
 Phase 2B (synthetic): input 1.1/policy 0.2 thêm hard variants S01–S04 explicit và phát output 1.3.
-Output reader đọc 1.0/1.1/1.2/1.3. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
+Phase 2C-1 (synthetic): policy 0.3 thêm phân phối môn S05/S06 (soft và hard), phát output 1.4
+với ScoreReport 1.1. Output reader đọc 1.0–1.4. Không có Electron, React, SQLite, HTTP hoặc vnEdu adapter.
 
 ## Chạy local
 
@@ -80,3 +81,12 @@ khung. Policy 0.1 vẫn từ chối mọi enabled hard. Rule cùng family không
 mode. INFEASIBLE không chỉ ra rule gây vô nghiệm. Core không có ngưỡng mặc định; xem
 [đặc tả 2B](docs/superpowers/specs/2026-11-05-phase-2b-hard-variants-design.md) và
 [báo cáo 2B](docs/phase-2b-report.md).
+
+## Phân phối môn Phase 2C-1
+
+Policy `0.3` thêm `SUBJECT_COMPONENT_DAY_SPREAD` (S05: nhóm `requirement_ids` explicit, mỗi cặp
+component phạt `max(0, k − |day_i − day_j|)` ngày thiếu; hard: mọi cặp cách ≥ k ngày) và
+`CLASS_SUBJECT_MAX_PERIODS_PER_DAY` (S06: số tiết lớp+môn+ngày vượt `limit`; hard: ≤ limit).
+Khoảng cách theo giá trị `day`; không có k/limit mặc định. Policy 0.1/0.2 coi hai mã này là
+unknown. Xem [đặc tả 2C-1](docs/superpowers/specs/2026-11-05-phase-2c-subject-distribution-design.md)
+và [báo cáo 2C-1](docs/phase-2c-report.md).
