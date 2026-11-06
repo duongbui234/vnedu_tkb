@@ -244,3 +244,27 @@ Giờ nghỉ phải khai báo đúng; timed block bảo thủ không vượt b�
   solve native đầu tiên (tầng thay đổi, hoặc feasibility của `run_quality` khi `AFTER_QUALITY`).
 - **Kiểm chứng:** mọi lịch qua validator độc lập, score evaluator và `evaluate_repair`. Số thay đổi của
   model phải bằng số tính lại. Lệch → `MODEL_INVALID / REPAIR_REPORT_MISMATCH`, không xuất lịch.
+
+## Chẩn đoán vô nghiệm Phase 3B
+
+`diagnostics/` là đường riêng; `solve()` và `repair()` không gọi nó và không đổi.
+
+- **Domain:** `diagnostics/domains.py` dựng lại domain như `prepare()` nhưng gắn cho mỗi placement tập
+  nhóm lọc-domain nó vi phạm (khóa, availability, S01/S04 hard). `MODEL` chỉ giữ placement sạch (bằng
+  domain của `prepare()`); `FULL` giữ cả placement vi phạm, cùng guard `max_placements`/`max_occupancy_terms`.
+- **Precheck mở rộng:** tám phép đếm `PC_*` trên domain sạch, liệt kê hết. `validation/precheck_verifier.py`
+  tính lại cùng danh sách bằng code riêng (không import preprocessing/constraints/solver/diagnostics).
+- **Model:** mỗi nhóm một literal `a`. Nhóm model viết `constraint.only_enforce_if(a)` (DEMAND:
+  `Σx = 1` khi bật, `AtMostOne` luôn bật); nhóm lọc-domain viết `x ⇒ ¬a`. Literal tắt chỉ nới model
+  (đơn điệu), nên core và deletion đúng. Bucket S02/S03/S05/S06 sao lại logic của `constraints/hard.py`
+  (không import để sửa); test đối chiếu status với `solve()` trên mọi fixture.
+- **B11 — phá đối xứng:** occurrence cùng requirement, cùng duration, cùng domain đã gắn nhãn và không
+  bị khóa được ràng buộc `rank(oᵢ) ≤ rank(oᵢ₊₁)`. Lập luận: mọi ràng buộc đối xứng giữa các occurrence
+  đó; occurrence không xếp có rank 0, nên một nghiệm của bất kỳ tập nhóm nào cũng sắp lại được theo thứ tự
+  này. Oracle kiểm có/không thứ tự cho cùng status trên **mọi** tập con nhóm. Không có B11, xung đột đếm
+  từ 12 tiết trả UNKNOWN sau 10 s (spike B9).
+- **Quy trình:** precheck → giải với mọi literal → core (`sufficient_assumptions_for_infeasibility`) →
+  giải lại riêng core để xác nhận → deletion theo thứ tự (kind, id). Mỗi lời gọi nhận phần budget còn
+  lại; workers 1, seed từ request. Phần tử bỏ được thì bỏ; phần tử giữ lại có lịch witness, được
+  `validate_schedule(..., relaxed_groups=…)` kiểm với đúng các phần tử còn lại bật. Hết budget hoặc
+  UNKNOWN → `minimal_proved=false`, phần tử đó vào `unresolved`.

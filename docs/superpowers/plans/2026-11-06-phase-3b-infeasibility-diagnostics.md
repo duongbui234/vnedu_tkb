@@ -1,7 +1,7 @@
 # Phase 3B — kế hoạch triển khai chẩn đoán vô nghiệm
 
-Ngày 2026-11-06. Trạng thái: **DRAFT — B1–B10 đã duyệt ngày 2026-11-06; spike B9 đã chạy; B11 (mới, từ
-spike) chờ duyệt; Task 1–9 chưa thực hiện.**
+Ngày 2026-11-06. Trạng thái: **B1–B11 đã duyệt ngày 2026-11-06; spike B9 đã chạy; bước C (Task 1–9) ĐÃ
+THỰC HIỆN, chưa commit.** Kết quả và sai khác: [báo cáo 3B](../../phase-3b-report.md).
 Đặc tả: [2026-11-06-phase-3b-infeasibility-diagnostics-design.md](../specs/2026-11-06-phase-3b-infeasibility-diagnostics-design.md).
 Base `4b15936` trên `main`.
 
@@ -69,7 +69,7 @@ dựng tay, không qua `prepare()`/`build_model()`; chưa đo ở cỡ 20/40 l�
 
 ## 2. Quyết định mới từ spike
 
-- [ ] **B11 — Phá đối xứng trong model chẩn đoán:** thêm ràng buộc thứ tự rank giữa các occurrence cùng
+- [x] **B11 — Phá đối xứng trong model chẩn đoán:** thêm ràng buộc thứ tự rank giữa các occurrence cùng
   requirement, cùng domain (domain mở rộng ở `FULL`), cùng tập nhóm, không bị khóa — làm phần **nền cố
   định** (không có assumption). Điều kiện: chứng minh ràng buộc này giữ nguyên tính khả thi với **mọi**
   tập con nhóm (kể cả khi DEMAND tắt và occurrence được phép không xếp, rank = 0), và kiểm bằng oracle
@@ -81,8 +81,8 @@ dựng tay, không qua `prepare()`/`build_model()`; chưa đo ở cỡ 20/40 l�
 | Bước | Cần duyệt riêng |
 |---|---|
 | A. Duyệt đặc tả B1–B10 | Đã duyệt 2026-11-06 |
-| B. Spike B9, kế hoạch này | Đã làm; **duyệt kế hoạch + B11** ở lượt này |
-| C. Task 1–9 trong working tree, chạy checks | Có (product code) |
+| B. Spike B9, kế hoạch này | Đã làm; kế hoạch + B11 đã duyệt 2026-11-06 |
+| C. Task 1–9 trong working tree, chạy checks | Đã duyệt và thực hiện 2026-11-06 |
 | D. Commit + push | Có |
 | E. Tự rà soát, sửa finding, kiểm installed wheel | Có, từng bước |
 

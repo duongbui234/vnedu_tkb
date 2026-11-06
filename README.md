@@ -9,8 +9,9 @@ với ScoreReport 1.1. Phase 2C-2 (synthetic): policy 0.4 thêm S07–S11 (ô h�
 ngày/buổi rảnh, buổi một tiết; chỉ soft) và `occupied_work`, phát output 1.5 với ScoreReport 1.2.
 Output reader đọc 1.0–1.5. Phase 3A (synthetic): lệnh `repair` xếp lại khi dữ liệu đổi, giữ lịch
 trước nhiều nhất có thể, và `evaluate-repair` kiểm lại độc lập; kết quả là envelope `RepairResult`
-1.0 bọc output hiện có, không thêm version output mới. Không có Electron, React, SQLite, HTTP hoặc
-vnEdu adapter.
+1.0 bọc output hiện có, không thêm version output mới. Phase 3B (synthetic): lệnh `explain` chẩn đoán
+input vô nghiệm (phản chứng đếm hoặc một tập xung đột), `check-explanation` kiểm lại độc lập. Không có
+Electron, React, SQLite, HTTP hoặc vnEdu adapter.
 
 ## Chạy local
 
@@ -121,3 +122,22 @@ uv run tkb-core evaluate-repair new.json previous.json repaired.json
 
 Xem [đặc tả Phase 3](docs/superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md) và
 [báo cáo 3A](docs/phase-3a-report.md).
+
+## Chẩn đoán vô nghiệm Phase 3B
+
+`explain <input> --time-limit S --seed N --granularity MODEL|FULL` trả `InfeasibilityReport` 1.0 (ba
+tham số đều bắt buộc). Trước hết chạy mọi precheck đếm (`PC_*`); có phản chứng thì dừng với
+`PRECHECK_PROOF`. Không có thì giải CP-SAT với một assumption cho mỗi nhóm ràng buộc và thu nhỏ core:
+`CORE_SUBSET` là **một** tập xung đột, không phải nguyên nhân duy nhất. `minimal_proved` chỉ đúng khi
+bỏ bất kỳ phần tử nào cũng có lịch, và mỗi lịch đó được validator độc lập kiểm. `MODEL` chẩn đoán demand,
+occupancy và rule hard trong model; `FULL` thêm khóa, availability và S01/S04 hard. Report không chứa
+lịch. `check-explanation <input> <report>` tính lại mọi phản chứng đếm, chạy được khi không cài OR-Tools;
+tập xung đột vẫn là bằng chứng của solver.
+
+```sh
+uv run --extra solver tkb-core explain input.json --time-limit 30 --seed 42 --granularity FULL --output report.json
+uv run tkb-core check-explanation input.json report.json
+```
+
+Xem [đặc tả 3B](docs/superpowers/specs/2026-11-06-phase-3b-infeasibility-diagnostics-design.md) và
+[báo cáo 3B](docs/phase-3b-report.md).

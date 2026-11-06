@@ -110,3 +110,69 @@ def gap_case(quality_case: dict[str, Any]) -> dict[str, Any]:
     """Policy 0.4 input for restricted-slot, gap and free-time rules (Phase 2C-2)."""
     quality_case["constraint_config"]["policy_version"] = "0.4"
     return quality_case
+
+
+def _diagnostic_base(slot_ids: list[tuple[int, int]]) -> dict[str, Any]:
+    return {
+        "schema_version": "1.1",
+        "school": {"school_id": "s", "academic_year": "y", "term": "t"},
+        "time_slots": [
+            {"id": f"d{d}p{p}", "day": d, "session": "AM", "period": p} for d, p in slot_ids
+        ],
+        "classes": [{"id": "c1", "size": 10}, {"id": "c2", "size": 10}],
+        "teachers": [{"id": "t1"}, {"id": "t2"}],
+        "subjects": [{"id": "sub"}],
+        "teaching_requirements": [],
+        "constraint_config": {"policy_version": "0.3", "hard": [], "soft": []},
+    }
+
+
+def _req(rid: str, cls: str, teacher: str, periods: int, **extra: Any) -> dict[str, Any]:
+    return {
+        "id": rid,
+        "class_ids": [cls],
+        "teacher_ids": [teacher],
+        "subject_id": "sub",
+        "periods_per_cycle": periods,
+        **extra,
+    }
+
+
+@pytest.fixture
+def triangle_case() -> dict[str, Any]:
+    """Three single lessons pairwise sharing class c1, teacher t1 or the only lab; 2 slots.
+
+    Every counting precheck passes, yet three mutually exclusive lessons need 3 slots.
+    Expected conflict: DEMAND r1-r3 + CLASS_OCCUPANCY c1 + TEACHER_OCCUPANCY t1 +
+    ROOM_OCCUPANCY lab.
+    """
+    data = _diagnostic_base([(1, 1), (1, 2)])
+    data["manage_rooms"] = True
+    data["rooms"] = [{"id": "lab", "room_type": "lab", "capacity": 30}]
+    lab = {"room_required": True, "required_room_type": "lab"}
+    data["teaching_requirements"] = [
+        _req("r1", "c1", "t1", 1),
+        _req("r2", "c1", "t2", 1, **lab),
+        _req("r3", "c2", "t1", 1, **lab),
+    ]
+    return data
+
+
+@pytest.fixture
+def spread_case() -> dict[str, Any]:
+    """S05 hard puts r's two lessons on different days; day 2's only slot is t1's lock.
+
+    Expected MODEL conflict: DEMAND r + DEMAND r3 + HARD_RULE spread + TEACHER_OCCUPANCY t1
+    (the lock is background at MODEL; at FULL it joins as LOCK r3::1).
+    """
+    data = _diagnostic_base([(1, 1), (1, 2), (2, 1)])
+    data["teaching_requirements"] = [_req("r", "c1", "t1", 2), _req("r3", "c2", "t1", 1)]
+    data["locked_assignments"] = [{"occurrence_id": "r3::1", "slot_id": "d2p1"}]
+    data["constraint_config"]["hard"] = [
+        {
+            "id": "spread",
+            "code": "SUBJECT_COMPONENT_DAY_SPREAD",
+            "parameters": {"requirement_ids": ["r"], "min_day_gap": 1},
+        }
+    ]
+    return data

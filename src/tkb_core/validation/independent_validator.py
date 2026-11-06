@@ -1,7 +1,7 @@
 """Recompute validity from raw assignments, never model variables or candidate domains."""
 
 from collections import Counter, defaultdict
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 from itertools import pairwise
 
 from tkb_core.constraints.registry import DEFINITIONS, HARD_POLICIES
@@ -26,9 +26,29 @@ from tkb_core.domain.rule_parameters import (
 
 # Placed periods of one occurrence: (teacher ID, covered slots, occurrence ID).
 _Placed = tuple[str, tuple[TimeSlot, ...], str]
+# Phase 3B witness checks may skip whole diagnostic groups, named by (kind, id). The kinds are
+# spelled here on purpose: this module must not import the diagnostics package.
+RELAXABLE_KINDS = frozenset(
+    {
+        "DEMAND",
+        "CLASS_OCCUPANCY",
+        "TEACHER_OCCUPANCY",
+        "ROOM_OCCUPANCY",
+        "HARD_RULE",
+        "LOCK",
+        "CLASS_AVAILABILITY",
+        "TEACHER_AVAILABILITY",
+        "ROOM_AVAILABILITY",
+        "HARD_PLACEMENT_RULE",
+    }
+)
 
 
-def _hard_variant_violations(problem: ScheduleInput, placed: Sequence[_Placed]) -> list[Diagnostic]:
+def _hard_variant_violations(
+    problem: ScheduleInput,
+    placed: Sequence[_Placed],
+    relaxed: frozenset[tuple[str, str]] = frozenset(),
+) -> list[Diagnostic]:
     """Recheck policy 0.2 hard variants from covered periods; shares no compiler code.
 
     Parameters were already parsed by the contract; this re-parses them through the
@@ -43,6 +63,8 @@ def _hard_variant_violations(problem: ScheduleInput, placed: Sequence[_Placed]) 
     found: list[Diagnostic] = []
     for rule in sorted(config.hard, key=lambda r: r.id):
         if not rule.enabled:
+            continue
+        if ("HARD_RULE", rule.id) in relaxed or ("HARD_PLACEMENT_RULE", rule.id) in relaxed:
             continue
         scoped = set(rule.scope.teacher_ids) or {t.id for t in problem.teachers}
         definition = DEFINITIONS[rule.code]
@@ -151,9 +173,22 @@ def _same_time(covered: TimeSlot, target: TimeSlot) -> bool:
 
 
 def validate_schedule(
-    problem: ScheduleInput, assignments: Sequence[ScheduleAssignment]
+    problem: ScheduleInput,
+    assignments: Sequence[ScheduleAssignment],
+    *,
+    relaxed_groups: Collection[tuple[str, str]] = (),
 ) -> ValidationReport:
-    """Check all Phase 1 hard semantics using independent Python occupancy logic."""
+    """Check all Phase 1 hard semantics using independent Python occupancy logic.
+
+    ``relaxed_groups`` is for Phase 3B minimality witnesses only: each (kind, id) names one
+    diagnostic group whose rule is skipped (``DEMAND`` allows missing occurrences of that
+    requirement, never extra ones). The fixed background (calendar, ``can_teach``, block
+    boundaries, participants, room need/type/capacity) is always checked. Empty by default,
+    which keeps the full validation unchanged.
+    """
+    relaxed = frozenset(relaxed_groups)
+    if any(kind not in RELAXABLE_KINDS for kind, _ in relaxed):
+        raise ValueError("Unknown relaxed group kind")
     violations: list[Diagnostic] = []
 
     def add(
@@ -256,7 +291,8 @@ def validate_schedule(
         return ValidationReport(valid=False, violations=tuple(violations))
 
     expected_total = sum(req.occurrence_count for req in requirements.values())
-    if len(assignments) != expected_total:
+    demand_relaxed = any(kind == "DEMAND" for kind, _ in relaxed)
+    if len(assignments) != expected_total and not demand_relaxed:
         add("OCCURRENCE_COUNT", "Assignment count does not match required occurrence count")
     seen: set[str] = set()
     observed: Counter[str] = Counter()
@@ -335,9 +371,13 @@ def validate_schedule(
         resources = [("CLASS", learner), ("TEACHER", teacher)]
         lock = locks.get(a.occurrence_id)
         needs_room = req.room_required or bool(lock and lock.room_id is not None)
-        if lock and (
-            (lock.slot_id is not None and a.slot_id != lock.slot_id)
-            or (lock.room_id is not None and a.room_id != lock.room_id)
+        if (
+            lock
+            and ("LOCK", a.occurrence_id) not in relaxed
+            and (
+                (lock.slot_id is not None and a.slot_id != lock.slot_id)
+                or (lock.room_id is not None and a.room_id != lock.room_id)
+            )
         ):
             add(
                 "LOCK_MISMATCH",
@@ -381,8 +421,10 @@ def validate_schedule(
                         resource_ids=(room.id,),
                     )
         for kind, resource in resources:
-            if resource.available_slot_ids is not None and any(
-                s.id not in resource.available_slot_ids for s in covered
+            if (
+                resource.available_slot_ids is not None
+                and (f"{kind}_AVAILABILITY", resource.id) not in relaxed
+                and any(s.id not in resource.available_slot_ids for s in covered)
             ):
                 add(
                     "AVAILABILITY",
@@ -390,6 +432,8 @@ def validate_schedule(
                     resource_ids=(resource.id,),
                     occurrence_ids=(a.occurrence_id,),
                 )
+            if (f"{kind}_OCCUPANCY", resource.id) in relaxed:
+                continue
             if timed:
                 begin, end = covered[0].start_minute, covered[-1].end_minute
                 assert begin is not None and end is not None
@@ -407,7 +451,10 @@ def validate_schedule(
                         )
                     symbolic[key] = a.occurrence_id
     for requirement_id, req in requirements.items():
-        if observed[requirement_id] != req.occurrence_count:
+        if observed[requirement_id] != req.occurrence_count and not (
+            ("DEMAND", requirement_id) in relaxed
+            and observed[requirement_id] < req.occurrence_count
+        ):
             add("OCCURRENCE_COUNT", "Requirement has missing or excess assignments")
     for (kind, resource_id), spans in intervals.items():
         farthest_end = -1
@@ -422,5 +469,5 @@ def validate_schedule(
                 )
             if end > farthest_end:
                 farthest_end, farthest_occurrence = end, occurrence_id
-    violations.extend(_hard_variant_violations(problem, placed))
+    violations.extend(_hard_variant_violations(problem, placed, relaxed))
     return ValidationReport(valid=not violations, violations=tuple(violations))

@@ -11,6 +11,7 @@ from typing import Any, Literal, NoReturn
 
 from pydantic import BaseModel, ValidationError
 
+from tkb_core.contracts.diagnostics import ExplainOptions, InfeasibilityReport
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.contracts.output import ScheduleResult
 from tkb_core.contracts.repair import PreviousSchedule, RepairRequest, RepairResult
@@ -19,6 +20,7 @@ from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import ConstraintConfigV11, Diagnostic
 from tkb_core.solver.options import SolveOptions
 from tkb_core.validation.independent_validator import validate_schedule
+from tkb_core.validation.precheck_verifier import check_explanation
 from tkb_core.validation.repair_evaluator import check_report, evaluate_repair
 from tkb_core.validation.score_evaluator import evaluate_score, score_version
 
@@ -244,6 +246,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "evaluate-score",
             "repair",
             "evaluate-repair",
+            "explain",
+            "check-explanation",
         }
     ):
         return emit_error(
@@ -292,6 +296,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     rechecking.add_argument("previous", type=Path)
     rechecking.add_argument("result", type=Path)
     rechecking.add_argument("--request", type=Path)
+    explaining = commands.add_parser(
+        "explain", help="Explain why an input has no schedule (Phase 3B)"
+    )
+    explaining.add_argument("path", type=Path)
+    explaining.add_argument("--time-limit", type=float, required=True)
+    explaining.add_argument("--seed", type=int, required=True)
+    explaining.add_argument("--granularity", choices=("MODEL", "FULL"), required=True)
+    explaining.add_argument("--output", type=Path)
+    for limit in ("max-slots", "max-occurrences", "max-placements", "max-occupancy-terms"):
+        explaining.add_argument("--" + limit, type=int)
+    verifying = commands.add_parser(
+        "check-explanation", help="Independently recompute a report's arithmetic proofs"
+    )
+    verifying.add_argument("path", type=Path)
+    verifying.add_argument("report", type=Path)
     try:
         namespace = parser.parse_args(args)
     except _ArgumentError:
@@ -302,6 +321,64 @@ def main(argv: Sequence[str] | None = None) -> int:
         problem = _read_model(namespace.path, ScheduleInput)
         fingerprint = problem.fingerprint()
         report_version[0] = score_version(problem)
+        if namespace.command == "check-explanation":
+            explanation = _read_model(namespace.report, InfeasibilityReport, "EXPLANATION_INVALID")
+            problems = check_explanation(problem, explanation)
+            if "STALE_REPORT" in problems:
+                return emit_error(
+                    "INPUT_INVALID", "STALE_RESULT", "Report does not match the current input"
+                )
+            if problems:
+                return emit_error(
+                    "INPUT_INVALID",
+                    "EXPLANATION_MISMATCH",
+                    "Report differs from recomputation: " + ",".join(problems),
+                )
+            evidence = explanation.evidence
+            print(
+                json.dumps(
+                    {
+                        "schema_version": "1.0",
+                        "status": "OK",
+                        "input_fingerprint": fingerprint,
+                        "report_status": explanation.status,
+                        "precheck_proofs_verified": len(explanation.precheck_proofs),
+                        "infeasibility_evidence": None
+                        if evidence is None
+                        else evidence.infeasibility,
+                        # Witnesses are not in the report; a subset stays a solver claim here.
+                        "minimality_rechecked": False,
+                    }
+                )
+            )
+            return 0
+        if namespace.command == "explain":
+            if namespace.output is not None:
+                _check_output(namespace.path, namespace.output)
+            explain_values: dict[str, Any] = {
+                "time_limit_seconds": namespace.time_limit,
+                "seed": namespace.seed,
+                "granularity": namespace.granularity,
+            }
+            for limit in ("max_slots", "max_occurrences", "max_placements", "max_occupancy_terms"):
+                value = getattr(namespace, limit)
+                if value is not None:
+                    explain_values[limit] = value
+            explain_options = ExplainOptions.model_validate(explain_values)
+            from tkb_core.diagnostics.pipeline import explain_infeasibility
+
+            serialized = explain_infeasibility(problem, explain_options).model_dump_json()
+            if namespace.output is not None:
+                try:
+                    _write_atomic(namespace.output, serialized)
+                except OSError:
+                    return emit_error(
+                        "INPUT_INVALID",
+                        "OUTPUT_WRITE_ERROR",
+                        "Could not atomically write the result file",
+                    )
+            print(serialized)
+            return 0
         if namespace.command == "evaluate-repair":
             return _evaluate_repair(
                 problem, namespace.previous, namespace.result, namespace.request

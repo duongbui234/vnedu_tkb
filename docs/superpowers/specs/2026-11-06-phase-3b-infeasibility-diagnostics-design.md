@@ -1,8 +1,8 @@
 # Phase 3B — đặc tả chẩn đoán vô nghiệm
 
-Ngày 2026-11-06. Trạng thái: **B1–B10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06; chưa triển khai.** Spike
-B9 đã chạy, API đáp ứng thiết kế; spike đề xuất thêm **B11** (phá đối xứng), chờ duyệt — xem
-[kế hoạch 3B](../plans/2026-11-06-phase-3b-infeasibility-diagnostics.md) §1–§2. Base `fe3e1c5` trên `main`.
+Ngày 2026-11-06. Trạng thái: **B1–B10 và B11 (từ spike B9) ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06;
+đã triển khai trong working tree, chưa commit** — xem [kế hoạch 3B](../plans/2026-11-06-phase-3b-infeasibility-diagnostics.md)
+và [báo cáo 3B](../../phase-3b-report.md) (gồm các sai khác nhỏ so với bản này). Base `fe3e1c5` trên `main`.
 
 Nguồn yêu cầu:
 

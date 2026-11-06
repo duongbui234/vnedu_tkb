@@ -164,3 +164,23 @@ Ghép theo `occurrence_id` ổn định:
 Slot hay phòng cũ không còn tồn tại không phải lỗi contract mà là `forced`. Occurrence frozen có vị trí
 cũ không hợp lệ → `INPUT_INVALID / REPAIR_FROZEN_TARGET_INVALID`. Input 1.0 →
 `UNSUPPORTED_FEATURE / REPAIR_INPUT_VERSION`.
+
+## Bổ sung Phase 3B — chẩn đoán vô nghiệm
+
+Contract riêng `InfeasibilityReport` 1.0 (`contracts/diagnostics.py`), không sửa input/output hiện có.
+`ExplainOptions` bắt buộc `time_limit_seconds`, `seed`, `granularity` (`MODEL` hoặc `FULL`); guard tài
+nguyên dùng mặc định như `solve()`.
+
+| Status | Trường đi kèm | Bằng chứng |
+|---|---|---|
+| `PRECHECK_PROOF` | `precheck_proofs` (code, rule, resource, `required` > `available`) | `ARITHMETIC`, tính lại độc lập |
+| `CORE_SUBSET` | `subset`, `minimal_proved`, `unresolved` | `SOLVER`; `minimality_witnesses` ghi kết quả validator cho từng phần tử |
+| `NOT_INFEASIBLE`, `UNKNOWN`, `RESOURCE_LIMIT` | không có | — |
+
+Nhóm (kind, id): `DEMAND` (requirement), `CLASS_/TEACHER_/ROOM_OCCUPANCY`, `HARD_RULE` (S02/S03/S05/S06
+hard) ở mọi mức; `LOCK` (occurrence), `CLASS_/TEACHER_/ROOM_AVAILABILITY`, `HARD_PLACEMENT_RULE`
+(S01/S04 hard) chỉ ở `FULL`. Nền cố định không chẩn đoán: calendar, `can_teach`, biên block, loại và sức
+chứa phòng. `limitations` là câu cố định: một tập xung đột, không phải nguyên nhân duy nhất. Report không
+có `assignments`. Lỗi input/capability giữ nguyên mã như `solve()`; riêng khóa sai, `solve()` báo
+`INPUT_INVALID / LOCK_CONFLICT`, còn `explain` coi đó là xung đột cần chẩn đoán (`PC_EMPTY_DOMAIN`,
+`PC_LOCK_OVERLAP` hoặc nhóm `LOCK`).

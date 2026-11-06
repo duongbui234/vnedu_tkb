@@ -105,3 +105,17 @@ P1–P3. Request khai báo nó đứng trước (`BEFORE_QUALITY`) hay sau (`AFT
 `max_changes` là giới hạn cứng của repair; `change_scope` biến occurrence matched ngoài scope thành
 khóa vị trí cũ. Khóa trong input luôn thắng lịch trước. Đơn vị và quy tắc ghép: xem
 [domain model](domain-model.md).
+
+## Phase 3B — nhóm chẩn đoán theo rule
+
+| Rule / điều kiện | Nhóm chẩn đoán | Mức |
+|---|---|---|
+| Demand của requirement | `DEMAND` | MODEL, FULL |
+| Không trùng lớp/GV/phòng | `CLASS_/TEACHER_/ROOM_OCCUPANCY` | MODEL, FULL |
+| S02/S03 hard (tải buổi/ngày), S05/S06 hard (phân phối) | `HARD_RULE` theo rule ID | MODEL, FULL |
+| Khóa slot/phòng | `LOCK` theo occurrence | FULL (MODEL: nền cố định) |
+| Availability lớp/GV/phòng | `*_AVAILABILITY` | FULL (MODEL: nền cố định) |
+| S01/S04 hard (ô tránh, khung tiết) | `HARD_PLACEMENT_RULE` theo rule ID | FULL (MODEL: nền cố định) |
+| Calendar, `can_teach`, biên block, loại/sức chứa phòng | không chẩn đoán | luôn bật |
+
+Soft rule không bao giờ gây vô nghiệm và không có nhóm.
