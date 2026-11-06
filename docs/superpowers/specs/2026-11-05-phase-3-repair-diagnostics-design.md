@@ -1,6 +1,6 @@
 # Phase 3 — đặc tả repair, chẩn đoán vô nghiệm và benchmark
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — P3-1 đến P3-12 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; chưa triển khai.** Runbook D/E/F đã ghim commit `86f624d`. **3A đã triển khai và commit (duyệt ngày 2026-11-05)** — xem [báo cáo 3A](../../phase-3a-report.md). 3B/3C chưa bắt đầu. Base
+Ngày 2026-11-05. Trạng thái: **DRAFT — P3-1 đến P3-12 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; chưa triển khai.** Runbook D/E/F đã ghim commit `86f624d`. **3A đã triển khai và commit (duyệt ngày 2026-11-05)** — xem [báo cáo 3A](../../phase-3a-report.md). **3B: đặc tả chi tiết DRAFT ngày 2026-11-06** — xem [đặc tả 3B](2026-11-06-phase-3b-infeasibility-diagnostics-design.md). 3C chưa bắt đầu. Base
 `86f624d` trên `main`. Kế hoạch triển khai lát đầu (3A):
 [2026-11-05-phase-3a-repair.md](../plans/2026-11-05-phase-3a-repair.md).
 
