@@ -96,7 +96,47 @@ precheck luôn chạy trên domain sạch trước khi dựng domain `FULL`; `ch
 `MODEL_INVALID`; hết budget trước lời gọi đầu → `UNKNOWN`. Thêm property test đối chiếu với `solve()`
 (200 seed). Sau sửa: **1967 passed, 22 skipped**.
 
+## Kiểm installed wheel từ `c1a49e1`
+
+Bổ sung sau commit `c1a49e1` (gồm bản sửa F1–F5). Chỉ Linux, mỗi lệnh chạy một lần (n = 1), input
+synthetic. Đây không phải benchmark và không đo hiệu năng.
+
+- Wheel `vnedu_tkb_core-0.2.0-py3-none-any.whl`, SHA256
+  `bea79eee30b81a18ffec0b5f80ce209429b2cc67273dca774aa7afc3ebbb5c79`, build bằng `uv build --wheel` từ
+  `git archive` của `c1a49e1` (tree sạch, không lẫn file chưa track). **Wheel không được commit**; nó chỉ
+  nằm trong scratchpad của phiên làm việc.
+- Python 3.12.3; OR-Tools 9.15.6755; Pydantic 2.14.1; `uv.lock` SHA256
+  `fe404cb126bce893368517318d4982b5f7842990429467d2a793af066c2e4c3b` (không đổi). Dependencies từ
+  `uv export --frozen` cài `--require-hashes` vào hai venv sạch: `venv-solver` (có OR-Tools) và
+  `venv-core` (không OR-Tools). Wheel cài `--no-deps`.
+- 44/44 file `tkb_core/*.py` đã cài khớp byte với `src/` tại `c1a49e1` ở cả hai venv, gồm 6 file
+  `diagnostics/`, `contracts/diagnostics.py` và `validation/precheck_verifier.py`.
+- Mọi lệnh chạy bằng `python -I -m tkb_core.cli` từ một thư mục ngoài repo.
+
+| Lệnh (venv) | Exit | Kết quả |
+|---|---:|---|
+| solver: `explain infeasible_teacher.json --granularity MODEL` | 0 | `PRECHECK_PROOF`, 2 × `PC_RESOURCE_CAPACITY`, 0 lời gọi solver |
+| solver: `explain triangle.json` MODEL / FULL | 0 / 0 | `CORE_SUBSET`, `minimal_proved`, 6 nhóm (DEMAND r1–r3, CLASS c1, TEACHER t1, ROOM lab); 8 lời gọi |
+| solver: `explain spread.json` MODEL | 0 | `CORE_SUBSET`, `minimal_proved`: DEMAND r, DEMAND r3, HARD_RULE spread, TEACHER t1; 7 lời gọi |
+| solver: `explain spread.json` FULL | 0 | Như MODEL, thêm `LOCK r3::1`; 8 lời gọi |
+| solver: `explain feasible_small.json` FULL (input 1.0) | 0 | `NOT_INFEASIBLE`, 1 lời gọi |
+| solver / core: `check-explanation` cho 5 report trên | 0 / 0 | `OK` (precheck: 2 phản chứng tính lại khớp, `ARITHMETIC`; core: `SOLVER`) |
+| core: `check-explanation spread.json r-forged.json` (đổi `DEMAND r` thành `ghost` ở subset và witness) | 2 | `EXPLANATION_MISMATCH / UNKNOWN_GROUP` (F2) |
+| core: `check-explanation triangle.json r-spread-full.json` | 2 | `STALE_RESULT` |
+| solver: `solve triangle.json` | 3 | 1.4 `INFEASIBLE`; đường `solve` vẫn chạy |
+| core: `solve triangle.json` | 2 | 1.4 `UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED` |
+| core: `explain triangle.json --granularity MODEL` | **1** | **Traceback `ModuleNotFoundError: No module named 'ortools'`, không có JSON** — finding mới F6 |
+
+Input: `infeasible_teacher.json`, `feasible_small.json` lấy từ `tests/fixtures`; `triangle.json` và
+`spread.json` giống fixture `triangle_case`/`spread_case` trong `tests/conftest.py`.
+
+**F6 (mở, chưa sửa):** khi không cài OR-Tools, `explain` crash thay vì trả lỗi có cấu trúc như `solve`/
+`repair` (`UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED`, exit 2). Ngay cả input chỉ cần precheck (không cần
+solver) cũng crash, vì `diagnostics.pipeline` import `ortools` lúc nạp module. Ghi ở
+[rà soát](phase-3b-review.md#f6--explain-crash-khi-không-cài-or-tools). Chưa kiểm sdist, Windows hay timed
+calendar qua wheel.
+
 ## Bước sau cần duyệt
 
-Kiểm installed wheel (bước E còn lại); review người thứ hai (S3). 3C (benchmark repair) là lát
+Sửa F6; review người thứ hai (S3). 3C (benchmark repair) là lát tiếp theo theo P3-10. 3C (benchmark repair) là lát
 tiếp theo theo P3-10.
