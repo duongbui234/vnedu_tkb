@@ -1,7 +1,8 @@
 # Phase 3B — đặc tả chẩn đoán vô nghiệm
 
-Ngày 2026-11-06. Trạng thái: **DRAFT — chờ người dùng duyệt B1–B10 (§10); chưa triển khai.** Base
-`fe3e1c5` trên `main`.
+Ngày 2026-11-06. Trạng thái: **B1–B10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06; chưa triển khai.** Spike
+B9 đã chạy, API đáp ứng thiết kế; spike đề xuất thêm **B11** (phá đối xứng), chờ duyệt — xem
+[kế hoạch 3B](../plans/2026-11-06-phase-3b-infeasibility-diagnostics.md) §1–§2. Base `fe3e1c5` trên `main`.
 
 Nguồn yêu cầu:
 
@@ -215,27 +216,27 @@ code để phân biệt PRECHECK_PROOF/CORE_SUBSET.
 
 ## 10. Quyết định cần duyệt
 
-- [ ] **B1 — Đường riêng:** chẩn đoán là API/CLI mới (`explain`); `solve()` và `repair()` không đổi, không
+- [x] **B1 — Đường riêng:** chẩn đoán là API/CLI mới (`explain`); `solve()` và `repair()` không đổi, không
   tự gọi chẩn đoán. *(Đề xuất: chọn. Giữ bất biến Phase 3; phương án khác là `solve --explain`, nhưng sẽ
   làm đổi output của `solve()`.)*
-- [ ] **B2 — Contract `InfeasibilityReport` 1.0** riêng như §8.1, không có assignments. *(Đề xuất: chọn.)*
-- [ ] **B3 — Danh mục nhóm** như §3.2, với nền cố định §3.2 không chẩn đoán. *(Đề xuất: chọn.)*
-- [ ] **B4 — Mức chi tiết:** `MODEL` (chỉ DEMAND, OCCUPANCY, HARD_RULE; model nhỏ) và `FULL` (thêm LOCK,
+- [x] **B2 — Contract `InfeasibilityReport` 1.0** riêng như §8.1, không có assignments. *(Đề xuất: chọn.)*
+- [x] **B3 — Danh mục nhóm** như §3.2, với nền cố định §3.2 không chẩn đoán. *(Đề xuất: chọn.)*
+- [x] **B4 — Mức chi tiết:** `MODEL` (chỉ DEMAND, OCCUPANCY, HARD_RULE; model nhỏ) và `FULL` (thêm LOCK,
   AVAILABILITY, HARD_PLACEMENT_RULE qua domain mở rộng). Request phải chọn tường minh. *(Đề xuất: chọn cả
   hai, triển khai `MODEL` trước trong cùng lát. GV bận và khóa là nguyên nhân thường gặp nên `FULL` cần
   có trước khi dùng với dữ liệu thật.)*
-- [ ] **B5 — Bằng chứng minimality** qua witness và validator độc lập chế độ bỏ qua nhóm (§7); phía vô
+- [x] **B5 — Bằng chứng minimality** qua witness và validator độc lập chế độ bỏ qua nhóm (§7); phía vô
   nghiệm ghi rõ chỉ solver. *(Đề xuất: chọn.)*
-- [ ] **B6 — Precheck mở rộng** §5, chỉ trong đường chẩn đoán, liệt kê mọi phản chứng, có verifier độc
+- [x] **B6 — Precheck mở rộng** §5, chỉ trong đường chẩn đoán, liệt kê mọi phản chứng, có verifier độc
   lập. Không đổi precheck của `solve()`. *(Đề xuất: chọn; đưa vào `solve()` là quyết định riêng sau.)*
-- [ ] **B7 — Budget:** một budget chung bắt buộc khai báo; workers = 1; seed khai báo. *(Đề xuất: chọn.)*
-- [ ] **B8 — Thu nhỏ bằng deletion** theo thứ tự ổn định (§6); tối tiểu theo bao hàm, không tối ưu số phần
+- [x] **B7 — Budget:** một budget chung bắt buộc khai báo; workers = 1; seed khai báo. *(Đề xuất: chọn.)*
+- [x] **B8 — Thu nhỏ bằng deletion** theo thứ tự ổn định (§6); tối tiểu theo bao hàm, không tối ưu số phần
   tử. *(Đề xuất: chọn. QuickXplain là cải tiến sau nếu đo thấy chậm.)*
-- [ ] **B9 — Spike kỹ thuật trước TDD:** xác nhận trên OR-Tools 9.15.6755 đã pin rằng
+- [x] **B9 — Spike kỹ thuật trước TDD:** xác nhận trên OR-Tools 9.15.6755 đã pin rằng
   `add_assumptions` + `sufficient_assumptions_for_infeasibility()` trả core đúng với workers = 1, có/không
   presolve, và hành vi khi hết budget. Kết quả ghi vào kế hoạch; nếu API không đáp ứng thì dừng và đề xuất
   lại, không tự đổi thiết kế. *(Đề xuất: chọn.)*
-- [ ] **B10 — Ngoài phạm vi:** không giải thích vô nghiệm của repair, không gợi ý sửa tự động, không
+- [x] **B10 — Ngoài phạm vi:** không giải thích vô nghiệm của repair, không gợi ý sửa tự động, không
   benchmark 3B trong lát này (đo thời gian chẩn đoán thuộc 3C hoặc lát sau). *(Đề xuất: chọn.)*
 
 Duyệt đặc tả là duyệt thiết kế; viết kế hoạch task, spike và code cần ủy quyền riêng.
