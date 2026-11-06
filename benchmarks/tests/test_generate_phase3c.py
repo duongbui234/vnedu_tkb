@@ -141,3 +141,28 @@ def test_requests_are_explicit() -> None:
         "change_scope": None,
         "use_previous_as_hint": False,
     }
+
+
+def test_candidate_rejected_by_core_is_skipped() -> None:
+    """Incident phase3c-linux-01: N2 on c10-tight-s101-soft gave REQ-C006-S03 to a teacher who
+    is unavailable at a locked slot; the core rejects that input (INPUT_INVALID/LOCK_CONFLICT),
+    so the candidate must be skipped instead of labelled EXPECTED_INFEASIBLE."""
+    from tkb_core.domain.errors import CoreError
+    from tkb_core.preprocessing.feasibility import prepare
+    from tkb_core.solver.options import SolveOptions
+
+    generated = g2.generate_dataset(10, "TIGHT", 101, "SOFT")
+    assert generated.witness is not None
+    data = generated.problem.model_dump(mode="json")
+    previous = [a.model_dump(mode="json") for a in generated.witness.assignments]
+    noisy = g3.derive_noise(data, previous, "c10-tight-s101-soft", "N2")
+    assert g3.core_rejection(noisy.data) is None
+    try:
+        prepare(ScheduleInput.model_validate(noisy.data), SolveOptions())
+    except CoreError as exc:
+        assert exc.status != "INPUT_INVALID"
+    # The incident candidate itself is still recognised as rejected.
+    rng = g3.random.Random(g3.noise_seed("c10-tight-s101-soft", "N2") * g3.MAX_CANDIDATES + 9)
+    incident, description = g3._apply(data, previous, "N2", rng)
+    assert description["requirement"] == "REQ-C006-S03" and description["new_teacher"] == "T011"
+    assert g3.core_rejection(incident) == "LOCK_CONFLICT"

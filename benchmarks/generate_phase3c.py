@@ -223,6 +223,26 @@ def counting_proofs(data: dict[str, Any]) -> tuple[str, ...]:
     return tuple(p.code for p in run_prechecks(domains))
 
 
+def core_rejection(data: dict[str, Any]) -> str | None:
+    """Diagnostic code when the core's own preparation rejects ``data`` as an input, else None.
+
+    ``prepare`` is the step ``solve`` and ``repair`` run first; INFEASIBLE or UNKNOWN from it are
+    outcomes on a valid input and are not rejections. Incident phase3c-linux-01: the 3B prechecks
+    read a conflicting lock as an infeasibility proof, while the core reports INPUT_INVALID.
+    """
+    from tkb_core.contracts.input import ScheduleInput
+    from tkb_core.domain.errors import CoreError
+    from tkb_core.preprocessing.feasibility import prepare
+    from tkb_core.solver.options import SolveOptions
+
+    try:
+        prepare(ScheduleInput.model_validate(data), SolveOptions())
+    except CoreError as exc:
+        if exc.status in ("INPUT_INVALID", "UNSUPPORTED_FEATURE"):
+            return exc.diagnostics[0].code
+    return None
+
+
 @dataclass(frozen=True)
 class NoisyInput:
     data: dict[str, Any]
@@ -235,7 +255,8 @@ class NoisyInput:
 def derive_noise(
     data: dict[str, Any], previous: Sequence[dict[str, Any]], dataset_id: str, noise: str
 ) -> NoisyInput:
-    """Apply ``noise`` deterministically; retry while a counting proof shows infeasibility."""
+    """Apply ``noise`` deterministically; skip inputs the core rejects; retry while a counting
+    proof shows infeasibility."""
     from tkb_core.domain.errors import CoreError
 
     if noise not in NOISES:
@@ -249,6 +270,8 @@ def derive_noise(
             proofs = counting_proofs(new)
         except CoreError:
             continue  # the candidate made an invalid input; try the next one
+        if core_rejection(new) is not None:
+            continue  # the core would answer INPUT_INVALID, not a repair; try the next one
         if not proofs:
             return NoisyInput(new, description, "GROUND_TRUTH_UNKNOWN", candidate, ())
         last = NoisyInput(new, description, "EXPECTED_INFEASIBLE", candidate, proofs)

@@ -203,3 +203,34 @@ def test_explain_on_unsat_input(tmp_path: Path) -> None:
     output = v1.OutputVerification(status="VALID_CORE_ERROR", solver_status="NOT_INFEASIBLE")
     verdict = j3.judge_explain(_record(tmp_path, output), tmp_path, "UNSAT", LIMITS)
     assert verdict.hard == "FAIL" and "UNSAT_REPORTED_FEASIBLE" in verdict.reasons
+
+
+def test_input_rejected_by_core_is_not_a_hard_fail(repaired: Path) -> None:
+    """Incident phase3c-linux-01: a core INPUT_INVALID is not a wrong schedule; it must not stop."""
+    envelope = json.loads((repaired / "result.json").read_text())
+    envelope["result"].update(
+        status="INPUT_INVALID", valid_schedule=False, assignments=[], validation=None
+    )
+    envelope["result"]["quality"] = {
+        "policy_version": "0.4",
+        "status": "NOT_EVALUATED",
+        "score": None,
+        "optimal_prefix": [],
+        "tier_runs": [],
+    }
+    envelope["result"]["diagnostics"] = [
+        {"code": "LOCK_CONFLICT", "message": "m", "occurrence_ids": ["r::1"]}
+    ]
+    envelope["repair"] = None
+    (repaired / "result.json").write_text(json.dumps(envelope))
+    output = v1.OutputVerification(status="VALID_CORE_ERROR", solver_status="INPUT_INVALID")
+    record = _record(repaired, output, code=2)
+    verdict = j3.judge_repair(record, repaired, "EXPECTED_INFEASIBLE", LIMITS)
+    assert (verdict.hard, verdict.performance, verdict.quality) == (
+        "NOT_APPLICABLE",
+        "NOT_APPLICABLE",
+        "NO_SCHEDULE",
+    )
+    assert verdict.status == "INPUT_INVALID"
+    assert verdict.reasons == ("CORE_REJECTED_INPUT", "LOCK_CONFLICT")
+    assert j3.stop_status(record, verdict) is None

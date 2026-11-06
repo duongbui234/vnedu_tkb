@@ -139,6 +139,18 @@ def judge_repair(record: RunRecord, base: Path, label: Label, limits: RunLimits)
         return Verdict3C(
             hard="NOT_APPLICABLE", performance="NOT_MET", status=status, run_sha256=_sha(base)
         )
+    if status in ("INPUT_INVALID", "UNSUPPORTED_FEATURE"):
+        # The core refused the input (incident phase3c-linux-01): no schedule was claimed, so
+        # this is not a hard-validity failure. derive_noise filters such candidates; one that
+        # still reaches a run is reported with the core's diagnostic code and does not stop.
+        codes = tuple(d.code for d in result.diagnostics)
+        return Verdict3C(
+            hard="NOT_APPLICABLE",
+            performance="NOT_APPLICABLE",
+            status=status,
+            reasons=("CORE_REJECTED_INPUT", *codes),
+            run_sha256=_sha(base),
+        )
     return Verdict3C(
         hard="FAIL", status=status, reasons=("UNEXPECTED_STATUS",), run_sha256=_sha(base)
     )

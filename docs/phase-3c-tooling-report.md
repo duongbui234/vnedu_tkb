@@ -76,6 +76,31 @@ Máy của người dùng (i7-12700H, cgroup2), không kiểm soát tải. Thư 
 Không được thử trong smoke: repair trả INFEASIBLE (explain theo sau), UNKNOWN/watchdog thật, admission
 gate chặn, R2, dataset 20/40 lớp. Các đường này chỉ có unit test hoặc chưa có.
 
+## Sửa sau sự cố `phase3c-linux-01` (2026-11-07)
+
+Campaign `phase3c-linux-01` (commit ghim `1ab0764`) dừng ở stage R, run 43/192
+`R1-c10-tight-s101-soft-N2-hint1`. S COMPLETE 18/18, derive 192 hàng, X chưa chạy. Raw evidence ở máy,
+`phase3c-campaign-01.tar.gz` có SHA256 `fa4061c9…5a93d7`.
+
+- **Nguyên nhân.** Nhiễu N2 (ứng viên 9) giao `REQ-C006-S03` cho T011. Requirement này có khóa
+  `::4` ở `d06-am-p02`, nhưng T011 không rảnh ô đó. Precheck 3B coi đây là bằng chứng vô nghiệm
+  (`PC_LOCK_OVERLAP`, `PC_EMPTY_DOMAIN`) nên gắn nhãn `EXPECTED_INFEASIBLE`. Còn `prepare` của core
+  trả `INPUT_INVALID / LOCK_CONFLICT`. Judge xếp trạng thái này vào `UNEXPECTED_STATUS`, ra H FAIL rồi
+  `STOPPED`. Core làm đúng; lỗi nằm ở tooling.
+- **Sửa generator.** `derive_noise` bỏ qua ứng viên mà `prepare` của core từ chối (`core_rejection`:
+  `INPUT_INVALID`/`UNSUPPORTED_FEATURE`). INFEASIBLE và UNKNOWN từ `prepare` không bị coi là từ chối.
+- **Sửa judge.** `judge_repair` xử lý `INPUT_INVALID`/`UNSUPPORTED_FEATURE` thành nhánh riêng: H và P
+  `NOT_APPLICABLE`, reasons `CORE_REJECTED_INPUT` kèm mã diagnostic, không dừng campaign.
+- **Test.** Thêm 2 test hồi quy, tái hiện bằng dataset `c10-tight-s101-soft`/N2 và verdict
+  `INPUT_INVALID`; cả hai RED trước khi sửa.
+- **Kiểm trên dữ liệu thật.** Sinh lại 72 input nhiễu từ 18 lịch stage S của campaign-01, ngoài
+  campaign, khoảng 133 s. Chỉ `c10-tight-s101-soft/N2` đổi (ứng viên 9 → 8, vẫn `EXPECTED_INFEASIBLE`
+  với `PC_RESOURCE_CAPACITY`); 71 input còn lại trùng. Input cũ là input duy nhất bị core từ chối.
+- **Checks.** `pytest tests benchmarks/tests` 2002 passed, 22 skipped; ruff, format và mypy đều PASS.
+  `src/` và tooling v1/v2 không đổi so với `1ab0764`.
+
+Chạy lại cần commit ghim mới, cập nhật runbook và campaign ID mới (`phase3c-linux-02`).
+
 ## Lệnh kiểm tra
 
 | Lệnh | Kết quả |
