@@ -1,6 +1,7 @@
 # Phase 3C — kế hoạch benchmark repair trên Linux
 
-Ngày 2026-11-06. Trạng thái: **DRAFT — chờ người dùng duyệt C1–C10 (§9); chưa viết code, chưa chạy.**
+Ngày 2026-11-06. Trạng thái: **C1–C10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06; bước B (Task 1–5) ĐÃ THỰC
+HIỆN; chưa chạy campaign.** Kết quả và sai khác (gồm seal hai tầng): [báo cáo tooling 3C](../../phase-3c-tooling-report.md).
 Base `f58f257` trên `main`.
 
 Nguồn: [đặc tả Phase 3](../specs/2026-11-05-phase-3-repair-diagnostics-design.md) §4 (3C), P3-7, P3-10,
@@ -136,8 +137,8 @@ Không thêm benchmarks vào wheel, không thêm dependency, không sửa `src/`
 
 | Bước | Cần duyệt riêng |
 |---|---|
-| A. Duyệt kế hoạch và C1–C10 | Có (lượt này dừng ở đây) |
-| B. Task 1–5, smoke cloud, checks | Có |
+| A. Duyệt kế hoạch và C1–C10 | Đã duyệt 2026-11-06 |
+| B. Task 1–5, smoke, checks | Đã thực hiện 2026-11-06 (smoke trên máy Linux) |
 | C. Commit + push tooling; runbook D/E/F cho 3C | Có |
 | D. Preflight, sinh bundle 3C trên máy Linux | Có |
 | E. Seal, warmup, pilot (1 run S + 1 run R1 mỗi biến thể ở 10 lớp) | Có |
@@ -146,24 +147,24 @@ Không thêm benchmarks vào wheel, không thêm dependency, không sửa `src/`
 
 ## 9. Quyết định cần duyệt
 
-- [ ] **C1 — Module mới** `benchmarks/*_phase3c.py`, import nhưng không sửa tooling v1/v2. *(Đề xuất: chọn.)*
-- [ ] **C2 — 18 dataset gốc** = s101 × 3 quy mô × BASE/MIXED/TIGHT × SOFT/HARD, trùng byte với bundle v2.
+- [x] **C1 — Module mới** `benchmarks/*_phase3c.py`, import nhưng không sửa tooling v1/v2. *(Đề xuất: chọn.)*
+- [x] **C2 — 18 dataset gốc** = s101 × 3 quy mô × BASE/MIXED/TIGHT × SOFT/HARD, trùng byte với bundle v2.
   *(Đề xuất: chọn. Ba seed sẽ gấp ba thời lượng.)*
-- [ ] **C3 — Lịch trước từ bước S** trong chính campaign; không dùng lại kết quả campaign-02. *(Đề xuất:
+- [x] **C3 — Lịch trước từ bước S** trong chính campaign; không dùng lại kết quả campaign-02. *(Đề xuất:
   chọn; tốn khoảng 0,6 h nhưng giữ identity một commit, một campaign.)*
-- [ ] **C4 — Bốn loại nhiễu N1–N4** như §2.3, mức nhiễu cố định, có precheck để gắn nhãn vô nghiệm.
+- [x] **C4 — Bốn loại nhiễu N1–N4** như §2.3, mức nhiễu cố định, có precheck để gắn nhãn vô nghiệm.
   *(Đề xuất: chọn.)*
-- [ ] **C5 — Ma trận** R1 (144 run, BEFORE, có/không hint) + R2 (48 run, AFTER, chỉ 10 lớp), n = 1.
+- [x] **C5 — Ma trận** R1 (144 run, BEFORE, có/không hint) + R2 (48 run, AFTER, chỉ 10 lớp), n = 1.
   *(Đề xuất: chọn.)*
-- [ ] **C6 — Budget/watchdog/RSS/reserve như v2**; repair và explain dùng budget của quy mô. *(Đề xuất: chọn.)*
-- [ ] **C7 — Verdict H/P/C/Q/X và gate** như §4–§5; INFEASIBLE không là lỗi trừ khi input có lịch đã biết.
+- [x] **C6 — Budget/watchdog/RSS/reserve như v2**; repair và explain dùng budget của quy mô. *(Đề xuất: chọn.)*
+- [x] **C7 — Verdict H/P/C/Q/X và gate** như §4–§5; INFEASIBLE không là lỗi trừ khi input có lịch đã biết.
   *(Đề xuất: chọn.)*
-- [ ] **C8 — Phần X:** `explain` MODEL và FULL trên 18 UNSAT_CAPACITY và mọi run repair trả INFEASIBLE.
+- [x] **C8 — Phần X:** `explain` MODEL và FULL trên 18 UNSAT_CAPACITY và mọi run repair trả INFEASIBLE.
   Không dựng riêng bài vô nghiệm kiểu không-đếm ở quy mô lớn trong 3C. *(Đề xuất: chọn. Hệ quả: thời gian
   đường core của `explain` ở 20/40 lớp chỉ được đo nếu nhiễu tình cờ sinh ra bài như vậy; ghi là hạn chế.)*
-- [ ] **C9 — Máy:** máy Linux của người dùng, cùng máy với campaign-02; workload ghi UNCONTROLLED nếu không
+- [x] **C9 — Máy:** máy Linux của người dùng, cùng máy với campaign-02; workload ghi UNCONTROLLED nếu không
   kiểm soát được. *(Đề xuất: chọn.)*
-- [ ] **C10 — Phạm vi kết luận:** "repair synthetic trên một máy Linux, n = 1 mỗi ô". Không P95/SLA, không
+- [x] **C10 — Phạm vi kết luận:** "repair synthetic trên một máy Linux, n = 1 mỗi ô". Không P95/SLA, không
   Windows, không chấp nhận chất lượng. *(Đề xuất: chọn.)*
 
 ## 10. Rủi ro
