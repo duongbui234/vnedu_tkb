@@ -9,6 +9,7 @@ members enforced. Witnesses are checked and discarded; the report carries no sch
 
 from importlib.metadata import version
 from time import perf_counter
+from typing import TYPE_CHECKING, Any
 
 from tkb_core.contracts.diagnostics import (
     LIMITATIONS,
@@ -24,13 +25,41 @@ from tkb_core.contracts.diagnostics import (
 from tkb_core.contracts.input import ScheduleInput
 from tkb_core.diagnostics.domains import GroupKey, build_domains
 from tkb_core.diagnostics.groups import enumerate_groups
-from tkb_core.diagnostics.model import build_diagnostic_model, solve_subset
 from tkb_core.diagnostics.prechecks import run_prechecks
 from tkb_core.domain.errors import CoreError
 from tkb_core.domain.models import ScheduleAssignment
 from tkb_core.preprocessing.normalize import normalize
 from tkb_core.solver.options import SolveOptions
 from tkb_core.validation.independent_validator import validate_schedule
+
+if TYPE_CHECKING:
+    from tkb_core.diagnostics.model import DiagnosticModel, SubsetOutcome
+
+
+# The model module imports OR-Tools at load time. Load it only when CP-SAT is needed, so
+# counting proofs work without the solver extra (review F6). Module-level wrappers keep the
+# names patchable in tests.
+def _require_solver() -> None:
+    try:
+        import ortools.sat.python.cp_model  # noqa: F401
+    except ImportError as exc:
+        raise CoreError(
+            "UNSUPPORTED_FEATURE",
+            "SOLVER_NOT_INSTALLED",
+            "Install the solver extra to execute CP-SAT",
+        ) from exc
+
+
+def build_diagnostic_model(*args: Any, **kwargs: Any) -> "DiagnosticModel":
+    from tkb_core.diagnostics import model
+
+    return model.build_diagnostic_model(*args, **kwargs)
+
+
+def solve_subset(*args: Any, **kwargs: Any) -> "SubsetOutcome":
+    from tkb_core.diagnostics import model
+
+    return model.solve_subset(*args, **kwargs)
 
 
 def _ref(key: GroupKey) -> GroupRef:
@@ -109,6 +138,7 @@ def explain_infeasibility(problem: ScheduleInput, options: ExplainOptions) -> In
     if left() <= 0:  # review F5: preparation used the whole budget
         return report("UNKNOWN", fingerprint)
 
+    _require_solver()
     solver_version = version("ortools")
     groups = enumerate_groups(normalized.problem, options.granularity)
     every: set[GroupKey] = {(str(g.kind), g.id) for g in groups}

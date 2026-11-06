@@ -1,7 +1,7 @@
 # Phase 3B — tự rà soát sau commit
 
 Ngày 2026-11-06. Đối tượng: commit `f3b2c94` trên `main` (đã push). Người rà soát: Claude (tự rà soát,
-không phải review người thứ hai theo S3). **Trạng thái: F1–F5 ĐÃ SỬA ngày 2026-11-06; F6 (từ kiểm installed wheel) MỞ** (xem
+không phải review người thứ hai theo S3). **Trạng thái: F1–F6 ĐÃ SỬA ngày 2026-11-06** (F6 phát hiện khi kiểm installed wheel) (xem
 §Kết quả sửa); người dùng duyệt sửa, commit và push.
 
 Phạm vi đọc: `contracts/diagnostics.py`, `diagnostics/` (domains, groups, prechecks, model, pipeline),
@@ -17,7 +17,7 @@ lệnh CLI mới và các test 3B. Mọi finding có repro chạy thật (script
 | F3 | Thấp | `explain` gặp `MODEL_INVALID` trả exit 2, còn `solve` trả 5 |
 | F4 | Thấp (test) | Logic bucket S02/S03/S05/S06 sao lại; oracle dùng cùng logic làm tham chiếu |
 | F5 | Thấp | Lời gọi solver đầu vẫn chạy khi budget đã hết |
-| F6 | Trung bình | `explain` crash (exit 1, không JSON) khi không cài OR-Tools — từ kiểm installed wheel, **mở** |
+| F6 | Trung bình | `explain` crash (exit 1, không JSON) khi không cài OR-Tools — từ kiểm installed wheel; đã sửa |
 
 ### F1 — Guard tài nguyên che phản chứng đếm và làm hỏng tính nhất quán với verifier
 
@@ -88,7 +88,7 @@ vẫn có thêm một lời gọi solver và `wall_time` có thể vượt `time
 
 ## F6 — `explain` crash khi không cài OR-Tools
 
-Phát hiện khi kiểm installed wheel từ `c1a49e1` (xem [báo cáo 3B](phase-3b-report.md)). **Mở, chưa sửa.**
+Phát hiện khi kiểm installed wheel từ `c1a49e1` (xem [báo cáo 3B](phase-3b-report.md)). **Đã sửa** (xem cuối mục).
 
 Trong venv không có OR-Tools, `python -I -m tkb_core.cli explain triangle.json --time-limit 10 --seed 42
 --granularity MODEL` thoát với exit 1, in traceback `ModuleNotFoundError: No module named 'ortools'` ra
@@ -102,6 +102,17 @@ Mức: trung bình (đường lỗi không có cấu trúc, lệch hợp đồng
 Đề xuất: import model lười trong pipeline (chỉ khi cần CP-SAT); khi thiếu OR-Tools và không có phản chứng,
 trả `UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED` (exit 2) như `solve`; precheck vẫn chạy được không cần
 OR-Tools. Test: subprocess chặn import `ortools`, kiểm cả input precheck và input cần solver.
+
+**Kết quả sửa:** `diagnostics/pipeline.py` không còn import `diagnostics.model` lúc nạp module; hai hàm
+bọc `build_diagnostic_model`/`solve_subset` nạp model khi cần, và `_require_solver()` chạy ngay trước lời
+gọi CP-SAT đầu tiên (sau precheck). Thiếu OR-Tools → `UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED`, CLI
+exit 2 JSON. TDD: test `test_explain_without_ortools` (2 ca, subprocess chặn import `ortools`) RED trước
+(cả hai crash), GREEN sau sửa. Checks: **1969 passed, 22 skipped**; ruff, format, mypy PASS; diff ở
+`solver/`, `preprocessing/`, `constraints/`, `repair/`, `benchmarks/` rỗng. Kiểm qua wheel build từ nội
+dung commit sửa (SHA256 `7ae89efc8453ac279026fc249f7e1da22d4623e2356441ca837db94697563b98`), venv sạch
+không OR-Tools: `explain infeasible_teacher.json` exit 0 `PRECHECK_PROOF` (0 lời gọi solver),
+`check-explanation` exit 0; `explain triangle.json` exit 2 `UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED`;
+stderr rỗng cả hai.
 
 ## Đã kiểm, không có finding
 

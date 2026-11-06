@@ -1,7 +1,8 @@
 # Phase 3B — báo cáo triển khai chẩn đoán vô nghiệm
 
 Ngày 2026-11-06. Base `c9d06e3` trên `main`. Người dùng duyệt B1–B10 (đặc tả) và B11 (từ spike), ủy quyền
-Task 1–9. **Trạng thái: TECHNICAL SYNTHETIC — commit `f3b2c94` (đã push); sửa F1–F5 sau tự rà soát.**
+Task 1–9. **Trạng thái: TECHNICAL SYNTHETIC — commit `f3b2c94` (đã push); sửa F1–F5 sau tự rà soát và F6 sau
+kiểm installed wheel.**
 
 Phạm vi: [đặc tả 3B](superpowers/specs/2026-11-06-phase-3b-infeasibility-diagnostics-design.md),
 [kế hoạch 3B](superpowers/plans/2026-11-06-phase-3b-infeasibility-diagnostics.md). Không sửa
@@ -130,7 +131,7 @@ synthetic. Đây không phải benchmark và không đo hiệu năng.
 Input: `infeasible_teacher.json`, `feasible_small.json` lấy từ `tests/fixtures`; `triangle.json` và
 `spread.json` giống fixture `triangle_case`/`spread_case` trong `tests/conftest.py`.
 
-**F6 (mở, chưa sửa):** khi không cài OR-Tools, `explain` crash thay vì trả lỗi có cấu trúc như `solve`/
+**F6 (đã sửa sau đó, xem [rà soát](phase-3b-review.md#f6--explain-crash-khi-không-cài-or-tools)):** khi không cài OR-Tools, `explain` crash thay vì trả lỗi có cấu trúc như `solve`/
 `repair` (`UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED`, exit 2). Ngay cả input chỉ cần precheck (không cần
 solver) cũng crash, vì `diagnostics.pipeline` import `ortools` lúc nạp module. Ghi ở
 [rà soát](phase-3b-review.md#f6--explain-crash-khi-không-cài-or-tools). Chưa kiểm sdist, Windows hay timed
@@ -138,5 +139,5 @@ calendar qua wheel.
 
 ## Bước sau cần duyệt
 
-Sửa F6; review người thứ hai (S3). 3C (benchmark repair) là lát tiếp theo theo P3-10. 3C (benchmark repair) là lát
+Review người thứ hai (S3). 3C (benchmark repair) là lát tiếp theo theo P3-10. 3C (benchmark repair) là lát
 tiếp theo theo P3-10.

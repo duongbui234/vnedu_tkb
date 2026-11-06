@@ -186,5 +186,7 @@ có `assignments`. Lỗi input/capability giữ nguyên mã như `solve()`; riê
 `PC_LOCK_OVERLAP` hoặc nhóm `LOCK`).
 
 CLI: `explain` trả exit 0 cho mọi report hợp lệ, 2 cho lỗi input/option, 5 cho `MODEL_INVALID`.
+Không cài OR-Tools: precheck vẫn chạy (`PRECHECK_PROOF` exit 0); cần CP-SAT thì trả
+`UNSUPPORTED_FEATURE / SOLVER_NOT_INSTALLED` exit 2, như `solve`.
 `check-explanation` tính lại phản chứng đếm, kiểm nhóm trong report có trong input ở đúng mức chi tiết
 (`UNKNOWN_GROUP`), và chấp nhận `RESOURCE_LIMIT` mà không đòi gì thêm.

@@ -137,3 +137,40 @@ def test_explain_model_invalid_exits_5(
     source.write_text(json.dumps(triangle_case))
     code, out = _run(["explain", str(source), *ARGS], capsys)
     assert code == 5 and out["status"] == "MODEL_INVALID"
+
+
+@pytest.mark.parametrize(
+    ("needs_solver", "exit_code", "status"),
+    [(False, 0, "PRECHECK_PROOF"), (True, 2, "UNSUPPORTED_FEATURE")],
+)
+def test_explain_without_ortools(
+    triangle_case: dict[str, Any], tmp_path: Path, needs_solver: bool, exit_code: int, status: str
+) -> None:
+    """F6: counting proofs need no solver; otherwise a structured SOLVER_NOT_INSTALLED error."""
+    source = tmp_path / "in.json"
+    if needs_solver:
+        source.write_text(json.dumps(triangle_case))
+    else:
+        source.write_text((FIXTURES / "infeasible_teacher.json").read_text())
+    script = f"""
+import builtins, sys
+original = builtins.__import__
+def guarded(name, *args, **kwargs):
+    if name.startswith('ortools'):
+        raise ImportError('No module named ' + repr(name))
+    return original(name, *args, **kwargs)
+builtins.__import__ = guarded
+from tkb_core.cli import main
+sys.exit(main(['explain', {str(source)!r}, '--time-limit', '5', '--seed', '1',
+               '--granularity', 'FULL']))
+"""
+    result = subprocess.run(
+        [sys.executable, "-c", script], capture_output=True, text=True, check=False
+    )
+    assert result.returncode == exit_code, result.stderr
+    out = json.loads(result.stdout)
+    assert out["status"] == status
+    if needs_solver:
+        assert out["diagnostics"][0]["code"] == "SOLVER_NOT_INSTALLED"
+    else:
+        assert out["metadata"]["solver_calls"] == 0
