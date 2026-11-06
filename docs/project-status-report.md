@@ -12,11 +12,14 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 - **Sản phẩm hiện có là Scheduling Core** (thư viện Python và CLI), chưa có ứng dụng cho người dùng cuối.
   Đúng phạm vi Core First: chưa có UI, SQLite, vnEdu API hay installer (Phase 4).
 - **Phase 0 và Phase 1 đã đạt.** **Phase 2 đạt về kỹ thuật synthetic** (S01–S11, hard variants
-  S01–S06), nhưng **chưa nghiệm thu vận hành**: chưa có số đo hiệu năng cho candidate hiện tại; chất lượng
-  giáo vụ cần duyệt; Windows ngoài phạm vi Phase 2 v2.
+  S01–S06), nhưng **chưa nghiệm thu vận hành**: chất lượng giáo vụ cần duyệt; Windows ngoài phạm vi
+  Phase 2 v2. *Cập nhật 2026-11-06:* campaign Linux v2 `phase2-v2-linux-02` trên candidate no-LP
+  `7e47f74` (chưa merge) đạt **H PASS 216/216, P MET 162/162 + 54/54 UNSAT**; Q REVIEW_REQUIRED, zero báo
+  riêng. Xem [báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md).
 - **Phase 3 (repair + benchmark) chưa bắt đầu.** Tooling benchmark synthetic đã có từ Phase 2, nhưng
   repair so với lịch trước và diagnostics vô nghiệm (IIS) chưa có.
-- **Nút thắt hiện tại là số đo hiệu năng** trên máy Linux của người dùng (bước D/E/F đã có runbook duyệt).
+- **Nút thắt hiện tại** (cập nhật 2026-11-06): đã có số đo H/P Linux cho candidate `7e47f74`; việc còn
+  lại là quyết định merge candidate, duyệt Q và mốc Windows.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
 ## 2. Trạng thái theo phase
@@ -25,7 +28,7 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 |---|---|---|---|
 | 0 — Skeleton, contracts | Import được, validate fixture, test/lint chạy | **Đạt** | [báo cáo Phase 0](phase-0-report.md) |
 | 1 — Scheduling MVP (hard) | CLI solve trên fixture có nghiệm; validator độc lập xác nhận; xử lý đúng fixture vô nghiệm; test pass | **Đạt** (2026-10-26) | [báo cáo Phase 1](phase-1-report.md) |
-| 2 — Quality optimization | Fixture chứng minh soft score cải thiện so baseline mà không phá hard; test pass | **Đạt về kỹ thuật synthetic.** Vận hành chưa nghiệm thu | [tiến độ Phase 2](phase-2-progress-report.md), [đánh giá cập nhật 1](phase-2-status-assessment-update-1.md) |
+| 2 — Quality optimization | Fixture chứng minh soft score cải thiện so baseline mà không phá hard; test pass | **Đạt về kỹ thuật synthetic.** H/P campaign Linux v2 đạt cho candidate `7e47f74` (chưa merge); Q REVIEW_REQUIRED, Windows chưa — vận hành chưa nghiệm thu toàn phần | [tiến độ Phase 2](phase-2-progress-report.md), [đánh giá cập nhật 1](phase-2-status-assessment-update-1.md) |
 | 3 — Repair + Benchmark | Repair test pass; benchmark có số liệu thực; validator pass trên mọi nghiệm | **Chưa bắt đầu.** Tooling benchmark synthetic đã có (2A v1, Phase 2 v2); chưa có repair | — |
 | 4 — Adapter, SQLite, UI, installer, Windows benchmark | Ngoài phạm vi hiện tại | **Không thực hiện** (đúng đặc tả) | — |
 
@@ -60,7 +63,7 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 | Installed wheel | Kiểm trên Linux ở mỗi mốc 2B/2C (n = 1, synthetic) |
 | Benchmark v1 (2A, policy 0.1) | Campaign Linux cũ: 54/81 known-feasible có lịch, 27/27 UNSAT đúng. Campaign candidate 2A: STOPPED, primary 0/108. Benchmark zero NOT_MET. Toàn bộ là lịch sử, giữ nguyên |
 | Điều tra TIGHT10 / Windows S03 | Chuỗi báo cáo trace, CPU và accounting ([tổng hợp](tight10-evidence-synthesis.md)); lịch sử 2A |
-| Benchmark v2 (policy 0.4) | Tooling sẵn sàng; diễn tập cloud chạy hết pilot (không phải evidence). **Chưa có số đo trên máy đích** |
+| Benchmark v2 (policy 0.4) | `phase2-v2-linux-01` (`86f624d`) bị gián đoạn, giữ nguyên. `phase2-v2-linux-02` (candidate `7e47f74`, 2026-11-06): 216/216 terminal, **H PASS, P MET**, Q REVIEW_REQUIRED, zero NOT_APPLICABLE; một máy, workload UNCONTROLLED, n = 3 — [báo cáo](phase-2a-linux-acceptance-report.md) |
 | Windows | Evidence chỉ cho snapshot cũ; Phase 2 v2 là Linux-only (S2) |
 
 Evidence thô của campaign nằm trong `benchmarks/artifacts/` trên máy người dùng và không có trong clone

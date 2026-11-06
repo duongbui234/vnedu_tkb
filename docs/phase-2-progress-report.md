@@ -16,7 +16,9 @@ kết quả đã lưu trong các tài liệu được dẫn.
 |---|---|---|
 | Kỹ thuật synthetic | **Đạt** | S01–S11 soft; hard variants S01–S06; evaluator độc lập; oracle; CLI/package. Policy 0.1–0.4, output 1.2–1.5, ScoreReport 1.0–1.2 |
 | Tooling đo hiệu năng v2 | **Sẵn sàng** | Policy 0.4, 72 dataset, verdict H/Q/P/zero theo acceptance v2. Đã tự rà soát (F1–F5 đã sửa) và diễn tập end-to-end trên cloud (R1 đã sửa, R2 đã ghi) |
-| Hiệu năng (P) trên máy đích | **Chưa có số đo** | Bước D/E/F đã có runbook duyệt; **đang chờ người dùng chạy bước D** |
+| Hard validity (H) campaign Linux v2 | **PASS 216/216** | *Cập nhật 2026-11-06*, campaign `phase2-v2-linux-02`, candidate `7e47f74` (chưa merge). [Báo cáo](phase-2a-linux-acceptance-report.md) |
+| Hiệu năng (P) trên máy đích | **MET** | 162/162 known-feasible có lịch trong giới hạn, 54/54 UNSAT đúng; một máy, workload UNCONTROLLED, n = 3, không P95/SLA |
+| Benchmark zero | Riêng | NOT_APPLICABLE ở ma trận v2 (không witness zero); verdict lịch sử NOT_MET giữ nguyên |
 | Chất lượng giáo vụ (Q) | REVIEW_REQUIRED | Chưa có quality profile |
 | Windows/cross-OS | **Ngoài phạm vi Phase 2 v2** | S2: Phase 2 v2 là Linux-only |
 | Dữ liệu thật | UNKNOWN | Ngoài Core |
@@ -52,6 +54,11 @@ PASS. Wheel `cdd34282…35d1`.
 | F | 216 run primary (khoảng 6–10 giờ liền) | Người dùng | Cần ủy quyền riêng |
 | Báo cáo | `docs/phase-2-linux-performance-report.md` | Claude | Chỉ khi được cho phép (M6) |
 
+*Cập nhật 2026-11-06:* `phase2-v2-linux-01` trên `86f624d` bị gián đoạn ở bước F và giữ nguyên. Chuỗi D/E/F
+được làm lại với ID mới `phase2-v2-linux-02` trên candidate `7e47f74`: E PASS (2 pilot), F COMPLETE 216/216,
+aggregate SUMMARIZED. Báo cáo M6 là [báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md)
+(DRAFT, chờ duyệt).
+
 Điều kiện máy đích: Linux x86_64 native, Python 3.12 qua `uv`, **cgroup v2** (`stat -fc %T /sys/fs/cgroup`
 = `cgroup2fs`), ≥ 6 GiB RAM khả dụng cho bước F, cắm sạc, không ngủ. Các bước D, E, F phải dùng cùng
 một commit và cùng một máy.
@@ -80,6 +87,9 @@ một commit và cùng một máy.
   thẳng `main`. S3 yêu cầu review người thứ hai trước khi dùng kết quả cho quyết định sản phẩm.
 
 ## 6. Việc tiếp theo
+
+*Cập nhật 2026-11-06:* bước 1–3 dưới đây đã xong với campaign `phase2-v2-linux-02`; bước 4 đang ở khâu
+duyệt [báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md) và quyết định merge candidate.
 
 1. **Người dùng:** chạy runbook D trên máy Linux, gửi kết quả theo §3 của runbook.
 2. **Claude:** kiểm kết quả D; nếu đạt, người dùng chạy runbook E.

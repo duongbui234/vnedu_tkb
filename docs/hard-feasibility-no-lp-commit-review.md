@@ -16,6 +16,11 @@ CLI, dependency hay solver pin. Không thêm fallback hoặc native call.
 Candidate kiểm giả thuyết LP overhead; chưa có số đo để kết luận nhanh hơn hay
 giải được bất kỳ trường hợp nào trong 30 UNKNOWN. Không chứng nhận hiệu năng.
 
+*Cập nhật 2026-11-06:* sau commit, campaign `phase2-v2-linux-02` trên đúng `7e47f74` đạt H PASS 216/216
+và P MET (162/162 known-feasible, 54/54 UNSAT); Q REVIEW_REQUIRED. Không có baseline đầy đủ cùng ma trận,
+nên vẫn không kết luận no-LP nhanh hơn baseline. Xem
+[báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md).
+
 ## Allowlist commit dự kiến — 12 file
 
 - Product (2): `src/tkb_core/solver/objectives.py`, `src/tkb_core/solver/cp_sat.py`.
