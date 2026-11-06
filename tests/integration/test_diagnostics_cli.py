@@ -121,3 +121,19 @@ def test_old_commands_keep_their_behaviour(capsys: Any) -> None:
         ["solve", str(FIXTURES / "infeasible_teacher.json"), "--time-limit", "5"], capsys
     )
     assert code == 3 and out["status"] == "INFEASIBLE"
+
+
+def test_explain_model_invalid_exits_5(
+    triangle_case: dict[str, Any], tmp_path: Path, capsys: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """F3: same exit code as solve/repair for a model failure."""
+    from tkb_core.domain.errors import CoreError
+
+    def broken(*args: Any, **kwargs: Any) -> Any:
+        raise CoreError("MODEL_INVALID", "DIAGNOSTIC_MODEL", "Diagnostic model was rejected")
+
+    monkeypatch.setattr("tkb_core.diagnostics.pipeline.build_diagnostic_model", broken)
+    source = tmp_path / "in.json"
+    source.write_text(json.dumps(triangle_case))
+    code, out = _run(["explain", str(source), *ARGS], capsys)
+    assert code == 5 and out["status"] == "MODEL_INVALID"

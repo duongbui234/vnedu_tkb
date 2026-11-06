@@ -327,11 +327,71 @@ def recompute_precheck_proofs(problem: ScheduleInput) -> tuple[PrecheckProof, ..
     return tuple(sorted(proofs, key=_key))
 
 
+_MODEL_RULE_CODES = frozenset(
+    {
+        "TEACHER_MAX_PERIODS_PER_SESSION",
+        "TEACHER_MAX_PERIODS_PER_DAY",
+        "SUBJECT_COMPONENT_DAY_SPREAD",
+        "CLASS_SUBJECT_MAX_PERIODS_PER_DAY",
+    }
+)
+_PLACEMENT_RULE_CODES = frozenset({"TEACHER_AVOID_SLOTS", "TEACHER_PREFERRED_PERIOD_WINDOW"})
+
+
+def recompute_groups(problem: ScheduleInput, granularity: str) -> set[tuple[str, str]]:
+    """Every diagnosable (kind, id) of ``problem`` at ``granularity``, from the raw input."""
+    active = [r for r in problem.teaching_requirements if r.occurrence_count > 0]
+    locks = {lock.occurrence_id: lock for lock in problem.locked_assignments}
+    rooms_used = any(r.room_required for r in active) or any(
+        lock.room_id is not None for lock in locks.values()
+    )
+    groups: set[tuple[str, str]] = set()
+    for req in active:
+        groups |= {
+            ("DEMAND", req.id),
+            ("CLASS_OCCUPANCY", req.class_ids[0]),
+            ("TEACHER_OCCUPANCY", req.teacher_ids[0]),
+        }
+    if rooms_used:
+        groups |= {("ROOM_OCCUPANCY", room.id) for room in problem.rooms}
+    config = problem.constraint_config
+    hard = []
+    if isinstance(config, ConstraintConfigV11) and config.policy_version in _HARD_POLICIES:
+        hard = [r for r in config.hard if r.enabled]
+    groups |= {("HARD_RULE", r.id) for r in hard if r.code in _MODEL_RULE_CODES}
+    if granularity == "FULL":
+        occurrences = {f"{r.id}::{i}" for r in active for i in range(1, r.occurrence_count + 1)}
+        classes = {r.class_ids[0] for r in active}
+        teachers = {r.teacher_ids[0] for r in active}
+        groups |= {("LOCK", o) for o in locks if o in occurrences}
+        groups |= {
+            ("CLASS_AVAILABILITY", c.id)
+            for c in problem.classes
+            if c.id in classes and c.available_slot_ids is not None
+        }
+        groups |= {
+            ("TEACHER_AVAILABILITY", t.id)
+            for t in problem.teachers
+            if t.id in teachers and t.available_slot_ids is not None
+        }
+        if rooms_used:
+            groups |= {
+                ("ROOM_AVAILABILITY", room.id)
+                for room in problem.rooms
+                if room.available_slot_ids is not None
+            }
+        groups |= {("HARD_PLACEMENT_RULE", r.id) for r in hard if r.code in _PLACEMENT_RULE_CODES}
+    return groups
+
+
 def check_explanation(problem: ScheduleInput, report: InfeasibilityReport) -> tuple[str, ...]:
-    """Return mismatch codes; empty means every arithmetic claim was recomputed equal."""
+    """Return mismatch codes; empty means every independently checkable claim holds."""
     problems: list[str] = []
     if report.input_fingerprint != problem.fingerprint():
         return ("STALE_REPORT",)
+    if report.status == "RESOURCE_LIMIT":
+        # The guard stopped the diagnosis before or while computing prechecks (review F1).
+        return ()
     expected = recompute_precheck_proofs(problem)
     declared = tuple(sorted(report.precheck_proofs, key=_key))
     if report.status == "PRECHECK_PROOF":
@@ -340,4 +400,12 @@ def check_explanation(problem: ScheduleInput, report: InfeasibilityReport) -> tu
     elif expected:
         # The pipeline only reaches CP-SAT when no counting proof exists.
         problems.append("PRECHECK_PROOF_MISSING")
+    if report.status == "CORE_SUBSET":
+        valid = recompute_groups(problem, report.granularity)
+        evidence = report.evidence
+        named = [*report.subset, *report.unresolved]
+        if evidence is not None:
+            named += [w.group for w in evidence.minimality_witnesses]
+        if any((g.kind, g.id) not in valid for g in named):
+            problems.append("UNKNOWN_GROUP")
     return tuple(problems)

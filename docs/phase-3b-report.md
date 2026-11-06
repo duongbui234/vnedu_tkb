@@ -1,8 +1,7 @@
 # Phase 3B — báo cáo triển khai chẩn đoán vô nghiệm
 
 Ngày 2026-11-06. Base `c9d06e3` trên `main`. Người dùng duyệt B1–B10 (đặc tả) và B11 (từ spike), ủy quyền
-Task 1–9. **Trạng thái: TECHNICAL SYNTHETIC — triển khai xong trong working tree; chưa commit, chưa
-push.**
+Task 1–9. **Trạng thái: TECHNICAL SYNTHETIC — commit `f3b2c94` (đã push); sửa F1–F5 sau tự rà soát.**
 
 Phạm vi: [đặc tả 3B](superpowers/specs/2026-11-06-phase-3b-infeasibility-diagnostics-design.md),
 [kế hoạch 3B](superpowers/plans/2026-11-06-phase-3b-infeasibility-diagnostics.md). Không sửa
@@ -89,7 +88,15 @@ riêng ngoài lập luận này và test hiện có.
   thể lệch nếu sau này chỉ sửa một bên.
 - Chưa kiểm installed wheel; chưa review người thứ hai (S3); synthetic; Linux.
 
+## Sửa sau tự rà soát
+
+[Tự rà soát](phase-3b-review.md) tìm 5 finding (F1–F5); cả 5 đã sửa cùng ngày theo TDD. Thay đổi hành vi:
+precheck luôn chạy trên domain sạch trước khi dựng domain `FULL`; `check-explanation` chấp nhận
+`RESOURCE_LIMIT` và từ chối nhóm không tồn tại (`UNKNOWN_GROUP`); `explain` trả exit 5 cho
+`MODEL_INVALID`; hết budget trước lời gọi đầu → `UNKNOWN`. Thêm property test đối chiếu với `solve()`
+(200 seed). Sau sửa: **1967 passed, 22 skipped**.
+
 ## Bước sau cần duyệt
 
-Commit + push (bước D), sau đó tự rà soát và kiểm installed wheel (bước E). 3C (benchmark repair) là lát
+Kiểm installed wheel (bước E còn lại); review người thứ hai (S3). 3C (benchmark repair) là lát
 tiếp theo theo P3-10.

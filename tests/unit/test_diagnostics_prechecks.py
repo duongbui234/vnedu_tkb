@@ -236,3 +236,53 @@ from tkb_core.validation.precheck_verifier import recompute_precheck_proofs, che
         [sys.executable, "-c", script], capture_output=True, text=True, check=False
     )
     assert result.returncode == 0, result.stderr
+
+
+def _core_report(data: dict[str, Any], granularity: str, groups: list[tuple[str, str]]) -> Any:
+    return InfeasibilityReport.model_validate(
+        {
+            "schema_version": "1.0",
+            "status": "CORE_SUBSET",
+            "input_fingerprint": ScheduleInput.model_validate(data).fingerprint(),
+            "granularity": granularity,
+            "subset": [{"kind": k, "id": i} for k, i in groups],
+            "minimal_proved": False,
+            "unresolved": [],
+            "evidence": {"infeasibility": "SOLVER", "minimality_witnesses": []},
+            "metadata": {
+                "solver_version": "9.15.6755",
+                "seed": 1,
+                "num_workers": 1,
+                "time_limit_seconds": 1.0,
+                "wall_time": 0.0,
+                "solver_calls": 1,
+            },
+            "limitations": LIMITATIONS,
+        }
+    )
+
+
+def test_check_explanation_rejects_unknown_or_out_of_granularity_groups() -> None:
+    """F2: subset groups must exist in the input at the report's granularity."""
+    data = base()
+    data["teachers"][0]["available_slot_ids"] = ["1-AM-1", "1-AM-2", "1-AM-3", "2-AM-1"]
+    data["locked_assignments"] = [{"occurrence_id": "r::1", "slot_id": "1-AM-1"}]
+    problem = ScheduleInput.model_validate(data)
+    real = [("DEMAND", "r"), ("TEACHER_OCCUPANCY", "t")]
+    assert check_explanation(problem, _core_report(data, "MODEL", real)) == ()
+    fake = [("DEMAND", "no-such-requirement")]
+    assert check_explanation(problem, _core_report(data, "MODEL", fake)) == ("UNKNOWN_GROUP",)
+    lock = [("LOCK", "r::1"), ("TEACHER_AVAILABILITY", "t")]
+    assert check_explanation(problem, _core_report(data, "FULL", lock)) == ()
+    assert check_explanation(problem, _core_report(data, "MODEL", lock)) == ("UNKNOWN_GROUP",)
+
+
+@pytest.mark.parametrize("name", sorted(p.name for p in FIXTURES.glob("*.json")))
+@pytest.mark.parametrize("granularity", ["MODEL", "FULL"])
+def test_verifier_group_catalogue_matches_diagnostics(name: str, granularity: str) -> None:
+    from tkb_core.diagnostics.groups import enumerate_groups
+    from tkb_core.validation.precheck_verifier import recompute_groups
+
+    problem = ScheduleInput.model_validate_json((FIXTURES / name).read_text())
+    expected = {(g.kind, g.id) for g in enumerate_groups(problem, granularity)}  # type: ignore[arg-type]
+    assert recompute_groups(problem, granularity) == expected

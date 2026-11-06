@@ -88,21 +88,26 @@ def explain_infeasibility(problem: ScheduleInput, options: ExplainOptions) -> In
         time_limit_seconds=options.time_limit_seconds, num_workers=1, seed=options.seed, **limits
     )
     fingerprint = problem.fingerprint()
+    guards = {
+        "max_placements": options.max_placements,
+        "max_occupancy_terms": options.max_occupancy_terms,
+    }
     try:
         normalized = normalize(problem, solve_options)
-        domains = build_domains(
-            normalized,
-            expanded=options.granularity == "FULL",
-            max_placements=options.max_placements,
-            max_occupancy_terms=options.max_occupancy_terms,
-        )
+        # Counting proofs never depend on granularity: compute them on the clean domain first,
+        # so a larger FULL domain cannot hide one behind the resource guard (review F1).
+        domains = build_domains(normalized, expanded=False, **guards)
+        proofs = run_prechecks(domains)
+        if proofs:
+            return report("PRECHECK_PROOF", fingerprint, proofs=proofs)
+        if options.granularity == "FULL":
+            domains = build_domains(normalized, expanded=True, **guards)
     except CoreError as exc:
         if exc.diagnostics[0].code == "RESOURCE_LIMIT":
             return report("RESOURCE_LIMIT", fingerprint)
         raise
-    proofs = run_prechecks(domains)
-    if proofs:
-        return report("PRECHECK_PROOF", fingerprint, proofs=proofs)
+    if left() <= 0:  # review F5: preparation used the whole budget
+        return report("UNKNOWN", fingerprint)
 
     solver_version = version("ortools")
     groups = enumerate_groups(normalized.problem, options.granularity)

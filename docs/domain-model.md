@@ -184,3 +184,7 @@ chứa phòng. `limitations` là câu cố định: một tập xung đột, kh�
 có `assignments`. Lỗi input/capability giữ nguyên mã như `solve()`; riêng khóa sai, `solve()` báo
 `INPUT_INVALID / LOCK_CONFLICT`, còn `explain` coi đó là xung đột cần chẩn đoán (`PC_EMPTY_DOMAIN`,
 `PC_LOCK_OVERLAP` hoặc nhóm `LOCK`).
+
+CLI: `explain` trả exit 0 cho mọi report hợp lệ, 2 cho lỗi input/option, 5 cho `MODEL_INVALID`.
+`check-explanation` tính lại phản chứng đếm, kiểm nhóm trong report có trong input ở đúng mức chi tiết
+(`UNKNOWN_GROUP`), và chấp nhận `RESOURCE_LIMIT` mà không đòi gì thêm.

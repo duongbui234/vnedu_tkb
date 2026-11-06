@@ -17,6 +17,7 @@ from tkb_core.domain.errors import CoreError
 from tkb_core.preprocessing.normalize import normalize
 from tkb_core.solver.cp_sat import solve
 from tkb_core.solver.options import SolveOptions
+from tkb_core.validation.precheck_verifier import check_explanation
 
 FIXTURES = Path(__file__).parents[1] / "fixtures"
 
@@ -139,12 +140,55 @@ def test_unknown_first_solve_is_unknown(
     assert report.status == "UNKNOWN" and report.subset == ()
 
 
-def test_tiny_budget_never_claims_a_wrong_answer(triangle_case: dict[str, Any]) -> None:
-    report = explain(triangle_case, seconds=1e-6)
-    assert report.status in ("UNKNOWN", "CORE_SUBSET")
-    if report.status == "CORE_SUBSET":
-        assert set(subset(report)) >= set(TRIANGLE)
-        assert not report.minimal_proved or subset(report) == TRIANGLE
+def test_exhausted_budget_skips_the_solver(triangle_case: dict[str, Any]) -> None:
+    """F5: once preparation used the whole budget, no solver call is made."""
+    report = explain(triangle_case, seconds=1e-9)
+    assert report.status == "UNKNOWN" and report.metadata.solver_calls == 0
+
+
+def _busy_teacher() -> dict[str, Any]:
+    return {
+        "schema_version": "1.1",
+        "school": {"school_id": "s", "academic_year": "y", "term": "t"},
+        "time_slots": [
+            {"id": f"s{i}", "day": 1, "session": "AM", "period": i} for i in range(1, 7)
+        ],
+        "classes": [{"id": "c"}],
+        "teachers": [{"id": "t", "available_slot_ids": ["s1", "s2"]}],
+        "subjects": [{"id": "x"}],
+        "teaching_requirements": [
+            {
+                "id": "r",
+                "class_ids": ["c"],
+                "teacher_ids": ["t"],
+                "subject_id": "x",
+                "periods_per_cycle": 3,
+            }
+        ],
+        "constraint_config": {"policy_version": "0.3", "hard": [], "soft": []},
+    }
+
+
+@pytest.mark.parametrize("granularity", ["MODEL", "FULL"])
+def test_prechecks_run_before_the_expanded_domain_guard(granularity: str) -> None:
+    """F1: the FULL domain may exceed the guard, but counting proofs come first."""
+    options = ExplainOptions.model_validate(
+        {"time_limit_seconds": 5.0, "seed": 1, "granularity": granularity, "max_placements": 10}
+    )
+    problem = ScheduleInput.model_validate(_busy_teacher())
+    report = explain_infeasibility(problem, options)
+    assert report.status == "PRECHECK_PROOF"
+    assert check_explanation(problem, report) == ()
+
+
+def test_resource_limit_report_passes_its_own_check(triangle_case: dict[str, Any]) -> None:
+    """F1: when even the clean domain hits the guard, RESOURCE_LIMIT is a valid report."""
+    triangle_case["teaching_requirements"][0]["periods_per_cycle"] = 3
+    problem = ScheduleInput.model_validate(triangle_case)
+    options = ExplainOptions(time_limit_seconds=5.0, seed=1, granularity="MODEL", max_placements=8)
+    report = explain_infeasibility(problem, options)
+    assert report.status == "RESOURCE_LIMIT"
+    assert check_explanation(problem, report) == ()
 
 
 def test_repeat_is_deterministic(spread_case: dict[str, Any]) -> None:

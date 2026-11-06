@@ -367,7 +367,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             explain_options = ExplainOptions.model_validate(explain_values)
             from tkb_core.diagnostics.pipeline import explain_infeasibility
 
-            serialized = explain_infeasibility(problem, explain_options).model_dump_json()
+            try:
+                serialized = explain_infeasibility(problem, explain_options).model_dump_json()
+            except CoreError as exc:
+                if exc.status != "MODEL_INVALID":
+                    raise
+                # Same exit code as solve/repair for a model failure (review F3).
+                diagnostic = exc.diagnostics[0]
+                _error(exc.status.value, diagnostic.code, diagnostic.message)
+                return 5
             if namespace.output is not None:
                 try:
                     _write_atomic(namespace.output, serialized)
