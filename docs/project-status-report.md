@@ -15,8 +15,9 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 - **Phase 0 và Phase 1 đã đạt.**
 - **Phase 2 đạt điều kiện Done của đặc tả §10** (S01–S11, hard variants S01–S06, evaluator độc lập). Campaign
   Linux v2 `phase2-v2-linux-02` trên no-LP `7e47f74` (đã merge vào `main` ở `1c2819f`) đạt **H PASS 216/216,
-  P MET 162/162 + 54/54 UNSAT**. **Q vẫn REVIEW_REQUIRED**: kế hoạch duyệt Q và ba biên bản DRAFT đã có,
-  chờ người dùng ghi quyết định. Zero là benchmark riêng. Windows ngoài phạm vi Phase 2 v2 (S2). Xem
+  P MET 162/162 + 54/54 UNSAT**. **Q của campaign vẫn REVIEW_REQUIRED**, nhưng ba biên bản Q đã có quyết định
+  (2026-11-07): A ACCEPTED, B và C NOT_ACCEPTED, theo nguyên tắc **P1 > 0 không chấp nhận**
+  ([biên bản](quality-decisions/README.md)). Zero là benchmark riêng. Windows ngoài phạm vi Phase 2 v2 (S2). Xem
   [báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md) và [kế hoạch Q](phase-2a-quality-review-plan.md).
 - **Phase 3 Done (P3-11, người dùng duyệt 2026-11-07)** ở mức mốc kỹ thuật synthetic; cả ba lát đã xong.
   - **3A (repair)** và **3B (chẩn đoán vô nghiệm: `explain`, `check-explanation`)** đã triển khai, tự rà
@@ -25,8 +26,10 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
     (166/166). Repair ra OPTIMAL, với số thay đổi tối thiểu đã chứng minh, ở 96/96 run BASE/MIXED đến 40
     lớp. TIGHT có 18 UNKNOWN, nên P của R1 ở mức campaign là NOT_MET. Xem [báo cáo 3C](phase-3c-report.md).
     Lần chạy trước `phase3c-linux-01` dừng vì lỗi tooling, đã sửa.
-- **Nút thắt hiện tại:** quyết định Q (phía người dùng); review người thứ hai cho contract repair (P3-12)
-  trước khi dùng dữ liệu thật.
+- **Nút thắt hiện tại:**
+  - Quality profile v0 (soạn từ ba biên bản Q).
+  - Hướng chất lượng search, vì P1 > 0 ở 90/162 lịch.
+  - Review người thứ hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
 ## 2. Trạng thái theo phase
@@ -110,8 +113,9 @@ câu trả lời từ trường thật.
 
 1. **Hiệu năng mới đo trên synthetic, một máy.** Campaign v2 đạt P đến 40 lớp (n = 3, workload
    UNCONTROLLED); không P95/SLA, chưa có dữ liệu trường thật.
-2. **Chất lượng lịch chưa được chấp nhận.** Q là REVIEW_REQUIRED; P1 > 0 ở 90/162 lịch, mọi lịch 20/40
-   lớp kém hơn witness. Biên bản Q chờ người dùng.
+2. **Chất lượng lịch chưa đạt.** Người duyệt chốt nguyên tắc "P1 > 0 không chấp nhận" (2026-11-07). Theo
+   đó, 90/162 lịch của campaign v2, gồm toàn bộ SOFT 40 lớp, sẽ là NOT_ACCEPTED nếu được duyệt cùng lý
+   do. Mọi lịch 20/40 lớp kém hơn witness. Q của campaign vẫn REVIEW_REQUIRED.
 3. **Khoảng cách tới dữ liệu thật.** Mọi ngưỡng, nhóm và lịch họp là UNKNOWN; synthetic không thay được
    trường thật.
 4. **Kiểm chứng độc lập mỏng.** Mọi rà soát là tự kiểm; không CI; không review người thứ hai (E6, S3).
@@ -122,12 +126,14 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ:** người dùng ghi quyết định Q cho ba biên bản. Phase 3 đã Done (duyệt 2026-11-07).
+1. **Ngay bây giờ:** soạn bản nháp quality profile v0 từ ba biên bản Q (kế hoạch Q §5 bước 2). Ba biên
+   bản đã có quyết định (2026-11-07); Phase 3 đã Done (2026-11-07).
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.
 3. **Tùy chọn:** kế hoạch riêng nếu cần thêm số đo repair cho TIGHT hoặc `AFTER_QUALITY` (budget hay
    seed khác); không nới gate của campaign đã chạy.
-4. **Hướng chất lượng search** (S1): nếu Q cho thấy P1 > 0 không chấp nhận được, lập kế hoạch riêng dựa
-   trên số đo v2; review người thứ hai cho contract và tooling (S3).
+4. **Hướng chất lượng search** (S1): người duyệt đã chốt P1 > 0 không chấp nhận, nên cần một kế hoạch
+   riêng dựa trên số đo v2. Không nới budget hay hard khi chưa có kế hoạch duyệt. Cần thêm review người thứ
+   hai cho contract và tooling (S3).
 5. **Song song khi có thể:** thu thập câu trả lời nghiệp vụ §13 và một bộ dữ liệu thật đã ẩn danh; quality
    profile cùng chủ thể nghiệp vụ; quyết định E5.
 6. **Phase 4** (adapter, SQLite, UI, Windows): Core đã đạt Phase 3; còn chờ contract vnEdu thật và kế hoạch

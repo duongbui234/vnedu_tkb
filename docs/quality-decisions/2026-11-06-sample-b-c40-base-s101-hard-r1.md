@@ -1,6 +1,6 @@
 # Biên bản Q — mẫu B: HARD, 40 lớp, BASE (c40-base-s101-hard r1)
 
-Trạng thái: **DRAFT — chưa có quyết định.** Theo [kế hoạch duyệt Q](../phase-2a-quality-review-plan.md)
+Trạng thái: **ĐÃ QUYẾT ĐỊNH 2026-11-07 — NOT_ACCEPTED** (chỉ synthetic, đúng result hash). Theo [kế hoạch duyệt Q](../phase-2a-quality-review-plan.md)
 §4(b). Xem [index](README.md).
 
 ## Định danh
@@ -46,8 +46,10 @@ Tham số benchmark (G3): S04 khung tiết 2–4, S09 chuỗi trống tối đa 
 
 | Trường | Nội dung |
 |---|---|
-| Quyết định | ☐ ACCEPTED ☐ NOT_ACCEPTED |
+| Quyết định | ☐ ACCEPTED ☒ NOT_ACCEPTED |
 | Phạm vi | Chỉ synthetic, đúng result hash trên |
-| Lý do theo rule | |
-| Người duyệt | |
-| Ngày | |
+| Lý do theo rule | P1 > 0: S01 = 21 (21 GV mỗi người 1 tiết ở ô xin tránh) |
+| Người duyệt | Người dùng (duongbui234) |
+| Ngày | 2026-11-07 |
+
+Nguyên tắc người duyệt: **P1 > 0 không chấp nhận.**

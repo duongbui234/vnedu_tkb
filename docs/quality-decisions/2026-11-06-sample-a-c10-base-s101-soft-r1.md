@@ -1,6 +1,6 @@
 # Biên bản Q — mẫu A: SOFT, 10 lớp, BASE (c10-base-s101-soft r1)
 
-Trạng thái: **DRAFT — chưa có quyết định.** Theo [kế hoạch duyệt Q](../phase-2a-quality-review-plan.md)
+Trạng thái: **ĐÃ QUYẾT ĐỊNH 2026-11-07 — ACCEPTED** (chỉ synthetic, đúng result hash). Theo [kế hoạch duyệt Q](../phase-2a-quality-review-plan.md)
 §4(b). Xem [index](README.md).
 
 ## Định danh
@@ -48,8 +48,10 @@ môn/lớp/ngày, S04 khung ưu tiên tiết 2–4, S09 chuỗi trống tối đ
 
 | Trường | Nội dung |
 |---|---|
-| Quyết định | ☐ ACCEPTED ☐ NOT_ACCEPTED |
+| Quyết định | ☒ ACCEPTED ☐ NOT_ACCEPTED |
 | Phạm vi | Chỉ synthetic, đúng result hash trên |
-| Lý do theo rule | |
-| Người duyệt | |
-| Ngày | |
+| Lý do theo rule | P1 = 0 (S01, S02, S06 đều 0). Ghi chú cho quality profile v0: P2 (S05 giãn ngày, S09 chuỗi trống, S03 tải/ngày) và mức tập trung S04 theo GV (tới 55 % tiết ngoài khung) cần có giới hạn |
+| Người duyệt | Người dùng (duongbui234) |
+| Ngày | 2026-11-07 |
+
+Nguyên tắc người duyệt: **P1 > 0 không chấp nhận.**

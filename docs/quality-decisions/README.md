@@ -8,9 +8,14 @@ hash**, không áp sang input, repeat hay dataset khác. Biên bản không sử
 
 | Mẫu | Biên bản | Lịch | Vector | Quyết định |
 |---|---|---|---|---|
-| A | [2026-11-06-sample-a](2026-11-06-sample-a-c10-base-s101-soft-r1.md) | SOFT 10 lớp BASE | `[0,106,219]` | Chưa ghi |
-| B | [2026-11-06-sample-b](2026-11-06-sample-b-c40-base-s101-hard-r1.md) | HARD 40 lớp BASE | `[21,233,924]` | Chưa ghi |
-| C | [2026-11-06-sample-c](2026-11-06-sample-c-c40-base-s103-soft-r1.md) | SOFT 40 lớp BASE | `[114,446,865]` | Chưa ghi |
+| A | [2026-11-06-sample-a](2026-11-06-sample-a-c10-base-s101-soft-r1.md) | SOFT 10 lớp BASE | `[0,106,219]` | **ACCEPTED** (2026-11-07) |
+| B | [2026-11-06-sample-b](2026-11-06-sample-b-c40-base-s101-hard-r1.md) | HARD 40 lớp BASE | `[21,233,924]` | **NOT_ACCEPTED** (2026-11-07; S01) |
+| C | [2026-11-06-sample-c](2026-11-06-sample-c-c40-base-s103-soft-r1.md) | SOFT 40 lớp BASE | `[114,446,865]` | **NOT_ACCEPTED** (2026-11-07; S02, S01, S06, S03) |
+
+**Quyết định ngày 2026-11-07** (người duyệt: Người dùng (duongbui234)). Nguyên tắc: **P1 > 0 không chấp nhận.** Mẫu A được
+chấp nhận kèm ghi chú: P2 (S05, S09, S03) và mức tập trung S04 theo GV cần giới hạn trong quality profile
+v0. Ba quyết định chỉ áp cho đúng ba result hash. Trục Q của campaign `phase2-v2-linux-02` vẫn là
+REVIEW_REQUIRED: harness chưa chấm Q, và chưa có profile v0 được duyệt.
 
 ## Mẫu tham khảo D (không cần quyết định)
 

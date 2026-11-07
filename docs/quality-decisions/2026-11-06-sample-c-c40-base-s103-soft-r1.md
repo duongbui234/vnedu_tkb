@@ -1,6 +1,6 @@
 # Biên bản Q — mẫu C: SOFT, 40 lớp, BASE (c40-base-s103-soft r1)
 
-Trạng thái: **DRAFT — chưa có quyết định.** Theo [kế hoạch duyệt Q](../phase-2a-quality-review-plan.md)
+Trạng thái: **ĐÃ QUYẾT ĐỊNH 2026-11-07 — NOT_ACCEPTED** (chỉ synthetic, đúng result hash). Theo [kế hoạch duyệt Q](../phase-2a-quality-review-plan.md)
 §4(b). Xem [index](README.md).
 
 ## Định danh
@@ -52,8 +52,10 @@ từ lịch; tổng tính lại (18) khớp tổng chính thức. Witness cùng 
 
 | Trường | Nội dung |
 |---|---|
-| Quyết định | ☐ ACCEPTED ☐ NOT_ACCEPTED |
+| Quyết định | ☐ ACCEPTED ☒ NOT_ACCEPTED |
 | Phạm vi | Chỉ synthetic, đúng result hash trên |
-| Lý do theo rule | |
-| Người duyệt | |
-| Ngày | |
+| Lý do theo rule | P1 > 0: S02 = 76 (63 buổi vượt, 13 buổi 5 tiết), S01 = 20, S06 = 18. P2: S03 = 77, có ngày-GV tới 7 tiết (giới hạn 4) |
+| Người duyệt | Người dùng (duongbui234) |
+| Ngày | 2026-11-07 |
+
+Nguyên tắc người duyệt: **P1 > 0 không chấp nhận.**
