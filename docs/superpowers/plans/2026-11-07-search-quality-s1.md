@@ -2,7 +2,8 @@
 
 Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (R1–R6 theo đề xuất).** **S1-a đã chạy
 2026-11-07: không hướng nào đạt §5** ([báo cáo spike](../../s1-a-spike-report.md)); không làm S1-b/S1-c với
-A1/A2. Hướng tiếp theo (A4 hoặc biến thể mới) cần kế hoạch hoặc spike mới được duyệt. Base `201a6e0` trên `main`.
+A1/A2. Hướng tiếp theo: [spike S1-b′ (A4, LNS)](2026-11-07-s1-b-prime-lns-spike.md), kế hoạch duyệt
+2026-11-07, chưa chạy. Base `201a6e0` trên `main`.
 
 Nguồn:
 - Quyết định S1 ([cập nhật 1](../../phase-2-status-assessment-update-1.md)): không tối ưu solver trước

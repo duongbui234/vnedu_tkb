@@ -30,7 +30,8 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 - **Nút thắt hiện tại:**
   - Hướng chất lượng search (S1), vì P1 > 0 ở 90/162 lịch và profile v0 đòi P1 = 0.
     [Kế hoạch S1](superpowers/plans/2026-11-07-search-quality-s1.md) đã duyệt 2026-11-07. Spike S1-a
-    (A1, A2) không đạt điều kiện ([báo cáo](s1-a-spike-report.md)); chưa có hướng được chọn.
+    (A1, A2) không đạt điều kiện ([báo cáo](s1-a-spike-report.md)); hướng tiếp theo là
+    [spike S1-b′ (LNS)](superpowers/plans/2026-11-07-s1-b-prime-lns-spike.md), kế hoạch đã duyệt, chưa chạy.
   - Review người thứ hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
@@ -128,9 +129,9 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ:** chọn hướng S1 tiếp theo. Spike S1-a (A1, A2) không đạt điều kiện
-   ([báo cáo](s1-a-spike-report.md)). Hướng còn lại là A4 (LNS theo cấu trúc bài toán), hoặc giữ A2 làm nền
-   rồi đổi cách tìm P1 = 0. Spike sau cần baseline cờ tắt chạy cùng phiên, có lặp lại. Ba biên bản Q, profile
+1. **Ngay bây giờ:** spike S1-b′ theo [kế hoạch](superpowers/plans/2026-11-07-s1-b-prime-lns-spike.md)
+   (A4, LNS theo GV/lớp/ngày, kèm A2; baseline cờ tắt cùng phiên, n = 3, 108 run, khoảng 4 giờ). Spike S1-a
+   (A1, A2) không đạt ([báo cáo](s1-a-spike-report.md)). Ba biên bản Q, profile
    v0, Phase 3 Done và kế hoạch S1 đều đã duyệt ngày 2026-11-07.
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.
 3. **Tùy chọn:** kế hoạch riêng nếu cần thêm số đo repair cho TIGHT hoặc `AFTER_QUALITY` (budget hay
