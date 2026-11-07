@@ -18,6 +18,12 @@
 - Pin dependency changes with `uv.lock`; runtime dependencies stay separate from dev.
 - Report commands actually executed, test results, phase boundaries and limitations.
   Do not claim benchmark/performance results without measurements.
+- Long or background runs (solver batches, comparisons, campaigns): finish as fast as
+  possible by using all CPU. Before launching, check `nproc`/RAM and run independent jobs
+  in parallel (`xargs -P`, `&` + `wait`) instead of one at a time; do not plan a long
+  sequential run when parallel fits. When the run measures time or resources,
+  still parallelize, but record the layout (jobs × workers vs hardware threads) and say in
+  the report which comparisons contention biases.
 # Next Step Suggestions
 
 After completing each task:
