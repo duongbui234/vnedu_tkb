@@ -32,8 +32,9 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
     [Kế hoạch S1](superpowers/plans/2026-11-07-search-quality-s1.md) đã duyệt 2026-11-07. Spike S1-a
     (A1, A2) không đạt điều kiện ([báo cáo](s1-a-spike-report.md)). Spike S1-b′ (A4, LNS) cũng không đạt
     ([báo cáo](s1-b-prime-spike-report.md)): A4 đưa P1 về 0 ở mọi dataset BASE/MIXED, kể cả 40 lớp, nhưng
-    hồi quy ở 3 dataset TIGHT, nên bị loại. Theo L8, hướng search của S1 dừng; hướng tiếp theo **chưa
-    quyết định**.
+    hồi quy ở 3 dataset TIGHT, nên bị loại. Người dùng mở thêm
+    [spike S1-b″](superpowers/plans/2026-11-07-s1-b-double-prime-hybrid-spike.md) (interleave có trần rồi
+    LNS), nhưng đã **dừng sau 26/252 run, không kết luận**, để ưu tiên đối chiếu với thời khóa biểu thật.
   - Review người thứ hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
@@ -131,10 +132,14 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ — quyết định sản phẩm sau S1:** S1-a ([báo cáo](s1-a-spike-report.md)) và S1-b′
-   ([báo cáo](s1-b-prime-spike-report.md)) đều không đạt. Lựa chọn (chưa quyết định): dừng S1 như L8; tăng
-   budget hoặc số worker; chấp nhận giới hạn chất lượng trong profile; hoặc kế hoạch spike mới giữ search
-   toàn model (ngoài L8). Ba biên bản Q, profile v0, Phase 3 Done, kế hoạch S1 và
+1. **Ngay bây giờ — dữ liệu thật:** người dùng sẽ cung cấp thời khóa biểu các trường từ DB công ty.
+   Thứ tự đề xuất:
+   - ẩn danh hóa và ánh xạ dữ liệu sang input Core;
+   - chấm lịch thật bằng evaluator độc lập;
+   - cho Core xếp lại cùng dữ liệu và so sánh.
+
+   Hướng search S1 tạm dừng: S1-a ([báo cáo](s1-a-spike-report.md)) và S1-b′
+   ([báo cáo](s1-b-prime-spike-report.md)) không đạt; S1-b″ dừng, không kết luận. Ba biên bản Q, profile v0, Phase 3 Done, kế hoạch S1 và
    [kế hoạch harness chấm Q](superpowers/plans/2026-11-07-quality-profile-harness.md) (chưa triển khai) đều
    đã duyệt ngày 2026-11-07.
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.

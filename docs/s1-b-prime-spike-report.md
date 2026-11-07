@@ -102,8 +102,9 @@ lại trên seed khác. Kết luận không đổi.
 ## 1. Cách làm
 
 - Worktree `.worktrees/s1-lns`, nhánh local `spike/s1-b-prime` từ `70d180b`; không commit, không merge.
-  Patch có SHA256 `3f5f56dc2d2b5d001d4bc8cebe53bce55a1fa007b13d7b33bfbee7f2eff9ad7f`. Lúc chấm, `git diff`
-  của worktree vẫn cho đúng hash này, và hai file test khớp byte với bản sao trong thư mục evidence. Test
+  Patch đầy đủ `spike-full.patch` có SHA256
+  `db7efe6415a7e1688aabc49c109b1519735504deb360b2b71db68ccadffdf1f0` (xem mục Đính chính). Hai file test
+  khớp byte với bản sao trong thư mục evidence. Test
   spike: `tests/unit/test_s1_lns.py` (10 test) và `tests/unit/test_s1_spike_flags.py` (từ S1-a).
 - Cờ `TKB_S1_SPIKE=A4` (tự kèm A2). Thay pha interleave của tier chưa chứng minh bằng vòng LNS:
   - neighbourhood GV (≤ 3), lớp (≤ 2) và ngày; một nửa số vòng chọn theo vi phạm;
@@ -158,6 +159,21 @@ lại trên seed khác. Kết luận không đổi.
 - Evidence: `.worktrees/s1-lns/benchmarks/artifacts/s1-lns/` (`runs/`, `runner.out`, `power.log`,
   `power-profile.txt`, `spike.patch`). Không commit. Script chấm nằm ngoài repo: `lns_analyze.py` (§4) và
   `lns_secondary.py` (ghi nhận phụ).
+
+### Đính chính (2026-11-07, sau khi duyệt)
+
+Bản đầu của báo cáo ghi patch SHA256 `3f5f56dc2d2b5d00…`. Đó là hash của `spike.patch`, nhưng file này
+được tạo bằng `rtk git diff` nên chỉ là bản tóm tắt đã rút gọn của rtk (12 036 byte), không phải diff áp
+được. Phép kiểm "`git diff` lúc chấm cho đúng hash" cũng đi qua rtk, nên chỉ so hai bản tóm tắt với nhau.
+
+- Diff thật được ghi sau đó bằng `rtk proxy git diff` vào `spike-full.patch` (18 645 byte), với SHA256
+  `db7efe6415a7e1688aabc49c109b1519735504deb360b2b71db68ccadffdf1f0`. Bản `spike.patch` cũ giữ nguyên.
+- `src/tkb_core/solver/objectives.py` trong worktree sửa lần cuối lúc 18:13, trước run đầu tiên (18:57). Vì
+  vậy diff đầy đủ chính là code đã chạy.
+- Diff đầy đủ áp sạch lên `main` và là nền của spike S1-b″.
+- Mục 0.1 vẫn giữ nguyên chữ đã chốt (`3f5f56dc…`). Từ nay, mọi đối chiếu patch của spike này dùng
+  `spike-full.patch`.
+- Kết quả và kết luận của báo cáo không đổi.
 
 ## 2. Kết quả
 

@@ -1,7 +1,11 @@
 # Spike S1-b″ — interleave có trần rồi LNS (A5)
 
-Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (H1–H8 theo đề xuất); chưa làm
-spike.** Làm spike cần lệnh cho phép riêng. Base `6f9e5bb` trên `main`.
+Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (H1–H8 theo đề xuất).** **Spike
+dừng theo quyết định người dùng ngày 2026-11-07, sau 26/252 run (đều thuộc phần s101 chỉ để báo cáo, exit
+0); không kết luận.** Phần gate s102/s103 chưa chạy. Người dùng ưu tiên đối chiếu với thời khóa biểu thật
+từ DB công ty, vì kiểm kỹ trên synthetic là quá mức so với nhu cầu hiện tại. Run `c40-base-s101-hard` B bị
+ngắt giữa chừng. Worktree `.worktrees/s1-hybrid`, code A5 (patch SHA256 `5d9ba8c5…`) và evidence được giữ
+nguyên; runner bỏ qua run đã xong nên có thể chạy tiếp nếu có lệnh mới. Base `6f9e5bb` trên `main`.
 
 **Quyết định của người dùng ngày 2026-11-07:** mở spike mới ngoài L8, sau khi
 [spike S1-b′](../../s1-b-prime-spike-report.md) không đạt. Spike phải giữ search toàn model, có baseline
