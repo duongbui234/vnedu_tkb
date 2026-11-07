@@ -1,7 +1,8 @@
 # Kế hoạch chất lượng search (S1)
 
-Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (R1–R6 theo đề xuất); chưa làm
-spike.** Mỗi bước S1-a, S1-b, S1-c vẫn cần lệnh cho phép riêng. Base `201a6e0` trên `main`.
+Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (R1–R6 theo đề xuất).** **S1-a đã chạy
+2026-11-07: không hướng nào đạt §5** ([báo cáo spike](../../s1-a-spike-report.md)); không làm S1-b/S1-c với
+A1/A2. Hướng tiếp theo (A4 hoặc biến thể mới) cần kế hoạch hoặc spike mới được duyệt. Base `201a6e0` trên `main`.
 
 Nguồn:
 - Quyết định S1 ([cập nhật 1](../../phase-2-status-assessment-update-1.md)): không tối ưu solver trước
