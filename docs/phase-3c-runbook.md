@@ -1,7 +1,7 @@
 # Phase 3C — runbook campaign benchmark repair trên Linux (`phase3c-linux-02`)
 
-Ngày 2026-11-06, cập nhật 2026-11-07 cho `phase3c-linux-02`. Trạng thái: **chưa chạy linux-02; mỗi bước
-D, E, F cần một lệnh cho phép riêng.** Đây là phần thao tác (bước C)
+Ngày 2026-11-06, cập nhật 2026-11-07 cho `phase3c-linux-02`. Trạng thái: **linux-02 đã chạy xong D, E, F
+(COMPLETE 2026-11-07); kết quả ở [báo cáo 3C](phase-3c-report.md).** Đây là phần thao tác (bước C)
 của [kế hoạch 3C](superpowers/plans/2026-11-06-phase-3c-repair-benchmark.md) (C1–C10 đã duyệt). Tooling và
 sai khác: [báo cáo tooling 3C](phase-3c-tooling-report.md).
 

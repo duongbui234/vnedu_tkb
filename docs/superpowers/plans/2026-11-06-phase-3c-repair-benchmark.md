@@ -1,7 +1,7 @@
 # Phase 3C — kế hoạch benchmark repair trên Linux
 
-Ngày 2026-11-06. Trạng thái: **C1–C10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06; bước B (Task 1–5) ĐÃ THỰC
-HIỆN; chưa chạy campaign.** Kết quả và sai khác (gồm seal hai tầng): [báo cáo tooling 3C](../../phase-3c-tooling-report.md).
+Ngày 2026-11-06. Trạng thái: **C1–C10 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06; bước B–G ĐÃ THỰC HIỆN.**
+Campaign `phase3c-linux-02` (2026-11-07) đã chạy xong; xem [báo cáo 3C](../../phase-3c-report.md). Kết quả và sai khác (gồm seal hai tầng): [báo cáo tooling 3C](../../phase-3c-tooling-report.md).
 Base `f58f257` trên `main`.
 
 Nguồn: [đặc tả Phase 3](../specs/2026-11-05-phase-3-repair-diagnostics-design.md) §4 (3C), P3-7, P3-10,
@@ -139,11 +139,11 @@ Không thêm benchmarks vào wheel, không thêm dependency, không sửa `src/`
 |---|---|
 | A. Duyệt kế hoạch và C1–C10 | Đã duyệt 2026-11-06 |
 | B. Task 1–5, smoke, checks | Đã thực hiện 2026-11-06 (smoke trên máy Linux) |
-| C. Commit + push tooling; runbook D/E/F cho 3C | Có |
-| D. Preflight, sinh bundle 3C trên máy Linux | Có |
-| E. Seal, warmup, pilot (1 run S + 1 run R1 mỗi biến thể ở 10 lớp) | Có |
-| F. Campaign đầy đủ (≈ 7–12 giờ) | Có, sau khi xem pilot |
-| G. Báo cáo 3C, commit báo cáo | Có |
+| C. Commit + push tooling; runbook D/E/F cho 3C | Đã thực hiện (`1ab0764`, runbook cập nhật cho linux-02 ở `629354e`) |
+| D. Preflight, sinh bundle 3C trên máy Linux | Đã thực hiện (linux-01 và linux-02) |
+| E. Seal, warmup, pilot (1 run S + 1 run R1 mỗi biến thể ở 10 lớp) | Đã thực hiện (chế độ smoke, xem runbook) |
+| F. Campaign đầy đủ (≈ 7–12 giờ) | Đã chạy: `phase3c-linux-01` dừng (lỗi tooling, sửa ở `67b4502`); `phase3c-linux-02` COMPLETE 2026-11-07 |
+| G. Báo cáo 3C, commit báo cáo | Đã thực hiện 2026-11-07 ([báo cáo](../../phase-3c-report.md)) |
 
 ## 9. Quyết định cần duyệt
 
