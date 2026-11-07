@@ -7,6 +7,27 @@ and teacher involved so that Core and the real schedule face the same remaining 
 
 Canonical CSV, one row per taught period: ``lop,thu,buoi,tiet,mon,ma_gv`` (UTF-8). ``buoi`` is
 S/C, Sáng/Chiều or AM/PM. Teacher codes must already be pseudonymised (§3).
+
+Optional class cells, one row per period a class may be taught in: ``lop,thu,buoi,tiet``. When
+given, each class may use only those cells of the frame (``available_slot_ids``), so Core faces the
+same calendar as the school; every lesson of the timetable must lie inside its class's cells.
+
+Optional teacher cells ``ma_gv,thu,buoi,tiet,loai`` (``loai`` hop/nghi/ban/hanche, from STKB) and
+locks ``ma_gv,thu,buoi,tiet``. Kinds listed as hard (default: hop) are removed from the teacher's
+``available_slot_ids``; the other known kinds become one soft TEACHER_AVOID_SLOTS (S01) rule per
+teacher at priority 2, scored for the real and the Core schedule alike. Each locked teacher cell
+locks the lesson that covers it at its block start. A lock wins over a hard teacher cell: that
+cell stays open for the teacher, and the report counts it.
+
+Optional teacher limits ``ma_gv,max_tiet_buoi,max_tiet_ngay`` (STKB teacher properties, empty when
+the school did not enable the limit). When given, the per-teacher load rules of the scale follow
+the school: S02 (periods per session) and S03 (periods per day) exist only for a teacher with that
+limit enabled, at that limit. The other rules keep the common scale.
+
+Optional teacher period windows ``ma_gv,buoi,tu_tiet,den_tiet`` (STKB ``GetValue_FromT1toT2``: a
+teacher should teach that session only from period ``tu_tiet`` to ``den_tiet``; STKB adds a small
+penalty per period taught outside). Each window becomes a soft TEACHER_AVOID_SLOTS rule over the
+frame cells of that session outside the window, at the priority of the other teacher requests.
 """
 
 from __future__ import annotations
@@ -25,6 +46,13 @@ from tkb_core.contracts.input import ScheduleInput
 from tkb_core.domain.models import ScheduleAssignment
 
 COLUMNS = ("lop", "thu", "buoi", "tiet", "mon", "ma_gv")
+CLASS_CELL_COLUMNS = ("lop", "thu", "buoi", "tiet")
+TEACHER_CELL_COLUMNS = ("ma_gv", "thu", "buoi", "tiet", "loai")
+LOCK_COLUMNS = ("ma_gv", "thu", "buoi", "tiet")
+LIMIT_COLUMNS = ("ma_gv", "max_tiet_buoi", "max_tiet_ngay")
+WINDOW_COLUMNS = ("ma_gv", "buoi", "tu_tiet", "den_tiet")
+TEACHER_KINDS = ("hop", "nghi", "ban", "hanche")
+AVOID_PRIORITY = 2  # teacher requests (Nghỉ/Bận/Hạn chế) when not hard; chosen before scoring
 SESSIONS = {
     "s": "AM",
     "sáng": "AM",
@@ -41,6 +69,8 @@ FIXED_PATTERNS = ("chào cờ", "chao co", "sinh hoạt", "sinh hoat", "shl")
 S02_LIMIT, S03_LIMIT, S06_LIMIT, S09_LIMIT, S05_GAP = 4, 5, 2, 1, 1
 
 Slot = tuple[int, str, int]
+TeacherLimits = dict[str, tuple[int | None, int | None]]  # teacher -> (per session, per day)
+TeacherWindows = dict[str, dict[str, tuple[int, int]]]  # teacher -> session -> (first, last)
 
 
 class TimetableError(ValueError):
@@ -133,6 +163,98 @@ def parse_frame(text: str) -> list[Slot]:
     )
 
 
+def parse_class_cells(text: str) -> dict[str, set[Slot]]:
+    """Cells each class may be taught in; a class absent from the file has no cells."""
+    reader = _reader(text, CLASS_CELL_COLUMNS)
+    cells: dict[str, set[Slot]] = defaultdict(set)
+    for raw in reader:
+        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
+        if not any(row.values()):
+            continue
+        line = reader.line_num
+        if not row["lop"]:
+            raise TimetableError(f"line {line}: 'lop' is required")
+        cells[row["lop"]].add(
+            (
+                _int(row["thu"], "thu", line),
+                _session(row["buoi"], line),
+                _int(row["tiet"], "tiet", line),
+            )
+        )
+    return dict(cells)
+
+
+def _cell(row: dict[str, str], line: int) -> Slot:
+    return (
+        _int(row["thu"], "thu", line),
+        _session(row["buoi"], line),
+        _int(row["tiet"], "tiet", line),
+    )
+
+
+def parse_teacher_cells(text: str) -> dict[str, dict[str, set[Slot]]]:
+    """Teacher -> kind -> cells; unknown kinds are kept (and later only counted)."""
+    reader = _reader(text, TEACHER_CELL_COLUMNS)
+    cells: dict[str, dict[str, set[Slot]]] = defaultdict(lambda: defaultdict(set))
+    for raw in reader:
+        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
+        if not any(row.values()):
+            continue
+        if not row["ma_gv"] or not row["loai"]:
+            raise TimetableError(f"line {reader.line_num}: 'ma_gv' and 'loai' are required")
+        cells[row["ma_gv"]][row["loai"]].add(_cell(row, reader.line_num))
+    return {t: dict(k) for t, k in cells.items()}
+
+
+def parse_locks(text: str) -> set[tuple[str, Slot]]:
+    reader = _reader(text, LOCK_COLUMNS)
+    locks = set()
+    for raw in reader:
+        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
+        if any(row.values()):
+            locks.add((row["ma_gv"], _cell(row, reader.line_num)))
+    return locks
+
+
+def parse_teacher_limits(text: str) -> TeacherLimits:
+    """Teacher -> (max periods per session, max per day); an empty value means no limit."""
+    reader = _reader(text, LIMIT_COLUMNS)
+    limits: TeacherLimits = {}
+    for raw in reader:
+        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
+        if not any(row.values()):
+            continue
+        line = reader.line_num
+        if not row["ma_gv"]:
+            raise TimetableError(f"line {line}: 'ma_gv' is required")
+        session, day = (
+            _int(row[c], c, line) if row[c] else None for c in ("max_tiet_buoi", "max_tiet_ngay")
+        )
+        limits[row["ma_gv"]] = (session, day)
+    return limits
+
+
+def parse_teacher_windows(text: str) -> TeacherWindows:
+    """Teacher -> session -> (first, last) period the teacher should teach in that session."""
+    reader = _reader(text, WINDOW_COLUMNS)
+    windows: dict[str, dict[str, tuple[int, int]]] = defaultdict(dict)
+    for raw in reader:
+        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
+        if not any(row.values()):
+            continue
+        line = reader.line_num
+        if not row["ma_gv"]:
+            raise TimetableError(f"line {line}: 'ma_gv' is required")
+        session = _session(row["buoi"], line)
+        first, last = _int(row["tu_tiet"], "tu_tiet", line), _int(row["den_tiet"], "den_tiet", line)
+        if first > last:
+            raise TimetableError(f"line {line}: 'tu_tiet' {first} is after 'den_tiet' {last}")
+        if session in windows[row["ma_gv"]]:
+            raise TimetableError(f"line {line}: window of {row['ma_gv']} {session} given twice")
+        windows[row["ma_gv"]][session] = (first, last)
+    return dict(windows)
+
+
 def format_timetable(rows: list[Row]) -> str:
     out = io.StringIO()
     writer = csv.writer(out, lineterminator="\n")
@@ -178,7 +300,12 @@ def _exclusions(rows: list[Row]) -> tuple[list[Row], list[tuple[str, Row]]]:
     return kept, excluded
 
 
-def _scale(teachers: list[str], spread: list[str], sessions: list[str]) -> list[dict[str, Any]]:
+def _scale(
+    teachers: list[str],
+    spread: list[str],
+    sessions: list[str],
+    limits: TeacherLimits | None = None,
+) -> list[dict[str, Any]]:
     rules: list[dict[str, Any]] = [
         {
             "id": "S06-ALL",
@@ -202,6 +329,11 @@ def _scale(teachers: list[str], spread: list[str], sessions: list[str]) -> list[
     )
     for t in teachers:
         for tag, code, params, priority in per_teacher:
+            if limits is not None and tag in ("S02", "S03"):
+                limit = limits.get(t, (None, None))[0 if tag == "S02" else 1]
+                if limit is None:
+                    continue  # the school set no such limit for this teacher
+                params = {**params, "limit": limit}
             rules.append(
                 {
                     "id": f"{tag}-{t}",
@@ -225,13 +357,45 @@ def _scale(teachers: list[str], spread: list[str], sessions: list[str]) -> list[
     return rules
 
 
-def convert(rows: list[Row], *, frame: list[Slot] | None = None, school: str = "SCH") -> Conversion:
+def _class_cells(
+    rows: list[Row], class_cells: dict[str, set[Slot]], known: set[Slot]
+) -> tuple[dict[str, set[str]], int]:
+    """Open slot ids per class, and how many given cells fall outside the frame."""
+    classes = sorted({r.lop for r in rows})
+    missing = [c for c in classes if c not in class_cells]
+    if missing:
+        raise TimetableError(f"class cells missing for class(es) {missing[:5]}")
+    allowed = {c: {slot_id(s) for s in class_cells[c] & known} for c in classes}
+    outside = sum(len(class_cells[c] - known) for c in classes)
+    bad = sorted({(r.lop, r.slot) for r in rows if slot_id(r.slot) not in allowed[r.lop]})
+    if bad:
+        raise TimetableError(f"timetable uses cells outside its class cells: {bad[:5]}")
+    return allowed, outside
+
+
+def convert(
+    rows: list[Row],
+    *,
+    frame: list[Slot] | None = None,
+    school: str = "SCH",
+    class_cells: dict[str, set[Slot]] | None = None,
+    teacher_cells: dict[str, dict[str, set[Slot]]] | None = None,
+    hard_kinds: tuple[str, ...] = ("hop",),
+    locked_cells: set[tuple[str, Slot]] | None = None,
+    teacher_limits: TeacherLimits | None = None,
+    avoid_priority: int = AVOID_PRIORITY,
+    teacher_windows: TeacherWindows | None = None,
+) -> Conversion:
     slots = sorted(frame) if frame is not None else _default_frame(rows)
     known = set(slots)
     outside = sorted({r.slot for r in rows} - known)
     if outside:
         raise TimetableError(f"timetable uses periods outside the frame: {outside[:5]}")
     ids = [slot_id(s) for s in slots]
+    allowed: dict[str, set[str]] | None = None
+    cells_outside_frame = 0
+    if class_cells is not None:
+        allowed, cells_outside_frame = _class_cells(rows, class_cells, known)
     kept, excluded = _exclusions(rows)
 
     blocked_class: dict[str, set[str]] = defaultdict(set)
@@ -240,6 +404,13 @@ def convert(rows: list[Row], *, frame: list[Slot] | None = None, school: str = "
         blocked_class[r.lop].add(slot_id(r.slot))
         if r.teacher:
             blocked_teacher[r.teacher].add(slot_id(r.slot))
+
+    if avoid_priority not in (1, 2, 3):
+        raise TimetableError(f"avoid priority must be 1, 2 or 3, not {avoid_priority}")
+    unknown_kinds = sorted(set(hard_kinds) - set(TEACHER_KINDS))
+    if unknown_kinds:
+        raise TimetableError(f"unknown hard teacher cell kind(s) {unknown_kinds}")
+    cell_owner: dict[tuple[str, Slot], tuple[str, Slot]] = {}
 
     cells: dict[tuple[str, str, str], list[Slot]] = defaultdict(list)
     for r in kept:
@@ -267,6 +438,8 @@ def convert(rows: list[Row], *, frame: list[Slot] | None = None, school: str = "
         )
         fixed = any(p in subject.casefold() for p in FIXED_PATTERNS)
         for i, block in enumerate(blocks, 1):
+            for cell in block:
+                cell_owner[(teacher, cell)] = (f"{req}::{i}", block[0])
             assignments.append(
                 {
                     "occurrence_id": f"{req}::{i}",
@@ -281,31 +454,153 @@ def convert(rows: list[Row], *, frame: list[Slot] | None = None, school: str = "
         if len(blocks) >= 2 and not fixed:
             spread.append(req)
 
-    def resource(name: str, blocked: dict[str, set[str]]) -> dict[str, Any]:
-        entry: dict[str, Any] = {"id": name}
-        if blocked.get(name):
-            entry["available_slot_ids"] = [s for s in ids if s not in blocked[name]]
-        return entry
+    fixed_locks = list(locks)  # lessons fixed by name (flag ceremony, class meeting)
+    locked = {a["occurrence_id"] for a in locks}
+    lock_report = {"given": 0, "locked_occurrences": 0, "on_empty_cell": 0}
+    if locked_cells is not None:
+        lock_report["given"] = len(locked_cells)
+        for teacher, cell in sorted(locked_cells):
+            owner = cell_owner.get((teacher, cell))
+            if owner is None:
+                lock_report["on_empty_cell"] += 1
+            elif owner[0] not in locked:
+                locked.add(owner[0])
+                locks.append({"occurrence_id": owner[0], "slot_id": slot_id(owner[1])})
+                lock_report["locked_occurrences"] += 1
 
     teachers_with_work = sorted({r.teacher for r in kept})
+    hard_teacher: dict[str, set[str]] = defaultdict(set)
+    avoid: dict[str, set[str]] = defaultdict(set)
+    taught_cells = {(r.teacher, slot_id(r.slot)) for r in kept}
+    locked_slots = {
+        (teacher, slot_id(cell))
+        for (teacher, cell), (occ, _) in cell_owner.items()
+        if occ in locked
+    }
+    teacher_report: dict[str, Any] = {"source": "none"}
+    if teacher_cells is not None:
+        counts = Counter[str]()
+        for teacher in teachers_with_work:
+            for kind, given in teacher_cells.get(teacher, {}).items():
+                inside = {slot_id(c) for c in given & known}
+                counts["outside_frame"] += len(given - known)
+                if kind not in TEACHER_KINDS:
+                    counts[f"ignored_{kind}"] += len(inside)
+                elif kind in hard_kinds:
+                    kept_open = {s for s in inside if (teacher, s) in locked_slots}
+                    counts["hard_cells_kept_for_locks"] += len(kept_open)
+                    hard_teacher[teacher] |= inside - kept_open
+                    counts[f"hard_{kind}"] += len(inside - kept_open)
+                    counts["real_lessons_on_hard_cells"] += sum(
+                        (teacher, s) in taught_cells for s in inside
+                    )
+                elif inside:  # an empty S01 rule is invalid; cells outside the frame are counted
+                    avoid[teacher] |= inside
+                    counts[f"soft_{kind}"] += len(inside)
+                    counts["real_lessons_on_soft_cells"] += sum(
+                        (teacher, s) in taught_cells for s in inside
+                    )
+        teacher_report = {
+            "source": "teacher-cells",
+            "hard_kinds": sorted(hard_kinds),
+            "soft_priority": avoid_priority,
+            "teachers_without_work": len(set(teacher_cells) - set(teachers_with_work)),
+            **dict(sorted(counts.items())),
+        }
+
+    def teacher_entry(name: str) -> dict[str, Any]:
+        entry: dict[str, Any] = {"id": name}
+        closed = blocked_teacher.get(name, set()) | hard_teacher.get(name, set())
+        if closed:
+            entry["available_slot_ids"] = [s for s in ids if s not in closed]
+        return entry
+
+    def class_entry(name: str) -> dict[str, Any]:
+        entry: dict[str, Any] = {"id": name}
+        open_ids = [
+            s
+            for s in ids
+            if s not in blocked_class.get(name, ()) and (allowed is None or s in allowed[name])
+        ]
+        if len(open_ids) < len(ids):
+            entry["available_slot_ids"] = open_ids
+        return entry
+
     sessions = sorted({s[1] for s in slots})
+    soft_rules = _scale(teachers_with_work, spread, sessions, teacher_limits)
+    limit_report: dict[str, Any] = {"source": "common"}
+    if teacher_limits is not None:
+        own = [teacher_limits[t] for t in teachers_with_work if t in teacher_limits]
+        limit_report = {
+            "source": "teacher-limits",
+            "S02_teachers": sum(a is not None for a, _ in own),
+            "S03_teachers": sum(b is not None for _, b in own),
+            "S02_limits": {str(k): v for k, v in sorted(Counter(a for a, _ in own if a).items())},
+            "S03_limits": {str(k): v for k, v in sorted(Counter(b for _, b in own if b).items())},
+            "teachers_missing": sum(t not in teacher_limits for t in teachers_with_work),
+        }
+    for teacher in sorted(avoid):
+        soft_rules.append(
+            {
+                "id": f"S01-{teacher}",
+                "code": "TEACHER_AVOID_SLOTS",
+                "parameters": {"slot_ids": [s for s in ids if s in avoid[teacher]]},
+                "priority": avoid_priority,
+                "weight": 1,
+                "scope": {"teacher_ids": [teacher]},
+            }
+        )
+    window_report: dict[str, Any] = {"source": "none"}
+    if teacher_windows is not None:
+        window_counts = Counter[str]()
+        for teacher in teachers_with_work:
+            window_outside: set[str] = set()
+            for session, (first, last) in teacher_windows.get(teacher, {}).items():
+                window_cells = {
+                    slot_id(c) for c in slots if c[1] == session and not first <= c[2] <= last
+                }
+                if not window_cells:
+                    window_counts["full_windows"] += 1
+                window_outside |= window_cells
+            if window_outside:
+                window_counts["teachers"] += 1
+                window_counts["cells_outside"] += len(window_outside)
+                window_counts["real_lessons_outside"] += sum(
+                    (teacher, s) in taught_cells for s in window_outside
+                )
+                soft_rules.append(
+                    {
+                        "id": f"S01K-{teacher}",
+                        "code": "TEACHER_AVOID_SLOTS",
+                        "parameters": {"slot_ids": [s for s in ids if s in window_outside]},
+                        "priority": avoid_priority,
+                        "weight": 1,
+                        "scope": {"teacher_ids": [teacher]},
+                    }
+                )
+        window_report = {
+            "source": "teacher-windows",
+            "teachers": window_counts["teachers"],
+            "cells_outside": window_counts["cells_outside"],
+            "real_lessons_outside": window_counts["real_lessons_outside"],
+            "full_windows": window_counts["full_windows"],
+            "teachers_without_work": len(set(teacher_windows) - set(teachers_with_work)),
+        }
     data: dict[str, Any] = {
         "schema_version": "1.1",
         "school": {"school_id": school, "academic_year": "unknown", "term": "unknown"},
         "time_slots": [
             {"id": slot_id(s), "day": s[0], "session": s[1], "period": s[2]} for s in slots
         ],
-        "classes": [resource(c, blocked_class) for c in sorted({r.lop for r in rows})],
-        "teachers": [
-            resource(t, blocked_teacher) for t in sorted({r.teacher for r in rows if r.teacher})
-        ],
+        "classes": [class_entry(c) for c in sorted({r.lop for r in rows})],
+        "teachers": [teacher_entry(t) for t in sorted({r.teacher for r in rows if r.teacher})],
         "subjects": [{"id": s} for s in sorted({r.subject for r in kept})],
         "teaching_requirements": requirements,
         "locked_assignments": locks,
         "constraint_config": {
             "policy_version": "0.4",
             "hard": [],
-            "soft": _scale(teachers_with_work, spread, sessions),
+            "soft": soft_rules,
         },
     }
     fingerprint = ScheduleInput.model_validate(data).fingerprint()
@@ -338,14 +633,24 @@ def convert(rows: list[Row], *, frame: list[Slot] | None = None, school: str = "
             for reason, r in sorted(excluded, key=lambda e: (e[0], e[1]))
         ],
         "excluded_periods": len(excluded),
+        "class_availability": {
+            "source": "class-cells" if allowed is not None else "frame",
+            "open_class_slots": sum(len(c.get("available_slot_ids", ids)) for c in data["classes"]),
+            "frame_class_slots": len(ids) * len(data["classes"]),
+            "cells_outside_frame": cells_outside_frame,
+        },
         "split_runs": split,
-        "fixed_requirements": sorted({a["occurrence_id"].split("::")[0] for a in locks}),
+        "fixed_requirements": sorted({a["occurrence_id"].split("::")[0] for a in fixed_locks}),
+        "teacher_availability": teacher_report,
+        "locks": lock_report,
         "scale": {
             "S02": S02_LIMIT,
             "S03": S03_LIMIT,
             "S06": S06_LIMIT,
             "S09": S09_LIMIT,
             "S05": S05_GAP,
+            "teacher_limits": limit_report,
+            "teacher_windows": window_report,
         },
     }
     return Conversion(data, previous, report)
@@ -382,6 +687,34 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--frame", type=Path, help="optional CSV of teaching periods (thu,buoi,tiet)"
     )
+    parser.add_argument(
+        "--class-cells",
+        type=Path,
+        help="optional CSV of cells each class may use (lop,thu,buoi,tiet)",
+    )
+    parser.add_argument(
+        "--teacher-cells", type=Path, help="optional CSV ma_gv,thu,buoi,tiet,loai from STKB"
+    )
+    parser.add_argument(
+        "--teacher-hard", default="hop", help="teacher cell kinds that are hard (default: hop)"
+    )
+    parser.add_argument("--locks", type=Path, help="optional CSV of locked teacher cells")
+    parser.add_argument(
+        "--teacher-limits",
+        type=Path,
+        help="optional CSV ma_gv,max_tiet_buoi,max_tiet_ngay; replaces the common S02/S03",
+    )
+    parser.add_argument(
+        "--teacher-windows",
+        type=Path,
+        help="optional CSV ma_gv,buoi,tu_tiet,den_tiet: soft rule for periods outside the window",
+    )
+    parser.add_argument(
+        "--avoid-priority",
+        type=int,
+        default=AVOID_PRIORITY,
+        help=f"priority of soft teacher cells (default {AVOID_PRIORITY})",
+    )
     parser.add_argument("--output", type=Path, required=True, help="new directory for the results")
     parser.add_argument("--school", default="SCH", help="pseudonymous school code")
     args = parser.parse_args(argv)
@@ -390,7 +723,39 @@ def main(argv: list[str] | None = None) -> int:
     try:
         rows = parse_timetable(args.timetable.read_text(encoding="utf-8"))
         frame = parse_frame(args.frame.read_text(encoding="utf-8")) if args.frame else None
-        conv = convert(rows, frame=frame, school=args.school)
+        cells = (
+            parse_class_cells(args.class_cells.read_text(encoding="utf-8"))
+            if args.class_cells
+            else None
+        )
+        teacher_cells = (
+            parse_teacher_cells(args.teacher_cells.read_text(encoding="utf-8"))
+            if args.teacher_cells
+            else None
+        )
+        locks = parse_locks(args.locks.read_text(encoding="utf-8")) if args.locks else None
+        limits = (
+            parse_teacher_limits(args.teacher_limits.read_text(encoding="utf-8"))
+            if args.teacher_limits
+            else None
+        )
+        windows = (
+            parse_teacher_windows(args.teacher_windows.read_text(encoding="utf-8"))
+            if args.teacher_windows
+            else None
+        )
+        conv = convert(
+            rows,
+            frame=frame,
+            school=args.school,
+            class_cells=cells,
+            teacher_cells=teacher_cells,
+            hard_kinds=tuple(k for k in args.teacher_hard.split(",") if k),
+            locked_cells=locks,
+            teacher_limits=limits,
+            avoid_priority=args.avoid_priority,
+            teacher_windows=windows,
+        )
     except TimetableError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
