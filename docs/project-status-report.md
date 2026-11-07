@@ -17,7 +17,8 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
   Linux v2 `phase2-v2-linux-02` trên no-LP `7e47f74` (đã merge vào `main` ở `1c2819f`) đạt **H PASS 216/216,
   P MET 162/162 + 54/54 UNSAT**. **Q của campaign vẫn REVIEW_REQUIRED**, nhưng ba biên bản Q đã có quyết định
   (2026-11-07): A ACCEPTED, B và C NOT_ACCEPTED, theo nguyên tắc **P1 > 0 không chấp nhận**
-  ([biên bản](quality-decisions/README.md)). Zero là benchmark riêng. Windows ngoài phạm vi Phase 2 v2 (S2). Xem
+  ([biên bản](quality-decisions/README.md)). [Quality profile v0](quality-profile-v0.md) được duyệt
+  2026-11-07 cho campaign tương lai: P1 = 0 bắt buộc, P2/P3 chỉ ghi nhận, chấm tay. Zero là benchmark riêng. Windows ngoài phạm vi Phase 2 v2 (S2). Xem
   [báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md) và [kế hoạch Q](phase-2a-quality-review-plan.md).
 - **Phase 3 Done (P3-11, người dùng duyệt 2026-11-07)** ở mức mốc kỹ thuật synthetic; cả ba lát đã xong.
   - **3A (repair)** và **3B (chẩn đoán vô nghiệm: `explain`, `check-explanation`)** đã triển khai, tự rà
@@ -27,8 +28,7 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
     lớp. TIGHT có 18 UNKNOWN, nên P của R1 ở mức campaign là NOT_MET. Xem [báo cáo 3C](phase-3c-report.md).
     Lần chạy trước `phase3c-linux-01` dừng vì lỗi tooling, đã sửa.
 - **Nút thắt hiện tại:**
-  - Quality profile v0 (soạn từ ba biên bản Q).
-  - Hướng chất lượng search, vì P1 > 0 ở 90/162 lịch.
+  - Hướng chất lượng search (S1), vì P1 > 0 ở 90/162 lịch và profile v0 đòi P1 = 0.
   - Review người thứ hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
@@ -126,8 +126,8 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ:** soạn bản nháp quality profile v0 từ ba biên bản Q (kế hoạch Q §5 bước 2). Ba biên
-   bản đã có quyết định (2026-11-07); Phase 3 đã Done (2026-11-07).
+1. **Ngay bây giờ:** lập kế hoạch chất lượng search (S1), lấy profile v0 (P1 = 0) làm thước đo. Ba biên
+   bản Q, profile v0 và Phase 3 Done đều đã duyệt ngày 2026-11-07.
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.
 3. **Tùy chọn:** kế hoạch riêng nếu cần thêm số đo repair cho TIGHT hoặc `AFTER_QUALITY` (budget hay
    seed khác); không nới gate của campaign đã chạy.
@@ -148,6 +148,6 @@ câu trả lời từ trường thật.
 | Phase 0/1 | [Phase 0](phase-0-report.md), [Phase 1](phase-1-report.md) |
 | Phase 2 | [tiến độ](phase-2-progress-report.md), [đánh giá](phase-2-status-assessment.md), [cập nhật 1](phase-2-status-assessment-update-1.md), [acceptance v2](phase-2a-acceptance-v2-draft.md) |
 | Hiệu năng v2 | [kế hoạch](superpowers/plans/2026-11-05-phase-2-linux-performance-v2.md), runbook [D](phase-2-linux-performance-step-d-runbook.md) / [E](phase-2-linux-performance-step-e-runbook.md) / [F](phase-2-linux-performance-step-f-runbook.md), [diễn tập E0](phase-2-linux-performance-rehearsal-e0-report.md) |
-| Phase 2 nghiệm thu | [nghiệm thu Linux](phase-2a-linux-acceptance-report.md), [kế hoạch Q](phase-2a-quality-review-plan.md), [biên bản Q](quality-decisions/README.md) |
+| Phase 2 nghiệm thu | [nghiệm thu Linux](phase-2a-linux-acceptance-report.md), [kế hoạch Q](phase-2a-quality-review-plan.md), [biên bản Q](quality-decisions/README.md), [profile v0](quality-profile-v0.md) |
 | Phase 3 | [đặc tả](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md), [báo cáo 3A](phase-3a-report.md), [rà soát 3A](phase-3a-review.md), [đặc tả 3B](superpowers/specs/2026-11-06-phase-3b-infeasibility-diagnostics-design.md), [báo cáo 3B](phase-3b-report.md), [rà soát 3B](phase-3b-review.md), [kế hoạch 3C](superpowers/plans/2026-11-06-phase-3c-repair-benchmark.md), [tooling 3C](phase-3c-tooling-report.md), [runbook 3C](phase-3c-runbook.md), [báo cáo 3C](phase-3c-report.md) |
 | Quy tắc làm việc | `AGENTS.md`, `CLAUDE.md` |

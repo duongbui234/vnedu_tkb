@@ -15,7 +15,10 @@ hash**, không áp sang input, repeat hay dataset khác. Biên bản không sử
 **Quyết định ngày 2026-11-07** (người duyệt: Người dùng (duongbui234)). Nguyên tắc: **P1 > 0 không chấp nhận.** Mẫu A được
 chấp nhận kèm ghi chú: P2 (S05, S09, S03) và mức tập trung S04 theo GV cần giới hạn trong quality profile
 v0. Ba quyết định chỉ áp cho đúng ba result hash. Trục Q của campaign `phase2-v2-linux-02` vẫn là
-REVIEW_REQUIRED: harness chưa chấm Q, và chưa có profile v0 được duyệt.
+REVIEW_REQUIRED: harness chưa chấm Q, và profile không áp ngược cho campaign đã chạy.
+
+[Quality profile v0](../quality-profile-v0.md) được duyệt ngày 2026-11-07 từ ba biên bản này: M1–M3 (P1 = 0)
+bắt buộc, U1–U6 (P2/P3) chỉ ghi nhận; áp cho campaign tương lai.
 
 ## Mẫu tham khảo D (không cần quyết định)
 

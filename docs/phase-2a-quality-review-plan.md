@@ -1,8 +1,9 @@
 # Phase 2A — kế hoạch duyệt chất lượng (trục Q)
 
-Ngày 2026-11-06. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06** (Q1–Q4 ở §6). Ba biên bản
-DRAFT cho mẫu A/B/C nằm ở [`quality-decisions/`](quality-decisions/README.md); chưa có quyết định Q nào
-được ghi. Áp dụng
+Ngày 2026-11-06. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-06** (Q1–Q4 ở §6). Bước 1 của §5 đã xong: ba biên bản
+mẫu A/B/C trong [`quality-decisions/`](quality-decisions/README.md) có quyết định ngày 2026-11-07. Bước 2
+cũng đã xong: [quality profile v0](quality-profile-v0.md) được duyệt ngày 2026-11-07, với P1 = 0 bắt buộc
+và P2/P3 chỉ ghi nhận. Bước 3 (thay đổi harness) chưa lập kế hoạch. Áp dụng
 [acceptance v2](phase-2a-acceptance-v2-draft.md) §3.2 cho kết quả campaign `phase2-v2-linux-02`
 ([báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md)), source `1c2819f` trên `main`
 (cây `src/` trùng `7e47f74`).
