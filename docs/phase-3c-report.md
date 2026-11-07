@@ -189,9 +189,10 @@ target 1/2/4 GiB. Không có watchdog stop: mọi UNKNOWN dừng theo `--time-li
 | X | 36/36 UNSAT và 22/22 explain theo sau đều kết luận được và kiểm độc lập OK |
 
 Điều kiện §10 của đặc tả gốc cho Phase 3 là "benchmark có số liệu thực, validator pass trên mọi nghiệm".
-Campaign này cung cấp số đo thực trên dữ liệu synthetic, và mọi nghiệm đều pass validator độc lập. Việc
-coi Phase 3 là Done (P3-11) do người dùng quyết định. Trước khi dùng repair với dữ liệu thật vẫn cần review
-người thứ hai cho contract repair (P3-12).
+Campaign này cung cấp số đo thực trên dữ liệu synthetic, và mọi nghiệm đều pass validator độc lập. **Người
+dùng duyệt Phase 3 Done (P3-11) ngày 2026-11-07**, ở mức mốc kỹ thuật synthetic; xem mục "Quyết định Done"
+trong [đặc tả Phase 3](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md). Trước khi dùng
+repair với dữ liệu thật vẫn cần review người thứ hai cho contract repair (P3-12).
 
 ## 6. Hạn chế
 
@@ -209,7 +210,7 @@ người thứ hai cho contract repair (P3-12).
 
 ## 7. Bước sau cần duyệt
 
-- Người dùng quyết định Phase 3 Done (P3-11) hay chưa, cùng hai việc độc lập: quyết định Q của Phase 2 và
-  review người thứ hai (P3-12, S3).
+- Phase 3 Done đã được duyệt (2026-11-07). Còn hai việc độc lập: quyết định Q của Phase 2 và review
+  người thứ hai (P3-12, S3).
 - Nếu cần thêm số đo cho TIGHT hoặc AFTER_QUALITY (ví dụ budget dài hơn hoặc nhiều seed), lập kế hoạch
   riêng. Không nới gate của campaign này.

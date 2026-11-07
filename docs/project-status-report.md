@@ -18,15 +18,15 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
   P MET 162/162 + 54/54 UNSAT**. **Q vẫn REVIEW_REQUIRED**: kế hoạch duyệt Q và ba biên bản DRAFT đã có,
   chờ người dùng ghi quyết định. Zero là benchmark riêng. Windows ngoài phạm vi Phase 2 v2 (S2). Xem
   [báo cáo nghiệm thu Linux](phase-2a-linux-acceptance-report.md) và [kế hoạch Q](phase-2a-quality-review-plan.md).
-- **Phase 3: cả ba lát đã xong; chờ người dùng quyết định Done (P3-11).**
+- **Phase 3 Done (P3-11, người dùng duyệt 2026-11-07)** ở mức mốc kỹ thuật synthetic; cả ba lát đã xong.
   - **3A (repair)** và **3B (chẩn đoán vô nghiệm: `explain`, `check-explanation`)** đã triển khai, tự rà
     soát và kiểm installed wheel.
   - **3C (benchmark repair):** campaign `phase3c-linux-02` (`67b4502`, 246 run) có H PASS trên mọi lịch
     (166/166). Repair ra OPTIMAL, với số thay đổi tối thiểu đã chứng minh, ở 96/96 run BASE/MIXED đến 40
     lớp. TIGHT có 18 UNKNOWN, nên P của R1 ở mức campaign là NOT_MET. Xem [báo cáo 3C](phase-3c-report.md).
     Lần chạy trước `phase3c-linux-01` dừng vì lỗi tooling, đã sửa.
-- **Nút thắt hiện tại:** quyết định Q và quyết định Done của Phase 3 (phía người dùng); review người thứ
-  hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
+- **Nút thắt hiện tại:** quyết định Q (phía người dùng); review người thứ hai cho contract repair (P3-12)
+  trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
 ## 2. Trạng thái theo phase
@@ -36,7 +36,7 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 | 0 — Skeleton, contracts | Import được, validate fixture, test/lint chạy | **Đạt** | [báo cáo Phase 0](phase-0-report.md) |
 | 1 — Scheduling MVP (hard) | CLI solve trên fixture có nghiệm; validator độc lập xác nhận; xử lý đúng fixture vô nghiệm; test pass | **Đạt** (2026-10-26) | [báo cáo Phase 1](phase-1-report.md) |
 | 2 — Quality optimization | Fixture chứng minh soft score cải thiện so baseline mà không phá hard; test pass | **Đạt** (Done §10). H/P campaign Linux v2 đạt (`7e47f74`, đã merge); Q REVIEW_REQUIRED; Windows ngoài phạm vi v2 | [tiến độ Phase 2](phase-2-progress-report.md), [nghiệm thu Linux](phase-2a-linux-acceptance-report.md), [kế hoạch Q](phase-2a-quality-review-plan.md) |
-| 3 — Repair + Benchmark | Repair test pass; benchmark có số liệu thực; validator pass trên mọi nghiệm | **3A, 3B, 3C xong (technical synthetic); chờ quyết định Done (P3-11).** 3C: H PASS 166/166 lịch; R1 P NOT_MET do 18 UNKNOWN ở TIGHT; Q REVIEW_REQUIRED | [đặc tả Phase 3](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md), [báo cáo 3A](phase-3a-report.md), [báo cáo 3B](phase-3b-report.md), [báo cáo 3C](phase-3c-report.md) |
+| 3 — Repair + Benchmark | Repair test pass; benchmark có số liệu thực; validator pass trên mọi nghiệm | **Đạt** (Done P3-11, duyệt 2026-11-07; technical synthetic). 3C: H PASS 166/166 lịch; R1 P NOT_MET do 18 UNKNOWN ở TIGHT; Q REVIEW_REQUIRED | [đặc tả Phase 3](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md), [báo cáo 3A](phase-3a-report.md), [báo cáo 3B](phase-3b-report.md), [báo cáo 3C](phase-3c-report.md) |
 | 4 — Adapter, SQLite, UI, installer, Windows benchmark | Ngoài phạm vi hiện tại | **Không thực hiện** (đúng đặc tả) | — |
 
 ## 3. Năng lực của Core hiện tại
@@ -122,8 +122,7 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ:** người dùng ghi quyết định Q cho ba biên bản và quyết định Phase 3 Done (P3-11) dựa
-   trên [báo cáo 3C](phase-3c-report.md).
+1. **Ngay bây giờ:** người dùng ghi quyết định Q cho ba biên bản. Phase 3 đã Done (duyệt 2026-11-07).
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.
 3. **Tùy chọn:** kế hoạch riêng nếu cần thêm số đo repair cho TIGHT hoặc `AFTER_QUALITY` (budget hay
    seed khác); không nới gate của campaign đã chạy.
@@ -131,7 +130,8 @@ câu trả lời từ trường thật.
    trên số đo v2; review người thứ hai cho contract và tooling (S3).
 5. **Song song khi có thể:** thu thập câu trả lời nghiệp vụ §13 và một bộ dữ liệu thật đã ẩn danh; quality
    profile cùng chủ thể nghiệp vụ; quyết định E5.
-6. **Phase 4** (adapter, SQLite, UI, Windows) chỉ khi Core đạt Phase 3 và có contract vnEdu thật.
+6. **Phase 4** (adapter, SQLite, UI, Windows): Core đã đạt Phase 3; còn chờ contract vnEdu thật và kế hoạch
+   Phase 4 được duyệt.
 
 ## 9. Tài liệu chính
 

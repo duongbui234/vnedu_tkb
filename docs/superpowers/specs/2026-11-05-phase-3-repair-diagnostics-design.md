@@ -1,6 +1,14 @@
 # Phase 3 — đặc tả repair, chẩn đoán vô nghiệm và benchmark
 
-Ngày 2026-11-05. Trạng thái: **DRAFT — P3-1 đến P3-12 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05; chưa triển khai.** Runbook D/E/F đã ghim commit `86f624d`. **3A đã triển khai và commit (duyệt ngày 2026-11-05)** — xem [báo cáo 3A](../../phase-3a-report.md). **3B: đã triển khai ngày 2026-11-06 (chưa commit)** — xem [đặc tả 3B](2026-11-06-phase-3b-infeasibility-diagnostics-design.md) và [báo cáo 3B](../../phase-3b-report.md). **3C: kế hoạch DRAFT ngày 2026-11-06** — xem [kế hoạch 3C](../plans/2026-11-06-phase-3c-repair-benchmark.md). Base
+Ngày 2026-11-05. Trạng thái: **P3-1 đến P3-12 ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT theo đề xuất ngày 2026-11-05. **Phase 3 Done (P3-11): người dùng duyệt ngày 2026-11-07**, ở mức mốc kỹ thuật trên dữ liệu synthetic (xem P3-11 và mục "Quyết định Done" ở cuối).** Runbook D/E/F đã ghim commit `86f624d`.
+
+- **3A:** triển khai và commit, duyệt ngày 2026-11-05 — [báo cáo 3A](../../phase-3a-report.md).
+- **3B:** triển khai, commit, tự rà soát và kiểm installed wheel ngày 2026-11-06 —
+  [đặc tả 3B](2026-11-06-phase-3b-infeasibility-diagnostics-design.md), [báo cáo 3B](../../phase-3b-report.md).
+- **3C:** campaign `phase3c-linux-02` xong ngày 2026-11-07 —
+  [kế hoạch 3C](../plans/2026-11-06-phase-3c-repair-benchmark.md), [báo cáo 3C](../../phase-3c-report.md).
+
+Base
 `86f624d` trên `main`. Kế hoạch triển khai lát đầu (3A):
 [2026-11-05-phase-3a-repair.md](../plans/2026-11-05-phase-3a-repair.md).
 
@@ -233,6 +241,26 @@ sản phẩm của repair**, khác với "witness hint" bị cấm trong benchma
 - [x] **P3-10 — 3C sau campaign Phase 2 v2:** benchmark repair chạy trên máy người dùng sau khi có số đo
   Phase 2. *(Đề xuất: chọn.)*
 - [x] **P3-11 — Done của Phase 3** = 3A, 3B, 3C đều xong và đạt điều kiện §10 của đặc tả gốc. Từng lát có
-  báo cáo riêng. *(Đề xuất: chọn.)*
+  báo cáo riêng. *(Đề xuất: chọn.)* **Người dùng duyệt Done ngày 2026-11-07** — xem mục "Quyết định Done"
+  ở cuối.
 - [x] **P3-12 — Review người thứ hai** (S3) cho contract repair trước khi dùng với dữ liệu thật; không
   chặn việc triển khai. *(Đề xuất: chọn.)*
+
+## Quyết định Done (P3-11) — 2026-11-07
+
+Người dùng duyệt **Phase 3 Done** ngày 2026-11-07, ở mức **mốc kỹ thuật trên dữ liệu synthetic**, giống
+cách Phase 2A được đóng.
+
+| Điều kiện §10 của đặc tả gốc | Bằng chứng |
+|---|---|
+| Repair test pass | `pytest tests benchmarks/tests` 2002 passed, 22 skipped (`67b4502`); oracle repair và diagnostics ([báo cáo 3A](../../phase-3a-report.md), [báo cáo 3B](../../phase-3b-report.md)) |
+| Benchmark có số liệu thực | Campaign `phase3c-linux-02` (246 run, một máy Linux, n = 1 mỗi ô) — [báo cáo 3C](../../phase-3c-report.md) |
+| Validator độc lập pass trên mọi nghiệm | 166/166 lịch (18 S + 148 repair) qua `validate-schedule`, `evaluate-score` và `evaluate-repair`; 58/58 report explain qua `check-explanation` |
+
+Quyết định này **không** bao gồm:
+
+- **Chấp nhận chất lượng:** Q vẫn REVIEW_REQUIRED.
+- **Hiệu năng repair trên bài sát giới hạn:** R1 có P NOT_MET ở mức campaign vì 18 run UNKNOWN thuộc TIGHT.
+- **P95/SLA và Windows.**
+- **Dùng với dữ liệu thật:** trước đó vẫn cần review người thứ hai cho contract repair (P3-12, S3), còn mở.
+
