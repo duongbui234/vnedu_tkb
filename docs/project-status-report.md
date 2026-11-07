@@ -1,7 +1,7 @@
 # vnEdu TKB — báo cáo hiện trạng toàn dự án
 
 Ngày 2026-11-05, **cập nhật 2026-11-07** tại base `629354e` trên `main`. Trạng thái: bản 2026-11-05 đã được
-người dùng duyệt; bản cập nhật 2026-11-07 (3B và 3C xong) là **DRAFT — chờ duyệt**.
+người dùng duyệt; bản cập nhật 2026-11-07 (3B và 3C xong; S1-a, S1-b′) là **DRAFT — chờ duyệt**.
 
 Báo cáo tổng hợp hiện trạng toàn dự án so với lộ trình trong
 [đặc tả Core First](VNEDU_TKB_CORE_FIRST_CODEX.md) §10. Lượt soạn chỉ đọc tài liệu, source và git log.
@@ -30,8 +30,10 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 - **Nút thắt hiện tại:**
   - Hướng chất lượng search (S1), vì P1 > 0 ở 90/162 lịch và profile v0 đòi P1 = 0.
     [Kế hoạch S1](superpowers/plans/2026-11-07-search-quality-s1.md) đã duyệt 2026-11-07. Spike S1-a
-    (A1, A2) không đạt điều kiện ([báo cáo](s1-a-spike-report.md)); hướng tiếp theo là
-    [spike S1-b′ (LNS)](superpowers/plans/2026-11-07-s1-b-prime-lns-spike.md), kế hoạch đã duyệt, chưa chạy.
+    (A1, A2) không đạt điều kiện ([báo cáo](s1-a-spike-report.md)). Spike S1-b′ (A4, LNS) cũng không đạt
+    ([báo cáo](s1-b-prime-spike-report.md)): A4 đưa P1 về 0 ở mọi dataset BASE/MIXED, kể cả 40 lớp, nhưng
+    hồi quy ở 3 dataset TIGHT, nên bị loại. Theo L8, hướng search của S1 dừng; hướng tiếp theo **chưa
+    quyết định**.
   - Review người thứ hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
@@ -129,16 +131,17 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ:** spike S1-b′ theo [kế hoạch](superpowers/plans/2026-11-07-s1-b-prime-lns-spike.md)
-   (A4, LNS theo GV/lớp/ngày, kèm A2; baseline cờ tắt cùng phiên, n = 3, 108 run, khoảng 4 giờ). Spike S1-a
-   (A1, A2) không đạt ([báo cáo](s1-a-spike-report.md)). Ba biên bản Q, profile
-   v0, Phase 3 Done và kế hoạch S1 đều đã duyệt ngày 2026-11-07.
+1. **Ngay bây giờ — quyết định sản phẩm sau S1:** S1-a ([báo cáo](s1-a-spike-report.md)) và S1-b′
+   ([báo cáo](s1-b-prime-spike-report.md)) đều không đạt. Lựa chọn (chưa quyết định): dừng S1 như L8; tăng
+   budget hoặc số worker; chấp nhận giới hạn chất lượng trong profile; hoặc kế hoạch spike mới giữ search
+   toàn model (ngoài L8). Ba biên bản Q, profile v0, Phase 3 Done, kế hoạch S1 và
+   [kế hoạch harness chấm Q](superpowers/plans/2026-11-07-quality-profile-harness.md) (chưa triển khai) đều
+   đã duyệt ngày 2026-11-07.
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.
 3. **Tùy chọn:** kế hoạch riêng nếu cần thêm số đo repair cho TIGHT hoặc `AFTER_QUALITY` (budget hay
    seed khác); không nới gate của campaign đã chạy.
-4. **Hướng chất lượng search** (S1): người duyệt đã chốt P1 > 0 không chấp nhận, nên cần một kế hoạch
-   riêng dựa trên số đo v2. Không nới budget hay hard khi chưa có kế hoạch duyệt. Cần thêm review người thứ
-   hai cho contract và tooling (S3).
+4. **Hướng chất lượng search** (S1): kế hoạch S1 đã duyệt và hai spike đã chạy (mục 1). Không nới budget
+   hay hard khi chưa có kế hoạch duyệt. Cần thêm review người thứ hai cho contract và tooling (S3).
 5. **Song song khi có thể:** thu thập câu trả lời nghiệp vụ §13 và một bộ dữ liệu thật đã ẩn danh; quality
    profile cùng chủ thể nghiệp vụ; quyết định E5.
 6. **Phase 4** (adapter, SQLite, UI, Windows): Core đã đạt Phase 3; còn chờ contract vnEdu thật và kế hoạch

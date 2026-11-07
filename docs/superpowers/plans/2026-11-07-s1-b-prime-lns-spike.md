@@ -1,7 +1,10 @@
 # Spike S1-b′ — LNS theo cấu trúc bài toán (A4)
 
-Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (L1–L8 theo đề xuất); chưa làm
-spike.** Làm spike cần lệnh cho phép riêng. Base `2ff4834` trên `main`.
+Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (L1–L8 theo đề xuất).** **Spike đã chạy 2026-11-07:
+không đạt §4** (điều kiện (3): hồi quy ở 3 dataset TIGHT), A4 ở dạng này bị loại
+([báo cáo spike](../../s1-b-prime-spike-report.md)). Theo quyết định ngày 2026-11-07, câu ghi nhận của L8 được
+thay bằng kết luận ở §6 của báo cáo, vì câu soạn sẵn sai với dữ liệu. Hướng tiếp theo chưa quyết định.
+Base `2ff4834` trên `main`.
 
 Tiếp nối [kế hoạch S1](2026-11-07-search-quality-s1.md) sau khi
 [spike S1-a](../../s1-a-spike-report.md) không đạt điều kiện. Dù mang tên S1-b′, đây vẫn là **spike chẩn

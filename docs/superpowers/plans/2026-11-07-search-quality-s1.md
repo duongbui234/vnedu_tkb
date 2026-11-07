@@ -2,8 +2,10 @@
 
 Ngày 2026-11-07. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-07 (R1–R6 theo đề xuất).** **S1-a đã chạy
 2026-11-07: không hướng nào đạt §5** ([báo cáo spike](../../s1-a-spike-report.md)); không làm S1-b/S1-c với
-A1/A2. Hướng tiếp theo: [spike S1-b′ (A4, LNS)](2026-11-07-s1-b-prime-lns-spike.md), kế hoạch duyệt
-2026-11-07, chưa chạy. Base `201a6e0` trên `main`.
+A1/A2. **Spike [S1-b′ (A4, LNS)](2026-11-07-s1-b-prime-lns-spike.md) đã chạy
+2026-11-07: không đạt §4** ([báo cáo](../../s1-b-prime-spike-report.md)). A4 cải thiện mạnh P1/P2 ở BASE/MIXED đến
+40 lớp nhưng hồi quy ở TIGHT, nên không đưa sang S1-b. Theo L8, hướng search của S1 dừng ở đây; lựa
+chọn tiếp theo là quyết định sản phẩm riêng, **chưa quyết định**. Base `201a6e0` trên `main`.
 
 Nguồn:
 - Quyết định S1 ([cập nhật 1](../../phase-2-status-assessment-update-1.md)): không tối ưu solver trước
