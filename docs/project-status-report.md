@@ -29,6 +29,7 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
     Lần chạy trước `phase3c-linux-01` dừng vì lỗi tooling, đã sửa.
 - **Nút thắt hiện tại:**
   - Hướng chất lượng search (S1), vì P1 > 0 ở 90/162 lịch và profile v0 đòi P1 = 0.
+    [Kế hoạch S1](superpowers/plans/2026-11-07-search-quality-s1.md) đã duyệt 2026-11-07; chưa làm spike.
   - Review người thứ hai cho contract repair (P3-12) trước khi dùng dữ liệu thật.
 - **Dữ liệu và quy tắc thật của trường vẫn là UNKNOWN.** Các câu hỏi nghiệp vụ ở §13 của đặc tả vẫn mở.
 
@@ -126,8 +127,9 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ:** lập kế hoạch chất lượng search (S1), lấy profile v0 (P1 = 0) làm thước đo. Ba biên
-   bản Q, profile v0 và Phase 3 Done đều đã duyệt ngày 2026-11-07.
+1. **Ngay bây giờ:** spike S1-a của [kế hoạch S1](superpowers/plans/2026-11-07-search-quality-s1.md)
+   (A1, A2, A1 + A2 trên 18 dataset s101, worktree riêng, không merge), lấy profile v0 (P1 = 0) làm thước
+   đo. Ba biên bản Q, profile v0, Phase 3 Done và kế hoạch S1 đều đã duyệt ngày 2026-11-07.
 2. **Review người thứ hai** cho contract repair và diagnostics (P3-12, S3) trước khi dùng dữ liệu thật.
 3. **Tùy chọn:** kế hoạch riêng nếu cần thêm số đo repair cho TIGHT hoặc `AFTER_QUALITY` (budget hay
    seed khác); không nới gate của campaign đã chạy.
