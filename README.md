@@ -11,7 +11,7 @@ Output reader đọc 1.0–1.5. Phase 3A (synthetic): lệnh `repair` xếp lạ
 trước nhiều nhất có thể, và `evaluate-repair` kiểm lại độc lập; kết quả là envelope `RepairResult`
 1.0 bọc output hiện có, không thêm version output mới. Phase 3B (synthetic): lệnh `explain` chẩn đoán
 input vô nghiệm (phản chứng đếm hoặc một tập xung đột), `check-explanation` kiểm lại độc lập. Không có
-Electron, React, SQLite, HTTP hoặc vnEdu adapter.
+ứng dụng desktop (Tauri 2 + React, quyết định 2026-11-09), SQLite, HTTP hoặc vnEdu adapter.
 
 ## Chạy local
 

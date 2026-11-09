@@ -2,7 +2,7 @@
 
 > **Mục đích:** Đây là đặc tả triển khai dành cho Codex. Ưu tiên tuyệt đối xây dựng, kiểm thử và benchmark **Scheduling Core** trước khi làm Desktop UI, SQLite hoặc tích hợp API vnEdu.
 >
-> **Ngữ cảnh đã chốt:** Ứng dụng cuối là **Electron + React + TypeScript** trên Windows. **Python + Google OR-Tools CP-SAT chạy LOCAL** trên máy người dùng, không cần server solver. **SQLite LOCAL** chỉ phục vụ dữ liệu riêng của TKB. Dữ liệu giáo dục lấy từ **API vnEdu hiện có**, kết quả hoàn chỉnh đồng bộ lại qua API vnEdu. Core **không phụ thuộc** những thành phần tích hợp này.
+> **Ngữ cảnh đã chốt:** Ứng dụng cuối là **Tauri 2 + React + TypeScript** trên Windows 10/11 (quyết định 2026-11-09, thay Electron; xem §1.3). **Python + Google OR-Tools CP-SAT chạy LOCAL** trên máy người dùng, không cần server solver. **SQLite LOCAL** chỉ phục vụ dữ liệu riêng của TKB. Dữ liệu giáo dục lấy từ **API vnEdu hiện có**, kết quả hoàn chỉnh đồng bộ lại qua API vnEdu. Core **không phụ thuộc** những thành phần tích hợp này.
 
 ## 0. Chỉ thị cho Codex — đọc trước khi thực hiện
 
@@ -37,9 +37,24 @@ Trước khi viết code:
 
 ### 1.2 Ngoài phạm vi hiện tại
 
-- Không xây dựng ứng dụng Electron/React, SQLite schema, vnEdu API adapter thật, hệ thống đăng nhập, đồng bộ, triển khai Kubernetes.
+- Không xây dựng ứng dụng desktop (Tauri 2/React), SQLite schema, vnEdu API adapter thật, hệ thống đăng nhập, đồng bộ, triển khai Kubernetes.
 - Không reverse engineer hay sao chép mã độc quyền STKB. Có thể tham khảo FET ở mức ý tưởng và đối chiếu kết quả khi có bộ test hợp lệ; tuân thủ giấy phép nếu tái sử dụng mã.
 - Không hỗ trợ mọi biến thể nghiệp vụ ngay MVP; phải thiết kế extension points và nêu rõ loại nào chưa hỗ trợ.
+
+### 1.3 Quyết định 2026-11-09: Tauri 2 thay Electron
+
+Người dùng quyết định ngày 2026-11-09. Ứng dụng desktop dùng **Tauri 2** (Rust) với giao diện React +
+TypeScript, thay cho Electron.
+
+- **Lý do:** Electron mang theo cả Chromium, không cần cho một ứng dụng nhỏ. Tauri dùng WebView2 có sẵn
+  trên Windows 10/11 nên vỏ ứng dụng nhẹ hơn nhiều về dung lượng và RAM. Máy ở trường chạy Windows
+  10/11.
+- **Cách tích hợp Core:** Core vẫn là Python + OR-Tools, đóng gói thành file chạy được và chạy như
+  sidecar của Tauri. Ứng dụng truyền file JSON vào, nhận JSON ra, giống CLI hiện có. Core không đổi và
+  không biết Tauri.
+- **Chưa đo:** dung lượng bộ cài, RAM, thời gian khởi động, cách xử lý WebView2 khi máy thiếu, và
+  antivirus với Core đóng gói. Các con số này sẽ đo bằng spike
+  ([kế hoạch](superpowers/plans/2026-11-09-tauri-sidecar-spike.md)).
 
 ## 2. Kiến trúc Core — độc lập I/O
 
@@ -203,7 +218,7 @@ Không trả lịch khi chưa có nghiệm hợp lệ. Nếu timeout nhưng có 
 - `max_time_in_seconds` cấu hình được; default ban đầu đề xuất 60 giây cho fixture nhỏ, không phải cam kết production.
 - `num_search_workers` cấu hình được; benchmark 1, 2, 4, 8 tùy máy. Không giả định nhiều worker luôn nhanh hơn.
 - `random_seed` cấu hình được; lưu lại trong kết quả. Lưu ý đa luồng và version solver có thể ảnh hưởng tính tái lập.
-- Chạy solver trong process riêng khi tích hợp Electron sau này; core không phụ thuộc cơ chế IPC.
+- Chạy solver trong process riêng khi tích hợp desktop app sau này (Tauri 2, Core là sidecar); core không phụ thuộc cơ chế IPC.
 - Hỗ trợ callback báo nghiệm trung gian hoặc progress ở mức solver có thể cung cấp, không giả lập % hoàn thành chính xác.
 
 ## 5. Independent Validator — bắt buộc
@@ -320,7 +335,7 @@ Không viết kết luận kiểu “60 lớp mất 2 phút” nếu chưa chạ
 
 - vnEdu API adapters (fetch dữ liệu + sync kết quả, auth và đối soát).
 - SQLite local (nháp, constraint config, lịch sử, sync log).
-- Electron/React UI, worker process IPC, đóng gói Python binary.
+- UI Tauri 2 + React, Core chạy như sidecar, đóng gói Python binary.
 - Installer, auto-update, Windows benchmark, triển khai sản phẩm.
 
 ## 11. Tiêu chuẩn code và chất lượng

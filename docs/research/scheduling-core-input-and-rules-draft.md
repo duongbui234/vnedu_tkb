@@ -8,7 +8,7 @@ Bản thiết kế kết hợp sau nghiên cứu: [Scheduling Core STKB/FET/CP-S
 
 ## 1. Các quyết định đã có và khoảng thiếu
 
-**VERIFIED — quyết định của người dùng:** Electron + React/TypeScript, Python + Google OR-Tools CP-SAT chạy local, SQLite và API vnEdu. Tạm dừng nghiên cứu tkb.com.vn; không đưa mô tả marketing của trang đó thành ràng buộc đã xác minh.
+**VERIFIED — quyết định của người dùng:** Electron + React/TypeScript (ngày 2026-11-09 đổi sang Tauri 2 + React/TypeScript, xem đặc tả Core First §1.3), Python + Google OR-Tools CP-SAT chạy local, SQLite và API vnEdu. Tạm dừng nghiên cứu tkb.com.vn; không đưa mô tả marketing của trang đó thành ràng buộc đã xác minh.
 
 **VERIFIED — dữ liệu quan sát:** [API đọc](vnedu-api-live-findings.md) trả 38 lớp, 109 GV, 20 môn, 527 phân công, 2 điểm trường. Cả 527 giá trị `so_tiet` bằng chuỗi `"0"`; 5 dòng phân công không tìm thấy GV tương ứng. [Tám file STKB](../../reverse-engineering/reports/STKB-file-format-analysis.md) đọc được phần danh mục và nối ID với API; chưa đọc được demand, incumbent hoặc rule đầy đủ.
 

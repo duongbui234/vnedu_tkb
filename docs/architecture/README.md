@@ -24,7 +24,7 @@ riêng; core không cần Desktop, SQLite hoặc HTTP.
 Phải phân biệt contract hợp lệ, qua precheck, trạng thái solver và kết quả đã được
 independent validator xác nhận. Input 1.0 phát output 1.1; input 1.1 phát output 1.2.
 Runtime dùng Pydantic 2.14.1; OR-Tools 9.15.6755 thuộc extra `solver`.
-Electron/React, SQLite, vnEdu adapter và repair tối thiểu thay đổi chưa được triển khai.
+Ứng dụng desktop (Tauri 2/React, thay Electron từ 2026-11-09), SQLite và vnEdu adapter chưa được triển khai.
 Không sửa core, fixture, dependency, nghiên cứu hoặc dữ liệu reverse engineering trong tác vụ này.
 
 ## Tái tạo
