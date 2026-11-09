@@ -1,7 +1,9 @@
 # vnEdu TKB — báo cáo hiện trạng toàn dự án
 
-Ngày 2026-11-05, **cập nhật 2026-11-07** tại base `629354e` trên `main`. Trạng thái: bản 2026-11-05 đã được
-người dùng duyệt; bản cập nhật 2026-11-07 (3B và 3C xong; S1-a, S1-b′) là **DRAFT — chờ duyệt**.
+Ngày 2026-11-05, **cập nhật 2026-11-07 và 2026-11-09**. Trạng thái: bản 2026-11-05 đã được người dùng
+duyệt. Bản cập nhật 2026-11-07 (3B và 3C xong; S1-a, S1-b′) và bản cập nhật 2026-11-09 (đối chiếu với
+thời khóa biểu thật, nhánh `real-stkb-teacher-constraints`, PR duongbui234/vnedu_tkb#7) là
+**DRAFT — chờ duyệt**.
 
 Báo cáo tổng hợp hiện trạng toàn dự án so với lộ trình trong
 [đặc tả Core First](VNEDU_TKB_CORE_FIRST_CODEX.md) §10. Lượt soạn chỉ đọc tài liệu, source và git log.
@@ -27,8 +29,25 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
     (166/166). Repair ra OPTIMAL, với số thay đổi tối thiểu đã chứng minh, ở 96/96 run BASE/MIXED đến 40
     lớp. TIGHT có 18 UNKNOWN, nên P của R1 ở mức campaign là NOT_MET. Xem [báo cáo 3C](phase-3c-report.md).
     Lần chạy trước `phase3c-linux-01` dừng vì lỗi tooling, đã sửa.
+- **Đối chiếu với thời khóa biểu thật (2026-11-08/09):**
+  - **Nguồn dữ liệu:** 50 file `.STKB` của trường thật, tải qua STKB API và chuyển sang input Core.
+  - **Ràng buộc đưa vào:** ô được học của lớp, ô Họp/Nghỉ/Bận/Hạn chế của GV, tiết khóa, giới hạn tải
+    và khung tiết GV theo cấu hình STKB của từng trường.
+  - **Kết quả với 4 worker, 180 s, cùng ràng buộc:**
+    - Core tốt hơn lịch STKB theo thứ tự từ điển ở **mọi trường so được**: 29/29 khi Nghỉ là hard, 33/33
+      khi Nghỉ là soft.
+    - P1 được chứng minh tối ưu ở mọi trường có lời giải.
+    - Lịch Core đều hợp lệ và điểm khớp evaluator độc lập.
+  - **Không so được:** 4 trường, vì chính lịch STKB vi phạm ràng buộc hard của file. Trong đó một trường
+    59 lớp vô nghiệm khi Nghỉ là hard, và Core chứng minh được số tiết tối thiểu trên ô Nghỉ là 17
+    (STKB: 71).
+  - **Phạm vi:** diagnostic, n = 1, một máy Linux, không phải nghiệm thu. Xem
+    [báo cáo đối chiếu](real-stkb-core-search-diagnosis.md).
+  - **Số worker:** 1 worker không dùng được trên trường lớn; nên dùng 4 worker. RSS đỉnh với 4 worker
+    cao nhất khoảng 1,5 GB.
 - **Nút thắt hiện tại:**
-  - Hướng chất lượng search (S1), vì P1 > 0 ở 90/162 lịch và profile v0 đòi P1 = 0.
+  - Hướng chất lượng search (S1), vì P1 > 0 ở 90/162 lịch synthetic và profile v0 đòi P1 = 0. Trên 33
+    trường thật, Core đạt P1 tối ưu với 4 worker (tổng P1 còn 1). Cần quyết định lại mức ưu tiên của S1.
     [Kế hoạch S1](superpowers/plans/2026-11-07-search-quality-s1.md) đã duyệt 2026-11-07. Spike S1-a
     (A1, A2) không đạt điều kiện ([báo cáo](s1-a-spike-report.md)). Spike S1-b′ (A4, LNS) cũng không đạt
     ([báo cáo](s1-b-prime-spike-report.md)): A4 đưa P1 về 0 ở mọi dataset BASE/MIXED, kể cả 40 lớp, nhưng
@@ -81,6 +100,7 @@ dẫn. Chi tiết Phase 2 nằm ở [báo cáo tiến độ Phase 2](phase-2-pro
 | Điều tra TIGHT10 / Windows S03 | Chuỗi báo cáo trace, CPU và accounting ([tổng hợp](tight10-evidence-synthesis.md)); lịch sử 2A |
 | Benchmark v2 (policy 0.4) | `phase2-v2-linux-01` (`86f624d`) bị gián đoạn, giữ nguyên. `phase2-v2-linux-02` (candidate `7e47f74`, 2026-11-06): 216/216 terminal, **H PASS, P MET**, Q REVIEW_REQUIRED, zero NOT_APPLICABLE; một máy, workload UNCONTROLLED, n = 3 — [báo cáo](phase-2a-linux-acceptance-report.md) |
 | Benchmark repair 3C | `phase3c-linux-02` (`67b4502`, 2026-11-07), 246/246 terminal; seal hai tầng, journal và receipt kiểm lại OK; 166 lịch và 58 report explain qua kiểm độc lập. Một máy, n = 1 mỗi ô — [báo cáo](phase-3c-report.md). `phase3c-linux-01` dừng vì lỗi tooling, giữ nguyên |
+| Đối chiếu dữ liệu thật (2026-11-08/09) | 5 lượt trên 3–36 trường, cuối cùng 33 trường × hai kịch bản Nghỉ hard/soft, 4 worker; thêm lượt 8 worker cho một trường. Core tốt hơn STKB 29/29 (Nghỉ hard) và 33/33 (Nghỉ soft); P1 tối ưu ở mọi trường có lời giải; mọi lịch Core hợp lệ, điểm khớp độc lập. Diagnostic, n = 1, Linux — [báo cáo](real-stkb-core-search-diagnosis.md) |
 | Windows | Evidence chỉ cho snapshot cũ; Phase 2 v2 là Linux-only (S2) |
 
 Evidence thô của campaign nằm trong `benchmarks/artifacts/` trên máy người dùng và không có trong clone
@@ -94,14 +114,25 @@ cloud.
   kiểm installed wheel.
 - **Nhánh:** PR duongbui234/vnedu_tkb#3 đến duongbui234/vnedu_tkb#6 đã merge, không có review comment hay
   CI. Repo chưa có `.github`. Từ `812b0b6`, theo yêu cầu người dùng, thay đổi push thẳng lên `main`,
-  nhưng mỗi commit vẫn cần duyệt (S4).
+  nhưng mỗi commit vẫn cần duyệt (S4). Tooling dữ liệu thật đi qua nhánh `real-stkb-teacher-constraints`
+  và PR duongbui234/vnedu_tkb#7 (chưa merge; đã chạy `/code-review` medium và sửa 7/10 phát hiện).
+- **Dữ liệu thật:** chỉ nằm dưới `benchmarks/artifacts/real/` (gitignore). Báo cáo dùng mã trường ẩn danh
+  TR01…TR50 và mã GV GV###; bảng đối chiếu sang site_id và file site_id chỉ lưu local, không commit.
 - **Sổ quyết định:** D1–D3, E1–E4/E6, G1–G10, K1–K7, M1–M7 và S1–S4 đã duyệt; E5 (chính sách version)
   chưa quyết định. Xem [tiến độ Phase 2 §4](phase-2-progress-report.md).
 
 ## 6. Câu hỏi nghiệp vụ còn mở (đặc tả §13)
 
 Core được thiết kế để các câu hỏi này là **cấu hình tường minh**, không phải giá trị đoán. Chưa câu nào có
-câu trả lời từ trường thật.
+câu trả lời được trường xác nhận. Lịch STKB của 33 trường thật cho thấy những gì đang được dùng (quan sát,
+không phải quy tắc của trường):
+
+- Chào cờ, sinh hoạt (câu 3) xuất hiện ở ô cố định; tooling khóa đúng ô.
+- Chia nhóm và lớp ghép (câu 4, 6) có thật trong lịch. Core chưa biểu diễn được nên các tiết này bị loại,
+  và ô của chúng bị chặn cho lớp/GV liên quan.
+- Tiết đôi (câu 5) có; chuỗi dài hơn 2 tiết được tách thành 2+1.
+- Mỗi trường tự bật ràng buộc GV trong STKB (câu 8): Họp/Nghỉ/Bận/Hạn chế theo ô, max tiết/buổi,
+  max tiết/ngày, khung tiết. 22/33 trường không bật giới hạn tải nào.
 
 | # | Câu hỏi | Core hiện tại |
 |---:|---|---|
@@ -122,8 +153,13 @@ câu trả lời từ trường thật.
 2. **Chất lượng lịch chưa đạt.** Người duyệt chốt nguyên tắc "P1 > 0 không chấp nhận" (2026-11-07). Theo
    đó, 90/162 lịch của campaign v2, gồm toàn bộ SOFT 40 lớp, sẽ là NOT_ACCEPTED nếu được duyệt cùng lý
    do. Mọi lịch 20/40 lớp kém hơn witness. Q của campaign vẫn REVIEW_REQUIRED.
-3. **Khoảng cách tới dữ liệu thật.** Mọi ngưỡng, nhóm và lịch họp là UNKNOWN; synthetic không thay được
-   trường thật.
+3. **Khoảng cách tới dữ liệu thật đã thu hẹp nhưng chưa đóng.** Đã có 33 trường thật đọc từ STKB, nhưng:
+   - số tiết và tiết đôi suy từ chính lịch STKB;
+   - thang P1/P2/P3 là của dự án; STKB dùng tổng có hệ số;
+   - ý nghĩa một số trường trong file STKB còn suy từ binary;
+   - chia nhóm/lớp ghép chưa biểu diễn được.
+
+   Ngưỡng nào là quy tắc bắt buộc của trường vẫn UNKNOWN.
 4. **Kiểm chứng độc lập mỏng.** Mọi rà soát là tự kiểm; không CI; không review người thứ hai (E6, S3).
 5. **Số phiên bản contract tăng theo từng mốc** (E5 chưa quyết định).
 6. **Windows chưa được kiểm cho candidate hiện tại**, trong khi Phase 4 nhắm ứng dụng desktop.
@@ -132,11 +168,13 @@ câu trả lời từ trường thật.
 
 ## 8. Lộ trình đề xuất
 
-1. **Ngay bây giờ — dữ liệu thật:** người dùng sẽ cung cấp thời khóa biểu các trường từ DB công ty.
-   Thứ tự đề xuất:
-   - ẩn danh hóa và ánh xạ dữ liệu sang input Core;
-   - chấm lịch thật bằng evaluator độc lập;
-   - cho Core xếp lại cùng dữ liệu và so sánh.
+1. **Dữ liệu thật — đã làm, chờ duyệt:** ẩn danh, ánh xạ sang input Core, chấm lịch STKB bằng evaluator
+   độc lập, cho Core xếp lại và so sánh đã xong trên 33 trường (bước E–G của
+   [kế hoạch tiếp nhận](superpowers/plans/2026-11-07-real-timetable-intake.md), dùng file STKB thay cho
+   DB công ty). Việc tiếp theo: duyệt và merge PR #7. Sau đó cân nhắc:
+   - xác nhận với trường ngưỡng nào là bắt buộc;
+   - biểu diễn chia nhóm/lớp ghép;
+   - đo trên Windows và máy ít nhân.
 
    Hướng search S1 tạm dừng: S1-a ([báo cáo](s1-a-spike-report.md)) và S1-b′
    ([báo cáo](s1-b-prime-spike-report.md)) không đạt; S1-b″ dừng, không kết luận. Ba biên bản Q, profile v0, Phase 3 Done, kế hoạch S1 và
@@ -163,4 +201,5 @@ câu trả lời từ trường thật.
 | Hiệu năng v2 | [kế hoạch](superpowers/plans/2026-11-05-phase-2-linux-performance-v2.md), runbook [D](phase-2-linux-performance-step-d-runbook.md) / [E](phase-2-linux-performance-step-e-runbook.md) / [F](phase-2-linux-performance-step-f-runbook.md), [diễn tập E0](phase-2-linux-performance-rehearsal-e0-report.md) |
 | Phase 2 nghiệm thu | [nghiệm thu Linux](phase-2a-linux-acceptance-report.md), [kế hoạch Q](phase-2a-quality-review-plan.md), [biên bản Q](quality-decisions/README.md), [profile v0](quality-profile-v0.md) |
 | Phase 3 | [đặc tả](superpowers/specs/2026-11-05-phase-3-repair-diagnostics-design.md), [báo cáo 3A](phase-3a-report.md), [rà soát 3A](phase-3a-review.md), [đặc tả 3B](superpowers/specs/2026-11-06-phase-3b-infeasibility-diagnostics-design.md), [báo cáo 3B](phase-3b-report.md), [rà soát 3B](phase-3b-review.md), [kế hoạch 3C](superpowers/plans/2026-11-06-phase-3c-repair-benchmark.md), [tooling 3C](phase-3c-tooling-report.md), [runbook 3C](phase-3c-runbook.md), [báo cáo 3C](phase-3c-report.md) |
+| Dữ liệu thật | [kế hoạch tiếp nhận](superpowers/plans/2026-11-07-real-timetable-intake.md), [báo cáo đối chiếu Core với STKB](real-stkb-core-search-diagnosis.md), [tooling](../tools/real_data/README.md) |
 | Quy tắc làm việc | `AGENTS.md`, `CLAUDE.md` |

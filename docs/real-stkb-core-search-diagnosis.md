@@ -3,19 +3,19 @@
 Ngày 2026-11-08. Trạng thái: **DRAFT, chờ người dùng duyệt.** Đây là phép đo chẩn đoán
 trên dữ liệu thật, không phải evidence nghiệm thu. Mỗi cấu hình chạy n = 1, seed 42.
 
-Trường được ghi bằng mã ẩn danh R01…R50. Bảng đối chiếu sang site_id chỉ lưu local ở
+Trường được ghi bằng mã ẩn danh TR01…TR50. Bảng đối chiếu sang site_id chỉ lưu local ở
 `benchmarks/artifacts/real/school-pseudonyms.csv` (gitignore); thư mục kết quả local vẫn đặt theo
-site_id (`<site>`).
+site_id (`<site>`). Nhãn R20/R37/R59 ở Phần B là nhãn cũ theo số lớp, không phải mã ẩn danh này.
 
 Báo cáo có năm phần, mới nhất trước:
 
 - **Phần L5 (lượt 5):**
   - nối nghĩa khung tiết GV từ binary và đưa vào thang theo trường;
   - chạy lại cả hai kịch bản Nghỉ hard và Nghỉ soft với 4 worker;
-  - chứng minh số tiết tối thiểu trên ô Nghỉ của trường R17.
+  - chứng minh số tiết tối thiểu trên ô Nghỉ của trường TR17.
 
 - **Phần L4 (lượt 4):** giới hạn tải GV theo cấu hình STKB của từng trường thay cho ngưỡng chung; Nghỉ ở
-  P1 cho trường R17. Chỉ chạy kịch bản Nghỉ soft, 4 worker.
+  P1 cho trường TR17. Chỉ chạy kịch bản Nghỉ soft, 4 worker.
 - **Phần 0 (lượt 3):** thêm ràng buộc giáo viên (Họp, Nghỉ, Bận, Hạn chế) và tiết khóa từ phần cuối file
   STKB; so 33 trường với 2 và 4 worker, hai kịch bản Nghỉ hard / Nghỉ soft.
 - **Phần A (lượt 2):** so 34 trường sau khi chặn ô theo lớp, với 2, 4 và 8 worker.
@@ -34,7 +34,7 @@ Báo cáo có năm phần, mới nhất trước:
 2. **Thang theo trường giữ nguyên kết luận.** 22/33 trường không bật giới hạn tải GV nào trong STKB. Khi
    bỏ ngưỡng chung, tổng P1 của STKB giảm từ 770 xuống 110, nhưng Core vẫn tốt hơn ở 33/33 trường và
    chứng minh P1 tối ưu ở 33/33.
-3. **Nghỉ:** ở trường R17 (59 lớp), Core xếp vào ô Nghỉ ít hơn STKB (71) trong mọi cấu hình trừ
+3. **Nghỉ:** ở trường TR17 (59 lớp), Core xếp vào ô Nghỉ ít hơn STKB (71) trong mọi cấu hình trừ
    cấu hình cũ (thang chung, Nghỉ ở P2: 236):
    - Nghỉ ở P1, thang chung: 32;
    - Nghỉ ở P1, thang theo trường: 17;
@@ -50,7 +50,7 @@ Báo cáo có năm phần, mới nhất trước:
 5. **RAM (RSS đỉnh):** với 4 worker, cao nhất 1,5 GB, trung vị 0,6 GB; với 2 worker, cao nhất 1,2 GB.
    Lượt 2 có 8 worker: cao nhất 2,3 GB. Chỉ đo trên Linux.
 
-## Phần L5 — Lượt 5: khung tiết GV, Nghỉ hard với thang theo trường, chứng minh P1 cho R17
+## Phần L5 — Lượt 5: khung tiết GV, Nghỉ hard với thang theo trường, chứng minh P1 cho TR17
 
 ### L5.1. Khung tiết GV: nghĩa đọc từ binary
 
@@ -92,10 +92,10 @@ mới; tổng 47 test qua.
   - 5 job cùng lúc trên ngân sách 20 luồng;
   - tổng **18,8 phút**, luồng cao nhất 20, 0 lỗi, 0 watchdog.
   - Mức tranh CPU giống cột 4 worker của lượt 3 và lượt 4.
-- **R17, Nghỉ ở P1, 8 worker, 600 s** (input lượt 4, `stkb-v4-p1school` và `stkb-v4-p1common`):
+- **TR17, Nghỉ ở P1, 8 worker, 600 s** (input lượt 4, `stkb-v4-p1school` và `stkb-v4-p1common`):
   - 2 job × 8 worker = 16/20 luồng chạy cùng lúc;
   - 10,4 phút.
-- **R17, chỉ Nghỉ ở P1** (chẩn đoán, `stkb-v5-nghionly`):
+- **TR17, chỉ Nghỉ ở P1** (chẩn đoán, `stkb-v5-nghionly`):
   - 1 job × 8 worker, 600 s;
   - chạy riêng sau batch, nên ít tranh CPU hơn hai job trên.
 
@@ -112,8 +112,8 @@ mới; tổng 47 test qua.
 | Lịch Core hợp lệ / điểm khớp | 32/32 | 32/32 |
 | RSS đỉnh: cao nhất / trung vị | 1,40 / 0,57 GB | 1,40 / 0,54 GB |
 
-- R17 vô nghiệm khi Nghỉ là hard ở cả hai thang; Core chứng minh vô nghiệm trong 6 s.
-- 4 trường có lịch STKB vi phạm hard (R29, R12, R34, R17) giống lượt 3.
+- TR17 vô nghiệm khi Nghỉ là hard ở cả hai thang; Core chứng minh vô nghiệm trong 6 s.
+- 4 trường có lịch STKB vi phạm hard (TR29, TR12, TR34, TR17) giống lượt 3.
 
 Theo quy mô trường (thang theo trường):
 
@@ -140,7 +140,7 @@ Từng rule, thang theo trường (tổng vi phạm thô; số trường Core t�
 
 - STKB 72 tiết, Core 16.
 - Core ít hơn ở 8 trường, bằng ở 1 trường, không trường nào nhiều hơn.
-- Phần lớn tiết ngoài khung của Core nằm ở trường R37 (16 GV có khung, 96 ô ngoài khung): STKB
+- Phần lớn tiết ngoài khung của Core nằm ở trường TR37 (16 GV có khung, 96 ô ngoài khung): STKB
   38, Core 14. Ở đây khung tiết cùng mức P2 với giãn ngày và chuỗi tiết trống, nên Core đổi qua lại giữa
   các rule này.
 
@@ -151,7 +151,7 @@ Từng rule, thang theo trường (tổng vi phạm thô; số trường Core t�
 - STKB tôn trọng khung tiết kém hơn giới hạn tải: 72 tiết ngoài khung, so với 2 tiết vượt max/buổi và 6
   tiết vượt max/ngày. Điều này hợp với hệ số: khung tiết 4, Nghỉ 30.
 
-### L5.4. R17: số tiết tối thiểu phải nằm trên ô Nghỉ
+### L5.4. TR17: số tiết tối thiểu phải nằm trên ô Nghỉ
 
 Lượt 4 chạy 4 worker, 180 s, và không chứng minh được P1 ở cấu hình Nghỉ P1. Lượt này chạy 8 worker,
 600 s:
@@ -178,7 +178,7 @@ Kết quả (8 worker, 600 s, chạy một mình, 8/20 luồng, 10,3 phút):
 | P2 | 43 | 7, chứng minh tối ưu sau 255 s |
 | P3 | 268 | 133 (cận dưới 49, hết giờ) |
 
-**Trả lời:** với Họp, tiết khóa và ô được học của lớp là hard, **mọi lịch hợp lệ của trường R17
+**Trả lời:** với Họp, tiết khóa và ô được học của lớp là hard, **mọi lịch hợp lệ của trường TR17
 phải đặt ít nhất 17 tiết vào ô Nghỉ**, và Core đạt đúng 17. Lịch STKB đặt 71. Con số này khớp P1 = 17 ở
 cấu hình thang theo trường (trường không bật giới hạn tải và không có khung tiết). Vì vậy lời giải đó cũng
 không xếp tiết nào vào ô Bận/Hạn chế hay vượt môn/lớp/ngày.
@@ -217,7 +217,7 @@ Mức tranh CPU giống lượt 4.
   12 trường, bằng ở 6, kém ở 0.
 - **Riêng khung tiết:** STKB 72 tiết ngoài khung, Core 17. Core ít hơn ở 8 trường, bằng ở 1. Gần như
   trùng với kịch bản Nghỉ hard (Core 16).
-- **Trường R17:** Core đặt 19 tiết vào ô Nghỉ (lượt 4: 20), STKB đặt 71. Trường này không có khung
+- **Trường TR17:** Core đặt 19 tiết vào ô Nghỉ (lượt 4: 20), STKB đặt 71. Trường này không có khung
   tiết, nên chênh 1 tiết là do lượt chạy (n = 1, cùng seed nhưng tìm kiếm song song không tất định). Mức
   tối thiểu đã chứng minh là 17 (L5.4).
 - **Giá phải trả:** thêm khung tiết thì P2 của Core tăng từ 47 lên 61, P3 từ 1142 lên 1161, vì Core phải
@@ -231,7 +231,7 @@ Mức tranh CPU giống lượt 4.
 - Thuộc tính nhóm GV (72 byte/nhóm) và các trường khác của record GV chưa đưa vào.
 - Kết quả local: `benchmarks/artifacts/real/stkb-v5-hard/<site>/cmp-w4/`,
   `stkb-v5-soft/<site>/cmp-w4/`,
-  `stkb-v4-p1{school,common}/R17/cmp-w8/`, `stkb-v5-nghionly/R17/cmp-w8/`; CSV ở
+  `stkb-v4-p1{school,common}/TR17/cmp-w8/`, `stkb-v5-nghionly/TR17/cmp-w8/`; CSV ở
   `stkb-v5/`.
 
 ## Phần L4 — Lượt 4: giới hạn tải GV theo từng trường (33 trường, 4 worker, Nghỉ soft)
@@ -278,8 +278,8 @@ Kiểm tra:
 
 - Có 35 job, mỗi job 4 worker, 180 s:
   - 33 trường, thang theo trường, Nghỉ soft ở P2;
-  - R17, Nghỉ ở P1, thang chung;
-  - R17, Nghỉ ở P1, thang theo trường.
+  - TR17, Nghỉ ở P1, thang chung;
+  - TR17, Nghỉ ở P1, thang theo trường.
 - Ngân sách 20 luồng, nên 5 job chạy cùng lúc (5 × 4 = 20 luồng), trường lớn trước.
 - Tổng **19,9 phút**; luồng dùng cao nhất là 20; 0 lỗi; 0 lượt bị watchdog dừng.
 - `stkb-v4-school/layout.jsonl` giờ ghi thư mục gốc của từng job.
@@ -329,7 +329,7 @@ Từng rule, thang theo trường (tổng vi phạm thô; số trường Core t�
 - **STKB vẫn tốt hơn ở P3 một số trường:** 7 trường về số buổi GV chỉ có 1 tiết, 2 trường về tổng tiết
   trống. Thứ tự từ điển không đổi vì Core tốt hơn ở mức cao hơn.
 
-### L4.4. Nghỉ ở P1 cho trường R17
+### L4.4. Nghỉ ở P1 cho trường TR17
 
 Trường 59 lớp, 1.066 ô Nghỉ, 440 tiết khóa. Theo lượt 3, trường này vô nghiệm khi coi Nghỉ là hard.
 Trường không bật giới hạn tải GV nào, nên thang theo trường không có S02/S03. Bảng đếm **số tiết nằm
@@ -360,7 +360,7 @@ trên ô Nghỉ**, không tính Bận/Hạn chế, với 4 worker và 180 s:
   không phải của STKB. STKB dùng tổng có hệ số (báo cáo 06), không dùng thứ tự từ điển.
 - Khung tiết của GV và thuộc tính nhóm GV chưa đưa vào.
 - Kết quả local: `benchmarks/artifacts/real/stkb-v4-school/<site>/cmp-w4/`,
-  `stkb-v4-p1common/R17/`, `stkb-v4-p1school/R17/`; CSV ở `stkb-v4/`.
+  `stkb-v4-p1common/TR17/`, `stkb-v4-p1school/TR17/`; CSV ở `stkb-v4/`.
 
 ---
 
@@ -380,7 +380,7 @@ trên ô Nghỉ**, không tính Bận/Hạn chế, với 4 worker và 180 s:
     lớp × 35, 12 B × GV × 35 và 8 B × phòng × 35.
   - **Chuỗi rỗng.** `FReadString` (Common.dll 0x10006221) chấp nhận độ dài 0.
 
-  Trường còn lại (R41) có 168 byte 0 dư trong bản ghi thực thể thứ hai. Chưa xác định nghĩa của số
+  Trường còn lại (TR41) có 168 byte 0 dư trong bản ghi thực thể thứ hai. Chưa xác định nghĩa của số
   byte này, nên không đoán và loại trường khỏi lượt này.
 - **`stkb_to_csv.py`** ghi thêm:
   - `teacher-cells.csv` (`ma_gv,thu,buoi,tiet,loai`): `hop` (1000–1006), `nghi` (998), `ban` (999),
@@ -442,12 +442,12 @@ hard, 33/33 ở kịch bản soft).
 
 | Trường | Lớp | Tiết STKB trên ô Nghỉ | Core 2 worker | Core 4 worker |
 |---|---:|---:|---|---|
-| 3050… | 32 | 56 | hợp lệ, [0, 0, 49] | hợp lệ, [0, 0, 46] |
-| 4334… | 19 | 4 | hợp lệ, [0, 0, 36] | hợp lệ, [0, 0, 30] |
-| 5797… | 44 | 42 | hợp lệ, [0, 10, 8] | hợp lệ, [0, 10, 4] |
-| 3114… | 59 | 54 | UNKNOWN (không có lời giải) | **INFEASIBLE** |
+| TR12 | 32 | 56 | hợp lệ, [0, 0, 49] | hợp lệ, [0, 0, 46] |
+| TR29 | 19 | 4 | hợp lệ, [0, 0, 36] | hợp lệ, [0, 0, 30] |
+| TR34 | 44 | 42 | hợp lệ, [0, 10, 8] | hợp lệ, [0, 10, 4] |
+| TR17 | 59 | 54 | UNKNOWN (không có lời giải) | **INFEASIBLE** |
 
-Ở trường 3114, CP-SAT với 4 worker chứng minh không có lịch nào vừa giữ 440 tiết khóa vừa tránh 1.052 ô
+Ở trường TR17, CP-SAT với 4 worker chứng minh không có lịch nào vừa giữ 440 tiết khóa vừa tránh 1.052 ô
 Nghỉ. Không có mâu thuẫn ở mức đếm: không GV, lớp hay phân công nào có số tiết vượt số ô còn mở, và
 không tiết khóa nào nằm trên ô bị chặn. Đây là kết quả của bài toán, không phải lỗi của Core: STKB cũng
 không xếp được lịch hợp lệ cho trường này.
@@ -485,13 +485,13 @@ bằng / kém):
 
 `TEACHER_AVOID_SLOTS` theo trường (STKB → Core 2w / 4w):
 
-- 3050…: 60 → 0 / 0;
-- 4334…: 4 → 0 / 0;
-- 3454…: 1 → 0 / 0;
-- 5797…: 42 → 7 / 17;
-- 3114… (59 lớp): **71 → 231 / 236**.
+- TR12: 60 → 0 / 0;
+- TR29: 4 → 0 / 0;
+- TR24: 1 → 0 / 0;
+- TR34: 42 → 7 / 17;
+- TR17 (59 lớp): **71 → 231 / 236**.
 
-Core tránh ô Nghỉ tốt hơn STKB ở 4 trường. Ở trường 3114, trường mà Nghỉ hard vô nghiệm, Core đổi thêm
+Core tránh ô Nghỉ tốt hơn STKB ở 4 trường. Ở trường TR17, trường mà Nghỉ hard vô nghiệm, Core đổi thêm
 khoảng 160 tiết vào ô Nghỉ để lấy P1 tốt hơn (6 so với 58). Theo thang chung, đổi như vậy là đúng; theo
 nhà trường thì chưa chắc.
 
@@ -517,7 +517,7 @@ nhà trường thì chưa chắc.
 
 1. "Tốt hơn" là theo thứ tự từ điển của thang chung, nặng nhất là P1 (GV ≤ 4 tiết/buổi, môn ≤ 2
    tiết/lớp/ngày). STKB không tối ưu theo thang này, và trường có thể không đặt các rule đó.
-2. Khi Nghỉ là soft ở P2, Core có thể xếp vào ô Nghỉ nhiều hơn STKB (trường 3114). Nếu trường coi Nghỉ là
+2. Khi Nghỉ là soft ở P2, Core có thể xếp vào ô Nghỉ nhiều hơn STKB (trường TR17). Nếu trường coi Nghỉ là
    hard hoặc ưu tiên trên P1, cần cấu hình đúng như vậy cho trường đó.
 3. Thuộc tính GV trong phần cuối file (max tiết/buổi, max tiết/ngày, …) chưa đưa vào input. STKB có thể
    đang tối ưu theo các giới hạn riêng của từng trường mà thang chung không biết.
@@ -525,7 +525,7 @@ nhà trường thì chưa chắc.
 ### 0.6. Giới hạn
 
 - n = 1, seed 42; chỉ đo Linux, máy i7-12700H, 20 luồng chạy đầy (§0.3). Không có lượt 8 worker trong lượt 3.
-- 33/34 trường; trường R41 bị loại vì phần cuối file có 168 byte chưa rõ nghĩa. 2 trường bị loại
+- 33/34 trường; trường TR41 bị loại vì phần cuối file có 168 byte chưa rõ nghĩa. 2 trường bị loại
   từ lượt 2 do trùng tên lớp.
 - Không biết 14 ô Họp/Nghỉ trùng tiết khóa nghĩa là gì trong STKB. Tooling giữ khóa và để mở ô đó.
 - Tiết khóa lấy theo cờ trong file; chưa kiểm STKB dùng cờ này khi xếp lại hay chỉ để hiển thị (báo
