@@ -1,14 +1,15 @@
 # Core so với lịch STKB trên dữ liệu thật: số worker, tính công bằng, RAM
 
-Ngày 2026-11-08. Trạng thái: **DRAFT, chờ người dùng duyệt.** Đây là phép đo chẩn đoán
+Ngày 2026-11-08, cập nhật 2026-11-09 (Phần R). Trạng thái: **DRAFT, chờ người dùng duyệt.** Đây là phép đo chẩn đoán
 trên dữ liệu thật, không phải evidence nghiệm thu. Mỗi cấu hình chạy n = 1, seed 42.
 
 Trường được ghi bằng mã ẩn danh TR01…TR50. Bảng đối chiếu sang site_id chỉ lưu local ở
 `benchmarks/artifacts/real/school-pseudonyms.csv` (gitignore); thư mục kết quả local vẫn đặt theo
 site_id (`<site>`). Nhãn R20/R37/R59 ở Phần B là nhãn cũ theo số lớp, không phải mã ẩn danh này.
 
-Báo cáo có năm phần, mới nhất trước:
+Báo cáo có sáu phần, mới nhất trước:
 
+- **Phần R (2026-11-09):** thử repair trên 3 trường thật với 3 kịch bản thay đổi giữa kỳ.
 - **Phần L5 (lượt 5):**
   - nối nghĩa khung tiết GV từ binary và đưa vào thang theo trường;
   - chạy lại cả hai kịch bản Nghỉ hard và Nghỉ soft với 4 worker;
@@ -49,6 +50,89 @@ Báo cáo có năm phần, mới nhất trước:
    còn đủ cho mọi trường; **nên dùng 4 worker**, nhất là với trường từ 31 lớp trở lên.
 5. **RAM (RSS đỉnh):** với 4 worker, cao nhất 1,5 GB, trung vị 0,6 GB; với 2 worker, cao nhất 1,2 GB.
    Lượt 2 có 8 worker: cao nhất 2,3 GB. Chỉ đo trên Linux.
+6. **Repair dùng được trên lịch thật** (Phần R). Có 9 lần chạy: 3 trường × 3 kịch bản (GV bận một ngày,
+   thêm 2 tiết, đổi GV).
+   - Lịch nào cũng hợp lệ và được `evaluate-repair` kiểm lại độc lập.
+   - Số tiết phải đổi được chứng minh là tối thiểu, mất dưới 1 s: 0–14 tiết trên 490–1.083 tiết. Mỗi
+     lần chỉ 0–7 GV, 0–7 lớp bị ảnh hưởng.
+   - Chất lượng giữ ngang lịch STKB ban đầu, trừ một trường hợp: thêm tiết vào lớp đã kín. Khi đó, giữ
+     nguyên lịch thì P1 tăng 2. Cho phép đổi tối đa 10 tiết thì P1 về 0.
+
+## Phần R — Repair trên lịch thật (3 trường, 3 kịch bản)
+
+### R1. Cách thử
+
+**Trường:** TR38 (18 lớp), TR23 (30 lớp), TR13 (47 lớp).
+
+**Input:** của kịch bản Nghỉ soft, thang theo trường có khung tiết (`stkb-v5-soft`). Lịch trước là
+**lịch STKB** của trường. Mỗi kịch bản sửa input như sau:
+
+| Kịch bản | Thay đổi input |
+|---|---|
+| A. GV bận cố định một ngày | GV dạy nhiều tiết nhất trường mất cả một ngày trong tuần, chọn ngày GV có nhiều tiết nhất mà không có tiết khóa |
+| B. Thêm 2 tiết/tuần | Một môn của một lớp tăng 4 → 6 tiết, thêm 2 tiết đơn. Nếu lớp đã kín ô, mở thêm ô cho lớp: TR23 mở 2 ô lẻ, TR13 mở chiều thứ 6 |
+| C. Đổi GV | Một môn 4 tiết/tuần của một lớp chuyển sang GV khác cùng môn, là GV dạy ít nhất và chưa dạy lớp đó. Mã requirement giữ nguyên để ghép được với lịch cũ |
+
+**Yêu cầu repair:**
+- `BEFORE_QUALITY`: tối thiểu số thay đổi trước, rồi tối ưu chất lượng trong số lịch có ít thay đổi nhất.
+- Không giới hạn `max_changes`, không giới hạn `change_scope`; dùng lịch cũ làm hint.
+- 6 worker, 180 s, seed 42.
+- Đơn vị thay đổi: một occurrence đổi ô (tiết đôi tính 1).
+
+**Bố trí chạy:**
+- 3 job × 6 worker = 18/20 luồng cho mỗi kịch bản, lần lượt A, B, C.
+- Thêm 2 lần chạy so sánh cho TR13 / kịch bản B, chạy riêng.
+- `layout.jsonl` trong từng thư mục kịch bản.
+
+### R2. Kết quả
+
+| Kịch bản | Trường | Phải dời | Đổi (tối thiểu, đã chứng minh) | GV / lớp bị ảnh hưởng | STKB trước `[P1,P2,P3]` | Sau repair | Thời gian | RSS |
+|---|---|---:|---:|---|---|---|---:|---:|
+| A | TR38 | 6 | **11** / 490 | 6 / 6 | [2, 28, 101] | [2, 27, 103] | 37 s | 0,67 GB |
+| A | TR23 | 3 | **10** / 548 | 5 / 3 | [2, 7, 79] | [2, 8, 80] | 78 s | 0,79 GB |
+| A | TR13 | 7 | **14** / 1.083 | 5 / 7 | [2, 6, 194] | [2, 6, 193] | 55 s | 1,21 GB |
+| B | TR38 | 0 (+2 tiết mới) | **0** | 0 / 0 | [2, 28, 101] | [2, 29, 101] | 4 s | 0,23 GB |
+| B | TR23 | 0 (+2 tiết mới) | **2** | 2 / 1 | [2, 7, 79] | [2, 8, 82] | 10 s | 0,27 GB |
+| B | TR13 | 0 (+2 tiết mới) | **0** | 0 / 0 | [2, 6, 194] | **[4, 11, 194]** | 12 s | 0,35 GB |
+| C | TR38 | 0 | **2** | 2 / 1 | [2, 28, 101] | [1, 29, 108] | 11 s | 0,40 GB |
+| C | TR23 | 0 | **5** | 4 / 2 | [2, 7, 79] | [2, 8, 84] | 18 s | 0,63 GB |
+| C | TR13 | 0 | **4** | 3 / 1 | [2, 6, 194] | [2, 8, 197] | 31 s | 1,16 GB |
+
+**Cả 9 lần chạy:**
+- Status OPTIMAL; lịch hợp lệ.
+- `evaluate-repair` báo OK, bộ đếm thay đổi khớp.
+- Số thay đổi tối thiểu được chứng minh trong 0,3–0,9 s.
+- Cả ba mức chất lượng đều được chứng minh tối ưu trong số lịch có ít thay đổi nhất.
+
+**So sánh thứ tự repair ở TR13, kịch bản B:**
+
+| Yêu cầu | Đổi | `[P1, P2, P3]` | Ghi chú |
+|---|---:|---|---|
+| `BEFORE_QUALITY` | 0 | [4, 11, 194] | 2 tiết mới rơi vào chiều thứ 6, vượt môn/lớp/ngày |
+| `AFTER_QUALITY`, không giới hạn | 880 / 1.083 | [0, 0, 51] | Gần như xếp lại cả trường; P3 chưa chứng minh, 186 s |
+| `AFTER_QUALITY`, `max_changes` = 10 | 10 | **[0, 1, 197]** | Tốt hơn lịch STKB ban đầu; P3 chưa chứng minh, 187 s, 1,68 GB |
+
+### R3. Nhận xét
+
+- **Đổi ít:** mỗi thay đổi chỉ kéo theo 0–14 tiết; ít nhất 97,7% lịch giữ nguyên. Số đổi cao hơn số phải dời
+  vì tiết bị dời phải lấy chỗ của tiết khác.
+- **Chất lượng:** chênh với lịch STKB trước không quá 2 ở P2 và 7 ở P3, trừ kịch bản B ở TR13.
+- **Lớp đã kín ô:** thêm tiết vào lớp đã kín ô, nếu giữ nguyên toàn bộ lịch, phải chấp nhận vi phạm.
+  `max_changes` cùng `AFTER_QUALITY` cho phép trường chọn mức đổi. Ở đây 10 tiết là đủ để P1 về 0. Không
+  có giới hạn thì `AFTER_QUALITY` gần như xếp lại cả lịch, như ở 3C.
+- **Gợi ý dùng:** mặc định `BEFORE_QUALITY`. Nếu P1 sau repair tăng, chạy thêm `AFTER_QUALITY` với
+  `max_changes` nhỏ, rồi cho người dùng chọn.
+
+### R4. Giới hạn
+
+- 3 trường, n = 1, một máy Linux.
+- Kịch bản do tool chọn theo luật cố định (GV nhiều tiết nhất, lớp còn trống nhiều nhất, GV cùng môn dạy
+  ít nhất), không phải thay đổi thật của trường.
+- Ở kịch bản B, các ô mở thêm cho lớp kín là giả định; trường thật có thể mở buổi khác.
+- Kịch bản C giữ mã requirement để ghép với lịch cũ. Nếu đổi GV mà sinh requirement mới, mọi tiết thành
+  `new`.
+- Chưa thử GV nghỉ cần người dạy thay: repair không đổi người dạy.
+- Kết quả local: `benchmarks/artifacts/real/repair-v1/{<site>,add2,swapgv,add2-after,add2-after-max10}/`.
 
 ## Phần L5 — Lượt 5: khung tiết GV, Nghỉ hard với thang theo trường, chứng minh P1 cho TR17
 
