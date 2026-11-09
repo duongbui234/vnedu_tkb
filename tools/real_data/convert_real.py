@@ -550,6 +550,10 @@ def convert(
                 if not window_cells:
                     window_counts["full_windows"] += 1
                 window_outside |= window_cells
+            # A cell already in the teacher's S01 rule is penalised once, not twice.
+            also_avoided = window_outside & avoid.get(teacher, set())
+            window_counts["cells_also_avoided"] += len(also_avoided)
+            window_outside -= also_avoided
             if window_outside:
                 window_counts["teachers"] += 1
                 window_counts["cells_outside"] += len(window_outside)
@@ -572,6 +576,7 @@ def convert(
             "cells_outside": window_counts["cells_outside"],
             "real_lessons_outside": window_counts["real_lessons_outside"],
             "full_windows": window_counts["full_windows"],
+            "cells_also_avoided": window_counts["cells_also_avoided"],
             "teachers_without_work": len(set(teacher_windows) - set(teachers_with_work)),
         }
     data: dict[str, Any] = {

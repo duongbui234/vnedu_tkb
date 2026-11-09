@@ -400,10 +400,29 @@ def test_teacher_windows_become_avoid_rules_outside_the_window() -> None:
         "cells_outside": 2,
         "real_lessons_outside": 2,  # GV01 teaches 6A1 Toán on 2-AM-1 and 3-AM-1
         "full_windows": 1,
+        "cells_also_avoided": 0,
         "teachers_without_work": 1,
     }
     ScheduleInput.model_validate(conv.input)
     assert _conv(BASIC).report["scale"]["teacher_windows"] == {"source": "none"}
+
+
+def test_teacher_window_cells_already_avoided_are_not_penalised_twice() -> None:
+    windows = cr.parse_teacher_windows(WINDOW_HEADER + "GV01,S,2,3\n")
+    # 2-AM-1 is a Nghỉ cell (soft S01) and outside GV01's window; 3-AM-1 is only outside.
+    cells = cr.parse_teacher_cells(TEACHER_HEADER + "GV01,2,S,1,nghi\n")
+    conv = _conv(BASIC, teacher_cells=cells, teacher_windows=windows)
+    soft = {r["id"]: r for r in conv.input["constraint_config"]["soft"]}
+    assert soft["S01-GV01"]["parameters"] == {"slot_ids": ["2-AM-1"]}
+    assert soft["S01K-GV01"]["parameters"] == {"slot_ids": ["3-AM-1"]}
+    report = conv.report["scale"]["teacher_windows"]
+    assert report["cells_also_avoided"] == 1 and report["cells_outside"] == 1
+    # Every window cell already avoided: no empty S01K rule.
+    both = cr.parse_teacher_cells(TEACHER_HEADER + "GV01,2,S,1,nghi\nGV01,3,S,1,ban\n")
+    conv = _conv(BASIC, teacher_cells=both, teacher_windows=windows)
+    assert not any(r["id"] == "S01K-GV01" for r in conv.input["constraint_config"]["soft"])
+    assert conv.report["scale"]["teacher_windows"]["cells_also_avoided"] == 2
+    ScheduleInput.model_validate(conv.input)
 
 
 def test_teacher_window_errors() -> None:

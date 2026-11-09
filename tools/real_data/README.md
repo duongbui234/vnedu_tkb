@@ -45,7 +45,8 @@ không bật thì không có rule. Các rule khác giữ nguyên thang chung.
 **Khung tiết của GV** (tùy chọn, `--teacher-windows`): CSV `ma_gv,buoi,tu_tiet,den_tiet`, mỗi dòng là
 một khung đã bật trong STKB (GV chỉ nên dạy từ tiết `tu_tiet` đến `den_tiet` của buổi đó). Mỗi GV có
 khung thêm một rule `TEACHER_AVOID_SLOTS` (id `S01K-<GV>`) phủ các ô của buổi đó nằm ngoài khung, cùng
-priority với `--avoid-priority`. Khung phủ cả buổi (1–5) không sinh rule.
+priority với `--avoid-priority`. Khung phủ cả buổi (1–5) không sinh rule. Ô đã có trong rule S01 của GV
+(Nghỉ/Bận/Hạn chế mềm) được bỏ khỏi S01K để không bị phạt hai lần (`cells_also_avoided` trong báo cáo).
 
 ## Lấy dữ liệu từ STKB
 
