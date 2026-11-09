@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import signal
 import subprocess
 import sys
 import time
@@ -101,7 +102,10 @@ def run(
                 str(job.workers),
             ]
             with (folder / f"{job.name}.log").open("w", encoding="utf-8") as out:
-                proc = subprocess.Popen(argv, stdout=out, stderr=subprocess.STDOUT)
+                # Own process group: the watchdog must also kill compare_real's Core child.
+                proc = subprocess.Popen(
+                    argv, stdout=out, stderr=subprocess.STDOUT, start_new_session=True
+                )
             running[job] = (proc, time.time())
             threads += job.workers
             log(
@@ -118,7 +122,7 @@ def run(
         for job, (proc, started) in list(running.items()):
             code = proc.poll()
             if code is None and time.time() - started > seconds + grace:
-                proc.kill()
+                os.killpg(proc.pid, signal.SIGKILL)
                 code = proc.wait()
                 log(
                     {

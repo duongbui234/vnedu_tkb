@@ -38,6 +38,7 @@ import io
 import json
 import sys
 from collections import Counter, defaultdict
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -163,25 +164,12 @@ def parse_frame(text: str) -> list[Slot]:
     )
 
 
-def parse_class_cells(text: str) -> dict[str, set[Slot]]:
-    """Cells each class may be taught in; a class absent from the file has no cells."""
-    reader = _reader(text, CLASS_CELL_COLUMNS)
-    cells: dict[str, set[Slot]] = defaultdict(set)
+def _records(reader: csv.DictReader[str]) -> Iterator[tuple[dict[str, str], int]]:
+    """Non-empty rows with stripped keys and values, and their line numbers."""
     for raw in reader:
         row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
-        if not any(row.values()):
-            continue
-        line = reader.line_num
-        if not row["lop"]:
-            raise TimetableError(f"line {line}: 'lop' is required")
-        cells[row["lop"]].add(
-            (
-                _int(row["thu"], "thu", line),
-                _session(row["buoi"], line),
-                _int(row["tiet"], "tiet", line),
-            )
-        )
-    return dict(cells)
+        if any(row.values()):
+            yield row, reader.line_num
 
 
 def _cell(row: dict[str, str], line: int) -> Slot:
@@ -192,27 +180,35 @@ def _cell(row: dict[str, str], line: int) -> Slot:
     )
 
 
+def parse_class_cells(text: str) -> dict[str, set[Slot]]:
+    """Cells each class may be taught in; a class absent from the file has no cells."""
+    reader = _reader(text, CLASS_CELL_COLUMNS)
+    cells: dict[str, set[Slot]] = defaultdict(set)
+    for row, line in _records(reader):
+        if not row["lop"]:
+            raise TimetableError(f"line {line}: 'lop' is required")
+        cells[row["lop"]].add(_cell(row, line))
+    return dict(cells)
+
+
 def parse_teacher_cells(text: str) -> dict[str, dict[str, set[Slot]]]:
     """Teacher -> kind -> cells; unknown kinds are kept (and later only counted)."""
     reader = _reader(text, TEACHER_CELL_COLUMNS)
     cells: dict[str, dict[str, set[Slot]]] = defaultdict(lambda: defaultdict(set))
-    for raw in reader:
-        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
-        if not any(row.values()):
-            continue
+    for row, line in _records(reader):
         if not row["ma_gv"] or not row["loai"]:
-            raise TimetableError(f"line {reader.line_num}: 'ma_gv' and 'loai' are required")
-        cells[row["ma_gv"]][row["loai"]].add(_cell(row, reader.line_num))
+            raise TimetableError(f"line {line}: 'ma_gv' and 'loai' are required")
+        cells[row["ma_gv"]][row["loai"]].add(_cell(row, line))
     return {t: dict(k) for t, k in cells.items()}
 
 
 def parse_locks(text: str) -> set[tuple[str, Slot]]:
     reader = _reader(text, LOCK_COLUMNS)
     locks = set()
-    for raw in reader:
-        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
-        if any(row.values()):
-            locks.add((row["ma_gv"], _cell(row, reader.line_num)))
+    for row, line in _records(reader):
+        if not row["ma_gv"]:
+            raise TimetableError(f"line {line}: 'ma_gv' is required")
+        locks.add((row["ma_gv"], _cell(row, line)))
     return locks
 
 
@@ -220,11 +216,7 @@ def parse_teacher_limits(text: str) -> TeacherLimits:
     """Teacher -> (max periods per session, max per day); an empty value means no limit."""
     reader = _reader(text, LIMIT_COLUMNS)
     limits: TeacherLimits = {}
-    for raw in reader:
-        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
-        if not any(row.values()):
-            continue
-        line = reader.line_num
+    for row, line in _records(reader):
         if not row["ma_gv"]:
             raise TimetableError(f"line {line}: 'ma_gv' is required")
         session, day = (
@@ -238,11 +230,7 @@ def parse_teacher_windows(text: str) -> TeacherWindows:
     """Teacher -> session -> (first, last) period the teacher should teach in that session."""
     reader = _reader(text, WINDOW_COLUMNS)
     windows: dict[str, dict[str, tuple[int, int]]] = defaultdict(dict)
-    for raw in reader:
-        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
-        if not any(row.values()):
-            continue
-        line = reader.line_num
+    for row, line in _records(reader):
         if not row["ma_gv"]:
             raise TimetableError(f"line {line}: 'ma_gv' is required")
         session = _session(row["buoi"], line)
@@ -750,7 +738,7 @@ def main(argv: list[str] | None = None) -> int:
             school=args.school,
             class_cells=cells,
             teacher_cells=teacher_cells,
-            hard_kinds=tuple(k for k in args.teacher_hard.split(",") if k),
+            hard_kinds=tuple(k.strip() for k in args.teacher_hard.split(",") if k.strip()),
             locked_cells=locks,
             teacher_limits=limits,
             avoid_priority=args.avoid_priority,

@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import struct
 import sys
 from collections import Counter, defaultdict
 from collections.abc import Mapping, Sequence
@@ -323,7 +324,8 @@ def main(argv: list[str] | None = None) -> int:
     for path, key in zip(args.files, keys, strict=True):
         try:
             extracted, summary = read_file(path.read_bytes())
-        except (ValueError, UnicodeDecodeError) as exc:
+        except (ValueError, UnicodeDecodeError, struct.error, IndexError, KeyError) as exc:
+            # One unreadable file must not abort the batch and lose summary.json.
             results.append({"school": key, "file": path.name, "error": str(exc)[:200]})
             continue
         if extracted.rows:

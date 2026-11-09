@@ -13,6 +13,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -54,9 +55,13 @@ def run_core(
         "42",
     ]
     started = time.monotonic()
-    proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
-    _, status, usage = os.wait4(proc.pid, 0)
-    assert proc.stderr is not None
+    # stderr goes to a file: a pipe left unread while waiting could fill and block the child.
+    with tempfile.TemporaryFile() as err:
+        proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=err)
+        _, status, usage = os.wait4(proc.pid, 0)
+        proc.returncode = os.waitstatus_to_exitcode(status)
+        err.seek(0)
+        stderr = err.read()
     return {
         "exit": os.waitstatus_to_exitcode(status),
         "wall_seconds": round(time.monotonic() - started, 2),
@@ -64,7 +69,7 @@ def run_core(
         "time_limit": seconds,
         "workers": workers,
         "warm_start": warm_start is not None,
-        "stderr": proc.stderr.read().decode(errors="replace")[-2000:],
+        "stderr": stderr.decode(errors="replace")[-2000:],
     }
 
 

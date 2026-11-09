@@ -200,6 +200,7 @@ def main(argv: list[str] | None = None) -> int:
     if credentials:
         client.login(*credentials)
     if args.command == "scan":
+        args.output.parent.mkdir(parents=True, exist_ok=True)  # fail before a long scan, not after
         index, errors = scan(
             client,
             read_sites(args.sites),
