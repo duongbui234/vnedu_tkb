@@ -128,8 +128,10 @@ câu trả lời được trường xác nhận. Lịch STKB của 33 trường 
 không phải quy tắc của trường):
 
 - Chào cờ, sinh hoạt (câu 3) xuất hiện ở ô cố định; tooling khóa đúng ô.
-- Chia nhóm và lớp ghép (câu 4, 6) có thật trong lịch. Core chưa biểu diễn được nên các tiết này bị loại,
-  và ô của chúng bị chặn cho lớp/GV liên quan.
+- Chia nhóm và lớp ghép (câu 4, 6): **không gặp** trong 33 trường. Converter không phải loại tiết nào
+  (0 tiết; mỗi tiết đều có đúng một lớp và một GV). Core vẫn chưa hỗ trợ hai trường hợp này nếu trường
+  khác có.
+- STKB để lại 110/27.143 tiết chưa xếp ở 33 trường. Input Core chỉ có các tiết STKB đã xếp (RD4).
 - Tiết đôi (câu 5) có; chuỗi dài hơn 2 tiết được tách thành 2+1.
 - Mỗi trường tự bật ràng buộc GV trong STKB (câu 8): Họp/Nghỉ/Bận/Hạn chế theo ô, max tiết/buổi,
   max tiết/ngày, khung tiết. 22/33 trường không bật giới hạn tải nào.
@@ -157,7 +159,7 @@ không phải quy tắc của trường):
    - số tiết và tiết đôi suy từ chính lịch STKB;
    - thang P1/P2/P3 là của dự án; STKB dùng tổng có hệ số;
    - ý nghĩa một số trường trong file STKB còn suy từ binary;
-   - chia nhóm/lớp ghép chưa biểu diễn được.
+   - chỉ có dữ liệu từ trường dùng STKB; chia nhóm/lớp ghép chưa gặp nên chưa kiểm được.
 
    Ngưỡng nào là quy tắc bắt buộc của trường vẫn UNKNOWN.
 4. **Kiểm chứng độc lập mỏng.** Mọi rà soát là tự kiểm; không CI; không review người thứ hai (E6, S3).
@@ -173,7 +175,6 @@ không phải quy tắc của trường):
    [kế hoạch tiếp nhận](superpowers/plans/2026-11-07-real-timetable-intake.md), dùng file STKB thay cho
    DB công ty). Việc tiếp theo: duyệt và merge PR #7. Sau đó cân nhắc:
    - xác nhận với trường ngưỡng nào là bắt buộc;
-   - biểu diễn chia nhóm/lớp ghép;
    - đo trên Windows và máy ít nhân.
 
    Hướng search S1 tạm dừng: S1-a ([báo cáo](s1-a-spike-report.md)) và S1-b′

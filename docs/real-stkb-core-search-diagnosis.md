@@ -185,8 +185,8 @@ không xếp tiết nào vào ô Bận/Hạn chế hay vượt môn/lớp/ngày.
 
 - Khi P1 chỉ còn Nghỉ, chứng minh nhanh hơn: 19 s so với 95 s.
 - RSS đỉnh 1,70 GB.
-- 17 là tối thiểu với dữ liệu đã chuyển đổi. Các tiết chia nhóm/lớp ghép bị loại vẫn chặn ô như mô tả ở
-  README, và lịch STKB vẫn hợp lệ với input này.
+- 17 là tối thiểu với dữ liệu đã chuyển đổi. Trường này không có tiết nào bị loại khi chuyển đổi, và
+  lịch STKB vẫn hợp lệ với input này.
 
 ### L5.5. Nghỉ soft, thang theo trường có khung tiết (4 worker)
 
