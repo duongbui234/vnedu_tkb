@@ -66,7 +66,7 @@ nhau.
 
 ## 3. Chọn onedir hay onefile
 
-**Đề xuất onedir** cho Phase 4, cần người dùng duyệt:
+**Quyết định: dùng onedir cho Phase 4.** Người dùng đã duyệt ngày 2026-11-10. Lý do:
 
 - Mỗi lần gọi Core khởi động nhanh hơn khoảng 2,6 s. App sẽ gọi Core cho cả `validate-input` và kiểm tra
   kết quả, không chỉ để xếp.
@@ -127,4 +127,3 @@ nhau.
   1,1 GB khi repair TR13 qua app cần được đo thật.
 - Kiểm SmartScreen khi tải bộ cài qua trình duyệt; bộ cài chưa ký số (TS5).
 - Kiểm có cửa sổ console bật lên khi app gọi Core hay không.
-- Duyệt chọn onedir (§3).
