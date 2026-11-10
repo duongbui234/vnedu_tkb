@@ -60,9 +60,22 @@ nhau.
 |---|---|
 | Đường dẫn `Thử nghiệm TKB` (có dấu và dấu cách) | ✅ cả hai bản, mã 0 |
 | Nút Dừng sau 5 s (`taskkill /T /F`) | ✅ còn 0 process Core, cả bản onefile (bootloader + process con) |
-| Cửa sổ console bật lên | Chưa kiểm: không đo tự động và không ai ghi nhận khi quan sát. App gọi Core với `CREATE_NO_WINDOW` |
+| Cửa sổ console bật lên | ✅ Không có (kiểm 2026-11-10, chi tiết dưới bảng) |
 | Windows Defender | Không có phát hiện nào trong lúc đo (`Get-MpThreatDetection` rỗng) |
 | SmartScreen | Chưa kiểm: bộ cài chạy im lặng bằng script, không tải qua trình duyệt |
+
+**Cách kiểm cửa sổ console:**
+
+- Cài im lặng bản onedir của build `8aeb8e5`, rồi chạy app `--auto` với TR38, 4 worker, 30 s.
+- Trước khi chạy, ghi lại mọi cửa sổ đang hiện trên toàn hệ thống. Trong lúc chạy, cứ 0,25 s liệt kê lại
+  để tìm cửa sổ mới (`EnumWindows` + `IsWindowVisible`).
+- Phải quét toàn hệ thống, không chỉ cây process của app. Trên máy này console mặc định là "Let Windows
+  decide", nên console mở trong Windows Terminal, mà Windows Terminal không nằm trong cây process của app.
+- **Đối chứng:** chạy `cmd.exe` bình thường. Script bắt được cửa sổ `WindowsTerminal` sau 0,5 s.
+- **Qua app:** trong 33,5 s, chỉ có cửa sổ của chính app hiện lên (`Tauri Window` và `Tao Thread Event
+  Target`, đều của `tkb-sidecar-spike.exe`). Core trả mã 0 và ghi file kết quả.
+- Mới kiểm khi console mặc định là Windows Terminal. Chưa kiểm khi máy dùng `conhost` làm console mặc
+  định, như Windows 10. Ở cả hai trường hợp, app đều gọi Core với `CREATE_NO_WINDOW`.
 
 ## 3. Chọn onedir hay onefile
 
@@ -128,4 +141,3 @@ nhau.
   Rủi ro này được chấp nhận và chuyển sang Phase 4. Với RAM 8 GB, đỉnh khoảng 1,1 GB khi repair TR13 qua
   app vẫn chưa được đo trên máy yếu.
 - Kiểm SmartScreen khi tải bộ cài qua trình duyệt; bộ cài chưa ký số (TS5).
-- Kiểm có cửa sổ console bật lên khi app gọi Core hay không.
