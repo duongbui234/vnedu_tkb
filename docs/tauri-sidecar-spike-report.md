@@ -62,7 +62,7 @@ nhau.
 | Nút Dừng sau 5 s (`taskkill /T /F`) | ✅ còn 0 process Core, cả bản onefile (bootloader + process con) |
 | Cửa sổ console bật lên | ✅ Không có (kiểm 2026-11-10, chi tiết dưới bảng) |
 | Windows Defender | Không có phát hiện nào trong lúc đo (`Get-MpThreatDetection` rỗng) |
-| SmartScreen | Chưa kiểm: bộ cài chạy im lặng bằng script, không tải qua trình duyệt |
+| SmartScreen | Không kiểm (người dùng quyết định 2026-11-10). Bộ cài chưa ký số và chưa có uy tín, nên dự kiến bị cảnh báo khi tải qua trình duyệt rồi chạy. Quyết định ký số để cho Phase 4 |
 
 **Cách kiểm cửa sổ console:**
 
@@ -140,4 +140,10 @@ nhau.
   quyết định **không đo Windows 10** ([kế hoạch không làm](superpowers/plans/2026-11-10-tauri-sidecar-win10-remeasure.md)).
   Rủi ro này được chấp nhận và chuyển sang Phase 4. Với RAM 8 GB, đỉnh khoảng 1,1 GB khi repair TR13 qua
   app vẫn chưa được đo trên máy yếu.
-- Kiểm SmartScreen khi tải bộ cài qua trình duyệt; bộ cài chưa ký số (TS5).
+- SmartScreen: không kiểm, theo quyết định của người dùng ngày 2026-11-10. Bộ cài chưa ký số (TS5).
+  Dự kiến:
+  - Edge có thể báo file "không thường được tải xuống";
+  - khi chạy, Windows hiện màn hình "Windows protected your PC", phải bấm "More info" rồi "Run anyway";
+  - máy do quản trị viên khóa chặt có thể không cho chạy.
+
+  Phase 4 cần quyết định có ký số không, và viết hướng dẫn cài đặt theo quyết định đó.
