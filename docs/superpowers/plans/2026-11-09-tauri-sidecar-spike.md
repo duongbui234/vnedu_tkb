@@ -1,7 +1,8 @@
 # Spike: Tauri 2 gọi Core đóng gói bằng PyInstaller trên Windows
 
 Ngày 2026-11-09. Trạng thái: **ĐÃ ĐƯỢC NGƯỜI DÙNG DUYỆT ngày 2026-11-09 (TS1–TS6 theo đề xuất).** Base `02250f2`
-trên `main`.
+trên `main`. S2–S4 đã làm trên một máy Windows 11 ngày 2026-11-10:
+[báo cáo](../../tauri-sidecar-spike-report.md). Chưa đo Windows 10 hay máy giống máy trường.
 
 **Bối cảnh:** người dùng chọn Tauri 2 thay Electron
 ([đặc tả Core First §1.3](../../VNEDU_TKB_CORE_FIRST_CODEX.md)). Máy ở trường chạy Windows 10/11.

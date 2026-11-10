@@ -95,5 +95,7 @@ hay `%TEMP%\tkb-spike-runs\`, vì chúng chứa thời khóa biểu.
   nhau.
 - Kiểu đóng gói: PyInstaller 6.16.0, chỉ gom những gì Core import, cộng metadata của `ortools` và
   `pydantic`. Nếu `self-check` lỗi, `build.ps1` tự build lại với `--collect-all ortools` và ghi vào
-  `build-info.json`. Trên Linux, bản gọn nặng 173 MB, bản `--collect-all` nặng 249 MB. PyInstaller
+  `build-info.json`. Trên Linux, bản gọn nặng 173 MB, bản `--collect-all` nặng 249 MB. Trên Windows 11,
+  bản gọn không tìm được DLL của OR-Tools, nên cả hai kiểu đều phải dùng `--collect-all`
+  ([báo cáo](../../docs/tauri-sidecar-spike-report.md)). PyInstaller
   6.11.1 không chạy được với numpy 2.5.

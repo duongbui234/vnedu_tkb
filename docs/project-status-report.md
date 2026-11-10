@@ -165,7 +165,10 @@ không phải quy tắc của trường):
    Ngưỡng nào là quy tắc bắt buộc của trường vẫn UNKNOWN.
 4. **Kiểm chứng độc lập mỏng.** Mọi rà soát là tự kiểm; không CI; không review người thứ hai (E6, S3).
 5. **Số phiên bản contract tăng theo từng mốc** (E5 chưa quyết định).
-6. **Windows chưa được kiểm cho candidate hiện tại**, trong khi Phase 4 nhắm ứng dụng desktop.
+6. **Windows chưa được kiểm cho candidate hiện tại**, trong khi Phase 4 nhắm ứng dụng desktop. Ngày
+   2026-11-10, [spike Tauri 2 + Core PyInstaller](tauri-sidecar-spike-report.md) đã chạy được TR38/TR13
+   trên một máy Windows 11 (n = 1), sau khi sửa lỗi stdout UTF-8 của CLI. Chưa đo Windows 10 hay máy
+   giống máy trường.
 7. **Repair trên bài sát giới hạn (TIGHT) ở 20/40 lớp** thường không có lịch trong budget (3C); chưa
    phân biệt được giữa vô nghiệm và chưa tìm được lịch.
 
