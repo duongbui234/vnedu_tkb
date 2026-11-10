@@ -1,6 +1,8 @@
 # Spike: đo lại Tauri 2 + Core onedir trên máy Windows 10 giống máy trường
 
-Ngày 2026-11-10. Trạng thái: **DRAFT — chờ duyệt (W1–W7).** Base `2176d86` trên `main`.
+Ngày 2026-11-10. Trạng thái: **KHÔNG LÀM.** Ngày 2026-11-10, người dùng quyết định không đo trên
+Windows 10, nên W1–W7 không được duyệt. Kế hoạch được giữ lại để tham khảo nếu sau này cần đo máy
+khác. Base `2176d86` trên `main`.
 
 **Bối cảnh:** [spike lần đầu](2026-11-09-tauri-sidecar-spike.md) mới đo trên một máy Windows 11 mạnh
 (i5-12500, 12 luồng, 16 GB RAM). Kết quả nằm trong [báo cáo](../../tauri-sidecar-spike-report.md). Đóng

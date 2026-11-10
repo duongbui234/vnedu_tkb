@@ -123,7 +123,9 @@ nhau.
 
 ## 5. Chưa làm
 
-- Đo trên Windows 10, và trên máy giống máy trường (4–8 luồng, 8 GB RAM). Với RAM 8 GB, đỉnh khoảng
-  1,1 GB khi repair TR13 qua app cần được đo thật.
+- Đo trên Windows 10, và trên máy giống máy trường (4–8 luồng, 8 GB RAM). Ngày 2026-11-10, người dùng
+  quyết định **không đo Windows 10** ([kế hoạch không làm](superpowers/plans/2026-11-10-tauri-sidecar-win10-remeasure.md)).
+  Rủi ro này được chấp nhận và chuyển sang Phase 4. Với RAM 8 GB, đỉnh khoảng 1,1 GB khi repair TR13 qua
+  app vẫn chưa được đo trên máy yếu.
 - Kiểm SmartScreen khi tải bộ cài qua trình duyệt; bộ cài chưa ký số (TS5).
 - Kiểm có cửa sổ console bật lên khi app gọi Core hay không.
