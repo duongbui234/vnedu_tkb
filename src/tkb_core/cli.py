@@ -1,6 +1,7 @@
 """Standalone contract, solve and independent schedule-validation CLI."""
 
 import argparse
+import io
 import json
 import os
 import sys
@@ -219,6 +220,10 @@ def _write_atomic(destination: Path, content: str) -> None:
 
 def main(argv: Sequence[str] | None = None) -> int:
     """Exit 0 valid, 2 input/unsupported, 3 infeasible, 4 unknown, 5 model failure."""
+    # JSON on stdout is UTF-8 whatever the platform picks: a Windows pipe or NUL handle
+    # defaults to the ANSI code page, which cannot encode Vietnamese IDs and names.
+    if isinstance(sys.stdout, io.TextIOWrapper):
+        sys.stdout.reconfigure(encoding="utf-8")
     args = list(sys.argv[1:] if argv is None else argv)
     evaluation = bool(args and args[0] == "evaluate-score")
     # Error reports follow the input's ScoreReport version once the input has been parsed.

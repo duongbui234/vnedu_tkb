@@ -1,6 +1,7 @@
 """Exercise the real module/installed CLI boundary in subprocesses."""
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -94,6 +95,27 @@ def test_solve_file_and_revalidate_independently(tmp_path: Path) -> None:
     assert json.loads(result_file.read_text()) == result
     checked = run_cli("validate-schedule", str(source), str(result_file))
     assert checked.returncode == 0 and json.loads(checked.stdout)["valid_schedule"]
+
+
+def test_solve_prints_utf8_when_stdout_is_not_utf8(tmp_path: Path) -> None:
+    # A Windows pipe or NUL handle gives Python a cp1252 stdout; non-ASCII IDs used to raise
+    # UnicodeEncodeError after the result file was written and turn success into exit 2.
+    source = tmp_path / "input.json"
+    text = (ROOT / "tests/fixtures/feasible_double.json").read_text(encoding="utf-8")
+    source.write_text(text.replace("demo-class-a", "lớp-6A-thử-nghiệm"), encoding="utf-8")
+    result_file = tmp_path / "result.json"
+    solved = subprocess.run(
+        [sys.executable, "-m", "tkb_core.cli", "solve", str(source), "--time-limit", "5"]
+        + ["--output", str(result_file)],
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
+        env={**os.environ, "PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"},
+    )
+    assert solved.returncode == 0, solved.stdout + solved.stderr
+    result = json.loads(solved.stdout.decode("utf-8"))
+    assert json.loads(result_file.read_text(encoding="utf-8")) == result
+    assert "lớp-6A-thử-nghiệm" in solved.stdout.decode("utf-8")
 
 
 @pytest.mark.parametrize("alias", ["same", "symlink", "hardlink"])
